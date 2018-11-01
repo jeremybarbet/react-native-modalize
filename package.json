@@ -1,0 +1,37 @@
+{
+  "name": "react-native-modalize",
+  "version": "1.0.0",
+  "description": "TODO",
+  "main": "src/index.ts",
+  "scripts": {
+    "lint": "tslint src"
+  },
+  "keywords": [
+    "react-native",
+    "native",
+    "modal",
+    "android",
+    "ios",
+    "scrollview"
+  ],
+  "author": "Jérémy Barbet",
+  "license": "MIT",
+  "homepage": "https://github.com/jeremybarbet/react-native-modalize",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeremybarbet/react-native-modalize"
+  },
+  "devDependencies": {
+    "@types/react": "^16.4.18",
+    "@types/react-native": "^0.57.7",
+    "react": "^16.6.0",
+    "react-native": "^0.57.4",
+    "tslint": "^5.11.0",
+    "typescript": "^3.1.5"
+  },
+  "peerDependencies": {
+    "react": ">=15.0.0",
+    "react-native": ">=0.50.0",
+    "react-native-gesture-handler": ">=1.0.7"
+  }
+}
