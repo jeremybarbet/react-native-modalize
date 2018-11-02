@@ -1,10 +1,11 @@
 {
   "name": "react-native-modalize",
   "version": "1.0.0",
-  "description": "TODO",
-  "main": "src/index.ts",
+  "description": "A modal that loves ScrollViews.",
+  "main": "lib/index.js",
   "scripts": {
-    "lint": "tslint src"
+    "start": "webpack -p",
+    "lint": "tslint 'src/**/*.ts?(x)'"
   },
   "keywords": [
     "react-native",
@@ -21,13 +22,20 @@
     "type": "git",
     "url": "https://github.com/jeremybarbet/react-native-modalize"
   },
+  "dependencies": {
+    "react": "^16.6.0",
+    "react-native": "^0.57.4",
+    "react-native-gesture-handler": "^1.0.8"
+  },
   "devDependencies": {
     "@types/react": "^16.4.18",
     "@types/react-native": "^0.57.7",
-    "react": "^16.6.0",
-    "react-native": "^0.57.4",
+    "ts-loader": "^5.3.0",
     "tslint": "^5.11.0",
-    "typescript": "^3.1.5"
+    "tslint-config-airbnb": "^5.11.0",
+    "typescript": "^3.1.5",
+    "webpack": "^4.24.0",
+    "webpack-cli": "^3.1.2"
   },
   "peerDependencies": {
     "react": ">=15.0.0",

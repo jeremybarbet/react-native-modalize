@@ -1,8 +1,12 @@
 {
-  "extends": ["tslint:recommended", "tslint-config-airbnb"],
+  "extends": [
+    "tslint:recommended",
+    "tslint-config-airbnb"
+  ],
   "linterOptions": {
     "exclude": [
-      "node_modules/**/*.ts"
+      "node_modules/**/*.ts",
+      "lib/**/*.ts"
     ]
   },
   "rules": {

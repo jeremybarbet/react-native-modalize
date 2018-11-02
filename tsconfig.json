@@ -1,25 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es2015",
-    "module": "commonjs",
+    "outDir": "./lib",
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "es5",
     "jsx": "react",
-    "noEmit": true,
-    "moduleResolution": "node",
-    "strictPropertyInitialization": false,
-    "skipLibCheck": true,
-    "strict": true,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "baseUrl": "./src",
-    "noUnusedLocals": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "noUnusedParameters": true,
-    "lib": [
-      "es2017",
-      "dom"
-    ]
+    "allowJs": true
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["./src"]
 }
