@@ -5,11 +5,19 @@ module.exports = {
 
   externals: {
     react: 'react',
+    'react-native': 'react-native',
+    'react-native-gesture-handler': 'react-native-gesture-handler',
   },
 
   resolve: {
     modules: ['./src'],
     extensions: ['.tsx', '.ts'],
+
+    alias: {
+      'react': path.join(__dirname, 'node_modules/react'),
+      'react-native': path.join(__dirname, 'node_modules/react-native'),
+      'react-native-gesture-handler': path.join(__dirname, 'node_modules/react-native-gesture-handler'),
+    },
   },
 
   module: {
