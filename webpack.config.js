@@ -3,15 +3,13 @@ const path = require('path');
 module.exports = {
   entry: './src/index.ts',
 
-  // externals: {
-  //   react: 'react',
-  // },
+  externals: {
+    react: 'react',
+  },
 
   resolve: {
-    modules: [
-      './src',
-      'node_modules',
-    ],
+    modules: ['./src'],
+    extensions: ['.tsx', '.ts'],
   },
 
   module: {
@@ -22,10 +20,6 @@ module.exports = {
         exclude: /node_modules/,
       },
     ],
-  },
-
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
   },
 
   output: {
