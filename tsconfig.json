@@ -1,12 +1,18 @@
 {
   "compilerOptions": {
-    "outDir": "./lib",
-    "noImplicitAny": true,
-    "module": "es6",
+    "outDir": "lib/",
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "jsx": "react-native",
+    "lib": ["esnext"],
     "target": "es5",
-    "jsx": "react",
-    "allowJs": true
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "strict": true,
+    "pretty": true,
+    "removeComments": true,
+    "sourceMap": true
   },
-  "include": ["./src"],
-  "exclude": ["./node_modules/**/*"]
+  "include": ["src/**/*"]
 }

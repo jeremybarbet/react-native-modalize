@@ -11,5 +11,8 @@ yarn.lock
 # misc
 #
 .vscode/
-lib/
+example/
+src/
 .watchmanconfig
+.tslint.json
+.tsconfig.json
