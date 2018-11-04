@@ -395,8 +395,6 @@ export default class Modalize extends React.Component<IProps, IState> {
     const { isVisible, lastSnap } = this.state;
     const max = lastSnap - this.snaps[0];
 
-    console.log('-render');
-
     return (
       <Modal
         supportedOrientations={['landscape', 'portrait', 'portrait-upside-down']}
