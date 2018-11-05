@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, StyleSheet, Text, View, Platform, BackAndroid, ViewStyle, TouchableOpacity, Dimensions, Modal, Easing } from 'react-native';
+import { Animated, StyleSheet, View, Platform, BackAndroid, ViewStyle, TouchableOpacity, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, KeyboardAvoidingView } from 'react-native';
 import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 import s from './Modalize.styles';
@@ -13,17 +13,25 @@ interface IProps {
   onOpened?: () => void;
   onClose?: () => void;
   onClosed?: () => void;
+  useNativeDriver?: boolean;
+  adjustToContentHeight?: boolean;
+
+  // @todo
+  HeaderComponent?: React.ReactNode;
+  FooterComponent?: React.ReactNode;
 }
 
 interface IState {
   lastSnap: number;
   isVisible: boolean;
-  hideContent: boolean;
   overlay: Animated.Value;
+  modalHeight: number;
+  contentHeight: number;
 }
 
 const { height: screenHeight } = Dimensions.get('window');
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
 const THRESHOLD = 200;
 
 export default class Modalize extends React.Component<IProps, IState> {
@@ -31,80 +39,74 @@ export default class Modalize extends React.Component<IProps, IState> {
   private snaps: number[];
   private snapStart: number;
   private snapEnd: number;
-  private lastScrollYValue: number = 0;
-  private lastScrollY: Animated.Value = new Animated.Value(0);
+  private beginScrollYValue: number = 0;
+  private beginScrollY: Animated.Value = new Animated.Value(0);
   private dragY: Animated.Value = new Animated.Value(0);
   private translateY: Animated.Value = new Animated.Value(screenHeight);
-  private reverseLastScrollY: Animated.AnimatedMultiplication;
+  private reverseBeginScrollY: Animated.AnimatedMultiplication;
   private modal: React.RefObject<TapGestureHandler> = React.createRef();
   private modalChildren: React.RefObject<PanGestureHandler> = React.createRef();
-  private modalSwiper: React.RefObject<PanGestureHandler> = React.createRef();
   private modalScrollview: React.RefObject<NativeViewGestureHandler> = React.createRef();
 
   static defaultProps = {
     swiperPosition: 'outside',
+    useNativeDriver: false,
+    adjustToContentHeight: false,
   };
 
   constructor(props: IProps) {
     super(props);
 
+    const modalHeight = screenHeight - this.swiperHeight;
+
     this.snaps = [];
-
-    // top, middle, bottom
-    if (props.height) {
-      this.snaps = [0, props.height, 550];
-    } else {
-      this.snaps = [0, this.modalHeight];
-    }
-
     this.snapStart = this.snaps[0];
     this.snapEnd = this.snaps[this.snaps.length - 1];
 
+    if (props.height) {
+      this.snaps.push(0, modalHeight - props.height, modalHeight);
+    } else {
+      this.snaps.push(0, modalHeight);
+    }
+
     this.state = {
-      lastSnap: this.snapEnd,
+      lastSnap: this.snaps[props.height ? 1 : 0],
       isVisible: false,
-      hideContent: false,
       overlay: new Animated.Value(0),
+      modalHeight,
+      contentHeight: 0,
     };
 
-    this.lastScrollY.addListener(({ value }) => {
-      this.lastScrollYValue = value;
-    });
+    this.beginScrollY.addListener(({ value }) =>
+      this.beginScrollYValue = value,
+    );
 
-    this.reverseLastScrollY = Animated.multiply(
+    this.reverseBeginScrollY = Animated.multiply(
       new Animated.Value(-1),
-      this.lastScrollY,
+      this.beginScrollY,
     );
   }
 
-  get swiperOutside() {
+  private get swiperOutside(): boolean  {
     const { swiperPosition } = this.props;
 
     return swiperPosition === 'outside';
   }
 
-  get swiperHeight() {
+  private get swiperHeight(): number {
     return this.swiperOutside ? 35 : 20;
   }
 
-  get modalHeight() {
-    return screenHeight - this.swiperHeight;
-  }
+  private get wrapper(): StyleProp<unknown> {
+    const { modalHeight } = this.state;
 
-  get height() {
-    const { height } = this.props;
-
-    return height || this.modalHeight;
-  }
-
-  get wrapper() {
     const valueY = Animated.add(
       this.dragY,
-      this.reverseLastScrollY,
+      this.reverseBeginScrollY,
     );
 
     return {
-      height: this.modalHeight,
+      height: modalHeight,
       transform: [{
         translateY: Animated.add(this.translateY, valueY).interpolate({
           inputRange: [this.snapStart, this.snapEnd],
@@ -115,7 +117,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     };
   }
 
-  get overlay() {
+  private get overlay(): StyleProp<unknown> {
     const { overlay } = this.state;
 
     return {
@@ -126,28 +128,39 @@ export default class Modalize extends React.Component<IProps, IState> {
     };
   }
 
-  onAnimateOpen = () => {
-    const { onOpened, height } = this.props;
-    const { overlay } = this.state;
-    const toValue = height ? this.modalHeight - height : 0;
+  private onUpdateLayout = (h: number): void => {
+    const { adjustToContentHeight, height } = this.props;
+    const { contentHeight, modalHeight } = this.state;
+
+    if (!adjustToContentHeight || modalHeight === h || height) {
+      return;
+    }
 
     this.setState({
-      isVisible: true,
-      hideContent: false,
+      contentHeight: h,
+      modalHeight: contentHeight - this.swiperHeight,
     });
+  }
+
+  private onAnimateOpen = (): void => {
+    const { onOpened, height, useNativeDriver } = this.props;
+    const { overlay, modalHeight } = this.state;
+    const toValue = height ? modalHeight - height : 0;
+
+    this.setState({ isVisible: true });
 
     Animated.parallel([
       Animated.timing(overlay, {
         toValue: 1,
         duration: 280,
         easing: Easing.ease,
-        useNativeDriver: true,
+        useNativeDriver,
       }),
 
       Animated.spring(this.translateY, {
         toValue,
         bounciness: 4,
-        useNativeDriver: true,
+        useNativeDriver,
       }),
     ]).start(() => {
       if (onOpened) {
@@ -156,126 +169,124 @@ export default class Modalize extends React.Component<IProps, IState> {
     });
   }
 
-  onAnimateClose = () => {
-    const { onClosed } = this.props;
+  private onAnimateClose = (): void => {
+    const { onClosed, useNativeDriver } = this.props;
     const { overlay } = this.state;
+
+    this.beginScrollYValue = 0;
+    this.beginScrollY.setValue(0);
 
     Animated.parallel([
       Animated.timing(overlay, {
         toValue: 0,
         duration: 200,
         easing: Easing.ease,
-        useNativeDriver: true,
+        useNativeDriver,
       }),
 
       Animated.timing(this.translateY, {
         toValue: screenHeight,
         duration: 320,
         easing: Easing.out(Easing.ease),
-        useNativeDriver: true,
+        useNativeDriver,
       }),
     ]).start(() => {
       if (onClosed) {
         onClosed();
       }
 
-      this.setState({
-        isVisible: false,
-        hideContent: true,
-      });
+      this.onResetModal();
     });
   }
 
-  onAnimateReset = (
-    event: PanGestureHandlerStateChangeEvent,
-    lastSnap: number = this.snaps[0],
-    translation?: number,
-  ) => {
-    const { velocityY, translationY } = event.nativeEvent;
-    const toValue = translationY - this.lastScrollYValue;
-    const translate = translation || toValue;
-
-    this.setState({ lastSnap });
-    this.translateY.extractOffset();
-    this.translateY.setValue(translate);
-    this.translateY.flattenOffset();
-    this.dragY.setValue(0);
-
-    Animated.spring(this.translateY, {
-      toValue: lastSnap,
-      velocity: velocityY,
-      tension: 50,
-      friction: 12,
-      useNativeDriver: true,
-    }).start();
-  }
-
-  onHandleSwiper = ({ nativeEvent }: PanGestureHandlerStateChangeEvent) => {
-    if (nativeEvent.oldState === State.BEGAN) {
-      this.lastScrollY.setValue(0);
-    }
-
-    this.onHandleChildren({ nativeEvent });
-  }
-
-  onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent) => {
+  private onResetModal = (): void => {
     const { height } = this.props;
 
-    if (!height) {
-      return this.onHandleSwiping({ nativeEvent });
-    }
+    this.translateY.setValue(screenHeight);
+    this.dragY.setValue(0);
 
-    this.onHandleSnapping({ nativeEvent });
+    const lastSnap = height ? this.snaps[1] : this.snaps[0];
+
+    this.setState({
+      lastSnap,
+      isVisible: false,
+    });
   }
 
-  onHandleSwiping = ({ nativeEvent }: PanGestureHandlerStateChangeEvent) => {
-    if (nativeEvent.oldState === State.ACTIVE) {
-      if (nativeEvent.translationY > THRESHOLD) {
-        this.onClose();
-      } else {
-        this.onAnimateReset({ nativeEvent });
-      }
+  private onScrollViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
+    const { contentHeight } = this.state;
+    const { height } = nativeEvent.layout;
+
+    if (contentHeight > 0) {
+      return;
     }
+
+    this.onUpdateLayout(height);
   }
 
-  onHandleSnapping = ({ nativeEvent }: PanGestureHandlerStateChangeEvent) => {
+  private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
+    const { height, useNativeDriver } = this.props;
+    const { lastSnap } = this.state;
+
     if (nativeEvent.oldState === State.ACTIVE) {
-      const { velocityY } = nativeEvent;
-      let { translationY } = nativeEvent;
+      const { velocityY, translationY } = nativeEvent;
+      const toValue = translationY - this.beginScrollYValue;
       let destSnapPoint = this.snaps[0];
+      let willClose = false;
 
-      translationY -= this.lastScrollYValue;
+      if (height) {
+        const dragToss = 0.05;
+        const endOffsetY = lastSnap + toValue + dragToss * velocityY;
 
-      const dragToss = 0.05;
-      const endOffsetY = this.state.lastSnap + translationY + dragToss * velocityY;
+        this.snaps.forEach((snap: number) => {
+          const distFromSnap = Math.abs(snap - endOffsetY);
 
-      this.snaps.forEach((snap: number) => {
-        const distFromSnap = Math.abs(snap - endOffsetY);
+          if (distFromSnap < Math.abs(destSnapPoint - endOffsetY)) {
+            destSnapPoint = snap;
+            willClose = false;
 
-        if (distFromSnap < Math.abs(destSnapPoint - endOffsetY)) {
-          destSnapPoint = snap;
-        }
-      });
+            if (snap === this.snapEnd) {
+              willClose = true;
+              this.close();
+            }
+          }
+        });
+      } else if (translationY > THRESHOLD && this.beginScrollYValue === 0) {
+        willClose = true;
+        this.close();
+      }
 
-      this.onAnimateReset({ nativeEvent }, destSnapPoint, translationY);
+      if (willClose) {
+        return;
+      }
+
+      this.setState({ lastSnap: destSnapPoint });
+      this.translateY.extractOffset();
+      this.translateY.setValue(toValue);
+      this.translateY.flattenOffset();
+      this.dragY.setValue(0);
+
+      Animated.spring(this.translateY, {
+        velocity: velocityY,
+        tension: 50,
+        friction: 12,
+        toValue: destSnapPoint,
+        useNativeDriver,
+      }).start();
     }
   }
 
-  onClose = () => {
+  private onBackPress = (): boolean => {
     this.close();
-  }
-
-  onBackPress = () => {
-    this.onClose();
 
     return true;
   }
 
-  onOverlayPress = () => {
-    this.onClose();
+  private onOverlayPress = (): void => {
+    this.close();
   }
 
-  open = () => {
+  public open = (): void => {
     const { onOpen } = this.props;
 
     if (onOpen) {
@@ -289,7 +300,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     this.onAnimateOpen();
   }
 
-  close = () => {
+  public close = (): void => {
     const { onClose } = this.props;
 
     if (onClose) {
@@ -303,7 +314,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     this.onAnimateClose();
   }
 
-  renderSwiper = () => {
+  private renderSwiper = (): React.ReactNode => {
     const swiperStyles = [s.swiper];
     const handleStyles = [s.swiper__handle];
 
@@ -313,35 +324,22 @@ export default class Modalize extends React.Component<IProps, IState> {
     }
 
     return (
-      <PanGestureHandler
-        ref={this.modalSwiper}
-        simultaneousHandlers={[this.modalScrollview, this.modal]}
-        shouldCancelWhenOutside={false}
-        onGestureEvent={Animated.event(
-          [{ nativeEvent: { translationY: this.dragY } }],
-          { useNativeDriver: true },
-        )}
-        onHandlerStateChange={this.onHandleSwiper}
-      >
-        <Animated.View style={swiperStyles}>
-          <View style={handleStyles} />
-        </Animated.View>
-      </PanGestureHandler>
+      <View style={swiperStyles}>
+        <View style={handleStyles} />
+      </View>
     );
   }
 
-  renderChildren = () => {
-    const { children } = this.props;
+  private renderChildren = (): React.ReactNode => {
+    const { children, useNativeDriver } = this.props;
+    const { contentHeight } = this.state;
 
     return (
       <PanGestureHandler
         ref={this.modalChildren}
         simultaneousHandlers={[this.modalScrollview, this.modal]}
         shouldCancelWhenOutside={false}
-        onGestureEvent={Animated.event(
-          [{ nativeEvent: { translationY: this.dragY } }],
-          { useNativeDriver: true },
-        )}
+        onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], { useNativeDriver })}
         onHandlerStateChange={this.onHandleChildren}
       >
         <Animated.View>
@@ -352,16 +350,11 @@ export default class Modalize extends React.Component<IProps, IState> {
           >
             <Animated.ScrollView
               bounces={false}
-              onScrollBeginDrag={Animated.event(
-                [{ nativeEvent: { contentOffset: { y: this.lastScrollY } } }],
-                { useNativeDriver: true },
-              )}
+              onScrollBeginDrag={Animated.event([{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }], { useNativeDriver })}
               scrollEventThrottle={16}
+              onLayout={this.onScrollViewLayout}
+              scrollEnabled={contentHeight === 0}
             >
-              <TouchableOpacity onPress={this.close}>
-                <Text>Close</Text>
-              </TouchableOpacity>
-
               {children}
             </Animated.ScrollView>
           </NativeViewGestureHandler>
@@ -370,7 +363,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     );
   }
 
-  renderOverlay = () => (
+  private renderOverlay = (): React.ReactNode => (
     <React.Fragment>
       {/* <PanGestureHandler
         ref={this.modalSwiper}
@@ -390,8 +383,8 @@ export default class Modalize extends React.Component<IProps, IState> {
     </React.Fragment>
   )
 
-  render() {
-    const { style } = this.props;
+  render(): React.ReactNode {
+    const { style, useNativeDriver } = this.props;
     const { isVisible, lastSnap } = this.state;
     const max = lastSnap - this.snaps[0];
 
@@ -400,7 +393,7 @@ export default class Modalize extends React.Component<IProps, IState> {
         supportedOrientations={['landscape', 'portrait', 'portrait-upside-down']}
         onRequestClose={this.onBackPress}
         visible={isVisible}
-        hardwareAccelerated
+        hardwareAccelerated={useNativeDriver}
         transparent
       >
         <TapGestureHandler
@@ -412,10 +405,14 @@ export default class Modalize extends React.Component<IProps, IState> {
             style={StyleSheet.absoluteFill}
             pointerEvents="box-none"
           >
-            <Animated.View style={[s.wrapper, this.wrapper, style]}>
+            <AnimatedKeyboardAvoidingView
+              behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+              pointerEvents="box-none"
+              style={[s.wrapper, this.wrapper, style]}
+            >
               {this.renderSwiper()}
               {this.renderChildren()}
-            </Animated.View>
+            </AnimatedKeyboardAvoidingView>
 
             {this.renderOverlay()}
           </View>
