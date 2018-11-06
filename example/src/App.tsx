@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import Modalize from 'react-native-modalize';
 
 export default class App extends React.Component {
@@ -58,6 +58,8 @@ export default class App extends React.Component {
         >
           <View style={{ paddingLeft: 10 }}>
             {this.renderList()}
+
+            <TextInput value="Input" />
           </View>
         </Modalize>
       </View>
