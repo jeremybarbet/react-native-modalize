@@ -16,6 +16,7 @@ interface IProps {
   onClosed?: () => void;
   useNativeDriver?: boolean;
   adjustToContentHeight?: boolean;
+  showsVerticalScrollIndicator?: boolean;
   HeaderComponent?: React.ReactNode;
   FooterComponent?: React.ReactNode;
 }
@@ -51,8 +52,9 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   static defaultProps = {
     swiperPosition: 'outside',
-    useNativeDriver: false,
+    useNativeDriver: true,
     adjustToContentHeight: false,
+    showsVerticalScrollIndicator: false,
   };
 
   constructor(props: IProps) {
@@ -337,7 +339,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private renderChildren = (): React.ReactNode => {
-    const { children, useNativeDriver, HeaderComponent, FooterComponent } = this.props;
+    const { children, useNativeDriver, showsVerticalScrollIndicator, HeaderComponent, FooterComponent } = this.props;
     const { contentHeight } = this.state;
 
     return (
@@ -359,10 +361,11 @@ export default class Modalize extends React.Component<IProps, IState> {
             <Animated.ScrollView
               style={this.scrollview}
               bounces={false}
-              onScrollBeginDrag={Animated.event([{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }], { useNativeDriver })}
+              onScrollBeginDrag={Animated.event([{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }], { useNativeDriver: false })}
               scrollEventThrottle={16}
               onLayout={this.onScrollViewLayout}
               scrollEnabled={contentHeight === 0}
+              showsVerticalScrollIndicator={showsVerticalScrollIndicator}
             >
               {children}
             </Animated.ScrollView>
