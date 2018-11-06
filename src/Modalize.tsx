@@ -24,6 +24,7 @@ interface IProps {
 interface IState {
   lastSnap: number;
   isVisible: boolean;
+  showContent: boolean;
   overlay: Animated.Value;
   modalHeight: number;
   contentHeight: number;
@@ -76,6 +77,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     this.state = {
       lastSnap: this.snaps[props.height ? 1 : 0],
       isVisible: false,
+      showContent: true,
       overlay: new Animated.Value(0),
       modalHeight,
       contentHeight: 0,
@@ -146,7 +148,10 @@ export default class Modalize extends React.Component<IProps, IState> {
     const { overlay, modalHeight } = this.state;
     const toValue = height ? modalHeight - height : 0;
 
-    this.setState({ isVisible: true });
+    this.setState({
+      isVisible: true,
+      showContent: true,
+    });
 
     Animated.parallel([
       Animated.timing(overlay, {
@@ -178,14 +183,14 @@ export default class Modalize extends React.Component<IProps, IState> {
     Animated.parallel([
       Animated.timing(overlay, {
         toValue: 0,
-        duration: 200,
+        duration: 280,
         easing: Easing.ease,
         useNativeDriver,
       }),
 
       Animated.timing(this.translateY, {
         toValue: screenHeight,
-        duration: 320,
+        duration: 280,
         easing: Easing.out(Easing.ease),
         useNativeDriver,
       }),
@@ -194,21 +199,18 @@ export default class Modalize extends React.Component<IProps, IState> {
         onClosed();
       }
 
-      this.onResetModal();
-    });
-  }
+      const { height } = this.props;
+      const lastSnap = height ? this.snaps[1] : this.snaps[0];
 
-  private onResetModal = (): void => {
-    const { height } = this.props;
+      this.setState({ showContent: false });
 
-    this.translateY.setValue(screenHeight);
-    this.dragY.setValue(0);
+      this.translateY.setValue(screenHeight);
+      this.dragY.setValue(0);
 
-    const lastSnap = height ? this.snaps[1] : this.snaps[0];
-
-    this.setState({
-      lastSnap,
-      isVisible: false,
+      this.setState({
+        lastSnap,
+        isVisible: false,
+      });
     });
   }
 
@@ -340,7 +342,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private renderChildren = (): React.ReactNode => {
     const { children, useNativeDriver, showsVerticalScrollIndicator, HeaderComponent, FooterComponent } = this.props;
-    const { contentHeight } = this.state;
+    const { contentHeight, showContent } = this.state;
 
     return (
       <PanGestureHandler
@@ -367,7 +369,7 @@ export default class Modalize extends React.Component<IProps, IState> {
               scrollEnabled={contentHeight === 0}
               showsVerticalScrollIndicator={showsVerticalScrollIndicator}
             >
-              {children}
+              {showContent && children}
             </Animated.ScrollView>
           </NativeViewGestureHandler>
 
@@ -378,6 +380,8 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private renderOverlay = (): React.ReactNode => {
+    const { showContent } = this.state;
+
     return (
       <React.Fragment>
         {/* <PanGestureHandler
@@ -392,7 +396,7 @@ export default class Modalize extends React.Component<IProps, IState> {
             activeOpacity={0.95}
             style={[StyleSheet.absoluteFill, { zIndex: 0 }]}
           >
-            <Animated.View style={[StyleSheet.absoluteFill, s.overlay, this.overlay]} />
+            {showContent && <Animated.View style={[StyleSheet.absoluteFill, s.overlay, this.overlay]} />}
           </AnimatedTouchableOpacity>
         {/* </PanGestureHandler> */}
       </React.Fragment>
@@ -429,15 +433,15 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   render(): React.ReactNode {
     const { style, useNativeDriver } = this.props;
-    const { isVisible, lastSnap } = this.state;
+    const { isVisible, lastSnap, showContent } = this.state;
     const max = lastSnap - this.snaps[0];
 
     return (
       <Modal
         supportedOrientations={['landscape', 'portrait', 'portrait-upside-down']}
         onRequestClose={this.onBackPress}
-        visible={isVisible}
         hardwareAccelerated={useNativeDriver}
+        visible={isVisible}
         transparent
       >
         <TapGestureHandler
@@ -449,14 +453,16 @@ export default class Modalize extends React.Component<IProps, IState> {
             style={StyleSheet.absoluteFill}
             pointerEvents="box-none"
           >
-            <AnimatedKeyboardAvoidingView
-              behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-              pointerEvents="box-none"
-              style={[s.wrapper, this.wrapper, style]}
-            >
-              {this.renderSwiper()}
-              {this.renderChildren()}
-            </AnimatedKeyboardAvoidingView>
+            {showContent && (
+              <AnimatedKeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                pointerEvents="box-none"
+                style={[s.wrapper, this.wrapper, style]}
+              >
+                {this.renderSwiper()}
+                {this.renderChildren()}
+              </AnimatedKeyboardAvoidingView>
+            )}
 
             {this.renderOverlay()}
           </View>
