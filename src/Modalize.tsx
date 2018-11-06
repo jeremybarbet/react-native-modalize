@@ -8,15 +8,14 @@ interface IProps {
   children: React.ReactNode;
   swiperPosition: 'outside' | 'inside';
   height?: number;
-  style?: ViewStyle;
+  style?: ViewStyle | ViewStyle[];
+  handleStyle?: ViewStyle | ViewStyle[];
   onOpen?: () => void;
   onOpened?: () => void;
   onClose?: () => void;
   onClosed?: () => void;
   useNativeDriver?: boolean;
   adjustToContentHeight?: boolean;
-
-  // @todo
   HeaderComponent?: React.ReactNode;
   FooterComponent?: React.ReactNode;
 }
@@ -27,6 +26,8 @@ interface IState {
   overlay: Animated.Value;
   modalHeight: number;
   contentHeight: number;
+  headerHeight: number;
+  footerHeight: number;
 }
 
 const { height: screenHeight } = Dimensions.get('window');
@@ -60,8 +61,6 @@ export default class Modalize extends React.Component<IProps, IState> {
     const modalHeight = screenHeight - this.swiperHeight;
 
     this.snaps = [];
-    this.snapStart = this.snaps[0];
-    this.snapEnd = this.snaps[this.snaps.length - 1];
 
     if (props.height) {
       this.snaps.push(0, modalHeight - props.height, modalHeight);
@@ -69,12 +68,17 @@ export default class Modalize extends React.Component<IProps, IState> {
       this.snaps.push(0, modalHeight);
     }
 
+    this.snapStart = this.snaps[0];
+    this.snapEnd = this.snaps[this.snaps.length - 1];
+
     this.state = {
       lastSnap: this.snaps[props.height ? 1 : 0],
       isVisible: false,
       overlay: new Animated.Value(0),
       modalHeight,
       contentHeight: 0,
+      headerHeight: 0,
+      footerHeight: 0,
     };
 
     this.beginScrollY.addListener(({ value }) =>
@@ -117,6 +121,13 @@ export default class Modalize extends React.Component<IProps, IState> {
     };
   }
 
+  private get scrollview(): ViewStyle {
+    const { modalHeight, headerHeight, footerHeight } = this.state;
+    const height = modalHeight - headerHeight - footerHeight;
+
+    return { height };
+  }
+
   private get overlay(): StyleProp<unknown> {
     const { overlay } = this.state;
 
@@ -126,20 +137,6 @@ export default class Modalize extends React.Component<IProps, IState> {
         outputRange: [0, 1],
       }),
     };
-  }
-
-  private onUpdateLayout = (h: number): void => {
-    const { adjustToContentHeight, height } = this.props;
-    const { contentHeight, modalHeight } = this.state;
-
-    if (!adjustToContentHeight || modalHeight === h || height) {
-      return;
-    }
-
-    this.setState({
-      contentHeight: h,
-      modalHeight: contentHeight - this.swiperHeight,
-    });
   }
 
   private onAnimateOpen = (): void => {
@@ -224,6 +221,26 @@ export default class Modalize extends React.Component<IProps, IState> {
     this.onUpdateLayout(height);
   }
 
+  private onComponentLayout = ({ nativeEvent }: LayoutChangeEvent, type: string): void => {
+    const { height } = nativeEvent.layout;
+
+    this.setState({ [`${type}Height`]: height } as any);
+  }
+
+  private onUpdateLayout = (h: number): void => {
+    const { adjustToContentHeight, height } = this.props;
+    const { contentHeight, modalHeight } = this.state;
+
+    if (!adjustToContentHeight || modalHeight === h || height) {
+      return;
+    }
+
+    this.setState({
+      contentHeight: h,
+      modalHeight: contentHeight - this.swiperHeight,
+    });
+  }
+
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
     const { height, useNativeDriver } = this.props;
     const { lastSnap } = this.state;
@@ -286,6 +303,99 @@ export default class Modalize extends React.Component<IProps, IState> {
     this.close();
   }
 
+  private renderComponent = (Component: React.ReactNode, type: string): React.ReactNode => {
+    if (!Component) {
+      return <View />;
+    }
+
+    return (
+      <View onLayout={event => this.onComponentLayout(event, type)}>
+        {React.isValidElement(Component)
+          ? Component
+          // @ts-ignore
+          : <Component />
+        }
+      </View>
+    );
+  }
+
+  private renderSwiper = (): React.ReactNode => {
+    const { handleStyle } = this.props;
+    const swiperStyles = [s.swiper];
+    const handleStyles = [s.swiper__handle, handleStyle];
+
+    if (!this.swiperOutside) {
+      swiperStyles.push(s.swiperBottom);
+      handleStyles.push(s.swiper__handleBottom);
+    }
+
+    return (
+      <View style={swiperStyles}>
+        <View style={handleStyles} />
+      </View>
+    );
+  }
+
+  private renderChildren = (): React.ReactNode => {
+    const { children, useNativeDriver, HeaderComponent, FooterComponent } = this.props;
+    const { contentHeight } = this.state;
+
+    return (
+      <PanGestureHandler
+        ref={this.modalChildren}
+        simultaneousHandlers={[this.modalScrollview, this.modal]}
+        shouldCancelWhenOutside={false}
+        onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], { useNativeDriver })}
+        onHandlerStateChange={this.onHandleChildren}
+      >
+        <Animated.View>
+          {this.renderComponent(HeaderComponent, 'header')}
+
+          <NativeViewGestureHandler
+            ref={this.modalScrollview}
+            waitFor={this.modal}
+            simultaneousHandlers={this.modalChildren}
+          >
+            <Animated.ScrollView
+              style={this.scrollview}
+              bounces={false}
+              onScrollBeginDrag={Animated.event([{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }], { useNativeDriver })}
+              scrollEventThrottle={16}
+              onLayout={this.onScrollViewLayout}
+              scrollEnabled={contentHeight === 0}
+            >
+              {children}
+            </Animated.ScrollView>
+          </NativeViewGestureHandler>
+
+          {this.renderComponent(FooterComponent, 'footer')}
+        </Animated.View>
+      </PanGestureHandler>
+    );
+  }
+
+  private renderOverlay = (): React.ReactNode => {
+    return (
+      <React.Fragment>
+        {/* <PanGestureHandler
+          ref={this.modalSwiper}
+          simultaneousHandlers={[this.modalScrollview, this.modal]}
+          shouldCancelWhenOutside={false}
+          onGestureEvent={this.onGestureEvent}
+          onHandlerStateChange={this.onHeaderHandlerStateChange}
+        > */}
+          <AnimatedTouchableOpacity
+            onPress={this.onOverlayPress}
+            activeOpacity={0.95}
+            style={[StyleSheet.absoluteFill, { zIndex: 0 }]}
+          >
+            <Animated.View style={[StyleSheet.absoluteFill, s.overlay, this.overlay]} />
+          </AnimatedTouchableOpacity>
+        {/* </PanGestureHandler> */}
+      </React.Fragment>
+    );
+  }
+
   public open = (): void => {
     const { onOpen } = this.props;
 
@@ -313,75 +423,6 @@ export default class Modalize extends React.Component<IProps, IState> {
 
     this.onAnimateClose();
   }
-
-  private renderSwiper = (): React.ReactNode => {
-    const swiperStyles = [s.swiper];
-    const handleStyles = [s.swiper__handle];
-
-    if (!this.swiperOutside) {
-      swiperStyles.push(s.swiperBottom);
-      handleStyles.push(s.swiper__handleBottom);
-    }
-
-    return (
-      <View style={swiperStyles}>
-        <View style={handleStyles} />
-      </View>
-    );
-  }
-
-  private renderChildren = (): React.ReactNode => {
-    const { children, useNativeDriver } = this.props;
-    const { contentHeight } = this.state;
-
-    return (
-      <PanGestureHandler
-        ref={this.modalChildren}
-        simultaneousHandlers={[this.modalScrollview, this.modal]}
-        shouldCancelWhenOutside={false}
-        onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], { useNativeDriver })}
-        onHandlerStateChange={this.onHandleChildren}
-      >
-        <Animated.View>
-          <NativeViewGestureHandler
-            ref={this.modalScrollview}
-            waitFor={this.modal}
-            simultaneousHandlers={this.modalChildren}
-          >
-            <Animated.ScrollView
-              bounces={false}
-              onScrollBeginDrag={Animated.event([{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }], { useNativeDriver })}
-              scrollEventThrottle={16}
-              onLayout={this.onScrollViewLayout}
-              scrollEnabled={contentHeight === 0}
-            >
-              {children}
-            </Animated.ScrollView>
-          </NativeViewGestureHandler>
-        </Animated.View>
-      </PanGestureHandler>
-    );
-  }
-
-  private renderOverlay = (): React.ReactNode => (
-    <React.Fragment>
-      {/* <PanGestureHandler
-        ref={this.modalSwiper}
-        simultaneousHandlers={[this.modalScrollview, this.modal]}
-        shouldCancelWhenOutside={false}
-        onGestureEvent={this.onGestureEvent}
-        onHandlerStateChange={this.onHeaderHandlerStateChange}
-      > */}
-        <AnimatedTouchableOpacity
-          onPress={this.onOverlayPress}
-          activeOpacity={0.95}
-          style={[StyleSheet.absoluteFill, { zIndex: 0 }]}
-        >
-          <Animated.View style={[StyleSheet.absoluteFill, s.overlay, this.overlay]} />
-        </AnimatedTouchableOpacity>
-      {/* </PanGestureHandler> */}
-    </React.Fragment>
-  )
 
   render(): React.ReactNode {
     const { style, useNativeDriver } = this.props;
