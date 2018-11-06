@@ -6,17 +6,15 @@ export default class App extends React.Component {
 
   modalize: React.RefObject<Modalize> = React.createRef();
 
-  static get options() {
-    return {
-      topBar: {
-        visible: false,
-      },
-    };
-  }
-
-  openModalize = () => {
+  openModal = () => {
     if (this.modalize.current) {
       this.modalize.current.open();
+    }
+  }
+
+  closeModal = () => {
+    if (this.modalize.current) {
+      this.modalize.current.close();
     }
   }
 
@@ -35,6 +33,7 @@ export default class App extends React.Component {
   renderList() {
     const list = [];
 
+    // tslint:disable-next-line:no-increment-decrement
     for (let i = 0; i < 50; i++) {
       list.push(<Text style={s.text} key={i}>Elem {i}</Text>);
     }
@@ -45,7 +44,7 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={s.host}>
-        <TouchableOpacity onPress={this.openModalize}>
+        <TouchableOpacity onPress={this.openModal}>
           <Text>Open Modalize</Text>
         </TouchableOpacity>
 
@@ -56,7 +55,11 @@ export default class App extends React.Component {
           // height={300}
           // adjustToContentHeight
         >
-          <View style={{ paddingLeft: 10 }}>
+          <View style={{ padding: 10 }}>
+            <TouchableOpacity onPress={this.closeModal}>
+              <Text>Close me</Text>
+            </TouchableOpacity>
+
             {this.renderList()}
 
             <TextInput value="Input" />
