@@ -1,6 +1,6 @@
 # Modalize
 
-A modal that loves ScrollViews. This component had been built with `react-native-gesture-handler` on top of the `Modal` component to take, care by default, of all the scrollview behaviors.
+A modal that loves ScrollViews. This component had been built with `react-native-gesture-handler` on top of the `Modal` component. It's made to address the common issue of the scrollable behavior you can face with react-native.
 
 ## Installation
 
@@ -18,11 +18,11 @@ This package has a peer dependencies to `react-native-gesture-handler`, follow [
 
 ## Features
 
-- ScrollView behavior by default
-- Snapping for two opening state
+- Scrollable behavior by default
+- Snapping states
 - In and out animations
-- Swiping to dismiss
-- Open and close public function
+- Swiping events
+- Open and close exposed methods
 - Listeners (onOpen/onOpened/onClose/onClosed)
 - Use native driver by default
 - Take care of keyboard if you have inputs
@@ -35,7 +35,7 @@ This package has a peer dependencies to `react-native-gesture-handler`, follow [
 import Modalize from 'react-native-modal';
 ```
 
-2. Add the modal in your render function use the `open` / `close` public method
+2. Add the modal in your render function, and use the `open` / `close` public methods
 
 ```jsx
 export default class MyApp extends React.Component {
@@ -76,9 +76,7 @@ export default class MyApp extends React.Component {
 }
 ```
 
-## Props
-
-Here is the list of all the available props for the `Modalize` component
+## The Props's army
 
 | Props                  | Type        | Default         | Description                                                      |
 | ---------------------- | ----------- | --------------- | ---------------------------------------------------------------- |
