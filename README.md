@@ -78,17 +78,18 @@ export default class MyApp extends React.Component {
 
 ## The Props's army
 
-| Props                  | Type        | Default         | Description                                                      |
-| ---------------------- | ----------- | --------------- | ---------------------------------------------------------------- |
-| children               | node        | **`required`**  | Something nice inside the modal (or not, up to you)              |
-| swiperPosition         | string      | `outside`       | The swiper's position on top of the modal, because it's nice     |
-| height                 | number      | `null`          | If you want the enable the snapping feature, add this props      |
-| style                  | style       | `null`          | You want a better design to this white background, pass it here  |
-| onOpen                 | func        | `null`          | Called when the open method is used                              |
-| onOpened               | func        | `null`          | Called when the opening animation is finished                    |
-| onClose                | func        | `null`          | Called when the close method is used                             |
-| onClosed               | func        | `null`          | Called when the closing animation is finished                    |
-| useNativeDriver        | boolean     | `true`          | Because it's better to use native animations                     |
-| adjustToContentHeight  | boolean     | `false`         | Don't want to calculate the height, just use this props          |
-| HeaderComponent        | node        | `null`          | A fixed header component on top of the modal                     |
-| FooterComponent        | node        | `null`          | A fixed footer component on top of the modal                     |
+| Props                         | Type        | Default         | Description                                                      |
+| ----------------------------- | ----------- | --------------- | ---------------------------------------------------------------- |
+| children                      | node        | **`required`**  | Something nice inside the modal (or not, up to you)              |
+| swiperPosition                | string      | `outside`       | The swiper's position on top of the modal, because it's nice     |
+| height                        | number      | `null`          | If you want the enable the snapping feature, add this props      |
+| style                         | style       | `null`          | You want a better design to this white background, pass it here  |
+| onOpen                        | func        | `null`          | Called when the open method is used                              |
+| onOpened                      | func        | `null`          | Called when the opening animation is finished                    |
+| onClose                       | func        | `null`          | Called when the close method is used                             |
+| onClosed                      | func        | `null`          | Called when the closing animation is finished                    |
+| useNativeDriver               | boolean     | `true`          | Because it's better to use native animations                     |
+| adjustToContentHeight         | boolean     | `false`         | Don't want to calculate the height, just use this props          |
+| showsVerticalScrollIndicator  | boolean     | `true`          | Do not show the indicator for the scrollview by default          |
+| HeaderComponent               | node        | `null`          | A fixed header component on top of the modal                     |
+| FooterComponent               | node        | `null`          | A fixed footer component on top of the modal                     |
