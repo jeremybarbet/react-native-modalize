@@ -10,6 +10,7 @@
     ]
   },
   "rules": {
+    "align": false,
     "ordered-imports": false,
     "object-literal-sort-keys": false,
     "max-line-length": false,
