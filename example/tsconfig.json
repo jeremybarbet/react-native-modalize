@@ -5,9 +5,7 @@
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
     "jsx": "react-native",
-    "lib": [
-      "es2017"
-    ],
+    "lib": ["es2017"],
     "module": "es2015",
     "moduleResolution": "node",
     "noEmitHelpers": true,
