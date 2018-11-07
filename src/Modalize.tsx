@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, StyleSheet, View, Platform, BackAndroid, ViewStyle, TouchableOpacity, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, KeyboardAvoidingView } from 'react-native';
+import { Animated, StyleSheet, View, Platform, BackAndroid, ViewStyle, TouchableOpacity, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, KeyboardAvoidingView, BackHandler } from 'react-native';
 import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 import s from './Modalize.styles';
@@ -93,6 +93,14 @@ export default class Modalize extends React.Component<IProps, IState> {
       new Animated.Value(-1),
       this.beginScrollY,
     );
+  }
+
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
   }
 
   private get swiperOutside(): boolean  {
@@ -297,7 +305,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     }
   }
 
-  private onBackPress = (): boolean => {
+  private onBackPress = async (): Promise<boolean> => {
     this.close();
 
     return true;
@@ -410,10 +418,6 @@ export default class Modalize extends React.Component<IProps, IState> {
       onOpen();
     }
 
-    if (Platform.OS === 'android') {
-      BackAndroid.addEventListener('hardwareBackPress', this.onBackPress);
-    }
-
     this.onAnimateOpen();
   }
 
@@ -422,10 +426,6 @@ export default class Modalize extends React.Component<IProps, IState> {
 
     if (onClose) {
       onClose();
-    }
-
-    if (Platform.OS === 'android') {
-      BackAndroid.removeEventListener('hardwareBackPress', this.onBackPress);
     }
 
     this.onAnimateClose();
