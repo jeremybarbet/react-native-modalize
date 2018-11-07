@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, StyleSheet, View, Platform, ViewStyle, TouchableOpacity, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, KeyboardAvoidingView, BackHandler } from 'react-native';
+import { Animated, StyleSheet, View, Platform, ViewStyle, TouchableOpacity, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler } from 'react-native';
 import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 import s from './Modalize.styles';
@@ -34,7 +34,6 @@ interface IState {
 
 const { height: screenHeight } = Dimensions.get('window');
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
-const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
 const THRESHOLD = 200;
 
 export default class Modalize extends React.Component<IProps, IState> {
@@ -454,19 +453,12 @@ export default class Modalize extends React.Component<IProps, IState> {
           maxDurationMs={100000}
           maxDeltaY={max}
         >
-          <View
-            style={StyleSheet.absoluteFill}
-            pointerEvents="box-none"
-          >
+          <View style={StyleSheet.absoluteFill}>
             {showContent && (
-              <AnimatedKeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-                pointerEvents="box-none"
-                style={[s.wrapper, this.wrapper, style]}
-              >
+              <Animated.View style={[s.wrapper, this.wrapper, style]}>
                 {this.renderSwiper()}
                 {this.renderChildren()}
-              </AnimatedKeyboardAvoidingView>
+              </Animated.View>
             )}
 
             {this.renderOverlay()}
