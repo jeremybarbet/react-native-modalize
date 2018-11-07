@@ -93,3 +93,15 @@ export default class MyApp extends React.Component {
 | showsVerticalScrollIndicator  | boolean     | `true`          | Do not show the indicator for the scrollview by default          |
 | HeaderComponent               | node        | `null`          | A fixed header component on top of the modal                     |
 | FooterComponent               | node        | `null`          | A fixed footer component on top of the modal                     |
+
+## Development
+
+It's pretty rough for now, but it works.
+
+```bash
+cd example/
+yarn
+yarn start
+```
+
+Change the code into `example/node_modules/react-native-modalize/*.ts(x)`. Then the magic happen, copy your code changed and go to `src/*.ts(x)` and paste it. You can now commit and open a pull request.
