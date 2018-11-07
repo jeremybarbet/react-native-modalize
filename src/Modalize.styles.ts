@@ -24,7 +24,7 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 
-  swiper: {
+  handle: {
     position: 'absolute',
     top: -20,
     right: 0,
@@ -36,11 +36,11 @@ export default StyleSheet.create({
     height: 20,
   },
 
-  swiperBottom: {
+  handleBottom: {
     top: 0,
   },
 
-  swiper__handle: {
+  handle__shape: {
     alignSelf: 'center',
 
     top: 8,
@@ -52,7 +52,7 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
   },
 
-  swiper__handleBottom: {
+  handle__shapeBottom: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
   },
 });

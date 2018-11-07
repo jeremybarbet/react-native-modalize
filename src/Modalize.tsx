@@ -6,7 +6,7 @@ import s from './Modalize.styles';
 
 interface IProps {
   children: React.ReactNode;
-  swiperPosition: 'outside' | 'inside';
+  handlePosition: 'outside' | 'inside';
   height?: number;
   style?: ViewStyle | ViewStyle[];
   handleStyle?: ViewStyle | ViewStyle[];
@@ -50,7 +50,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   private modalScrollview: React.RefObject<NativeViewGestureHandler> = React.createRef();
 
   static defaultProps = {
-    swiperPosition: 'outside',
+    handlePosition: 'outside',
     useNativeDriver: true,
     adjustToContentHeight: false,
     showsVerticalScrollIndicator: false,
@@ -60,7 +60,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     super(props);
 
     const height = this.isIos ? screenHeight : screenHeight - 10;
-    const modalHeight = height - this.swiperHeight;
+    const modalHeight = height - this.handleHeight;
 
     this.snaps = [];
 
@@ -106,14 +106,14 @@ export default class Modalize extends React.Component<IProps, IState> {
     return Platform.OS === 'ios';
   }
 
-  private get swiperOutside(): boolean  {
-    const { swiperPosition } = this.props;
+  private get isHandleOutside(): boolean  {
+    const { handlePosition } = this.props;
 
-    return swiperPosition === 'outside';
+    return handlePosition === 'outside';
   }
 
-  private get swiperHeight(): number {
-    return this.swiperOutside ? 35 : 20;
+  private get handleHeight(): number {
+    return this.isHandleOutside ? 35 : 20;
   }
 
   private get wrapper(): StyleProp<unknown> {
@@ -214,7 +214,6 @@ export default class Modalize extends React.Component<IProps, IState> {
       const lastSnap = height ? this.snaps[1] : this.snaps[0];
 
       this.setState({ showContent: false });
-
       this.translateY.setValue(screenHeight);
       this.dragY.setValue(0);
 
@@ -252,7 +251,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
     this.setState({
       contentHeight: h,
-      modalHeight: contentHeight - this.swiperHeight,
+      modalHeight: contentHeight - this.handleHeight,
     });
   }
 
@@ -330,14 +329,14 @@ export default class Modalize extends React.Component<IProps, IState> {
     );
   }
 
-  private renderSwiper = (): React.ReactNode => {
+  private renderHandle = (): React.ReactNode => {
     const { handleStyle, useNativeDriver } = this.props;
-    const swiperStyles = [s.swiper];
-    const handleStyles = [s.swiper__handle, handleStyle];
+    const handleStyles = [s.handle];
+    const shapeStyles = [s.handle__shape, handleStyle];
 
-    if (!this.swiperOutside) {
-      swiperStyles.push(s.swiperBottom);
-      handleStyles.push(s.swiper__handleBottom);
+    if (!this.isHandleOutside) {
+      handleStyles.push(s.handleBottom);
+      shapeStyles.push(s.handle__shapeBottom);
     }
 
     return (
@@ -347,8 +346,8 @@ export default class Modalize extends React.Component<IProps, IState> {
         onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], { useNativeDriver })}
         onHandlerStateChange={this.onHandleChildren}
       >
-        <Animated.View style={swiperStyles}>
-          <View style={handleStyles} />
+        <Animated.View style={handleStyles}>
+          <View style={shapeStyles} />
         </Animated.View>
       </PanGestureHandler>
     );
@@ -454,7 +453,7 @@ export default class Modalize extends React.Component<IProps, IState> {
           <View style={StyleSheet.absoluteFill}>
             {showContent && (
               <Animated.View style={[s.wrapper, this.wrapper, style]}>
-                {this.renderSwiper()}
+                {this.renderHandle()}
                 {this.renderChildren()}
               </Animated.View>
             )}
