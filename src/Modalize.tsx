@@ -355,7 +355,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private renderChildren = (): React.ReactNode => {
     const { children, useNativeDriver, showsVerticalScrollIndicator, HeaderComponent, FooterComponent } = this.props;
-    const { contentHeight, showContent } = this.state;
+    const { contentHeight } = this.state;
 
     return (
       <PanGestureHandler
@@ -382,7 +382,7 @@ export default class Modalize extends React.Component<IProps, IState> {
               scrollEnabled={contentHeight === 0}
               showsVerticalScrollIndicator={showsVerticalScrollIndicator}
             >
-              {showContent && children}
+              {children}
             </Animated.ScrollView>
           </NativeViewGestureHandler>
 
