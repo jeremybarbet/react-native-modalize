@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, StyleSheet, View, Platform, ViewStyle, TouchableOpacity, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler } from 'react-native';
+import { Animated, StyleSheet, View, Platform, ViewStyle, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler } from 'react-native';
 import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 import s from './Modalize.styles';
@@ -33,7 +33,6 @@ interface IState {
 }
 
 const { height: screenHeight } = Dimensions.get('window');
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 const THRESHOLD = 200;
 
 export default class Modalize extends React.Component<IProps, IState> {
@@ -49,6 +48,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   private modal: React.RefObject<TapGestureHandler> = React.createRef();
   private modalChildren: React.RefObject<PanGestureHandler> = React.createRef();
   private modalScrollview: React.RefObject<NativeViewGestureHandler> = React.createRef();
+  private modalOverlay: React.RefObject<PanGestureHandler> = React.createRef();
 
   static defaultProps = {
     swiperPosition: 'outside',
@@ -315,10 +315,6 @@ export default class Modalize extends React.Component<IProps, IState> {
     return true;
   }
 
-  private onOverlayPress = (): void => {
-    this.close();
-  }
-
   private renderComponent = (Component: React.ReactNode, type: string): React.ReactNode => {
     if (!Component) {
       return <View />;
@@ -392,26 +388,23 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private renderOverlay = (): React.ReactNode => {
+    const { useNativeDriver } = this.props;
     const { showContent } = this.state;
 
     return (
-      <React.Fragment>
-        {/* <PanGestureHandler
-          ref={this.modalSwiper}
-          simultaneousHandlers={[this.modalScrollview, this.modal]}
-          shouldCancelWhenOutside={false}
-          onGestureEvent={this.onGestureEvent}
-          onHandlerStateChange={this.onHeaderHandlerStateChange}
-        > */}
-          <AnimatedTouchableOpacity
-            onPress={this.onOverlayPress}
-            activeOpacity={0.95}
-            style={[StyleSheet.absoluteFill, { zIndex: 0 }]}
-          >
-            {showContent && <Animated.View style={[StyleSheet.absoluteFill, s.overlay, this.overlay]} />}
-          </AnimatedTouchableOpacity>
-        {/* </PanGestureHandler> */}
-      </React.Fragment>
+      <PanGestureHandler
+        ref={this.modalOverlay}
+        simultaneousHandlers={this.modal}
+        shouldCancelWhenOutside={false}
+        onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], { useNativeDriver })}
+        onHandlerStateChange={this.onHandleChildren}
+      >
+        <Animated.View style={[StyleSheet.absoluteFill, { zIndex: 0 }]}>
+          {showContent && (
+            <Animated.View style={[StyleSheet.absoluteFill, s.overlay, this.overlay]} />
+          )}
+        </Animated.View>
+      </PanGestureHandler>
     );
   }
 
