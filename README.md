@@ -32,7 +32,7 @@ This package has a peer dependencies to `react-native-gesture-handler`, follow [
 1. Import Modalize
 
 ```jsx
-import Modalize from 'react-native-modal';
+import Modalize from 'react-native-modalize';
 ```
 
 2. Add the modal in your render function, and use the `open` / `close` public methods
