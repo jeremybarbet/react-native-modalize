@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, StyleSheet, View, Platform, BackAndroid, ViewStyle, TouchableOpacity, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, KeyboardAvoidingView, BackHandler } from 'react-native';
+import { Animated, StyleSheet, View, Platform, ViewStyle, TouchableOpacity, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, KeyboardAvoidingView, BackHandler } from 'react-native';
 import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 import s from './Modalize.styles';
@@ -61,7 +61,8 @@ export default class Modalize extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-    const modalHeight = screenHeight - this.swiperHeight;
+    const height = this.isIos ? screenHeight : screenHeight - 10;
+    const modalHeight = height - this.swiperHeight;
 
     this.snaps = [];
 
@@ -101,6 +102,10 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+  }
+
+  private get isIos(): boolean {
+    return Platform.OS === 'ios';
   }
 
   private get swiperOutside(): boolean  {
