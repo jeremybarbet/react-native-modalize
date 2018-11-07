@@ -48,7 +48,6 @@ export default class Modalize extends React.Component<IProps, IState> {
   private modal: React.RefObject<TapGestureHandler> = React.createRef();
   private modalChildren: React.RefObject<PanGestureHandler> = React.createRef();
   private modalScrollview: React.RefObject<NativeViewGestureHandler> = React.createRef();
-  private modalOverlay: React.RefObject<PanGestureHandler> = React.createRef();
 
   static defaultProps = {
     swiperPosition: 'outside',
@@ -175,7 +174,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
       Animated.spring(this.translateY, {
         toValue,
-        bounciness: 4,
+        bounciness: 5,
         useNativeDriver,
       }),
     ]).start(() => {
@@ -332,7 +331,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private renderSwiper = (): React.ReactNode => {
-    const { handleStyle } = this.props;
+    const { handleStyle, useNativeDriver } = this.props;
     const swiperStyles = [s.swiper];
     const handleStyles = [s.swiper__handle, handleStyle];
 
@@ -342,9 +341,16 @@ export default class Modalize extends React.Component<IProps, IState> {
     }
 
     return (
-      <View style={swiperStyles}>
-        <View style={handleStyles} />
-      </View>
+      <PanGestureHandler
+        simultaneousHandlers={this.modal}
+        shouldCancelWhenOutside={false}
+        onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], { useNativeDriver })}
+        onHandlerStateChange={this.onHandleChildren}
+      >
+        <Animated.View style={swiperStyles}>
+          <View style={handleStyles} />
+        </Animated.View>
+      </PanGestureHandler>
     );
   }
 
@@ -393,7 +399,6 @@ export default class Modalize extends React.Component<IProps, IState> {
 
     return (
       <PanGestureHandler
-        ref={this.modalOverlay}
         simultaneousHandlers={this.modal}
         shouldCancelWhenOutside={false}
         onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], { useNativeDriver })}
