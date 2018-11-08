@@ -18,6 +18,10 @@ export default StyleSheet.create({
     elevation: 4,
   },
 
+  wrapper__scrollview: {
+    overflow: 'hidden',
+  },
+
   overlay: {
     zIndex: 0,
 
