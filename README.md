@@ -42,6 +42,12 @@ export default class MyApp extends React.Component {
 
   modal = React.createRef();
 
+  get renderList() {
+    return [...Array(50).keys()].map((_, i) => (
+      <Text key={i}>Elem {i}</Text>
+    ));
+  }
+
   onOpen = () => {
     if (this.modal.current) {
       this.modal.current.open();
@@ -63,7 +69,7 @@ export default class MyApp extends React.Component {
 
         <Modalize ref={this.modal}>
           <View style={{ padding: 10 }}>
-            <Text>The content and it will be scrollable if tall enough!</Text>
+            {this.renderList}
 
             <TouchableOpacity onPress={this.onClose}>
               <Text>Close the modal</Text>

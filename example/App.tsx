@@ -6,6 +6,12 @@ export default class App extends React.Component {
 
   modalize: React.RefObject<Modalize> = React.createRef();
 
+  get renderList() {
+    return [...Array(50).keys()].map((_, i) => (
+      <Text style={s.text} key={i}>Elem {i}</Text>
+    ));
+  }
+
   openModal = () => {
     if (this.modalize.current) {
       this.modalize.current.open();
@@ -30,17 +36,6 @@ export default class App extends React.Component {
     );
   }
 
-  renderList() {
-    const list = [];
-
-    // tslint:disable-next-line:no-increment-decrement
-    for (let i = 0; i < 50; i++) {
-      list.push(<Text style={s.text} key={i}>Elem {i}</Text>);
-    }
-
-    return list;
-  }
-
   render() {
     return (
       <View style={s.host}>
@@ -60,7 +55,7 @@ export default class App extends React.Component {
               <Text>Close me</Text>
             </TouchableOpacity>
 
-            {this.renderList()}
+            {this.renderList}
 
             <TextInput value="Input" />
           </View>
