@@ -57,7 +57,15 @@ export default class App extends React.Component {
 
             {this.renderList}
 
-            <TextInput value="Input" />
+            <TextInput
+              value="My input"
+              style={{
+                padding: 10,
+                height: 40,
+                backgroundColor: '#ccc',
+                width: '100%',
+              }}
+            />
           </View>
         </Modalize>
       </View>
