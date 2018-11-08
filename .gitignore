@@ -10,6 +10,7 @@ yarn.lock
 
 # misc
 #
+.expo/
 .vscode/
 lib/
 .watchmanconfig
