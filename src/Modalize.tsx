@@ -139,10 +139,14 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private get scrollview(): ViewStyle {
+    const { adjustToContentHeight } = this.props;
     const { modalHeight, headerHeight, footerHeight } = this.state;
-    const height = modalHeight - headerHeight - footerHeight;
 
-    return { height };
+    if (adjustToContentHeight && (headerHeight || footerHeight)) {
+      return {};
+    }
+
+    return { height: modalHeight - headerHeight - footerHeight };
   }
 
   private get overlay(): StyleProp<unknown> {
