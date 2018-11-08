@@ -30,6 +30,7 @@ interface IState {
   contentHeight: number;
   headerHeight: number;
   footerHeight: number;
+  enableBounces: boolean;
 }
 
 const { height: screenHeight } = Dimensions.get('window');
@@ -82,6 +83,7 @@ export default class Modalize extends React.Component<IProps, IState> {
       contentHeight: 0,
       headerHeight: 0,
       footerHeight: 0,
+      enableBounces: true,
     };
 
     this.beginScrollY.addListener(({ value }) =>
@@ -258,9 +260,11 @@ export default class Modalize extends React.Component<IProps, IState> {
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
     const { height, useNativeDriver } = this.props;
     const { lastSnap } = this.state;
+    const { velocityY, translationY } = nativeEvent;
+
+    this.setState({ enableBounces: this.beginScrollYValue > 0 || translationY < 0 });
 
     if (nativeEvent.oldState === State.ACTIVE) {
-      const { velocityY, translationY } = nativeEvent;
       const toValue = translationY - this.beginScrollYValue;
       let destSnapPoint = this.snaps[0];
       let willClose = false;
@@ -355,7 +359,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private renderChildren = (): React.ReactNode => {
     const { children, useNativeDriver, showsVerticalScrollIndicator, HeaderComponent, FooterComponent } = this.props;
-    const { contentHeight } = this.state;
+    const { contentHeight, enableBounces } = this.state;
 
     return (
       <PanGestureHandler
@@ -375,7 +379,7 @@ export default class Modalize extends React.Component<IProps, IState> {
           >
             <Animated.ScrollView
               style={this.scrollview}
-              bounces={false}
+              bounces={enableBounces}
               onScrollBeginDrag={Animated.event([{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }], { useNativeDriver: false })}
               scrollEventThrottle={16}
               onLayout={this.onScrollViewLayout}
