@@ -43,6 +43,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   private snapStart: number;
   private snapEnd: number;
   private beginScrollYValue: number = 0;
+  private contentAlreadyCalculated: boolean = false;
   private beginScrollY: Animated.Value = new Animated.Value(0);
   private dragY: Animated.Value = new Animated.Value(0);
   private translateY: Animated.Value = new Animated.Value(screenHeight);
@@ -231,35 +232,31 @@ export default class Modalize extends React.Component<IProps, IState> {
     });
   }
 
-  private onScrollViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
-    const { contentHeight } = this.state;
-    const { height } = nativeEvent.layout;
+  private onScrollviewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
+    const { adjustToContentHeight, height } = this.props;
+    const { contentHeight, modalHeight } = this.state;
 
-    if (contentHeight > 0) {
+    if (
+      !adjustToContentHeight ||
+      modalHeight <= nativeEvent.layout.height ||
+      height ||
+      this.contentAlreadyCalculated
+    ) {
       return;
     }
 
-    this.onUpdateLayout(height);
+    this.setState({
+      contentHeight: nativeEvent.layout.height,
+      modalHeight: contentHeight - this.handleHeight,
+    }, () => {
+      this.contentAlreadyCalculated = true;
+    });
   }
 
   private onComponentLayout = ({ nativeEvent }: LayoutChangeEvent, type: string): void => {
     const { height } = nativeEvent.layout;
 
     this.setState({ [`${type}Height`]: height } as any);
-  }
-
-  private onUpdateLayout = (h: number): void => {
-    const { adjustToContentHeight, height } = this.props;
-    const { contentHeight, modalHeight } = this.state;
-
-    if (!adjustToContentHeight || modalHeight < h || height) {
-      return;
-    }
-
-    this.setState({
-      contentHeight: h,
-      modalHeight: contentHeight - this.handleHeight,
-    });
   }
 
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
@@ -409,7 +406,7 @@ export default class Modalize extends React.Component<IProps, IState> {
                   { useNativeDriver: false },
                 )}
                 scrollEventThrottle={16}
-                onLayout={this.onScrollViewLayout}
+                onLayout={this.onScrollviewLayout}
                 scrollEnabled={contentHeight === 0}
                 showsVerticalScrollIndicator={showsVerticalScrollIndicator}
                 keyboardDismissMode="interactive"
