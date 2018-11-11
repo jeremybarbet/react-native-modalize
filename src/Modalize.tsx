@@ -252,7 +252,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     const { adjustToContentHeight, height } = this.props;
     const { contentHeight, modalHeight } = this.state;
 
-    if (!adjustToContentHeight || modalHeight === h || height) {
+    if (!adjustToContentHeight || modalHeight < h || height) {
       return;
     }
 
