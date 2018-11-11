@@ -1,93 +1,65 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
-import Modalize from 'react-native-modalize';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
-export default class App extends React.Component {
+import DefaultContent from './modals/DefaultContent';
+import SnapingList from './modals/SnapingList';
+import FixedContent from './modals/FixedContent';
 
-  modalize: React.RefObject<Modalize> = React.createRef();
+export default class App extends React.PureComponent {
 
-  get renderList() {
-    return [...Array(50).keys()].map((_, i) => (
-      <Text style={s.text} key={i}>Elem {i}</Text>
+  modal: any[] = [];
+
+  renderButtons = (links: string[]) => {
+    return links.map((link, i) => (
+      <TouchableOpacity
+        key={i}
+        style={s.app__button}
+        onPress={() => this.modal[i].openModal()}
+        activeOpacity={0.9}
+      >
+        <Text style={s.app__text}>{link}</Text>
+      </TouchableOpacity>
     ));
-  }
-
-  openModal = () => {
-    if (this.modalize.current) {
-      this.modalize.current.open();
-    }
-  }
-
-  closeModal = () => {
-    if (this.modalize.current) {
-      this.modalize.current.close();
-    }
-  }
-
-  renderHeader() {
-    return (
-      <View style={{ height: 30, backgroundColor: 'red', width: '100%' }} />
-    );
-  }
-
-  renderFooter() {
-    return (
-      <View style={{ height: 50, backgroundColor: 'red', width: '100%', borderBottomColor: 'green', borderBottomWidth: 2 }} />
-    );
   }
 
   render() {
     return (
-      <View style={s.host}>
-        <TouchableOpacity onPress={this.openModal}>
-          <Text>Open Modalize</Text>
-        </TouchableOpacity>
+      <View style={s.app}>
+        {this.renderButtons([
+          'Modal with a default content',
+          'Modal with a fixed content',
+          'Modal with a snaping list',
+        ])}
 
-        <Modalize
-          ref={this.modalize}
-          // HeaderComponent={this.renderHeader}
-          // FooterComponent={this.renderFooter}
-          // height={300}
-          // adjustToContentHeight
-        >
-          <View style={{ padding: 10 }}>
-            <TouchableOpacity onPress={this.closeModal}>
-              <Text>Close me</Text>
-            </TouchableOpacity>
-
-            {this.renderList}
-
-            <TextInput
-              value="My input"
-              style={{
-                padding: 10,
-                height: 40,
-                backgroundColor: '#ccc',
-                width: '100%',
-              }}
-            />
-          </View>
-        </Modalize>
+        <DefaultContent ref={(el: DefaultContent) => { this.modal[0] = el; }} />
+        <FixedContent ref={(el: FixedContent) => { this.modal[1] = el; }} />
+        <SnapingList ref={(el: SnapingList) => { this.modal[2] = el; }} />
       </View>
     );
   }
 }
 
 const s = StyleSheet.create({
-  host: {
+  app: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
 
-    padding: 16,
+    padding: 15,
   },
 
-  content: {
-    marginBottom: 16,
+  app__button: {
+    paddingVertical: 15,
+    marginBottom: 15,
+
+    width: 220,
+
+    backgroundColor: '#333',
+    borderRadius: 6,
   },
 
-  text: {
-    fontSize: 28,
-    fontWeight: '200',
+  app__text: {
+    color: '#fff',
+    textAlign: 'center',
   },
 });
