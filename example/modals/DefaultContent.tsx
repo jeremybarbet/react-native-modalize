@@ -9,6 +9,8 @@ export default class DefaultContent extends React.PureComponent {
 
   private renderContent = () => (
     <View style={s.content}>
+      <Text style={s.content__heading}>Article title</Text>
+      <Text style={s.content__subheading}>November 11st 2018</Text>
       <Text style={s.content__paragraph}>{faker.lorem.paragraphs(8)}</Text>
     </View>
   )
@@ -30,13 +32,28 @@ export default class DefaultContent extends React.PureComponent {
 
 const s = StyleSheet.create({
   content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-
     padding: 15,
   },
 
-  content__paragraph: {
+  content__heading: {
+    marginBottom: 2,
+
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#333',
+  },
+
+  content__subheading: {
+    marginBottom: 20,
+
     fontSize: 16,
+    color: '#ccc',
+  },
+
+  content__paragraph: {
+    fontSize: 15,
+    fontWeight: '200',
+    lineHeight: 22,
+    color: '#666',
   },
 });
