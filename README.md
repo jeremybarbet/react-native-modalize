@@ -1,5 +1,7 @@
 # Modalize
 
+**This package is still in an early stage, use it with cuation.** 🖖
+
 A modal that love ScrollViews. This component had been built with `react-native-gesture-handler` on top of the `Modal` component. It's made to address the common issue of the scrollable behavior you can face with react-native.
 
 ## Demo
