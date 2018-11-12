@@ -20,6 +20,7 @@
     "variable-name": false,
     "import-name": false,
     "no-boolean-literal-compare": false,
+    "no-console": [true, "debug", "log"],
     "no-else-after-return": [true, "allow-else-if"],
     "object-shorthand-properties-first": false
   }

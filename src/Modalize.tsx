@@ -17,6 +17,7 @@ interface IProps {
   useNativeDriver?: boolean;
   adjustToContentHeight?: boolean;
   showsVerticalScrollIndicator?: boolean;
+  withReactModal?: boolean;
   HeaderComponent?: React.ReactNode;
   FooterComponent?: React.ReactNode;
 }
@@ -59,6 +60,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     useNativeDriver: true,
     adjustToContentHeight: false,
     showsVerticalScrollIndicator: false,
+    withReactModal: false,
   };
 
   constructor(props: IProps) {
@@ -66,6 +68,10 @@ export default class Modalize extends React.Component<IProps, IState> {
 
     const height = this.isIos ? screenHeight : screenHeight - 10;
     const modalHeight = height - this.handleHeight;
+
+    if (props.withReactModal) {
+      console.warn('[react-native-modalize] `withReactModal: true`. React modal is going to be moved out of react-native core in the future. I\'d recommended migrating to something like react-navigation or react-native-navigation\'s modal to wrap this package. Besides, react-native-gesture-handler for Android desnt\'t work with the react modal component.');
+    }
 
     this.snaps = [];
 
@@ -112,7 +118,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     return Platform.OS === 'ios';
   }
 
-  private get isHandleOutside(): boolean  {
+  private get isHandleOutside(): boolean {
     const { handlePosition } = this.props;
 
     return handlePosition === 'outside';
@@ -461,6 +467,58 @@ export default class Modalize extends React.Component<IProps, IState> {
     );
   }
 
+  private renderModalize = (): React.ReactNode => {
+    const { style, adjustToContentHeight } = this.props;
+    const { isVisible, lastSnap, showContent } = this.state;
+    const max = lastSnap - this.snaps[0];
+
+    if (!isVisible) {
+      return null;
+    }
+
+    return (
+      <View style={StyleSheet.absoluteFill}>
+        <TapGestureHandler
+          ref={this.modal}
+          maxDurationMs={100000}
+          maxDeltaY={max}
+        >
+          <View style={StyleSheet.absoluteFill}>
+            {showContent && (
+              <AnimatedKeyboardAvoidingView
+                style={[s.wrapper, this.wrapper, style]}
+                behavior="padding"
+                enabled={this.isIos && adjustToContentHeight}
+              >
+                {this.renderHandle()}
+                {this.renderChildren()}
+              </AnimatedKeyboardAvoidingView>
+            )}
+
+            {this.renderOverlay()}
+          </View>
+        </TapGestureHandler>
+      </View>
+    );
+  }
+
+  private renderReactModal = (child: React.ReactNode): React.ReactNode => {
+    const { useNativeDriver } = this.props;
+    const { isVisible } = this.state;
+
+    return (
+      <Modal
+        supportedOrientations={['landscape', 'portrait', 'portrait-upside-down']}
+        onRequestClose={this.onBackPress}
+        hardwareAccelerated={useNativeDriver}
+        visible={isVisible}
+        transparent
+      >
+        {child}
+      </Modal>
+    );
+  }
+
   public open = (): void => {
     const { onOpen } = this.props;
 
@@ -482,39 +540,14 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   render(): React.ReactNode {
-    const { style, useNativeDriver, adjustToContentHeight } = this.props;
-    const { isVisible, lastSnap, showContent } = this.state;
-    const max = lastSnap - this.snaps[0];
+    const { withReactModal } = this.props;
 
-    return (
-      <Modal
-        supportedOrientations={['landscape', 'portrait', 'portrait-upside-down']}
-        onRequestClose={this.onBackPress}
-        hardwareAccelerated={useNativeDriver}
-        visible={isVisible}
-        transparent
-      >
-        <TapGestureHandler
-          ref={this.modal}
-          maxDurationMs={100000}
-          maxDeltaY={max}
-        >
-          <View style={StyleSheet.absoluteFill}>
-            {showContent && (
-              <AnimatedKeyboardAvoidingView
-                style={[s.wrapper, this.wrapper, style]}
-                behavior="padding"
-                enabled={this.isIos && adjustToContentHeight}
-              >
-                {this.renderHandle()}
-                {this.renderChildren()}
-              </AnimatedKeyboardAvoidingView>
-            )}
+    if (withReactModal && this.isIos) {
+      return this.renderReactModal(
+        this.renderModalize(),
+      );
+    }
 
-            {this.renderOverlay()}
-          </View>
-        </TapGestureHandler>
-      </Modal>
-    );
+    return this.renderModalize();
   }
 }
