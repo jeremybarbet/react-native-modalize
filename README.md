@@ -88,6 +88,7 @@ export default class MyApp extends React.PureComponent {
 | `height`                        | number      |                 | A first snap value before snaping to full height  |
 | `adjustToContentHeight`         | bool        | `false`         | Shrink the modal to content's height              |
 | `showsVerticalScrollIndicator`  | bool        | `false`         | Do not show the indicator for the scrollview      |
+| `withReactModal`                | bool        | `false`         | Only iOS. To use React Modal to wrap modalize     |
 | `HeaderComponent`               | node        |                 | A fixed header component on top of the modal      |
 | `FooterComponent`               | node        |                 | A fixed footer component on top of the modal      |
 | `onOpen`                        | func        |                 | Called when the `open` method is used             |
@@ -101,6 +102,12 @@ export default class MyApp extends React.PureComponent {
 | ------------------------------- | ----------- | --------------- | ------------------------------------------------- |
 | `open`                          | func        | **`required`**  | The method to open the modal                      |
 | `close`                         | func        |                 | The method to close the modal                     |
+
+## Q&A
+
+**What's the React modal's warning?**
+
+In a future version of `react-native`, the `Modal` component will be moved out from the core. Besides `react-native-gesture-handler` for `Android` doesn't work well with it. I'd recommand migrating to something like react-navigation or react-native-navigation's modal to wrap this component.
 
 ## Development
 
