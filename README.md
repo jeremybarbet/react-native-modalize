@@ -35,28 +35,16 @@ This package has a peer dependencies to `react-native-gesture-handler`, follow [
 import Modalize from 'react-native-modalize';
 ```
 
-2. Add the modal in your render function, and use the `open` / `close` public methods
+2. Add the modal in your render function, and use the `open` method to open the modal
 
 ```jsx
-export default class MyApp extends React.Component {
+export default class MyApp extends React.PureComponent {
 
   modal = React.createRef();
-
-  get renderList() {
-    return [...Array(50).keys()].map((_, i) => (
-      <Text key={i}>Elem {i}</Text>
-    ));
-  }
 
   onOpen = () => {
     if (this.modal.current) {
       this.modal.current.open();
-    }
-  }
-
-  onClose = () => {
-    if (this.modal.current) {
-      this.modal.current.close();
     }
   }
 
@@ -68,13 +56,7 @@ export default class MyApp extends React.Component {
         </TouchableOpacity>
 
         <Modalize ref={this.modal}>
-          <View style={{ padding: 10 }}>
-            {this.renderList}
-
-            <TouchableOpacity onPress={this.onClose}>
-              <Text>Close the modal</Text>
-            </TouchableOpacity>
-          </View>
+          ...your content
         </Modalize>
       </View>
     )
