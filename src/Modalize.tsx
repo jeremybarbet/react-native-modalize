@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Animated, StyleSheet, View, Platform, ViewStyle, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView } from 'react-native';
-import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
+import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent, TapGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 import s from './Modalize.styles';
 
@@ -51,6 +51,8 @@ export default class Modalize extends React.Component<IProps, IState> {
   private modal: React.RefObject<TapGestureHandler> = React.createRef();
   private modalChildren: React.RefObject<PanGestureHandler> = React.createRef();
   private modalScrollview: React.RefObject<NativeViewGestureHandler> = React.createRef();
+  private modalOverlay: React.RefObject<PanGestureHandler> = React.createRef();
+  private modalOverlayTap: React.RefObject<TapGestureHandler> = React.createRef();
 
   static defaultProps = {
     handlePosition: 'outside',
@@ -313,6 +315,12 @@ export default class Modalize extends React.Component<IProps, IState> {
     }
   }
 
+  private onHandleOverlay = ({ nativeEvent }: TapGestureHandlerStateChangeEvent): void => {
+    if (nativeEvent.oldState === State.ACTIVE) {
+      this.close();
+    }
+  }
+
   private onBackPress = async (): Promise<boolean> => {
     this.close();
 
@@ -428,7 +436,8 @@ export default class Modalize extends React.Component<IProps, IState> {
 
     return (
       <PanGestureHandler
-        simultaneousHandlers={this.modal}
+        ref={this.modalOverlay}
+        simultaneousHandlers={[this.modal, this.modalOverlayTap]}
         shouldCancelWhenOutside={false}
         onGestureEvent={Animated.event(
           [{ nativeEvent: { translationY: this.dragY } }],
@@ -438,7 +447,14 @@ export default class Modalize extends React.Component<IProps, IState> {
       >
         <Animated.View style={[StyleSheet.absoluteFill, { zIndex: 0 }]}>
           {showContent && (
-            <Animated.View style={[StyleSheet.absoluteFill, s.overlay, this.overlay]} />
+            <TapGestureHandler
+              ref={this.modalOverlayTap}
+              waitFor={this.modalOverlay}
+              simultaneousHandlers={this.modalOverlay}
+              onHandlerStateChange={this.onHandleOverlay}
+            >
+              <Animated.View style={[StyleSheet.absoluteFill, s.overlay, this.overlay]} />
+            </TapGestureHandler>
           )}
         </Animated.View>
       </PanGestureHandler>
