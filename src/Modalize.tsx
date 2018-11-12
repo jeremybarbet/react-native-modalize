@@ -70,7 +70,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     const modalHeight = height - this.handleHeight;
 
     if (props.withReactModal) {
-      console.warn('[react-native-modalize] `withReactModal: true`. React modal is going to be moved out of react-native core in the future. I\'d recommended migrating to something like react-navigation or react-native-navigation\'s modal to wrap this package. Besides, react-native-gesture-handler for Android desnt\'t work with the react modal component.');
+      console.warn('[react-native-modalize] `withReactModal: true`. React modal is going to be moved out of react-native core in the future. I\'d recommend migrating to something like react-navigation or react-native-navigation\'s modal to wrap this component. Besides, react-native-gesture-handler for Android desnt\'t work with the react modal component.');
     }
 
     this.snaps = [];

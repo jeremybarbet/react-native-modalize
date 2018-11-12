@@ -1,8 +1,8 @@
 # Modalize
 
-**This package is still in an early stage, use it with cuation.** 🖖
+**This package is still in an early stage, use it with caution.** 🖖
 
-A modal that love ScrollViews. This component had been built with `react-native-gesture-handler` on top of the `Modal` component. It's made to address the common issue of the scrollable behavior you can face with react-native.
+A modal that loves ScrollViews. This component had been built with `react-native-gesture-handler`. It's made to address the common issue of the scrollable behavior you can face with react-native.
 
 ## Demo
 
@@ -20,7 +20,7 @@ An expo app is avalaible at the [following link](https://expo.io/@jeremdsgn/reac
 yarn add react-native-modalize
 ```
 
-This package has a peer dependencies to `react-native-gesture-handler`, follow [their guide](https://kmagiera.github.io/react-native-gesture-handler/docs/getting-started.html) to set it up on your project.
+This package has a peer dependency to `react-native-gesture-handler`, follow [their guide](https://kmagiera.github.io/react-native-gesture-handler/docs/getting-started.html) to set it up on your project.
 
 ```bash
 "peerDependencies": {
@@ -85,7 +85,7 @@ export default class MyApp extends React.PureComponent {
 | `handlePosition`                | string      | `outside`       | The handle's position on top of the modal         |
 | `handleStyle`                   | style       |                 | Style passed to the handle                        |
 | `useNativeDriver`               | bool        | `true`          | Because it's better to use the UI thread          |
-| `height`                        | number      |                 | A first snap value before snaping to full height  |
+| `height`                        | number      |                 | A first snap value before snapping to full height  |
 | `adjustToContentHeight`         | bool        | `false`         | Shrink the modal to content's height              |
 | `showsVerticalScrollIndicator`  | bool        | `false`         | Do not show the indicator for the scrollview      |
 | `withReactModal`                | bool        | `false`         | Only iOS. To use React Modal to wrap modalize     |
@@ -107,7 +107,7 @@ export default class MyApp extends React.PureComponent {
 
 **What's the React modal's warning?**
 
-In a future version of `react-native`, the `Modal` component will be moved out from the core. Besides `react-native-gesture-handler` for `Android` doesn't work well with it. I'd recommand migrating to something like react-navigation or react-native-navigation's modal to wrap this component.
+In a future version of `react-native`, the `Modal` component will be moved out from the core. Besides, `react-native-gesture-handler` for `Android` doesn't work well with it. I'd recommend migrating to something like react-navigation or react-native-navigation's modal to wrap this component.
 
 ## Development
 
@@ -119,4 +119,4 @@ yarn
 yarn start
 ```
 
-Change the code into `example/node_modules/react-native-modalize/*.ts(x)`. Then the magic happen, copy your code changed and go to `src/*.ts(x)` and paste it. You can now commit and open a pull request.
+Change the code into `example/node_modules/react-native-modalize/*.ts(x)`. Then the magic happens, copy your code changed and go to `src/*.ts(x)` and paste it. You can now commit and open a pull request.

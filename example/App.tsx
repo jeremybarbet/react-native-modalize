@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import DefaultContent from './modals/DefaultContent';
-import SnapingList from './modals/SnapingList';
+import SnappingList from './modals/SnappingList';
 import FixedContent from './modals/FixedContent';
 
 export default class App extends React.PureComponent {
@@ -28,12 +28,12 @@ export default class App extends React.PureComponent {
         {this.renderButtons([
           'Modal with a default content',
           'Modal with a fixed content',
-          'Modal with a snaping list',
+          'Modal with a snapping list',
         ])}
 
         <DefaultContent ref={(el: DefaultContent) => { this.modal[0] = el; }} />
         <FixedContent ref={(el: FixedContent) => { this.modal[1] = el; }} />
-        <SnapingList ref={(el: SnapingList) => { this.modal[2] = el; }} />
+        <SnappingList ref={(el: SnappingList) => { this.modal[2] = el; }} />
       </View>
     );
   }

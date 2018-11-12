@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
-export default class SnapingList extends React.PureComponent {
+export default class SnappingList extends React.PureComponent {
 
   private modal: React.RefObject<Modalize> = React.createRef();
 
