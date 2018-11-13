@@ -1,17 +1,19 @@
 # Modalize
 
+[![npm version](https://badge.fury.io/js/react-native-modalize.svg)](https://badge.fury.io/js/react-native-modalize)
+
 **This package is still in an early stage, use it with caution.** 🖖
 
-A modal that loves ScrollViews. This component had been built with `react-native-gesture-handler`. It's made to address the common issue of the scrollable behavior you can face with react-native.
+A modal that loves ScrollViews. This component had been built with `react-native-gesture-handler` to address the common issue of scrolling and swipping behaviors you can face with a modal with react-native.
 
 ## Demo
 
 An expo app is avalaible at the [following link](https://expo.io/@jeremdsgn/react-native-modalize).
 
 <p align="left">
-  <img src="https://user-images.githubusercontent.com/937328/48359862-ca19bc80-e695-11e8-9e66-6ed182f3dd87.gif" height="516" />
-  <img src="https://user-images.githubusercontent.com/937328/48358611-07307f80-e693-11e8-852d-a14200005b30.gif" height="516" />
-  <img src="https://user-images.githubusercontent.com/937328/48358629-0dbef700-e693-11e8-8281-f86e280db7ac.gif" height="516" />
+  <img src="https://user-images.githubusercontent.com/937328/48359862-ca19bc80-e695-11e8-9e66-6ed182f3dd87.gif" height="532" />
+  <img src="https://user-images.githubusercontent.com/937328/48358611-07307f80-e693-11e8-852d-a14200005b30.gif" height="532" />
+  <img src="https://user-images.githubusercontent.com/937328/48358629-0dbef700-e693-11e8-8281-f86e280db7ac.gif" height="531" />
 </p>
 
 ## Installation
