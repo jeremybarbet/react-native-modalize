@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, StyleSheet, View, Platform, ViewStyle, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView } from 'react-native';
+import { Animated, StyleSheet, View, Platform, ViewStyle, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules } from 'react-native';
 import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent, TapGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 import s from './Modalize.styles';
@@ -32,10 +32,13 @@ interface IState {
   headerHeight: number;
   footerHeight: number;
   enableBounces: boolean;
+  scrollViewHeight: ViewStyle[];
+  keyboardEnableScroll: boolean;
 }
 
 const { height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
+const { StatusBarManager } = NativeModules;
 const THRESHOLD = 200;
 
 export default class Modalize extends React.Component<IProps, IState> {
@@ -51,7 +54,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   private reverseBeginScrollY: Animated.AnimatedMultiplication;
   private modal: React.RefObject<TapGestureHandler> = React.createRef();
   private modalChildren: React.RefObject<PanGestureHandler> = React.createRef();
-  private modalScrollview: React.RefObject<NativeViewGestureHandler> = React.createRef();
+  private modalScrollView: React.RefObject<NativeViewGestureHandler> = React.createRef();
   private modalOverlay: React.RefObject<PanGestureHandler> = React.createRef();
   private modalOverlayTap: React.RefObject<TapGestureHandler> = React.createRef();
 
@@ -94,6 +97,8 @@ export default class Modalize extends React.Component<IProps, IState> {
       headerHeight: 0,
       footerHeight: 0,
       enableBounces: true,
+      scrollViewHeight: [],
+      keyboardEnableScroll: false,
     };
 
     this.beginScrollY.addListener(({ value }) =>
@@ -106,12 +111,18 @@ export default class Modalize extends React.Component<IProps, IState> {
     );
   }
 
-  componentDidMount() {
+  componentWillMount() {
+    this.onScrollViewChange();
+
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+    Keyboard.addListener('keyboardWillShow', this.onKeyboardShow);
+    Keyboard.addListener('keyboardWillHide', this.onKeyboardHide);
   }
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+    Keyboard.removeListener('keyboardWillShow', this.onKeyboardShow);
+    Keyboard.removeListener('keyboardWillHide', this.onKeyboardHide);
   }
 
   private get isIos(): boolean {
@@ -146,17 +157,6 @@ export default class Modalize extends React.Component<IProps, IState> {
         }),
       }],
     };
-  }
-
-  private get scrollview(): ViewStyle {
-    const { adjustToContentHeight } = this.props;
-    const { modalHeight, headerHeight, footerHeight } = this.state;
-
-    if (adjustToContentHeight) {
-      return {};
-    }
-
-    return { height: modalHeight - headerHeight - footerHeight };
   }
 
   private get overlay(): StyleProp<unknown> {
@@ -240,7 +240,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     });
   }
 
-  private onScrollviewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
+  private onScrollViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
     const { adjustToContentHeight, height } = this.props;
     const { contentHeight, modalHeight } = this.state;
 
@@ -259,6 +259,29 @@ export default class Modalize extends React.Component<IProps, IState> {
     }, () => {
       this.contentAlreadyCalculated = true;
     });
+  }
+
+  private onScrollViewChange = (keyboardHeight?: number): void => {
+    const { adjustToContentHeight } = this.props;
+    const { contentHeight, modalHeight, headerHeight, footerHeight } = this.state;
+    const scrollViewHeight = [];
+
+    if (keyboardHeight) {
+      const statusBarHeight = this.isIos ? 20 : StatusBarManager.HEIGHT;
+      const height = screenHeight - keyboardHeight - headerHeight - footerHeight - this.handleHeight - statusBarHeight;
+
+      if (contentHeight > height) {
+        scrollViewHeight.push({ height });
+        this.setState({ keyboardEnableScroll: true });
+      }
+    } else if (!adjustToContentHeight) {
+      const height = modalHeight - headerHeight - footerHeight;
+
+      scrollViewHeight.push({ height });
+      this.setState({ keyboardEnableScroll: false });
+    }
+
+    this.setState({ scrollViewHeight });
   }
 
   private onComponentLayout = ({ nativeEvent }: LayoutChangeEvent, type: string): void => {
@@ -333,6 +356,16 @@ export default class Modalize extends React.Component<IProps, IState> {
     return true;
   }
 
+  private onKeyboardShow = (event: any) => {
+    const { height } = event.endCoordinates;
+
+    this.onScrollViewChange(height);
+  }
+
+  private onKeyboardHide = () => {
+    this.onScrollViewChange();
+  }
+
   private renderComponent = (Component: React.ReactNode, type: string): React.ReactNode => {
     if (!Component) {
       return <View />;
@@ -386,12 +419,13 @@ export default class Modalize extends React.Component<IProps, IState> {
       FooterComponent,
     } = this.props;
 
-    const { contentHeight, enableBounces } = this.state;
+    const { contentHeight, enableBounces, scrollViewHeight, keyboardEnableScroll } = this.state;
+    const scrollEnabled = contentHeight === 0 || keyboardEnableScroll;
 
     return (
       <PanGestureHandler
         ref={this.modalChildren}
-        simultaneousHandlers={[this.modalScrollview, this.modal]}
+        simultaneousHandlers={[this.modalScrollView, this.modal]}
         shouldCancelWhenOutside={false}
         onGestureEvent={Animated.event(
           [{ nativeEvent: { translationY: this.dragY } }],
@@ -408,20 +442,20 @@ export default class Modalize extends React.Component<IProps, IState> {
             enabled={this.isIos && !adjustToContentHeight}
           >
             <NativeViewGestureHandler
-              ref={this.modalScrollview}
+              ref={this.modalScrollView}
               waitFor={this.modal}
               simultaneousHandlers={this.modalChildren}
             >
               <Animated.ScrollView
-                style={this.scrollview}
+                style={scrollViewHeight}
                 bounces={enableBounces}
                 onScrollBeginDrag={Animated.event(
                   [{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }],
                   { useNativeDriver: false },
                 )}
                 scrollEventThrottle={16}
-                onLayout={this.onScrollviewLayout}
-                scrollEnabled={contentHeight === 0}
+                onLayout={this.onScrollViewLayout}
+                scrollEnabled={scrollEnabled}
                 showsVerticalScrollIndicator={showsVerticalScrollIndicator}
                 keyboardDismissMode="interactive"
               >
