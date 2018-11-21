@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, StyleSheet, View, Platform, ViewStyle, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules } from 'react-native';
+import { Animated, StyleSheet, View, Platform, ViewStyle, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules, PlatformIOSStatic } from 'react-native';
 import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent, TapGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 import s from './Modalize.styles';
@@ -36,7 +36,7 @@ interface IState {
   keyboardEnableScroll: boolean;
 }
 
-const { height: screenHeight } = Dimensions.get('window');
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
 const { StatusBarManager } = NativeModules;
 const THRESHOLD = 200;
@@ -70,7 +70,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     super(props);
 
     const height = this.isIos ? screenHeight : screenHeight - 10;
-    const modalHeight = height - this.handleHeight;
+    const modalHeight = height - this.handleHeight - (this.isIphoneX ? 44 : 0);
 
     if (props.withReactModal) {
       console.warn('[react-native-modalize] `withReactModal: true`. React modal is going to be moved out of react-native core in the future. I\'d recommend migrating to something like react-navigation or react-native-navigation\'s modal to wrap this component. Besides, react-native-gesture-handler for Android desnt\'t work with the react modal component.');
@@ -127,6 +127,13 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private get isIos(): boolean {
     return Platform.OS === 'ios';
+  }
+
+  private get isIphoneX(): boolean {
+    // @ts-ignore
+    const isIphone = this.isIos && !Platform.isPad && !Platform.isTVOS;
+
+    return isIphone && ((screenHeight === 812 || screenWidth === 812) || (screenHeight === 896 || screenWidth === 896));
   }
 
   private get isHandleOutside(): boolean {
