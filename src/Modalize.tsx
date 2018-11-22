@@ -57,6 +57,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   private modalScrollView: React.RefObject<NativeViewGestureHandler> = React.createRef();
   private modalOverlay: React.RefObject<PanGestureHandler> = React.createRef();
   private modalOverlayTap: React.RefObject<TapGestureHandler> = React.createRef();
+  private willCloseModalize: boolean = false;
 
   static defaultProps = {
     handlePosition: 'outside',
@@ -307,7 +308,6 @@ export default class Modalize extends React.Component<IProps, IState> {
     if (nativeEvent.oldState === State.ACTIVE) {
       const toValue = translationY - this.beginScrollYValue;
       let destSnapPoint = this.snaps[0];
-      let willClose = false;
 
       if (height) {
         const dragToss = 0.05;
@@ -318,20 +318,20 @@ export default class Modalize extends React.Component<IProps, IState> {
 
           if (distFromSnap < Math.abs(destSnapPoint - endOffsetY)) {
             destSnapPoint = snap;
-            willClose = false;
+            this.willCloseModalize = false;
 
             if (snap === this.snapEnd) {
-              willClose = true;
+              this.willCloseModalize = true;
               this.close();
             }
           }
         });
       } else if (translationY > THRESHOLD && this.beginScrollYValue === 0) {
-        willClose = true;
+        this.willCloseModalize = true;
         this.close();
       }
 
-      if (willClose) {
+      if (this.willCloseModalize) {
         return;
       }
 
@@ -352,7 +352,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private onHandleOverlay = ({ nativeEvent }: TapGestureHandlerStateChangeEvent): void => {
-    if (nativeEvent.oldState === State.ACTIVE) {
+    if (nativeEvent.oldState === State.ACTIVE && !this.willCloseModalize) {
       this.close();
     }
   }
