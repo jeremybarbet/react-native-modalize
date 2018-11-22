@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, StyleSheet, View, Platform, ViewStyle, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules, PlatformIOSStatic } from 'react-native';
+import { Animated, StyleSheet, View, Platform, ViewStyle, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules } from 'react-native';
 import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent, TapGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 import s from './Modalize.styles';
