@@ -375,7 +375,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private renderComponent = (Component: React.ReactNode, type: string): React.ReactNode => {
     if (!Component) {
-      return <View />;
+      return null;
     }
 
     return (
