@@ -2,8 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import DefaultContent from './modals/DefaultContent';
-import SnappingList from './modals/SnappingList';
 import FixedContent from './modals/FixedContent';
+import SnappingList from './modals/SnappingList';
+import AbsoluteHeader from './modals/AbsoluteHeader';
 
 export default class App extends React.PureComponent {
 
@@ -29,11 +30,13 @@ export default class App extends React.PureComponent {
           'Modal with a default content',
           'Modal with a fixed content',
           'Modal with a snapping list',
+          'Modal with an absolute header',
         ])}
 
         <DefaultContent ref={(el: DefaultContent) => { this.modal[0] = el; }} />
         <FixedContent ref={(el: FixedContent) => { this.modal[1] = el; }} />
         <SnappingList ref={(el: SnappingList) => { this.modal[2] = el; }} />
+        <AbsoluteHeader ref={(el: AbsoluteHeader) => { this.modal[3] = el; }} />
       </View>
     );
   }
@@ -52,7 +55,7 @@ const s = StyleSheet.create({
     paddingVertical: 15,
     marginBottom: 15,
 
-    width: 220,
+    width: 240,
 
     backgroundColor: '#333',
     borderRadius: 6,
