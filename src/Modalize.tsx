@@ -379,7 +379,10 @@ export default class Modalize extends React.Component<IProps, IState> {
     }
 
     return (
-      <View onLayout={event => this.onComponentLayout(event, type)}>
+      <View
+        style={s.component}
+        onLayout={event => this.onComponentLayout(event, type)}
+      >
         {React.isValidElement(Component)
           ? Component
           // @ts-ignore

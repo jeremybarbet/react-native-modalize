@@ -28,6 +28,10 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.65)',
   },
 
+  component: {
+    zIndex: 20,
+  },
+
   handle: {
     position: 'absolute',
     top: -20,
