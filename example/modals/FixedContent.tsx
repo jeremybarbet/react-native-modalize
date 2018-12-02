@@ -3,30 +3,40 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, ImageStyle } from 'rea
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
+import { isIphoneX } from '../is-iphone-x';
+
 export default class FixedContent extends React.PureComponent {
 
   private modal: React.RefObject<Modalize> = React.createRef();
 
-  private renderContent = () => (
-    <View style={s.content}>
-      <Image
-        style={s.content__icon as ImageStyle}
-        source={require('../assets/send-message.png')}
-      />
+  private renderContent = () => {
+    const contentStyles = [s.content];
 
-      <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
-      <Text style={s.content__heading}>Send the message?</Text>
-      <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
+    if (isIphoneX()) {
+      contentStyles.push(s.contentIphoneX);
+    }
 
-      <TouchableOpacity
-        style={s.content__button}
-        activeOpacity={0.9}
-        onPress={this.closeModal}
-      >
-        <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
-      </TouchableOpacity>
-    </View>
-  )
+    return (
+      <View style={contentStyles}>
+        <Image
+          style={s.content__icon as ImageStyle}
+          source={require('../assets/send-message.png')}
+        />
+
+        <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
+        <Text style={s.content__heading}>Send the message?</Text>
+        <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
+
+        <TouchableOpacity
+          style={s.content__button}
+          activeOpacity={0.9}
+          onPress={this.closeModal}
+        >
+          <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   public openModal = () => {
     if (this.modal.current) {
@@ -55,6 +65,12 @@ export default class FixedContent extends React.PureComponent {
 const s = StyleSheet.create({
   content: {
     padding: 20,
+  },
+
+  contentIphoneX: {
+    paddingTop: 20,
+    paddingBottom: 34,
+    paddingHorizontal: 20,
   },
 
   content__icon: {
