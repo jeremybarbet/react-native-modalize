@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Linking } from 'react-native';
 
 import DefaultContent from './modals/DefaultContent';
 import FixedContent from './modals/FixedContent';
@@ -37,6 +37,10 @@ export default class App extends React.PureComponent {
         <FixedContent ref={(el: FixedContent) => { this.modal[1] = el; }} />
         <SnappingList ref={(el: SnappingList) => { this.modal[2] = el; }} />
         <AbsoluteHeader ref={(el: AbsoluteHeader) => { this.modal[3] = el; }} />
+
+        <View style={s.app__footer}>
+          <Text style={s.app__copy}>Created by <Text style={s.app__author} onPress={() => Linking.openURL('https://github.com/jeremybarbet')}>Jérémy Barbet</Text> — v1.0.0-alpha.7</Text>
+        </View>
       </View>
     );
   }
@@ -64,5 +68,19 @@ const s = StyleSheet.create({
   app__text: {
     color: '#fff',
     textAlign: 'center',
+  },
+
+  app__footer: {
+    position: 'absolute',
+    bottom: 40,
+  },
+
+  app__copy: {
+    fontSize: 12,
+    color: '#b5b5b5',
+  },
+
+  app__author: {
+    color: '#707070',
   },
 });
