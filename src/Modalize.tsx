@@ -73,7 +73,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     super(props);
 
     const height = this.isIos ? screenHeight : screenHeight - 10;
-    const modalHeight = height - (props.withHandle ? this.handleHeight : 0) - (this.isIphoneX ? 44 : 0);
+    const modalHeight = height - (props.withHandle ? this.handleHeight : 0) - (this.isIphoneX ? 34 : 0);
 
     if (props.withReactModal) {
       console.warn('[react-native-modalize] `withReactModal: true`. React modal is going to be moved out of react-native core in the future. I\'d recommend migrating to something like react-navigation or react-native-navigation\'s modal to wrap this component. Besides, react-native-gesture-handler for Android desnt\'t work with the react modal component.');
@@ -278,7 +278,12 @@ export default class Modalize extends React.Component<IProps, IState> {
     const scrollViewHeight = [];
 
     if (keyboardHeight) {
-      const statusBarHeight = this.isIos ? 20 : StatusBarManager.HEIGHT;
+      const statusBarHeight = this.isIphoneX
+        ? 48
+        : this.isIos
+          ? 20
+          : StatusBarManager.HEIGHT;
+
       const height = screenHeight - keyboardHeight - headerHeight - footerHeight - (withHandle ? this.handleHeight : 0) - statusBarHeight;
 
       if (contentHeight > height) {
@@ -286,7 +291,7 @@ export default class Modalize extends React.Component<IProps, IState> {
         this.setState({ keyboardEnableScroll: true });
       }
     } else if (!adjustToContentHeight) {
-      const height = modalHeight - headerHeight - footerHeight;
+      const height = modalHeight - headerHeight - footerHeight - (this.isIphoneX ? 48 : 0);
 
       scrollViewHeight.push({ height });
       this.setState({ keyboardEnableScroll: false });
