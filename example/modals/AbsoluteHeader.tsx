@@ -42,6 +42,7 @@ export default class AbsoluteHeader extends React.PureComponent {
       <Modalize
         ref={this.modal}
         HeaderComponent={this.renderHeader}
+        withHandle={false}
       >
         {this.renderContent()}
       </Modalize>
