@@ -240,6 +240,7 @@ export default class Modalize extends React.Component<IProps, IState> {
       this.setState({ showContent: false });
       this.translateY.setValue(screenHeight);
       this.dragY.setValue(0);
+      this.willCloseModalize = false;
 
       this.setState({
         lastSnap,
