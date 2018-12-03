@@ -73,7 +73,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     super(props);
 
     const height = this.isIos ? screenHeight : screenHeight - 10;
-    const modalHeight = height - (props.withHandle ? this.handleHeight : 0) - (this.isIphoneX ? 34 : 0);
+    const modalHeight = height - this.handleHeight - (this.isIphoneX ? 34 : 0);
 
     if (props.withReactModal) {
       console.warn('[react-native-modalize] `withReactModal: true`. React modal is going to be moved out of react-native core in the future. I\'d recommend migrating to something like react-navigation or react-native-navigation\'s modal to wrap this component. Besides, react-native-gesture-handler for Android desnt\'t work with the react modal component.');
@@ -146,6 +146,12 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private get handleHeight(): number {
+    const { withHandle } = this.props;
+
+    if (!withHandle) {
+      return 20;
+    }
+
     return this.isHandleOutside ? 35 : 20;
   }
 
@@ -252,7 +258,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private onScrollViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
-    const { adjustToContentHeight, height, withHandle } = this.props;
+    const { adjustToContentHeight, height } = this.props;
     const { contentHeight, modalHeight } = this.state;
 
     if (
@@ -266,14 +272,14 @@ export default class Modalize extends React.Component<IProps, IState> {
 
     this.setState({
       contentHeight: nativeEvent.layout.height,
-      modalHeight: contentHeight - (withHandle ? this.handleHeight : 0),
+      modalHeight: contentHeight - this.handleHeight,
     }, () => {
       this.contentAlreadyCalculated = true;
     });
   }
 
   private onScrollViewChange = (keyboardHeight?: number): void => {
-    const { adjustToContentHeight, withHandle } = this.props;
+    const { adjustToContentHeight } = this.props;
     const { contentHeight, modalHeight, headerHeight, footerHeight } = this.state;
     const scrollViewHeight = [];
 
@@ -284,7 +290,7 @@ export default class Modalize extends React.Component<IProps, IState> {
           ? 20
           : StatusBarManager.HEIGHT;
 
-      const height = screenHeight - keyboardHeight - headerHeight - footerHeight - (withHandle ? this.handleHeight : 0) - statusBarHeight;
+      const height = screenHeight - keyboardHeight - headerHeight - footerHeight - this.handleHeight - statusBarHeight;
 
       if (contentHeight > height) {
         scrollViewHeight.push({ height });
@@ -433,7 +439,6 @@ export default class Modalize extends React.Component<IProps, IState> {
       useNativeDriver,
       showsVerticalScrollIndicator,
       adjustToContentHeight,
-      withHandle,
       HeaderComponent,
       FooterComponent,
     } = this.props;
@@ -457,7 +462,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
           <KeyboardAvoidingView
             behavior="position"
-            style={{ paddingBottom: (adjustToContentHeight || !withHandle) ? 0 : this.handleHeight }}
+            style={{ paddingBottom: adjustToContentHeight ? 0 : this.handleHeight }}
             enabled={this.isIos && !adjustToContentHeight}
           >
             <NativeViewGestureHandler
