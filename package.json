@@ -8,7 +8,9 @@
     "build": "rm -rf ./lib/* && tsc",
     "start": "yarn run tsc --watch",
     "prepublish": "yarn run build",
-    "lint": "tslint 'src/**/*.ts?(x)'"
+    "lint": "tslint 'src/**/*.ts?(x)'",
+    "version": "sh ./version.sh",
+    "postversion": "sh ./post-version.sh"
   },
   "keywords": [
     "react-native",
