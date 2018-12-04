@@ -4,7 +4,7 @@
 
 **This package is still in an early stage, use it with caution.** 🖖
 
-A modal that loves ScrollViews. This component had been built with `react-native-gesture-handler` to address the common issue of scrolling and swipping behaviors you can face with a modal with react-native. This component is built-in with a `ScrollView`, you don't have to include it by yourself, just pass a View with your content, and the component with handle the rest for you.
+A modal that loves ScrollViews. This component had been built with `react-native-gesture-handler` to address the common issue of scrolling and swipping behaviors you can face with a modal with react-native. This component is built-in with a `ScrollView`, you don't have to include it by yourself, just pass a View with your content, and the component will handle the rest for you.
 
 ## Demo
 
@@ -123,3 +123,7 @@ yarn start
 ```
 
 Change the code into `example/node_modules/react-native-modalize/*.ts(x)`. Then the magic happens, copy your code changed and go to `src/*.ts(x)` and paste it. You can now commit and open a pull request.
+
+<style>
+  table { width:100%; }
+</style>
