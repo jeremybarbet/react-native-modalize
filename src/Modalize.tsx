@@ -297,7 +297,7 @@ export default class Modalize extends React.Component<IProps, IState> {
         this.setState({ keyboardEnableScroll: true });
       }
     } else if (!adjustToContentHeight) {
-      const height = modalHeight - headerHeight - footerHeight - (this.isIphoneX ? 48 : 0);
+      const height = modalHeight - headerHeight - footerHeight;
 
       scrollViewHeight.push({ height });
       this.setState({ keyboardEnableScroll: false });
