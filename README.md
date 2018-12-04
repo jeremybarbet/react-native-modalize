@@ -4,7 +4,7 @@
 
 **This package is still in an early stage, use it with caution.** 🖖
 
-A modal that loves ScrollViews. This component had been built with `react-native-gesture-handler` to address the common issue of scrolling and swipping behaviors you can face with a modal with react-native.
+A modal that loves ScrollViews. This component had been built with `react-native-gesture-handler` to address the common issue of scrolling and swipping behaviors you can face with a modal with react-native. This component is built-in with a `ScrollView`, you don't have to include it by yourself, just pass a View with your content, and the component with handle the rest for you.
 
 ## Demo
 
@@ -32,7 +32,7 @@ This package has a peer dependency to `react-native-gesture-handler`, follow [th
 
 ## Features
 
-- Scrollable behavior by default
+- Scrollable behavior
 - Snapping states
 - In and out animations
 - Swiping events
