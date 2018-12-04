@@ -39,7 +39,7 @@ export default class App extends React.PureComponent {
         <AbsoluteHeader ref={(el: AbsoluteHeader) => { this.modal[3] = el; }} />
 
         <View style={s.app__footer}>
-          <Text style={s.app__copy}>Created by <Text style={s.app__author} onPress={() => Linking.openURL('https://github.com/jeremybarbet')}>Jérémy Barbet</Text> — v1.0.0-alpha.9</Text>
+          <Text style={s.app__copy}>Created by <Text style={s.app__author} onPress={() => Linking.openURL('https://github.com/jeremybarbet')}>Jérémy Barbet</Text> — v1.0.0-alpha.10</Text>
         </View>
       </View>
     );
