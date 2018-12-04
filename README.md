@@ -87,10 +87,11 @@ export default class MyApp extends React.PureComponent {
 | `handlePosition`                | string      | `outside`       | The handle's position on top of the modal         |
 | `handleStyle`                   | style       |                 | Style passed to the handle                        |
 | `useNativeDriver`               | bool        | `true`          | Because it's better to use the UI thread          |
-| `height`                        | number      |                 | A first snap value before snapping to full height  |
+| `height`                        | number      |                 | A first snap value before snapping to full height |
 | `adjustToContentHeight`         | bool        | `false`         | Shrink the modal to content's height              |
 | `showsVerticalScrollIndicator`  | bool        | `false`         | Do not show the indicator for the scrollview      |
-| `withReactModal`                | bool        | `false`         | Only iOS. To use React Modal to wrap modalize     |
+| `withReactModal`                | bool        | `false`         | To use React Modal to wrap modalize Only iOS      |
+| `withHandle`                    | bool        | `true`          | To hide the handle if you don't want it           |
 | `HeaderComponent`               | node        |                 | A fixed header component on top of the modal      |
 | `FooterComponent`               | node        |                 | A fixed footer component on top of the modal      |
 | `onOpen`                        | func        |                 | Called when the `open` method is used             |
