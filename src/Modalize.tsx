@@ -535,7 +535,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     }
 
     return (
-      <View style={StyleSheet.absoluteFill}>
+      <View style={[StyleSheet.absoluteFill, { zIndex: 9999 }]}>
         <TapGestureHandler
           ref={this.modal}
           maxDurationMs={100000}
