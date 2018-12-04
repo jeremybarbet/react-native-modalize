@@ -123,7 +123,3 @@ yarn start
 ```
 
 Change the code into `example/node_modules/react-native-modalize/*.ts(x)`. Then the magic happens, copy your code changed and go to `src/*.ts(x)` and paste it. You can now commit and open a pull request.
-
-<style>
-  table { width:100%; }
-</style>
