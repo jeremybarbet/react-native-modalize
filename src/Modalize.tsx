@@ -45,9 +45,7 @@ const THRESHOLD = 150;
 
 export default class Modalize extends React.Component<IProps, IState> {
 
-  private snaps: number[];
-  private snapStart: number;
-  private snapEnd: number;
+  private snaps: number[] = [];
   private beginScrollYValue: number = 0;
   private contentAlreadyCalculated: boolean = false;
   private beginScrollY: Animated.Value = new Animated.Value(0);
@@ -80,19 +78,12 @@ export default class Modalize extends React.Component<IProps, IState> {
       console.warn('[react-native-modalize] `withReactModal: true`. React modal is going to be moved out of react-native core in the future. I\'d recommend migrating to something like react-navigation or react-native-navigation\'s modal to wrap this component. Besides, react-native-gesture-handler for Android desnt\'t work with the react modal component.');
     }
 
-    this.snaps = [];
-
     if (props.height) {
       this.snaps.push(0, modalHeight - props.height, modalHeight);
-    } else {
-      this.snaps.push(0, modalHeight);
     }
 
-    this.snapStart = this.snaps[0];
-    this.snapEnd = this.snaps[this.snaps.length - 1];
-
     this.state = {
-      lastSnap: this.snaps[props.height ? 1 : 0],
+      lastSnap: props.height ? modalHeight - props.height : 0,
       isVisible: false,
       showContent: true,
       overlay: new Animated.Value(0),
@@ -168,8 +159,8 @@ export default class Modalize extends React.Component<IProps, IState> {
       height: modalHeight,
       transform: [{
         translateY: Animated.add(this.translateY, valueY).interpolate({
-          inputRange: [this.snapStart, this.snapEnd],
-          outputRange: [this.snapStart, this.snapEnd],
+          inputRange: [0, modalHeight],
+          outputRange: [0, modalHeight],
           extrapolate: 'clamp',
         }),
       }],
@@ -218,8 +209,9 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private onAnimateClose = (): void => {
-    const { onClosed, useNativeDriver } = this.props;
-    const { overlay } = this.state;
+    const { onClosed, useNativeDriver, height } = this.props;
+    const { overlay, modalHeight } = this.state;
+    const lastSnap = height ? modalHeight - height : 0;
 
     this.beginScrollYValue = 0;
     this.beginScrollY.setValue(0);
@@ -243,9 +235,6 @@ export default class Modalize extends React.Component<IProps, IState> {
         onClosed();
       }
 
-      const { height } = this.props;
-      const lastSnap = height ? this.snaps[1] : this.snaps[0];
-
       this.setState({ showContent: false });
       this.translateY.setValue(screenHeight);
       this.dragY.setValue(0);
@@ -260,7 +249,8 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private onScrollViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
     const { adjustToContentHeight, height } = this.props;
-    const { contentHeight, modalHeight } = this.state;
+    const { modalHeight } = this.state;
+    const contentHeight = nativeEvent.layout.height + this.handleHeight;
 
     if (
       !adjustToContentHeight ||
@@ -272,7 +262,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     }
 
     this.setState({
-      contentHeight: nativeEvent.layout.height,
+      contentHeight,
       modalHeight: contentHeight - this.handleHeight,
     }, () => {
       this.contentAlreadyCalculated = true;
@@ -315,14 +305,14 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
     const { height, useNativeDriver, adjustToContentHeight } = this.props;
-    const { lastSnap, contentHeight } = this.state;
+    const { lastSnap, contentHeight, modalHeight } = this.state;
     const { velocityY, translationY } = nativeEvent;
 
     this.setState({ enableBounces: this.beginScrollYValue > 0 || translationY < 0 });
 
     if (nativeEvent.oldState === State.ACTIVE) {
       const toValue = translationY - this.beginScrollYValue;
-      let destSnapPoint = this.snaps[0];
+      let destSnapPoint = 0;
 
       if (height) {
         const dragToss = 0.05;
@@ -335,7 +325,7 @@ export default class Modalize extends React.Component<IProps, IState> {
             destSnapPoint = snap;
             this.willCloseModalize = false;
 
-            if (snap === this.snapEnd) {
+            if (snap === modalHeight) {
               this.willCloseModalize = true;
               this.close();
             }
@@ -532,7 +522,6 @@ export default class Modalize extends React.Component<IProps, IState> {
   private renderModalize = (): React.ReactNode => {
     const { style, adjustToContentHeight, withHandle } = this.props;
     const { isVisible, lastSnap, showContent } = this.state;
-    const max = lastSnap - this.snaps[0];
 
     if (!isVisible) {
       return null;
@@ -543,7 +532,7 @@ export default class Modalize extends React.Component<IProps, IState> {
         <TapGestureHandler
           ref={this.modal}
           maxDurationMs={100000}
-          maxDeltaY={max}
+          maxDeltaY={lastSnap}
         >
           <View style={StyleSheet.absoluteFill}>
             {showContent && (
