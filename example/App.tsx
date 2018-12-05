@@ -5,6 +5,7 @@ import DefaultContent from './modals/DefaultContent';
 import FixedContent from './modals/FixedContent';
 import SnappingList from './modals/SnappingList';
 import AbsoluteHeader from './modals/AbsoluteHeader';
+import InputForm from './modals/InputForm';
 
 export default class App extends React.PureComponent {
 
@@ -31,12 +32,14 @@ export default class App extends React.PureComponent {
           'Modal with a fixed content',
           'Modal with a snapping list',
           'Modal with an absolute header',
+          'Modal with an input',
         ])}
 
         <DefaultContent ref={(el: DefaultContent) => { this.modal[0] = el; }} />
         <FixedContent ref={(el: FixedContent) => { this.modal[1] = el; }} />
         <SnappingList ref={(el: SnappingList) => { this.modal[2] = el; }} />
         <AbsoluteHeader ref={(el: AbsoluteHeader) => { this.modal[3] = el; }} />
+        <InputForm ref={(el: InputForm) => { this.modal[4] = el; }} />
 
         <View style={s.app__footer}>
           <Text style={s.app__copy}>Created by <Text style={s.app__author} onPress={() => Linking.openURL('https://github.com/jeremybarbet')}>Jérémy Barbet</Text> — v1.0.0-alpha.11</Text>

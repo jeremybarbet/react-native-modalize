@@ -9,7 +9,7 @@ export default class AbsoluteHeader extends React.PureComponent {
 
   private renderHeader = () => (
     <TouchableOpacity
-      style={s.modal__cross}
+      style={s.modal__header}
       activeOpacity={0.8}
       onPress={this.closeModal}
     >
@@ -51,7 +51,7 @@ export default class AbsoluteHeader extends React.PureComponent {
 }
 
 const s = StyleSheet.create({
-  modal__cross: {
+  modal__header: {
     position: 'absolute',
     top: 20,
     right: 20,
