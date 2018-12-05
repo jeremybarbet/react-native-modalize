@@ -41,7 +41,7 @@ interface IState {
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
 const { StatusBarManager } = NativeModules;
-const THRESHOLD = 200;
+const THRESHOLD = 150;
 
 export default class Modalize extends React.Component<IProps, IState> {
 
@@ -314,8 +314,8 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
-    const { height, useNativeDriver } = this.props;
-    const { lastSnap } = this.state;
+    const { height, useNativeDriver, adjustToContentHeight } = this.props;
+    const { lastSnap, contentHeight } = this.state;
     const { velocityY, translationY } = nativeEvent;
 
     this.setState({ enableBounces: this.beginScrollYValue > 0 || translationY < 0 });
@@ -341,7 +341,10 @@ export default class Modalize extends React.Component<IProps, IState> {
             }
           }
         });
-      } else if (translationY > THRESHOLD && this.beginScrollYValue === 0) {
+      } else if (
+        translationY > (adjustToContentHeight ? contentHeight / 3 : THRESHOLD) &&
+        this.beginScrollYValue === 0
+      ) {
         this.willCloseModalize = true;
         this.close();
       }
