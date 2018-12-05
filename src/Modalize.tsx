@@ -45,7 +45,8 @@ const THRESHOLD = 150;
 
 export default class Modalize extends React.Component<IProps, IState> {
 
-  private snaps: number[] = [];
+  private snaps: number[] = [];
+  private snapEnd: number;
   private beginScrollYValue: number = 0;
   private contentAlreadyCalculated: boolean = false;
   private beginScrollY: Animated.Value = new Animated.Value(0);
@@ -80,7 +81,11 @@ export default class Modalize extends React.Component<IProps, IState> {
 
     if (props.height) {
       this.snaps.push(0, modalHeight - props.height, modalHeight);
+    } else {
+      this.snaps.push(0, modalHeight);
     }
+
+    this.snapEnd = this.snaps[this.snaps.length - 1];
 
     this.state = {
       lastSnap: props.height ? modalHeight - props.height : 0,
@@ -159,8 +164,8 @@ export default class Modalize extends React.Component<IProps, IState> {
       height: modalHeight,
       transform: [{
         translateY: Animated.add(this.translateY, valueY).interpolate({
-          inputRange: [0, modalHeight],
-          outputRange: [0, modalHeight],
+          inputRange: [0, this.snapEnd],
+          outputRange: [0, this.snapEnd],
           extrapolate: 'clamp',
         }),
       }],
@@ -210,8 +215,8 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private onAnimateClose = (): void => {
     const { onClosed, useNativeDriver, height } = this.props;
-    const { overlay, modalHeight } = this.state;
-    const lastSnap = height ? modalHeight - height : 0;
+    const { overlay } = this.state;
+    const lastSnap = height ? this.snaps[1] : 0;
 
     this.beginScrollYValue = 0;
     this.beginScrollY.setValue(0);
@@ -249,8 +254,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private onScrollViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
     const { adjustToContentHeight, height } = this.props;
-    const { modalHeight } = this.state;
-    const contentHeight = nativeEvent.layout.height + this.handleHeight;
+    const { contentHeight, modalHeight } = this.state;
 
     if (
       !adjustToContentHeight ||
@@ -262,7 +266,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     }
 
     this.setState({
-      contentHeight,
+      contentHeight: nativeEvent.layout.height,
       modalHeight: contentHeight - this.handleHeight,
     }, () => {
       this.contentAlreadyCalculated = true;
@@ -305,7 +309,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
     const { height, useNativeDriver, adjustToContentHeight } = this.props;
-    const { lastSnap, contentHeight, modalHeight } = this.state;
+    const { lastSnap, contentHeight } = this.state;
     const { velocityY, translationY } = nativeEvent;
 
     this.setState({ enableBounces: this.beginScrollYValue > 0 || translationY < 0 });
@@ -325,7 +329,7 @@ export default class Modalize extends React.Component<IProps, IState> {
             destSnapPoint = snap;
             this.willCloseModalize = false;
 
-            if (snap === modalHeight) {
+            if (snap === this.snapEnd) {
               this.willCloseModalize = true;
               this.close();
             }
