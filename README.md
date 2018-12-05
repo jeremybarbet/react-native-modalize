@@ -86,6 +86,7 @@ export default class MyApp extends React.PureComponent {
 | `style`                         | style       |                 | Style passed to the container                     |
 | `handlePosition`                | string      | `outside`       | The handle's position on top of the modal         |
 | `handleStyle`                   | style       |                 | Style passed to the handle                        |
+| `overlayStyle`                  | style       |                 | Style passed to the overlay                       |
 | `useNativeDriver`               | bool        | `true`          | Because it's better to use the UI thread          |
 | `height`                        | number      |                 | A first snap value before snapping to full height |
 | `adjustToContentHeight`         | bool        | `false`         | Shrink the modal to content's height              |

@@ -10,6 +10,7 @@ interface IProps {
   height?: number;
   style?: ViewStyle | ViewStyle[];
   handleStyle?: ViewStyle | ViewStyle[];
+  overlayStyle?: ViewStyle | ViewStyle[];
   onOpen?: () => void;
   onOpened?: () => void;
   onClose?: () => void;
@@ -495,7 +496,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private renderOverlay = (): React.ReactNode => {
-    const { useNativeDriver } = this.props;
+    const { useNativeDriver, overlayStyle } = this.props;
     const { showContent } = this.state;
 
     return (
@@ -517,7 +518,7 @@ export default class Modalize extends React.Component<IProps, IState> {
               simultaneousHandlers={this.modalOverlay}
               onHandlerStateChange={this.onHandleOverlay}
             >
-              <Animated.View style={[StyleSheet.absoluteFill, s.overlay, this.overlay]} />
+              <Animated.View style={[StyleSheet.absoluteFill, s.overlay, overlayStyle, this.overlay]} />
             </TapGestureHandler>
           )}
         </Animated.View>
