@@ -42,7 +42,7 @@ export default class App extends React.PureComponent {
         <InputForm ref={(el: InputForm) => { this.modal[4] = el; }} />
 
         <View style={s.app__footer}>
-          <Text style={s.app__copy}>Created by <Text style={s.app__author} onPress={() => Linking.openURL('https://github.com/jeremybarbet')}>Jérémy Barbet</Text> — v1.0.0-alpha.11</Text>
+          <Text style={s.app__copy}>Created by <Text style={s.app__author} onPress={() => Linking.openURL('https://github.com/jeremybarbet')}>Jérémy Barbet</Text> — v1.0.0-alpha.12</Text>
         </View>
       </View>
     );
