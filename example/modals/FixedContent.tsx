@@ -3,21 +3,13 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, ImageStyle } from 'rea
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
-import { isIphoneX } from '../is-iphone-x';
-
 export default class FixedContent extends React.PureComponent {
 
   private modal: React.RefObject<Modalize> = React.createRef();
 
   private renderContent = () => {
-    const contentStyles = [s.content];
-
-    if (isIphoneX()) {
-      contentStyles.push(s.contentIphoneX);
-    }
-
     return (
-      <View style={contentStyles}>
+      <View style={s.content}>
         <Image
           style={s.content__icon as ImageStyle}
           source={require('../assets/send-message.png')}
@@ -65,12 +57,6 @@ export default class FixedContent extends React.PureComponent {
 const s = StyleSheet.create({
   content: {
     padding: 20,
-  },
-
-  contentIphoneX: {
-    paddingTop: 20,
-    paddingBottom: 34,
-    paddingHorizontal: 20,
   },
 
   content__icon: {
