@@ -460,7 +460,6 @@ export default class Modalize extends React.Component<IProps, IState> {
 
           <KeyboardAvoidingView
             behavior="position"
-            style={{ paddingBottom: adjustToContentHeight ? 0 : this.handleHeight }}
             enabled={this.isIos && !adjustToContentHeight}
           >
             <NativeViewGestureHandler
