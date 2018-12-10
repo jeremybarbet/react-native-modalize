@@ -111,7 +111,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     );
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.onScrollViewChange();
 
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
@@ -304,7 +304,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   private onComponentLayout = ({ nativeEvent }: LayoutChangeEvent, type: string): void => {
     const { height } = nativeEvent.layout;
 
-    this.setState({ [`${type}Height`]: height } as any);
+    this.setState({ [`${type}Height`]: height } as any, () => this.onScrollViewChange());
   }
 
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
@@ -460,7 +460,6 @@ export default class Modalize extends React.Component<IProps, IState> {
 
           <KeyboardAvoidingView
             behavior="position"
-            style={{ paddingBottom: adjustToContentHeight ? 0 : this.handleHeight }}
             enabled={this.isIos && !adjustToContentHeight}
           >
             <NativeViewGestureHandler
