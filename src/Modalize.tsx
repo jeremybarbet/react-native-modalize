@@ -36,6 +36,7 @@ interface IState {
   enableBounces: boolean;
   scrollViewHeight: ViewStyle[];
   keyboardEnableScroll: boolean;
+  keyboardToggle: boolean;
 }
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -99,6 +100,7 @@ export default class Modalize extends React.Component<IProps, IState> {
       enableBounces: true,
       scrollViewHeight: [],
       keyboardEnableScroll: false,
+      keyboardToggle: false,
     };
 
     this.beginScrollY.addListener(({ value }) =>
@@ -304,7 +306,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   private onComponentLayout = ({ nativeEvent }: LayoutChangeEvent, type: string): void => {
     const { height } = nativeEvent.layout;
 
-    this.setState({ [`${type}Height`]: height } as any, () => this.onScrollViewChange());
+    this.setState({ [`${type}Height`]: height } as any, this.onScrollViewChange);
   }
 
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
@@ -378,10 +380,12 @@ export default class Modalize extends React.Component<IProps, IState> {
   private onKeyboardShow = (event: any) => {
     const { height } = event.endCoordinates;
 
+    this.setState({ keyboardToggle: true });
     this.onScrollViewChange(height);
   }
 
   private onKeyboardHide = () => {
+    this.setState({ keyboardToggle: false });
     this.onScrollViewChange();
   }
 
@@ -441,8 +445,16 @@ export default class Modalize extends React.Component<IProps, IState> {
       FooterComponent,
     } = this.props;
 
-    const { contentHeight, enableBounces, scrollViewHeight, keyboardEnableScroll } = this.state;
+    const {
+      contentHeight,
+      enableBounces,
+      scrollViewHeight,
+      keyboardEnableScroll,
+      keyboardToggle,
+    } = this.state;
+
     const scrollEnabled = contentHeight === 0 || keyboardEnableScroll;
+    const marginBottom = adjustToContentHeight ? 0 : keyboardToggle ? this.handleHeight : 0;
 
     return (
       <PanGestureHandler
@@ -460,6 +472,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
           <KeyboardAvoidingView
             behavior="position"
+            style={{ marginBottom }}
             enabled={this.isIos && !adjustToContentHeight}
           >
             <NativeViewGestureHandler
