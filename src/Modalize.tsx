@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, View, Platform, ViewStyle, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules } from 'react-native';
+import { Animated, View, Platform, ViewStyle, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules, RegisteredStyle } from 'react-native';
 import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent, TapGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 import s from './Modalize.styles';
@@ -9,8 +9,8 @@ interface IProps {
   handlePosition: 'outside' | 'inside';
   height?: number;
   style?: ViewStyle | ViewStyle[];
-  handleStyle?: ViewStyle | ViewStyle[];
-  overlayStyle?: ViewStyle | ViewStyle[];
+  handleStyle?: ViewStyle | ViewStyle[] | RegisteredStyle<ViewStyle> | RegisteredStyle<ViewStyle[]>;
+  overlayStyle?: ViewStyle | ViewStyle[] | RegisteredStyle<ViewStyle> | RegisteredStyle<ViewStyle[]>;
   onOpen?: () => void;
   onOpened?: () => void;
   onClose?: () => void;
