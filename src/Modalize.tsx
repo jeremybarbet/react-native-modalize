@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, StyleSheet, View, Platform, ViewStyle, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules } from 'react-native';
+import { Animated, View, Platform, ViewStyle, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules } from 'react-native';
 import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent, TapGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 import s from './Modalize.styles';
@@ -127,6 +127,26 @@ export default class Modalize extends React.Component<IProps, IState> {
     Keyboard.removeListener('keyboardWillHide', this.onKeyboardHide);
   }
 
+  public open = (): void => {
+    const { onOpen } = this.props;
+
+    if (onOpen) {
+      onOpen();
+    }
+
+    this.onAnimateOpen();
+  }
+
+  public close = (): void => {
+    const { onClose } = this.props;
+
+    if (onClose) {
+      onClose();
+    }
+
+    this.onAnimateClose();
+  }
+
   private get isIos(): boolean {
     return Platform.OS === 'ios';
   }
@@ -154,7 +174,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     return this.isHandleOutside ? 35 : 20;
   }
 
-  private get wrapper(): StyleProp<unknown> {
+  private get modalizeContent(): StyleProp<any> {
     const { modalHeight } = this.state;
 
     const valueY = Animated.add(
@@ -174,7 +194,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     };
   }
 
-  private get overlay(): StyleProp<unknown> {
+  private get overlayBackground(): StyleProp<any> {
     const { overlay } = this.state;
 
     return {
@@ -267,6 +287,8 @@ export default class Modalize extends React.Component<IProps, IState> {
       return;
     }
 
+    // @todo: modalHeight should be equal to the nativeEvent's height,
+    // and not to the state's value which is 0 at the first mount
     this.setState({
       contentHeight: nativeEvent.layout.height,
       modalHeight: contentHeight - this.handleHeight,
@@ -281,12 +303,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     const scrollViewHeight = [];
 
     if (keyboardHeight) {
-      const statusBarHeight = this.isIphoneX
-        ? 48
-        : this.isIos
-          ? 20
-          : StatusBarManager.HEIGHT;
-
+      const statusBarHeight = this.isIphoneX ? 48 : this.isIos ? 20 : StatusBarManager.HEIGHT;
       const height = screenHeight - keyboardHeight - headerHeight - footerHeight - this.handleHeight - statusBarHeight;
 
       if (contentHeight > height) {
@@ -409,9 +426,13 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private renderHandle = (): React.ReactNode => {
-    const { handleStyle, useNativeDriver } = this.props;
-    const handleStyles = [s.handle];
-    const shapeStyles = [s.handle__shape, handleStyle];
+    const { handleStyle, useNativeDriver, withHandle } = this.props;
+    const handleStyles: any[] = [s.handle];
+    const shapeStyles: any[] = [s.handle__shape, handleStyle];
+
+    if (!withHandle) {
+      return null;
+    }
 
     if (!this.isHandleOutside) {
       handleStyles.push(s.handleBottom);
@@ -435,14 +456,32 @@ export default class Modalize extends React.Component<IProps, IState> {
     );
   }
 
+  private renderHeader = (): React.ReactNode => {
+    const { useNativeDriver, HeaderComponent } = this.props;
+
+    return (
+      <PanGestureHandler
+        simultaneousHandlers={this.modal}
+        shouldCancelWhenOutside={false}
+        onGestureEvent={Animated.event(
+          [{ nativeEvent: { translationY: this.dragY } }],
+          { useNativeDriver },
+        )}
+        onHandlerStateChange={this.onHandleChildren}
+      >
+        <Animated.View>
+          {this.renderComponent(HeaderComponent, 'header')}
+        </Animated.View>
+      </PanGestureHandler>
+    );
+  }
+
   private renderChildren = (): React.ReactNode => {
     const {
       children,
       useNativeDriver,
       showsVerticalScrollIndicator,
       adjustToContentHeight,
-      HeaderComponent,
-      FooterComponent,
     } = this.props;
 
     const {
@@ -467,41 +506,41 @@ export default class Modalize extends React.Component<IProps, IState> {
         )}
         onHandlerStateChange={this.onHandleChildren}
       >
-        <Animated.View style={s.wrapper__scrollview}>
-          {this.renderComponent(HeaderComponent, 'header')}
-
-          <KeyboardAvoidingView
-            behavior="position"
-            style={{ marginBottom }}
-            enabled={this.isIos && !adjustToContentHeight}
+        <AnimatedKeyboardAvoidingView
+          behavior="position"
+          style={{ marginBottom }}
+          enabled={this.isIos && !adjustToContentHeight}
+        >
+          <NativeViewGestureHandler
+            ref={this.modalScrollView}
+            waitFor={this.modal}
+            simultaneousHandlers={this.modalChildren}
           >
-            <NativeViewGestureHandler
-              ref={this.modalScrollView}
-              waitFor={this.modal}
-              simultaneousHandlers={this.modalChildren}
+            <Animated.ScrollView
+              style={scrollViewHeight}
+              bounces={enableBounces}
+              onScrollBeginDrag={Animated.event(
+                [{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }],
+                { useNativeDriver: false },
+              )}
+              scrollEventThrottle={16}
+              onLayout={this.onScrollViewLayout}
+              scrollEnabled={scrollEnabled}
+              showsVerticalScrollIndicator={showsVerticalScrollIndicator}
+              keyboardDismissMode="interactive"
             >
-              <Animated.ScrollView
-                style={scrollViewHeight}
-                bounces={enableBounces}
-                onScrollBeginDrag={Animated.event(
-                  [{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }],
-                  { useNativeDriver: false },
-                )}
-                scrollEventThrottle={16}
-                onLayout={this.onScrollViewLayout}
-                scrollEnabled={scrollEnabled}
-                showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-                keyboardDismissMode="interactive"
-              >
-                {children}
-              </Animated.ScrollView>
-            </NativeViewGestureHandler>
-          </KeyboardAvoidingView>
-
-          {this.renderComponent(FooterComponent, 'footer')}
-        </Animated.View>
+              {children}
+            </Animated.ScrollView>
+          </NativeViewGestureHandler>
+        </AnimatedKeyboardAvoidingView>
       </PanGestureHandler>
     );
+  }
+
+  private renderFooter = (): React.ReactNode => {
+    const { FooterComponent } = this.props;
+
+    return this.renderComponent(FooterComponent, 'footer');
   }
 
   private renderOverlay = (): React.ReactNode => {
@@ -519,7 +558,7 @@ export default class Modalize extends React.Component<IProps, IState> {
         )}
         onHandlerStateChange={this.onHandleChildren}
       >
-        <Animated.View style={[StyleSheet.absoluteFill, { zIndex: 0 }]}>
+        <Animated.View style={s.overlay}>
           {showContent && (
             <TapGestureHandler
               ref={this.modalOverlayTap}
@@ -527,7 +566,7 @@ export default class Modalize extends React.Component<IProps, IState> {
               simultaneousHandlers={this.modalOverlay}
               onHandlerStateChange={this.onHandleOverlay}
             >
-              <Animated.View style={[StyleSheet.absoluteFill, s.overlay, overlayStyle, this.overlay]} />
+              <Animated.View style={[s.overlay__background, overlayStyle, this.overlayBackground]} />
             </TapGestureHandler>
           )}
         </Animated.View>
@@ -536,7 +575,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private renderModalize = (): React.ReactNode => {
-    const { style, adjustToContentHeight, withHandle } = this.props;
+    const { style, adjustToContentHeight } = this.props;
     const { isVisible, lastSnap, showContent } = this.state;
 
     if (!isVisible) {
@@ -544,21 +583,23 @@ export default class Modalize extends React.Component<IProps, IState> {
     }
 
     return (
-      <View style={[StyleSheet.absoluteFill, { zIndex: 9999 }]}>
+      <View style={s.modalize}>
         <TapGestureHandler
           ref={this.modal}
           maxDurationMs={100000}
           maxDeltaY={lastSnap}
         >
-          <View style={StyleSheet.absoluteFill}>
+          <View style={s.modalize__wrapper}>
             {showContent && (
               <AnimatedKeyboardAvoidingView
-                style={[s.wrapper, this.wrapper, style]}
+                style={[s.modalize__content, this.modalizeContent, style]}
                 behavior="padding"
                 enabled={this.isIos && adjustToContentHeight}
               >
-                {withHandle && this.renderHandle()}
+                {this.renderHandle()}
+                {this.renderHeader()}
                 {this.renderChildren()}
+                {this.renderFooter()}
               </AnimatedKeyboardAvoidingView>
             )}
 
@@ -584,26 +625,6 @@ export default class Modalize extends React.Component<IProps, IState> {
         {child}
       </Modal>
     );
-  }
-
-  public open = (): void => {
-    const { onOpen } = this.props;
-
-    if (onOpen) {
-      onOpen();
-    }
-
-    this.onAnimateOpen();
-  }
-
-  public close = (): void => {
-    const { onClose } = this.props;
-
-    if (onClose) {
-      onClose();
-    }
-
-    this.onAnimateClose();
   }
 
   render(): React.ReactNode {

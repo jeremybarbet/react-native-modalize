@@ -1,7 +1,24 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  wrapper: {
+  modalize: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    zIndex: 9999,
+  },
+
+  modalize__wrapper: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  },
+
+  modalize__content: {
     zIndex: 5,
 
     marginTop: 'auto',
@@ -16,20 +33,6 @@ export default StyleSheet.create({
     shadowRadius: 12,
 
     elevation: 4,
-  },
-
-  wrapper__scrollview: {
-    overflow: 'hidden',
-  },
-
-  overlay: {
-    zIndex: 0,
-
-    backgroundColor: 'rgba(0, 0, 0, 0.65)',
-  },
-
-  component: {
-    zIndex: 20,
   },
 
   handle: {
@@ -62,5 +65,29 @@ export default StyleSheet.create({
 
   handle__shapeBottom: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
+  },
+
+  component: {
+    zIndex: 20,
+  },
+
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    zIndex: 0,
+  },
+
+  overlay__background: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    zIndex: 0,
+
+    backgroundColor: 'rgba(0, 0, 0, 0.65)',
   },
 });
