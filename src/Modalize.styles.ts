@@ -7,7 +7,7 @@ export default StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    zIndex: 9999,
+    zIndex: 9998,
   },
 
   modalize__wrapper: {
@@ -40,7 +40,7 @@ export default StyleSheet.create({
     top: -20,
     right: 0,
     left: 0,
-    zIndex: 20,
+    zIndex: 5,
 
     paddingBottom: 20,
 
@@ -68,7 +68,7 @@ export default StyleSheet.create({
   },
 
   component: {
-    zIndex: 20,
+    zIndex: 9999,
   },
 
   overlay: {
@@ -86,7 +86,6 @@ export default StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    zIndex: 0,
 
     backgroundColor: 'rgba(0, 0, 0, 0.65)',
   },
