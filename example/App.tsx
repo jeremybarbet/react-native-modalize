@@ -35,15 +35,17 @@ export default class App extends React.PureComponent {
           'Modal with an input',
         ])}
 
+        <View style={s.app__footer}>
+          <Text style={s.app__copy}>
+            Created by <Text style={s.app__author} onPress={() => Linking.openURL('https://github.com/jeremybarbet')}>Jérémy Barbet</Text> — v1.0.0-alpha.12
+          </Text>
+        </View>
+
         <DefaultContent ref={(el: DefaultContent) => { this.modal[0] = el; }} />
         <FixedContent ref={(el: FixedContent) => { this.modal[1] = el; }} />
         <SnappingList ref={(el: SnappingList) => { this.modal[2] = el; }} />
         <AbsoluteHeader ref={(el: AbsoluteHeader) => { this.modal[3] = el; }} />
         <InputForm ref={(el: InputForm) => { this.modal[4] = el; }} />
-
-        <View style={s.app__footer}>
-          <Text style={s.app__copy}>Created by <Text style={s.app__author} onPress={() => Linking.openURL('https://github.com/jeremybarbet')}>Jérémy Barbet</Text> — v1.0.0-alpha.12</Text>
-        </View>
       </View>
     );
   }
