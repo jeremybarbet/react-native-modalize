@@ -589,7 +589,10 @@ export default class Modalize extends React.Component<IProps, IState> {
           maxDurationMs={100000}
           maxDeltaY={lastSnap}
         >
-          <View style={s.modalize__wrapper}>
+          <View
+            style={s.modalize__wrapper}
+            pointerEvents="box-none"
+          >
             {showContent && (
               <AnimatedKeyboardAvoidingView
                 style={[s.modalize__content, this.modalizeContent, style]}
