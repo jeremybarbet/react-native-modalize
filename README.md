@@ -4,7 +4,9 @@
 
 **This package is still in an early stage, use it with caution.** 🖖
 
-A modal that loves ScrollViews. This component had been built with `react-native-gesture-handler` to address the common issue of scrolling and swipping behaviors you can face with a modal with react-native. This component is built-in with a `ScrollView`, you don't have to include it by yourself, just pass a View with your content, and the component will handle the rest for you.
+A modal that loves ScrollViews.
+
+This component had been built with `react-native-gesture-handler` to address the common issue of scrolling and swipping behaviors you can face with a modal with react-native. This component is built-in with a `ScrollView`, you don't have to include it by yourself, just pass your content, and the component will handle the rest for you.
 
 ## Demo
 
@@ -114,7 +116,7 @@ export default class MyApp extends React.PureComponent {
 Yes, of course you can. But if you use the one from `react-native` it won't work. You will have to import the one from `react-native-gesture-handler`.
 
 ```tsx
-import { ScrollView } from 'react-native-gesture-handler'`;
+import { ScrollView } from 'react-native-gesture-handler';
 ```
 
 **What's the React modal's warning?**
