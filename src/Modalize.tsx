@@ -415,6 +415,7 @@ export default class Modalize extends React.Component<IProps, IState> {
       <View
         style={s.component}
         onLayout={event => this.onComponentLayout(event, type)}
+        pointerEvents="box-none"
       >
         {React.isValidElement(Component)
           ? Component
@@ -469,7 +470,7 @@ export default class Modalize extends React.Component<IProps, IState> {
         )}
         onHandlerStateChange={this.onHandleChildren}
       >
-        <Animated.View>
+        <Animated.View pointerEvents="box-none">
           {this.renderComponent(HeaderComponent, 'header')}
         </Animated.View>
       </PanGestureHandler>
