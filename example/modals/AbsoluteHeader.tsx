@@ -12,6 +12,7 @@ export default class AbsoluteHeader extends React.PureComponent {
       style={s.modal__header}
       activeOpacity={0.8}
       onPress={this.closeModal}
+      hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }}
     >
       <Image source={require('../assets/cross.png')} />
     </TouchableOpacity>
@@ -55,6 +56,7 @@ const s = StyleSheet.create({
     position: 'absolute',
     top: 20,
     right: 20,
+    zIndex: 2,
 
     alignItems: 'center',
     justifyContent: 'center',

@@ -407,10 +407,6 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private renderComponent = (Component: React.ReactNode, type: string): React.ReactNode => {
-    if (!Component) {
-      return null;
-    }
-
     return (
       <View
         style={s.component}
@@ -460,6 +456,10 @@ export default class Modalize extends React.Component<IProps, IState> {
   private renderHeader = (): React.ReactNode => {
     const { useNativeDriver, HeaderComponent } = this.props;
 
+    if (!HeaderComponent) {
+      return null;
+    }
+
     return (
       <PanGestureHandler
         simultaneousHandlers={this.modal}
@@ -470,7 +470,10 @@ export default class Modalize extends React.Component<IProps, IState> {
         )}
         onHandlerStateChange={this.onHandleChildren}
       >
-        <Animated.View pointerEvents="box-none">
+        <Animated.View
+          style={s.component}
+          pointerEvents="box-none"
+        >
           {this.renderComponent(HeaderComponent, 'header')}
         </Animated.View>
       </PanGestureHandler>
@@ -540,6 +543,10 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private renderFooter = (): React.ReactNode => {
     const { FooterComponent } = this.props;
+
+    if (!FooterComponent) {
+      return null;
+    }
 
     return this.renderComponent(FooterComponent, 'footer');
   }

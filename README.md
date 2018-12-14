@@ -128,6 +128,7 @@ In a future version of `react-native`, the `Modal` component will be moved out f
 ```bash
 cd example/
 yarn
+yarn start
 cd ..
 yarn start
 ```
