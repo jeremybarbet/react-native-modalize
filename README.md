@@ -125,12 +125,11 @@ In a future version of `react-native`, the `Modal` component will be moved out f
 
 ## Development
 
-It's pretty rough for now, but it works.
-
 ```bash
 cd example/
 yarn
+cd ..
 yarn start
 ```
 
-Change the code into `example/node_modules/react-native-modalize/*.ts(x)`. Then the magic happens, copy your code changed and go to `src/*.ts(x)` and paste it. You can now commit and open a pull request.
+Make sure to make modal's changes into `src/` folder, and things relating to examples into `example/` 🤷🏻‍♀️

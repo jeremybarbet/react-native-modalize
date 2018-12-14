@@ -6,7 +6,7 @@
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "rm -rf ./lib/* && tsc",
-    "start": "yarn run tsc --watch",
+    "start": "yarn run cpx 'src/**/*.{ts,tsx}' 'example/node_modules/react-native-modalize' --watch",
     "prepublish": "yarn run build",
     "lint": "tslint 'src/**/*.ts?(x)'",
     "postversion": "sh ./post-version.sh"
@@ -29,6 +29,7 @@
   "devDependencies": {
     "@types/react": "^16.4.18",
     "@types/react-native": "^0.57.7",
+    "cpx": "^1.5.0",
     "react": "^16.6.1",
     "react-native": "^0.57.4",
     "react-native-gesture-handler": "^1.0.9",
