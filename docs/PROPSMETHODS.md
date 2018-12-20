@@ -20,9 +20,9 @@ If you want to style the modal, you can pass a style object.
 
 The handle's position on top of the modal.
 
-| Type     | Required | Default   |
-| -------- | -------- | --------- |
-| string   | No       | `outside` |
+| Type                      | Required | Default   |
+| ------------------------- | -------- | --------- |
+| enum('outside', 'inside') | No       | `outside` |
 
 ### `handleStyle`
 
@@ -71,6 +71,14 @@ Do not show the indicator for the scrollview.
 | Type     | Required | Default  |
 | -------- | -------- | -------- |
 | bool     | Yes      | `false`  |
+
+### `keyboardShouldPersistTaps`
+
+If you have any inputs inside the children props and you want to manage how to dismiss the keyboard. See [`react-native` documentation](https://facebook.github.io/react-native/docs/scrollview#keyboardshouldpersisttaps) for more informations.
+
+| Type                               | Required | Default  |
+| ---------------------------------- | -------- | -------- |
+| enum('never', 'always', 'handled') | No       | `never`  |
 
 ### `withReactModal`
 

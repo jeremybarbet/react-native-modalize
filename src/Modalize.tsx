@@ -23,6 +23,7 @@ interface IProps {
   useNativeDriver?: boolean;
   adjustToContentHeight?: boolean;
   showsVerticalScrollIndicator?: boolean;
+  keyboardShouldPersistTaps?: 'never' | 'always' | 'handled';
   withReactModal?: boolean;
   withHandle?: boolean;
   header?: IComponent;
@@ -71,6 +72,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     useNativeDriver: true,
     adjustToContentHeight: false,
     showsVerticalScrollIndicator: false,
+    keyboardShouldPersistTaps: 'never',
     withReactModal: false,
     withHandle: true,
   };
@@ -501,6 +503,7 @@ export default class Modalize extends React.Component<IProps, IState> {
       useNativeDriver,
       showsVerticalScrollIndicator,
       adjustToContentHeight,
+      keyboardShouldPersistTaps,
     } = this.props;
 
     const {
@@ -546,7 +549,8 @@ export default class Modalize extends React.Component<IProps, IState> {
               onLayout={this.onScrollViewLayout}
               scrollEnabled={scrollEnabled}
               showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-              keyboardDismissMode="interactive"
+              keyboardDismissMode={this.isIos ? 'interactive' : 'on-drag'}
+              keyboardShouldPersistTaps={keyboardShouldPersistTaps}
             >
               {children}
             </Animated.ScrollView>
