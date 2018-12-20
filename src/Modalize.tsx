@@ -327,10 +327,10 @@ export default class Modalize extends React.Component<IProps, IState> {
     this.setState({ scrollViewHeight });
   }
 
-  private onComponentLayout = ({ nativeEvent }: LayoutChangeEvent, component: string): void => {
+  private onComponentLayout = ({ nativeEvent }: LayoutChangeEvent, name: string): void => {
     const { height } = nativeEvent.layout;
 
-    this.setState({ [`${component}Height`]: height } as any, this.onScrollViewChange);
+    this.setState({ [`${name}Height`]: height } as any, this.onScrollViewChange);
   }
 
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
@@ -413,7 +413,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     this.onScrollViewChange();
   }
 
-  private renderComponent = (Component: React.ReactNode, component: string): React.ReactNode => {
+  private renderComponent = (Component: React.ReactNode, name: string): React.ReactNode => {
     const { header, footer } = this.props;
 
     // @ts-ignore
@@ -427,7 +427,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     return (
       <View
         style={s.component}
-        onLayout={event => this.onComponentLayout(event, component)}
+        onLayout={event => this.onComponentLayout(event, name)}
         pointerEvents="box-none"
       >
         {element}
@@ -567,7 +567,7 @@ export default class Modalize extends React.Component<IProps, IState> {
       return null;
     }
 
-    return this.renderComponent(footer.isAbsolute, 'footer');
+    return this.renderComponent(footer.component, 'footer');
   }
 
   private renderOverlay = (): React.ReactNode => {
