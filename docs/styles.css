@@ -1,0 +1,39 @@
+code {
+  color: #439bdf !important;
+}
+
+pre > code,
+.sidebar-nav code {
+  color: inherit !important;
+}
+
+.sidebar-nav li img {
+  margin-right: 5px;
+
+  vertical-align: middle;
+}
+
+.markdown-section {
+  max-width: 930px;
+}
+
+.markdown-section h3 code {
+  font-size: 18px;
+}
+
+.markdown-section table {
+  display: inline-table;
+
+  width: 100%;
+}
+
+.markdown-section table thead {
+  text-align: left;
+
+  background-color: #f5f8fa;
+}
+
+.markdown-section table th,
+.markdown-section table td {
+  padding: 15px;
+}
