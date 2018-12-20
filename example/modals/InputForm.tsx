@@ -44,7 +44,10 @@ export default class InputForm extends React.PureComponent {
     return (
       <Modalize
         ref={this.modal}
-        FooterComponent={this.renderFooter}
+        footer={{
+          component: this.renderFooter,
+          isAbsolute: false,
+        }}
         adjustToContentHeight
       >
         {this.renderContent()}

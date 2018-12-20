@@ -40,7 +40,10 @@ export default class SnappingList extends React.PureComponent {
     return (
       <Modalize
         ref={this.modal}
-        HeaderComponent={this.renderHeader}
+        header={{
+          component: this.renderHeader,
+          isAbsolute: false,
+        }}
         height={350}
       >
         {this.renderContent()}
