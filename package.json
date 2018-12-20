@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@types/react": "^16.7.17",
-    "@types/react-native": "^0.57.18",
+    "@types/react-native": "^0.57.19",
     "cpx": "^1.5.0",
     "react": "^16.6.3",
     "react-native": "^0.57.8",
