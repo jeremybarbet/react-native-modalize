@@ -11,7 +11,7 @@
     "noEmitOnError": true,
     "strict": true,
     "pretty": true,
-    "removeComments": true,
+    "removeComments": false,
     "sourceMap": true
   },
   "include": ["src"],

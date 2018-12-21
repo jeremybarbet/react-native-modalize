@@ -2,31 +2,47 @@
 
 ### `children`
 
-Something nice inside (or not, up to you).
+A React component that will define the content of the modal.
+
+Modalize is built-in with a `ScrollView` which mean you don't need to pass one.
+
+Even though, if you need a horizontal scroll inside your modal, you can pass a `ScrollView`. But for this, you need to use the one from RNGH: `import { ScrollView } from 'react-native-gesture-handler';`.
 
 | Type     | Required |
 | -------- | -------- |
 | node     | Yes      |
 
-### `style`
+### `height`
 
-If you want to style the modal, you can pass a style object.
+A number that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
+
+The value you pass is the height of the modal before being full opened.
 
 | Type     | Required |
 | -------- | -------- |
-| style    | No       |
+| number   | Yes      |
 
 ### `handlePosition`
 
-The handle's position on top of the modal.
+Define where the handle on top of the modal should be positioned.
 
 | Type                      | Required | Default   |
 | ------------------------- | -------- | --------- |
 | enum('outside', 'inside') | No       | `outside` |
 
+### `style`
+
+Define the style of the modal.
+
+| Type     | Required |
+| -------- | -------- |
+| style    | No       |
+
 ### `handleStyle`
 
-If you want to style the handle, you can pass a style object.
+Define the style of the handle on top of the modal.
+
+?> Be aware that if you change the height of the handle, the modal height won't change. It's not dynamic yet, and it will be in the future.
 
 | Type     | Required |
 | -------- | -------- |
@@ -34,23 +50,17 @@ If you want to style the handle, you can pass a style object.
 
 ### `overlayStyle`
 
-If you want to style the overlay, you can pass a style object.
+Define the style of the overlay.
 
 | Type     | Required |
 | -------- | -------- |
 | style     | No      |
 
-### `height`
-
-By providing a value to the `height` props it enable the snapping feature. The value you pass is a number that determines how much the modal should be open before being full height. In short, tt's a two steps process to open the modal.
-
-| Type     | Required |
-| -------- | -------- |
-| number   | Yes      |
-
 ### `useNativeDriver`
 
-Because it's better to use the UI thread and make animations smoother.
+Use the native thread by default to execute the animations.
+
+It's not really recommanded to set it to `false`, but sometimes you don't have choice, so this option is here for that.
 
 | Type     | Required | Default  |
 | -------- | -------- | -------- |
@@ -58,7 +68,9 @@ Because it's better to use the UI thread and make animations smoother.
 
 ### `adjustToContentHeight`
 
-Shrink the modal to content's height. `Modalize` can calculate for you if your content is taller than the max height or not, it it's not it will shrink the height of the modal to adapt it to your content's height.
+Shrink the modal to your content's height.
+
+`Modalize` can calculate for you if your content is taller than the max height or not, if it isn't, it will adapt the height of the modal to fit your content.
 
 | Type     | Required | Default  |
 | -------- | -------- | -------- |
@@ -66,7 +78,7 @@ Shrink the modal to content's height. `Modalize` can calculate for you if your c
 
 ### `showsVerticalScrollIndicator`
 
-Do not show the indicator for the scrollview.
+Define if you want to toggle the vertical scroll indicator.
 
 | Type     | Required | Default  |
 | -------- | -------- | -------- |
@@ -74,7 +86,9 @@ Do not show the indicator for the scrollview.
 
 ### `keyboardShouldPersistTaps`
 
-If you have any inputs inside the children props and you want to manage how to dismiss the keyboard. See [`react-native` documentation](https://facebook.github.io/react-native/docs/scrollview#keyboardshouldpersisttaps) for more informations.
+Define the behavior of the keyboard when having inputs inside the modal.
+
+If you have any inputs inside your cont and you want to manage how to dismiss the keyboard. See [`react-native` documentation](https://facebook.github.io/react-native/docs/scrollview#keyboardshouldpersisttaps) for more informations.
 
 | Type                               | Required | Default  |
 | ---------------------------------- | -------- | -------- |
@@ -82,11 +96,13 @@ If you have any inputs inside the children props and you want to manage how to d
 
 ### `withReactModal`
 
-To use React Modal to wrap Modalize.
+Define if `Modalize` has to be wrap with the Modal component from react-native.
 
 Most of application are now using a router, either [react-navigation](https://snack.expo.io/@react-navigation/full-screen-modal-v3), [react-native-navigation](https://wix.github.io/react-native-navigation/#/docs/top-level-api?id=showoverlaylayout-) or others. On all of these libraries, there is something similar to `openOverlay` that will open a screen on top of your content. It's recommanded to wrap `Modalize` into it.
 
 ?> Since the `Modal` component from `react-native` will be move out of the core soon, it's not well maintain anymore. Besides, it doesn't work well along with `react-native-gesture-handler`. That's why the `withReactModal` props is only avaiable on iOS and not recommanded to use.
+
+?> Examples for both react-navigation and react-native-navigation will be availables in a future version.
 
 | Type     | Required | Default  | Platform |
 | -------- | -------- | -------- | -------- |
@@ -94,7 +110,7 @@ Most of application are now using a router, either [react-navigation](https://sn
 
 ### `withHandle`
 
-To hide the handle if you don't want it.
+Define if the handle on top of the modal is display or not.
 
 | Type     | Required | Default  |
 | -------- | -------- | -------- |
@@ -102,7 +118,7 @@ To hide the handle if you don't want it.
 
 ### `header`
 
-A fixed header component on top of the modal.
+A header component outside of the ScrollView, on top of the modal.
 
 - If your header has to be at the top of the modal, without floating on the content you pass `isAbsolute: false`
 - If your header has to float on top of the content, like a close squared button, you have to `isAbsolute: true`. It will skip the height calculation of the header and avoid to change the scrollview height.
@@ -115,7 +131,9 @@ A fixed header component on top of the modal.
 
 ### `footer`
 
-A fixed footer component on top of the modal. See above for the details about the props.
+A footer component outside of the ScrollView, on top of the modal.
+
+See above for the details about the props.
 
 | Type                                          | Required |
 | --------------------------------------------- | -------- |
@@ -123,7 +141,7 @@ A fixed footer component on top of the modal. See above for the details about th
 
 ### `onOpen`
 
-Called when the `open` method is used.
+Callback function when the `open` method is triggered.
 
 | Type     | Required |
 | -------- | -------- |
@@ -131,7 +149,7 @@ Called when the `open` method is used.
 
 ### `onOpened`
 
-Called when the modal is opened.
+Callback function when the modal is opened.
 
 | Type     | Required |
 | -------- | -------- |
@@ -139,7 +157,7 @@ Called when the modal is opened.
 
 ### `onClose`
 
-Called when the `close` method is used.
+Callback function when the `close` method is triggered.
 
 | Type     | Required |
 | -------- | -------- |
@@ -147,7 +165,7 @@ Called when the `close` method is used.
 
 ### `onClosed`
 
-Called when the modal is closed.
+Callback function when the modal is closed.
 
 | Type     | Required |
 | -------- | -------- |

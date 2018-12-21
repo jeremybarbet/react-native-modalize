@@ -1,49 +1,9 @@
 import * as React from 'react';
-import { Animated, View, Platform, ViewStyle, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules, RegisteredStyle } from 'react-native';
+import { Animated, View, Platform, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules } from 'react-native';
 import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent, TapGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
+import { IProps, IState } from './Options';
 import s from './Modalize.styles';
-
-interface IComponent {
-  component: React.ReactNode;
-  isAbsolute: boolean;
-}
-
-interface IProps {
-  children: React.ReactNode;
-  handlePosition: 'outside' | 'inside';
-  height?: number;
-  style?: ViewStyle | ViewStyle[] | RegisteredStyle<ViewStyle> | RegisteredStyle<ViewStyle[]>;
-  handleStyle?: ViewStyle | ViewStyle[] | RegisteredStyle<ViewStyle> | RegisteredStyle<ViewStyle[]>;
-  overlayStyle?: ViewStyle | ViewStyle[] | RegisteredStyle<ViewStyle> | RegisteredStyle<ViewStyle[]>;
-  onOpen?: () => void;
-  onOpened?: () => void;
-  onClose?: () => void;
-  onClosed?: () => void;
-  useNativeDriver?: boolean;
-  adjustToContentHeight?: boolean;
-  showsVerticalScrollIndicator?: boolean;
-  keyboardShouldPersistTaps?: 'never' | 'always' | 'handled';
-  withReactModal?: boolean;
-  withHandle?: boolean;
-  header?: IComponent;
-  footer?: IComponent;
-}
-
-interface IState {
-  lastSnap: number;
-  isVisible: boolean;
-  showContent: boolean;
-  overlay: Animated.Value;
-  modalHeight: number;
-  contentHeight: number;
-  headerHeight: number;
-  footerHeight: number;
-  enableBounces: boolean;
-  scrollViewHeight: ViewStyle[];
-  keyboardEnableScroll: boolean;
-  keyboardToggle: boolean;
-}
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
