@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "build": "rm -rf ./lib/* && tsc",
+    "build": "rm -rf ./lib/* && yarn lint && tsc",
     "start": "yarn run cpx 'src/**/*.{ts,tsx}' 'example/node_modules/react-native-modalize' --watch",
     "prepublish": "yarn run build",
     "lint": "tslint 'src/**/*.ts?(x)'",
