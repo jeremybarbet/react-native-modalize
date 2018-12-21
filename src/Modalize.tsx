@@ -5,14 +5,24 @@ import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, 
 import { IProps, IState } from './Options';
 import s from './Modalize.styles';
 
+const { StatusBarManager } = NativeModules;
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
-const { StatusBarManager } = NativeModules;
 const THRESHOLD = 150;
 
 export default class Modalize extends React.Component<IProps, IState> {
 
-  private snaps: number[] = [];
+  static defaultProps = {
+    handlePosition: 'outside',
+    useNativeDriver: true,
+    adjustToContentHeight: false,
+    showsVerticalScrollIndicator: false,
+    keyboardShouldPersistTaps: 'never',
+    withReactModal: false,
+    withHandle: true,
+  };
+
+  private snaps: number[] = [];
   private snapEnd: number;
   private beginScrollYValue: number = 0;
   private contentAlreadyCalculated: boolean = false;
@@ -27,16 +37,6 @@ export default class Modalize extends React.Component<IProps, IState> {
   private modalOverlayTap: React.RefObject<TapGestureHandler> = React.createRef();
   private willCloseModalize: boolean = false;
 
-  static defaultProps = {
-    handlePosition: 'outside',
-    useNativeDriver: true,
-    adjustToContentHeight: false,
-    showsVerticalScrollIndicator: false,
-    keyboardShouldPersistTaps: 'never',
-    withReactModal: false,
-    withHandle: true,
-  };
-
   constructor(props: IProps) {
     super(props);
 
@@ -44,7 +44,12 @@ export default class Modalize extends React.Component<IProps, IState> {
     const modalHeight = height - this.handleHeight - (this.isIphoneX ? 34 : 0);
 
     if (props.withReactModal) {
-      console.warn('[react-native-modalize] `withReactModal: true`. React modal is going to be moved out of react-native core in the future. I\'d recommend migrating to something like react-navigation or react-native-navigation\'s modal to wrap this component. Besides, react-native-gesture-handler for Android desnt\'t work with the react modal component.');
+      console.warn(
+        '[react-native-modalize] `withReactModal` is set to `true`. Modal from react-native is going ' +
+        'to be moved out of the core in the future. I\'d recommend migrating to something like ' +
+        'react-navigation or react-native-navigation\'s to wrap Modalize. Check out the documentation ' +
+        'for more informations.'
+      );
     }
 
     if (props.height) {
@@ -287,12 +292,6 @@ export default class Modalize extends React.Component<IProps, IState> {
     this.setState({ scrollViewHeight });
   }
 
-  private onComponentLayout = ({ nativeEvent }: LayoutChangeEvent, name: string): void => {
-    const { height } = nativeEvent.layout;
-
-    this.setState({ [`${name}Height`]: height } as any, this.onScrollViewChange);
-  }
-
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
     const { height, useNativeDriver, adjustToContentHeight } = this.props;
     const { lastSnap, contentHeight } = this.state;
@@ -384,10 +383,13 @@ export default class Modalize extends React.Component<IProps, IState> {
       return element;
     }
 
+    const onLayout = ({ nativeEvent }: LayoutChangeEvent) =>
+      this.setState({ [`${name}Height`]: nativeEvent.layout.height } as any, this.onScrollViewChange);
+
     return (
       <View
         style={s.component}
-        onLayout={event => this.onComponentLayout(event, name)}
+        onLayout={onLayout}
         pointerEvents="box-none"
       >
         {element}
@@ -476,6 +478,8 @@ export default class Modalize extends React.Component<IProps, IState> {
 
     const scrollEnabled = contentHeight === 0 || keyboardEnableScroll;
     const marginBottom = adjustToContentHeight ? 0 : keyboardToggle ? this.handleHeight : 0;
+    const enabled = this.isIos && !adjustToContentHeight;
+    const keyboardDismissMode = this.isIos ? 'interactive' : 'on-drag';
 
     return (
       <PanGestureHandler
@@ -491,7 +495,7 @@ export default class Modalize extends React.Component<IProps, IState> {
         <AnimatedKeyboardAvoidingView
           behavior="position"
           style={{ marginBottom }}
-          enabled={this.isIos && !adjustToContentHeight}
+          enabled={enabled}
         >
           <NativeViewGestureHandler
             ref={this.modalScrollView}
@@ -509,7 +513,7 @@ export default class Modalize extends React.Component<IProps, IState> {
               onLayout={this.onScrollViewLayout}
               scrollEnabled={scrollEnabled}
               showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-              keyboardDismissMode={this.isIos ? 'interactive' : 'on-drag'}
+              keyboardDismissMode={keyboardDismissMode}
               keyboardShouldPersistTaps={keyboardShouldPersistTaps}
             >
               {children}
@@ -564,6 +568,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   private renderModalize = (): React.ReactNode => {
     const { style, adjustToContentHeight } = this.props;
     const { isVisible, lastSnap, showContent } = this.state;
+    const enabled = this.isIos && adjustToContentHeight;
 
     if (!isVisible) {
       return null;
@@ -584,7 +589,7 @@ export default class Modalize extends React.Component<IProps, IState> {
               <AnimatedKeyboardAvoidingView
                 style={[s.modalize__content, this.modalizeContent, style]}
                 behavior="padding"
-                enabled={this.isIos && adjustToContentHeight}
+                enabled={enabled}
               >
                 {this.renderHandle()}
                 {this.renderHeader()}
