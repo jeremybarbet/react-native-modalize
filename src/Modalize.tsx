@@ -48,7 +48,7 @@ export default class Modalize extends React.Component<IProps, IState> {
         '[react-native-modalize] `withReactModal` is set to `true`. Modal from react-native is going ' +
         'to be moved out of the core in the future. I\'d recommend migrating to something like ' +
         'react-navigation or react-native-navigation\'s to wrap Modalize. Check out the documentation ' +
-        'for more informations.'
+        'for more informations.',
       );
     }
 
