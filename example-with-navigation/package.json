@@ -1,0 +1,45 @@
+{
+  "name": "modalizeWithNavigation",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest",
+    "r-c": "node node_modules/react-native/local-cli/cli.js start -- --reset-cache",
+    "r-ios": "react-native run-ios",
+    "r-android": "react-native run-android",
+    "r-android-release": "react-native run-android --variant=release",
+    "b-ios": "react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios",
+    "b-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output ./android/app/src/main/assets/index.android.bundle --assets-dest ./android/app/src/main/res/",
+    "b-debug-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output ./android/app/build/intermediates/assets/debug/index.android.bundle --assets-dest ./android/app/build/intermediates/res/merged/debug",
+    "clean": "rm -rf node_modules/ && yarn cache clean && yarn install",
+    "cache:clean": "rm -fr $TMPDIR/react-*; watchman watch-del-all;",
+    "reset:cache": "rm -rf $TMPDIR/react-* && rm -rf $TMPDIR/metro-* && rm -rf $TMPDIR/haste-* && watchman watch-del-all && npm cache clean --force && npm cache verify && rm -rf ios/build && rm -rf node_modules/ && yarn install"
+  },
+  "rnpm": {
+    "assets": [
+      "src/assets/fonts"
+    ]
+  },
+  "dependencies": {
+    "mobx": "^5.7.0",
+    "mobx-persist": "^0.4.1",
+    "mobx-react": "^5.4.2",
+    "react": "16.6.1",
+    "react-native": "0.57.7",
+    "react-native-gesture-handler": "^1.0.12",
+    "react-native-modalize": "^1.0.0-alpha.19",
+    "react-navigation": "^3.0.9"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.2.0",
+    "babel-jest": "23.6.0",
+    "babel-plugin-module-resolver": "^3.1.1",
+    "jest": "23.6.0",
+    "metro-react-native-babel-preset": "0.50.0",
+    "react-test-renderer": "16.6.1"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}

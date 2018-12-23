@@ -1,0 +1,20 @@
+{
+  "presets": ["module:metro-react-native-babel-preset"],
+  "plugins": [
+    ["module-resolver",
+      {
+        "root": ["./src"],
+        "extensions": [".ios.js", ".android.js", ".js", ".json"],
+        "alias": {
+          "screens": "./src/screens/",
+          "components": "./src/components/",
+          "router": "./src/router/",
+          "services": "./src/services/",
+          "assets": "./src/assets/",
+          "stores": "./src/stores/"
+        }
+      }
+    ],
+    ["@babel/plugin-proposal-decorators", { "legacy": true }]
+  ]
+}
