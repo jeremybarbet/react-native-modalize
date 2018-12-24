@@ -6,7 +6,7 @@
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "rm -rf ./lib/* && yarn lint && tsc",
-    "start": "yarn run cpx 'src/**/*.{ts,tsx}' 'example/node_modules/react-native-modalize' --watch",
+    "start": "yarn run cpx 'src/**/*.{ts,tsx}' 'examples/react-native-navigation/node_modules/react-native-modalize' --watch",
     "prepublish": "yarn run build",
     "lint": "tslint 'src/**/*.ts?(x)'",
     "postversion": "sh ./post-version.sh"
