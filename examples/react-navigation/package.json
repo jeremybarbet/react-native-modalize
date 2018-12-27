@@ -1,0 +1,30 @@
+{
+  "name": "modalize-with-react-navigation",
+  "main": "node_modules/expo/AppEntry.js",
+  "private": true,
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject"
+  },
+  "dependencies": {
+    "expo": "^31.0.2",
+    "faker": "^4.1.0",
+    "react": "16.5.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
+    "react-native-modalize": "file:../../src",
+    "react-navigation": "^2.18.2",
+    "tslib": "^1.9.3"
+  },
+  "devDependencies": {
+    "@types/expo": "^31.0.5",
+    "@types/faker": "^4.1.4",
+    "@types/react": "^16.7.18",
+    "@types/react-native": "^0.57.23",
+    "@types/react-navigation": "^3.0.1",
+    "babel-preset-expo": "^5.0.0",
+    "react-native-typescript-transformer": "^1.2.11",
+    "typescript": "^3.2.2"
+  }
+}
