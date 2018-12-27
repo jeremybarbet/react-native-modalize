@@ -7,7 +7,7 @@ const HomeScreen = () => (
   <View style={s.app}>
     <Text style={s.app__heading}>Modalize</Text>
     <Text style={s.app__subheading}>Run with React Navigation</Text>
-    <Text style={s.app__copy}>Move to the modal tab to see all the examples</Text>
+    <Text style={s.app__copy}>Go to the modal tab to see all the examples</Text>
 
     <Footer />
   </View>

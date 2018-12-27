@@ -7,6 +7,10 @@ export default class InputForm extends React.PureComponent {
 
   private modal: React.RefObject<Modalize> = React.createRef();
 
+  componentDidMount() {
+    this.openModal();
+  }
+
   private renderContent = () => {
     return (
       <View style={s.content}>

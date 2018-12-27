@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
-import HomeScreen from '../screens/HomeScreen';
-import ModalScreen from '../screens/ModalScreen';
+import Home from '../screens/Home';
+import Modal from '../screens/Modal';
 import { View } from 'react-native';
 
 const Icon = ({ focused }: { focused: boolean }) => (
@@ -17,7 +17,7 @@ const Icon = ({ focused }: { focused: boolean }) => (
 );
 
 const HomeStack = createStackNavigator(
-  { Home: HomeScreen },
+  { Home },
   { headerMode: 'none' },
 );
 
@@ -27,7 +27,7 @@ HomeStack.navigationOptions = {
 };
 
 const ModalStack = createStackNavigator(
-  { Modal: ModalScreen },
+  { Modal },
   { headerMode: 'none' },
 );
 
@@ -60,7 +60,7 @@ export default createSwitchNavigator(
       ModalStack,
     }),
     Modal: {
-      screen: ModalScreen,
+      screen: Modal,
       navigationOptions: () => ({
         gesturesEnabled: false,
       }),

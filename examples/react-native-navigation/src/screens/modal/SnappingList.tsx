@@ -7,6 +7,10 @@ export default class SnappingList extends React.PureComponent {
 
   private modal: React.RefObject<Modalize> = React.createRef();
 
+  componentDidMount() {
+    this.openModal();
+  }
+
   private renderHeader = () => (
     <View style={s.modal__header}>
       <Text style={s.modal__headerText}>50 users online</Text>

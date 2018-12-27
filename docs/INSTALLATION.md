@@ -57,6 +57,10 @@ import Modalize from 'react-native-modalize';
 **2. Add the modal in your render function, and use the `open` method to open the modal**
 
 ```jsx
+import * as React from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import Modalize from 'react-native-modalize';
+
 export default class MyApp extends React.PureComponent {
 
   modal = React.createRef();
@@ -78,7 +82,7 @@ export default class MyApp extends React.PureComponent {
           ...your content
         </Modalize>
       </View>
-    )
+    );
   }
 }
 ```
