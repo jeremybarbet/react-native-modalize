@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
-import Footer from '../components/footer/Footer';
+import Footer from '../../components/footer/Footer';
 
 const HomeScreen = () => (
   <View style={s.app}>

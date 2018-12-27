@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
-import Footer from '../components/footer/Footer';
+import Footer from '../../components/footer/Footer';
 
-import DefaultContent from '../modals/DefaultContent';
-import FixedContent from '../modals/FixedContent';
-import SnappingList from '../modals/SnappingList';
-import AbsoluteHeader from '../modals/AbsoluteHeader';
-import InputForm from '../modals/InputForm';
+import DefaultContent from '../../modals/DefaultContent';
+import FixedContent from '../../modals/FixedContent';
+import SnappingList from '../../modals/SnappingList';
+import AbsoluteHeader from '../../modals/AbsoluteHeader';
+import InputForm from '../../modals/InputForm';
 
 const ModalScreen = () => {
   const modal: any[] = [];
