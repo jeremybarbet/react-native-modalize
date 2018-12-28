@@ -2,7 +2,7 @@
 
 As explained [here](./PROPSMETHODS?id=withreactmodal), it's not recommanded to use the `withReactModal` props. React Native team will soon remove from the core of React Native a lot of components, like the `Modal` one. It's unstable and not performing well.
 
-This is why most of the major router implemented their way to handle a modal/overlay behavior.
+This is why most of the major router implemented their way to handle a modal/overlay behavior. Both `react-native-navigation` and `react-navigation` examples are made using a bottom tabbar, it's a very common design pattern, but you can also find an example without any navigation under the `react-native-expo` folder.
 
 ## React Native Navigation
 

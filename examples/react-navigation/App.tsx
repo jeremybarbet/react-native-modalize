@@ -60,15 +60,16 @@ const Modalize = ({ context }: { context: IState }) => {
   return modals.find(modal => modal.id === context.type)!.component;
 }
 
-const App = () => (
-  <ModalContext.Consumer>
-    <AppNavigator />
-    {(context: IState) => <Modalize context={context} />}
-  </ModalContext.Consumer>
-);
+export default class App extends React.PureComponent {
 
-App.contextType = {
-  context: ModalContext,
-};
+  static contextType = ModalContext;
 
-export default App;
+  render() {
+    return (
+      <ModalContext.Consumer>
+        <AppNavigator />
+        {(context: IState) => <Modalize context={context} />}
+      </ModalContext.Consumer>
+    );
+  }
+}

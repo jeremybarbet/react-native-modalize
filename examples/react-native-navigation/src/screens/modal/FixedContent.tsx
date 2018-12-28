@@ -11,7 +11,7 @@ const FixedContent = () => {
       <View style={s.content}>
         <Image
           style={s.content__icon as ImageStyle}
-          source={require('../../assets/send-message.png')}
+          source={require('assets/send-message.png')}
         />
 
         <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>

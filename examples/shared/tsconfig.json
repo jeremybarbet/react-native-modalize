@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "jsx": "react-native",
+    "strict": true,
+    "baseUrl": "./src",
+  },
+  "include": ["src"],
+}

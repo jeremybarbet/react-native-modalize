@@ -1,0 +1,11 @@
+{
+  "name": "shared",
+  "version": "1.0.0",
+  "description": "Code shared between examples",
+  "main": "index.ts",
+  "devDependencies": {
+    "@types/react": "16.7.18",
+    "@types/react-native": "0.57.23",
+    "typescript": "3.2.2"
+  }
+}

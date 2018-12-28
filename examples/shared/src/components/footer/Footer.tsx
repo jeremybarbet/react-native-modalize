@@ -21,7 +21,7 @@ const s = StyleSheet.create({
   },
 
   footer__author: {
-    color: '#707070',
+    color: '#404040',
   },
 });
 

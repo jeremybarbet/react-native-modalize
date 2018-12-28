@@ -13,7 +13,7 @@ const AbsoluteHeader = () => {
       onPress={closeModal}
       hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }}
     >
-      <Image source={require('../../assets/cross.png')} />
+      <Image source={require('assets/cross.png')} />
     </TouchableOpacity>
   );
 

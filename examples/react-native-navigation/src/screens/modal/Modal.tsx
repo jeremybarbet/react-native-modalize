@@ -1,8 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Navigation } from 'react-native-navigation';
-
-import Footer from '../../components/footer/Footer';
+import { Layout, Footer, Button } from 'shared';
 
 import { MODAL_DEFAULT, MODAL_FIXED, MODAL_SNAPPING, MODAL_ABSOLUTE, MODAL_INPUT } from '..';
 
@@ -28,19 +26,16 @@ const Modal = () => {
 
   const renderButtons = (links: ILink[]) => {
     return links.map(({ id, name }, i) => (
-      <TouchableOpacity
+      <Button
         key={i}
-        style={s.app__button}
         onPress={() => onPress(id)}
-        activeOpacity={0.9}
-      >
-        <Text style={s.app__text}>{name}</Text>
-      </TouchableOpacity>
+        name={name}
+      />
     ));
   }
 
   return (
-    <View style={s.app}>
+    <Layout>
       {renderButtons([
         { id: MODAL_DEFAULT, name: 'Modal with a default content' },
         { id: MODAL_FIXED, name: 'Modal with a fixed content' },
@@ -50,35 +45,8 @@ const Modal = () => {
       ])}
 
       <Footer />
-    </View>
+    </Layout>
   );
 }
-
-const s = StyleSheet.create({
-  app: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-
-    padding: 15,
-
-    backgroundColor: '#fafafa',
-  },
-
-  app__button: {
-    paddingVertical: 15,
-    marginBottom: 15,
-
-    width: 240,
-
-    backgroundColor: '#333',
-    borderRadius: 6,
-  },
-
-  app__text: {
-    color: '#fff',
-    textAlign: 'center',
-  },
-});
 
 export default Modal;

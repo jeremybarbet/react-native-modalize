@@ -29,7 +29,7 @@ Screens.set(MODAL_INPUT, ModalInput);
 const options = {
   textColor: '#ccc',
   selectedTextColor: '#2f95dc',
-  icon: require('../assets/bottom-bar-icon.png'),
+  icon: require('assets/bottom-bar-icon.png'),
   selectedIconColor: '#2f95dc',
 };
 
