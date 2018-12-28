@@ -3,22 +3,21 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
-export default class AbsoluteHeader extends React.PureComponent {
+const AbsoluteHeader = () => {
+  const modal: React.RefObject<Modalize> = React.createRef();
 
-  private modal: React.RefObject<Modalize> = React.createRef();
-
-  private renderHeader = () => (
+  const renderHeader = () => (
     <TouchableOpacity
       style={s.modal__header}
       activeOpacity={0.8}
-      onPress={this.closeModal}
+      onPress={closeModal}
       hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }}
     >
       <Image source={require('../assets/cross.png')} />
     </TouchableOpacity>
-  )
+  );
 
-  private renderContent = () => (
+  const renderContent = () => (
     <View style={s.content}>
       <Text style={s.content__heading}>Article title</Text>
       <Text style={s.content__subheading}>November 11st 2018</Text>
@@ -26,32 +25,30 @@ export default class AbsoluteHeader extends React.PureComponent {
     </View>
   )
 
-  public openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
+  const openModal = () => {
+    if (modal.current) {
+      modal.current.open();
     }
   }
 
-  public closeModal = () => {
-    if (this.modal.current) {
-      this.modal.current.close();
+  const closeModal = () => {
+    if (modal.current) {
+      modal.current.close();
     }
   }
 
-  render() {
-    return (
-      <Modalize
-        ref={this.modal}
-        header={{
-          component: this.renderHeader,
-          isAbsolute: true,
-        }}
-        withHandle={false}
-      >
-        {this.renderContent()}
-      </Modalize>
-    );
-  }
+  return (
+    <Modalize
+      ref={modal}
+      header={{
+        component: renderHeader,
+        isAbsolute: true,
+      }}
+      withHandle={false}
+    >
+      {renderContent()}
+    </Modalize>
+  );
 }
 
 const s = StyleSheet.create({
@@ -97,3 +94,5 @@ const s = StyleSheet.create({
     color: '#666',
   },
 });
+
+export default AbsoluteHeader;

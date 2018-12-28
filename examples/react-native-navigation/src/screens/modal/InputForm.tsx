@@ -1,17 +1,12 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
-export default class InputForm extends React.PureComponent {
+const InputForm = () => {
+  const modal: React.RefObject<Modalize> = React.createRef();
 
-  private modal: React.RefObject<Modalize> = React.createRef();
-
-  componentDidMount() {
-    this.openModal();
-  }
-
-  private renderContent = () => {
+  const renderContent = () => {
     return (
       <View style={s.content}>
         <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
@@ -20,44 +15,46 @@ export default class InputForm extends React.PureComponent {
         <TextInput style={s.content__input} placeholder="Type your username" />
       </View>
     );
-  }
+  };
 
-  private renderFooter = () => (
+  const renderFooter = () => (
     <TouchableOpacity
       style={s.modal__footer}
       activeOpacity={0.8}
-      onPress={this.closeModal}
+      onPress={closeModal}
     >
       <Text style={s.modal__footerText}>{'Submit'.toUpperCase()}</Text>
     </TouchableOpacity>
-  )
+  );
 
-  public openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
+  const openModal = () => {
+    if (modal.current) {
+      modal.current.open();
     }
-  }
+  };
 
-  public closeModal = () => {
-    if (this.modal.current) {
-      this.modal.current.close();
+  const closeModal = () => {
+    if (modal.current) {
+      modal.current.close();
     }
-  }
+  };
 
-  render() {
-    return (
-      <Modalize
-        ref={this.modal}
-        footer={{
-          component: this.renderFooter,
-          isAbsolute: false,
-        }}
-        adjustToContentHeight
-      >
-        {this.renderContent()}
-      </Modalize>
-    );
-  }
+  useEffect(() => {
+    openModal();
+  });
+
+  return (
+    <Modalize
+      ref={modal}
+      footer={{
+        component: renderFooter,
+        isAbsolute: false,
+      }}
+      adjustToContentHeight
+    >
+      {renderContent()}
+    </Modalize>
+  );
 }
 
 const s = StyleSheet.create({
@@ -114,3 +111,5 @@ const s = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default InputForm;

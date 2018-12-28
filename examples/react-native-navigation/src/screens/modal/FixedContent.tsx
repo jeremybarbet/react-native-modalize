@@ -1,17 +1,12 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ImageStyle } from 'react-native';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
-export default class FixedContent extends React.PureComponent {
+const FixedContent = () => {
+  const modal: React.RefObject<Modalize> = React.createRef();
 
-  private modal: React.RefObject<Modalize> = React.createRef();
-
-  componentDidMount() {
-    this.openModal();
-  }
-
-  private renderContent = () => {
+  const renderContent = () => {
     return (
       <View style={s.content}>
         <Image
@@ -26,36 +21,38 @@ export default class FixedContent extends React.PureComponent {
         <TouchableOpacity
           style={s.content__button}
           activeOpacity={0.9}
-          onPress={this.closeModal}
+          onPress={closeModal}
         >
           <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
         </TouchableOpacity>
       </View>
     );
-  }
+  };
 
-  public openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
+  const openModal = () => {
+    if (modal.current) {
+      modal.current.open();
     }
-  }
+  };
 
-  public closeModal = () => {
-    if (this.modal.current) {
-      this.modal.current.close();
+  const closeModal = () => {
+    if (modal.current) {
+      modal.current.close();
     }
-  }
+  };
 
-  render() {
-    return (
-      <Modalize
-        ref={this.modal}
-        adjustToContentHeight
-      >
-        {this.renderContent()}
-      </Modalize>
-    );
-  }
+  useEffect(() => {
+    openModal();
+  });
+
+  return (
+    <Modalize
+      ref={modal}
+      adjustToContentHeight
+    >
+      {renderContent()}
+    </Modalize>
+  );
 }
 
 const s = StyleSheet.create({
@@ -110,3 +107,5 @@ const s = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default FixedContent;

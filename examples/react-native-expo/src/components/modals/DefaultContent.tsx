@@ -3,31 +3,28 @@ import { StyleSheet, Text, View } from 'react-native';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
-export default class DefaultContent extends React.PureComponent {
+const DefaultContent = () => {
+  const modal: React.RefObject<Modalize> = React.createRef();
 
-  private modal: React.RefObject<Modalize> = React.createRef();
-
-  private renderContent = () => (
+  const renderContent = () => (
     <View style={s.content}>
       <Text style={s.content__heading}>Article title</Text>
       <Text style={s.content__subheading}>November 11st 2018</Text>
       <Text style={s.content__paragraph}>{faker.lorem.paragraphs(8)}</Text>
     </View>
-  )
+  );
 
-  public openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
+  const openModal = () => {
+    if (modal.current) {
+      modal.current.open();
     }
-  }
+  };
 
-  render() {
-    return (
-      <Modalize ref={this.modal}>
-        {this.renderContent()}
-      </Modalize>
-    );
-  }
+  return (
+    <Modalize ref={modal}>
+      {renderContent()}
+    </Modalize>
+  );
 }
 
 const s = StyleSheet.create({
@@ -57,3 +54,5 @@ const s = StyleSheet.create({
     color: '#666',
   },
 });
+
+export default DefaultContent;

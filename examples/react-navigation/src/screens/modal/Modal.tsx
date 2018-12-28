@@ -2,25 +2,34 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import Footer from '../../components/footer/Footer';
+import { ModalContext, IState } from '../../components/modal-provider/ModalProvider';
 
-import DefaultContent from '../../modals/DefaultContent';
-import FixedContent from '../../modals/FixedContent';
-import SnappingList from '../../modals/SnappingList';
-import AbsoluteHeader from '../../modals/AbsoluteHeader';
-import InputForm from '../../modals/InputForm';
+interface IProps {
+  context: IState;
+}
 
-const ModalScreen = () => {
-  const modal: any[] = [];
+interface ILink {
+  id: string;
+  name: string;
+}
 
-  const renderButtons = (links: string[]) => {
-    return links.map((link, i) => (
+const ModalScreen = (props: IProps) => {
+  console.log('-modal', ModalScreen.contextType.modal);
+
+  const onPress = (id: string) => {
+    // @todo: pseudo code
+    ModalScreen.contextType.modal.type = id;
+  };
+
+  const renderButtons = (links: ILink[]) => {
+    return links.map(({ id, name }, i) => (
       <TouchableOpacity
         key={i}
         style={s.app__button}
-        onPress={() => modal[i].openModal()}
+        onPress={() => onPress(id)}
         activeOpacity={0.9}
       >
-        <Text style={s.app__text}>{link}</Text>
+        <Text style={s.app__text}>{name}</Text>
       </TouchableOpacity>
     ));
   }
@@ -28,19 +37,14 @@ const ModalScreen = () => {
   return (
     <View style={s.app}>
       {renderButtons([
-        'Modal with a default content',
-        'Modal with a fixed content',
-        'Modal with a snapping list',
-        'Modal with an absolute header',
-        'Modal with an input',
+        { id: 'MODAL_DEFAULT', name: 'Modal with a default content' },
+        { id: 'MODAL_FIXED', name: 'Modal with a fixed content' },
+        { id: 'MODAL_SNAPPING', name: 'Modal with a snapping list' },
+        { id: 'MODAL_ABSOLUTE', name: 'Modal with an absolute header' },
+        { id: 'MODAL_INPUT', name: 'Modal with an input' },
       ])}
 
       <Footer />
-      <DefaultContent ref={(el: DefaultContent) => { modal[0] = el; }} />
-      <FixedContent ref={(el: FixedContent) => { modal[1] = el; }} />
-      <SnappingList ref={(el: SnappingList) => { modal[2] = el; }} />
-      <AbsoluteHeader ref={(el: AbsoluteHeader) => { modal[3] = el; }} />
-      <InputForm ref={(el: InputForm) => { modal[4] = el; }} />
     </View>
   );
 }
@@ -71,5 +75,9 @@ const s = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+ModalScreen.contextType = {
+  modal: ModalContext,
+};
 
 export default ModalScreen;

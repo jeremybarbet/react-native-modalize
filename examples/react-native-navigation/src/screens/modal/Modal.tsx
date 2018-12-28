@@ -12,23 +12,26 @@ interface ILink {
 }
 
 const Modal = () => {
-  const onOpen = (name: string) => {
+  const onPress = (id: string) => {
+    /*
+     * If you need to pass any props to the modal you
+     * can use the key passProps, you can also pass some options.
+     * Check the react-native-navigation's documentation for more infos.
+     */
     Navigation.showOverlay({
       component: {
-        name,
-        options: {
-          overlay: { interceptTouchOutside: false },
-        },
+        name: id,
+        options: { overlay: { interceptTouchOutside: false } },
       },
     });
   };
 
-  const renderButtons = (links: Array<ILink>) => {
+  const renderButtons = (links: ILink[]) => {
     return links.map(({ id, name }, i) => (
       <TouchableOpacity
         key={i}
         style={s.app__button}
-        onPress={() => onOpen(id)}
+        onPress={() => onPress(id)}
         activeOpacity={0.9}
       >
         <Text style={s.app__text}>{name}</Text>
