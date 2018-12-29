@@ -14,7 +14,7 @@ const Modal = () => {
     /*
      * To avoid creating multiple screens for each modal,
      * I just pass the modal content as a props to the
-     * Modalize wrapper. It's for making the example simpler.
+     * Modalize screen
      */
     Navigation.showOverlay({
       component: {

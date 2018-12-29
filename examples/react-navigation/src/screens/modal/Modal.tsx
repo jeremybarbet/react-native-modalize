@@ -1,10 +1,10 @@
 import React from 'react';
 import { Layout, Footer, Button } from 'shared';
 
-import { ModalContext, IState } from '../../components/modal-provider/ModalProvider';
+import { ModalContext } from '../../../App';
 
 interface IProps {
-  context: IState;
+  toggleModal: (id: string) => void;
 }
 
 interface ILink {
@@ -12,41 +12,37 @@ interface ILink {
   name: string;
 }
 
-const ModalScreen = (props: IProps) => {
-  console.log('-modal', ModalScreen.contextType.modal);
+export default class ModalScreen extends React.PureComponent<IProps> {
 
-  const onPress = (id: string) => {
-    // @todo: pseudo code
-    ModalScreen.contextType.modal.type = id;
-  };
+  static contextType = ModalContext;
 
-  const renderButtons = (links: ILink[]) => {
+  private onPress = (id: string) => {
+    this.props.toggleModal(id);
+  }
+
+  private renderButtons = (links: ILink[]) => {
     return links.map(({ id, name }, i) => (
       <Button
         key={i}
-        onPress={() => onPress(id)}
+        onPress={() => this.onPress(id)}
         name={name}
       />
     ));
   }
 
-  return (
-    <Layout>
-      {renderButtons([
-        { id: 'MODAL_DEFAULT', name: 'Modal with a default content' },
-        { id: 'MODAL_FIXED', name: 'Modal with a fixed content' },
-        { id: 'MODAL_SNAPPING', name: 'Modal with a snapping list' },
-        { id: 'MODAL_ABSOLUTE', name: 'Modal with an absolute header' },
-        { id: 'MODAL_INPUT', name: 'Modal with an input' },
-      ])}
+  render() {
+    return (
+      <Layout>
+        {this.renderButtons([
+          { id: 'MODAL_DEFAULT', name: 'Modal with a default content' },
+          { id: 'MODAL_FIXED', name: 'Modal with a fixed content' },
+          { id: 'MODAL_SNAPPING', name: 'Modal with a snapping list' },
+          { id: 'MODAL_ABSOLUTE', name: 'Modal with an absolute header' },
+          { id: 'MODAL_INPUT', name: 'Modal with an input' },
+        ])}
 
-      <Footer />
-    </Layout>
-  );
+        <Footer />
+      </Layout>
+    );
+  }
 }
-
-ModalScreen.contextType = {
-  modal: ModalContext,
-};
-
-export default ModalScreen;

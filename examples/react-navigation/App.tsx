@@ -1,76 +1,57 @@
 import * as React from 'react';
-import { View } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-import { AbsoluteHeader, DefaultContent, FixedContent, InputForm, SnappingList } from 'shared';
 
-import Home from './src/screens/home/Home';
-import Modal from './src/screens/modal/Modal';
+import AppNavigator from './src/screens';
+import Modalize from './src/components/modalize/Modalize';
 
-import { ModalContext, IState } from './src/components/modal-provider/ModalProvider';
-
-const Icon = ({ focused }: { focused: boolean }) => (
-  <View
-    style={{
-      width: 18,
-      height: 18,
-      backgroundColor: focused ? '#2f95dc' : '#ccc',
-      borderRadius: 18,
-    }}
-  />
-);
-
-const HomeStack = createStackNavigator(
-  { Home },
-  { headerMode: 'none' },
-);
-
-HomeStack.navigationOptions = {
-  tabBarIcon: ({ focused }: { focused: boolean }) => <Icon focused={focused} />,
-  tabBarLabel: 'Home',
-};
-
-const ModalStack = createStackNavigator(
-  { Modal },
-  { headerMode: 'none' },
-);
-
-ModalStack.navigationOptions = {
-  tabBarIcon: ({ focused }: { focused: boolean }) => <Icon focused={focused} />,
-  tabBarLabel: 'Modal',
-};
-
-const AppNavigator = createBottomTabNavigator({
-  Home: HomeStack,
-  Modal: ModalStack,
-});
-
-const Modalize = ({ context }: { context: IState }) => {
-  console.log('-context', context);
-
-  const modals = [
-    { id: 'MODAL_DEFAULT', component: <DefaultContent /> },
-    { id: 'MODAL_FIXED', component: <FixedContent /> },
-    { id: 'MODAL_SNAPPING', component: <SnappingList /> },
-    { id: 'MODAL_ABSOLUTE', component: <AbsoluteHeader /> },
-    { id: 'MODAL_INPUT', component: <InputForm /> },
-  ];
-
-  return modals.find(modal => modal.id === context.type)!.component;
+interface IState {
+  toggleModal: (id: string) => void;
+  type: string;
+  isOpen: boolean;
 }
 
-export default class App extends React.PureComponent {
+export const ModalContext = React.createContext({
+  toggleModal: () => {},
+  type: 'MODAL_DEFAULT',
+  isOpen: false,
+});
 
-  static contextType = ModalContext;
+export default class App extends React.PureComponent<any, IState> {
+
+  private toggleModal: (id: string) => void;
+
+  constructor(props: any) {
+    super(props);
+
+    this.toggleModal = (id: string) => {
+      console.log('-id', id);
+
+      this.setState({
+        type: id,
+        isOpen: true,
+      });
+    };
+
+    this.state = {
+      toggleModal: this.toggleModal,
+      type: 'MODAL_DEFAULT',
+      isOpen: false,
+    };
+  }
 
   render() {
     return (
-      <>
+      <ModalContext.Provider value={this.state}>
         <AppNavigator />
 
         <ModalContext.Consumer>
-          {(context: IState) => <Modalize context={context} />}
+          {({ isOpen, type }) => (
+            <Modalize
+              isOpen={isOpen}
+              type={type}
+            />
+          )}
         </ModalContext.Consumer>
-      </>
+      </ModalContext.Provider>
     );
   }
 }
