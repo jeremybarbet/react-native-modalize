@@ -1,11 +1,5 @@
 import React from 'react';
-import { Layout, Header, Footer, Button } from 'shared';
-
-import DefaultContent from './src/components/modals/DefaultContent';
-import FixedContent from './src/components/modals/FixedContent';
-import SnappingList from './src/components/modals/SnappingList';
-import AbsoluteHeader from './src/components/modals/AbsoluteHeader';
-import InputForm from './src/components/modals/InputForm';
+import { Layout, Header, Footer, Button, AbsoluteHeader, DefaultContent, FixedContent, InputForm, SnappingList } from 'shared';
 
 const App = () => {
   const modal: any[] = [];

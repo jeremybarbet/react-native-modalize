@@ -1,15 +1,11 @@
 import * as React from 'react';
 import { View } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import { AbsoluteHeader, DefaultContent, FixedContent, InputForm, SnappingList } from 'shared';
 
 import Home from './src/screens/home/Home';
 import Modal from './src/screens/modal/Modal';
 
-import DefaultContent from './src/components/modals/DefaultContent';
-import FixedContent from './src/components/modals/FixedContent';
-import SnappingList from './src/components/modals/SnappingList';
-import AbsoluteHeader from './src/components/modals/AbsoluteHeader';
-import InputForm from './src/components/modals/InputForm';
 import { ModalContext, IState } from './src/components/modal-provider/ModalProvider';
 
 const Icon = ({ focused }: { focused: boolean }) => (
@@ -49,6 +45,8 @@ const AppNavigator = createBottomTabNavigator({
 });
 
 const Modalize = ({ context }: { context: IState }) => {
+  console.log('-context', context);
+
   const modals = [
     { id: 'MODAL_DEFAULT', component: <DefaultContent /> },
     { id: 'MODAL_FIXED', component: <FixedContent /> },
@@ -66,10 +64,13 @@ export default class App extends React.PureComponent {
 
   render() {
     return (
-      <ModalContext.Consumer>
+      <>
         <AppNavigator />
-        {(context: IState) => <Modalize context={context} />}
-      </ModalContext.Consumer>
+
+        <ModalContext.Consumer>
+          {(context: IState) => <Modalize context={context} />}
+        </ModalContext.Consumer>
+      </>
     );
   }
 }

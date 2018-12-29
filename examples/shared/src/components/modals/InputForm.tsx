@@ -16,7 +16,7 @@ export default class InputForm extends React.PureComponent {
         <TextInput style={s.content__input} placeholder="Type your username" />
       </View>
     );
-  }
+  };
 
   private renderFooter = () => (
     <TouchableOpacity
@@ -26,19 +26,19 @@ export default class InputForm extends React.PureComponent {
     >
       <Text style={s.modal__footerText}>{'Submit'.toUpperCase()}</Text>
     </TouchableOpacity>
-  )
+  );
 
   public openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
     }
-  }
+  };
 
   public closeModal = () => {
     if (this.modal.current) {
       this.modal.current.close();
     }
-  }
+  };
 
   render() {
     return (

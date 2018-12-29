@@ -1,8 +1,11 @@
 {
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "jsx": "react-native",
+    "moduleResolution": "node",
+    "target": "es2017",
     "strict": true,
-    "baseUrl": "./src",
+    "baseUrl": "./src"
   },
-  "include": ["src"],
+  "include": ["src"]
 }

@@ -11,14 +11,14 @@ export interface IState {
 
 export const ModalContext = React.createContext({
   toggle: () => {},
-  type: '',
+  type: 'MODAL_DEFAULT',
 });
 
 export default class ModalProvider extends React.PureComponent<IProps, IState> {
 
   state = {
     toggle: () => {},
-    type: 'dza',
+    type: 'MODAL_DEFAULT',
   };
 
   render() {

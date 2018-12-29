@@ -3,52 +3,55 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
-const AbsoluteHeader = () => {
-  const modal: React.RefObject<Modalize> = React.createRef();
+export default class AbsoluteHeader extends React.PureComponent {
 
-  const renderHeader = () => (
+  private modal: React.RefObject<Modalize> = React.createRef();
+
+  private renderHeader = () => (
     <TouchableOpacity
       style={s.modal__header}
       activeOpacity={0.8}
-      onPress={closeModal}
+      onPress={this.closeModal}
       hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }}
     >
-      <Image source={require('../../assets/cross.png')} />
+      <Image source={require('../../assets/images/cross.png')} />
     </TouchableOpacity>
   );
 
-  const renderContent = () => (
+  private renderContent = () => (
     <View style={s.content}>
       <Text style={s.content__heading}>Article title</Text>
       <Text style={s.content__subheading}>November 11st 2018</Text>
       <Text style={s.content__paragraph}>{faker.lorem.paragraphs(8)}</Text>
     </View>
-  )
-
-  const openModal = () => {
-    if (modal.current) {
-      modal.current.open();
-    }
-  }
-
-  const closeModal = () => {
-    if (modal.current) {
-      modal.current.close();
-    }
-  }
-
-  return (
-    <Modalize
-      ref={modal}
-      header={{
-        component: renderHeader,
-        isAbsolute: true,
-      }}
-      withHandle={false}
-    >
-      {renderContent()}
-    </Modalize>
   );
+
+  public openModal = () => {
+    if (this.modal.current) {
+      this.modal.current.open();
+    }
+  }
+
+  public closeModal = () => {
+    if (this.modal.current) {
+      this.modal.current.close();
+    }
+  }
+
+  render() {
+    return (
+      <Modalize
+        ref={this.modal}
+        header={{
+          component: this.renderHeader,
+          isAbsolute: true,
+        }}
+        withHandle={false}
+      >
+        {this.renderContent()}
+      </Modalize>
+    );
+  }
 }
 
 const s = StyleSheet.create({
@@ -95,4 +98,4 @@ const s = StyleSheet.create({
   },
 });
 
-export default AbsoluteHeader;
+// export default AbsoluteHeader;

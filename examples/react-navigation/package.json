@@ -26,6 +26,7 @@
     "@types/react-navigation": "3.0.1",
     "babel-preset-expo": "5.0.0",
     "react-native-typescript-transformer": "1.2.11",
+    "scheduler": "0.12.0",
     "typescript": "3.2.2"
   }
 }

@@ -1,18 +1,19 @@
-import React, { useEffect } from 'react';
+import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
-const SnappingList = () => {
-  const modal: React.RefObject<Modalize> = React.createRef();
+export default class SnappingList extends React.PureComponent {
 
-  const renderHeader = () => (
+  private modal: React.RefObject<Modalize> = React.createRef();
+
+  private renderHeader = () => (
     <View style={s.modal__header}>
       <Text style={s.modal__headerText}>50 users online</Text>
     </View>
   );
 
-  const renderContent = () => (
+  private renderContent = () => (
     <View style={s.content}>
       {[...Array(50).keys()].map((_, i) => (
         <View style={s.content__row} key={i}>
@@ -29,28 +30,26 @@ const SnappingList = () => {
     </View>
   );
 
-  const openModal = () => {
-    if (modal.current) {
-      modal.current.open();
+  public openModal = () => {
+    if (this.modal.current) {
+      this.modal.current.open();
     }
   };
 
-  useEffect(() => {
-    openModal();
-  });
-
-  return (
-    <Modalize
-      ref={modal}
-      header={{
-        component: renderHeader,
-        isAbsolute: false,
-      }}
-      height={350}
-    >
-      {renderContent()}
-    </Modalize>
-  );
+  render() {
+    return (
+      <Modalize
+        ref={this.modal}
+        header={{
+          component: this.renderHeader,
+          isAbsolute: false,
+        }}
+        height={350}
+      >
+        {this.renderContent()}
+      </Modalize>
+    );
+  }
 }
 
 const s = StyleSheet.create({
@@ -97,5 +96,3 @@ const s = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-export default SnappingList;
