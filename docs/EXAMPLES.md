@@ -1,12 +1,14 @@
 # Examples
 
-As explained [here](./PROPSMETHODS?id=withreactmodal), it's not recommanded to use the `withReactModal` props. React Native team will soon remove from the core of React Native a lot of components, like the `Modal` one. It's unstable and not performing well.
+As explained [here](./PROPSMETHODS?id=withreactmodal), it's not recommanded to use the `withReactModal` props. React Native team will soon remove from the core a lot of components, and the `Modal` is one of them.
 
-This is why most of the major router implemented their way to handle a modal/overlay behavior. Both `react-native-navigation` and `react-navigation` examples are made using a bottom tabbar, it's a very common design pattern, but you can also find an example without any navigation under the `react-native-expo` folder.
+This is why most of the major navigator implemented their owns ways to handle the modal/overlay behaviors. Both `react-native-navigation` and `react-navigation` examples are made using a bottom tabbar because it's a very common design pattern. But you can also find an example without any navigation under the `react-native-expo` folder.
+
+?> All the modals, layout, text and buttons are shared between the different examples to make it easier to maintain. You can find the code in `examples/shared` folder. Even though, each examples are using the shared folder using a file npm path `"shared": "file:../shared",`. There isn't any live-reload solution yet to change the shared folder and modifify instantly the examples folders.
 
 ## React Native Navigation
 
-This is probably the simplest router to handle this bevahior. There is a method called `showOverlay` that will open any screen you want on top of the current screen.
+This is probably the simplest navigator to handle this bevahior. There is a method called `showOverlay` that will open any screen you want on top of the current screen.
 
 You can run the example by doing:
 
@@ -30,7 +32,6 @@ cd examples/react-navigation
 yarn
 yarn start
 ```
-
 
 ## React Native Expo
 

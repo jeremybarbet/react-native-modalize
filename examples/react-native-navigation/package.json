@@ -1,5 +1,6 @@
 {
   "name": "modalize-react-native-navigation",
+  "description": "An example of Modalize using React Native Navigation.",
   "version": "0.0.1",
   "private": true,
   "scripts": {

@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "react-native-modalize",
-    "description": "A modal that loves ScrollViews.",
-    "slug": "react-native-modalize",
+    "name": "modalize-expo",
+    "description": "An example of Modalize using Expo.",
+    "slug": "modalize-expo",
     "privacy": "public",
     "sdkVersion": "31.0.0",
     "platforms": ["ios", "android"],
