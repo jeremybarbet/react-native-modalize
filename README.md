@@ -14,7 +14,11 @@ The full [documentation is available here](https://jeremybarbet.github.io/react-
 
 ## Demo
 
-An expo app is avalaible at the [following link](https://expo.io/@jeremdsgn/react-native-modalize).
+There is multiple examples runing through differents navigators, with more informations [here](/EXAMPLES.md)
+
+- React Native Navigation: See `examples/react-native-navigation`
+- React Navigation: [See demo](https://expo.io/@jeremdsgn/modalize-react-navigation)
+- Expo: [See demo](https://expo.io/@jeremdsgn/modalize-expo)
 
 <p align="left">
   <img src="https://user-images.githubusercontent.com/937328/48359862-ca19bc80-e695-11e8-9e66-6ed182f3dd87.gif" height="532" />

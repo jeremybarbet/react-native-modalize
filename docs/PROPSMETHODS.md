@@ -98,11 +98,7 @@ If you have any inputs inside your cont and you want to manage how to dismiss th
 
 Define if `Modalize` has to be wrap with the Modal component from react-native.
 
-Most of application are now using a router, either [react-navigation](https://snack.expo.io/@react-navigation/full-screen-modal-v3), [react-native-navigation](https://wix.github.io/react-native-navigation/#/docs/top-level-api?id=showoverlaylayout-) or others. On all of these libraries, there is something similar to `openOverlay` that will open a screen on top of your content. It's recommanded to wrap `Modalize` into it.
-
-?> Since the `Modal` component from `react-native` will be move out of the core soon, it's not well maintain anymore. Besides, it doesn't work well along with `react-native-gesture-handler`. That's why the `withReactModal` props is only avaiable on iOS and not recommanded to use.
-
-?> Examples for both react-navigation and react-native-navigation will be availables in a future version.
+?> It's not recommended to pass it at `true`. Check the [examples' documentation](/EXAMPLES.md) to find the best way to handle it.
 
 | Type     | Required | Default  | Platform |
 | -------- | -------- | -------- | -------- |

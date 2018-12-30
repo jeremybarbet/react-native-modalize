@@ -5,8 +5,10 @@
   ],
   "linterOptions": {
     "exclude": [
-      "node_modules/**/*.ts",
-      "lib/**/*.ts"
+      "node_modules/**/*",
+      "docs/**/*",
+      "examples/**/*",
+      "lib/**/*"
     ]
   },
   "rules": {

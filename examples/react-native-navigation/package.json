@@ -1,0 +1,28 @@
+{
+  "name": "modalize-react-native-navigation",
+  "description": "An example of Modalize using React Native Navigation.",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start"
+  },
+  "dependencies": {
+    "faker": "4.1.0",
+    "react": "16.7.0-alpha.2",
+    "react-native": "npm:@brunolemos/react-native",
+    "react-native-gesture-handler": "1.0.12",
+    "react-native-modalize": "1.0.0-alpha.19",
+    "react-native-navigation": "2.4.0",
+    "shared": "file:../shared"
+  },
+  "devDependencies": {
+    "@types/faker": "4.1.4",
+    "@types/react": "16.7.18",
+    "@types/react-native": "0.57.22",
+    "@types/react-test-renderer": "16.0.3",
+    "babel-plugin-module-resolver": "3.1.1",
+    "metro-react-native-babel-preset": "0.51.1",
+    "react-test-renderer": "16.6.3",
+    "typescript": "3.2.2"
+  }
+}

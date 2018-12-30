@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "modalize-expo",
+    "description": "An example of Modalize using Expo.",
+    "slug": "modalize-expo",
+    "privacy": "public",
+    "sdkVersion": "31.0.0",
+    "platforms": ["ios", "android"],
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "icon": "./src/assets/icon.png",
+    "splash": {
+      "image": "./src/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "./src/assets/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    }
+  }
+}
