@@ -1,7 +1,7 @@
 - Getting started
   - [Installation](/INSTALLATION)
   - [Usage](/USAGE)
-  - [Examples](/EXAMPLEs)
+  - [Examples](/EXAMPLES)
   - [Features](/FEATURES)
 - Guide
   - [Props and Methods](/PROPSMETHODS)

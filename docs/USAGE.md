@@ -38,3 +38,5 @@ export default class MyApp extends React.PureComponent {
   }
 }
 ```
+
+?> This is a really straight-forward example. If you want to see more complex examples on how to implement it along a navigator, check the [examples' documentation](/EXAMPLES.md).

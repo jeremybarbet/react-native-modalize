@@ -1,16 +1,22 @@
 # Examples
 
-As explained [here](./PROPSMETHODS?id=withreactmodal), it's not recommanded to use the `withReactModal` props. React Native team will soon remove from the core a lot of components, and the `Modal` is one of them.
+With these three following examples you will see:
 
-This is why most of the major navigator implemented their owns ways to handle the modal/overlay behaviors. Both `react-native-navigation` and `react-navigation` examples are made using a bottom tabbar because it's a very common design pattern. But you can also find an example without any navigation under the `react-native-expo` folder.
+- How to use the modal using different navigators
+- How to avoid using the Modal from React Native
+- The best practices to display the modal
 
-?> All the modals, layout, text and buttons are shared between the different examples to make it easier to maintain. You can find the code in `examples/shared` folder.
+React Native team will soon remove from the core a lot of components, including the `Modal`. This is why it's not recommended to use the [withReactModal](/PROPSMETHODS?id=withreactmodal) props.
 
-!> For the moment, each examples are using the shared folder using a npm path `"shared": "file:../shared",`. There isn't any live-reload solution yet to change the shared folder and modifify instantly the examples folders. So you will have to remove the `node_modules` from the example folder after you finished to change the `shared` folder.
+This is why most of the major navigators implemented theirs owns ways to handle the modal/overlay behavior. Both `react-native-navigation` and `react-navigation` examples are made using a bottom tab bar because it's a very common design pattern and show you how to use `Modalize` without using `withReactModal` props.
+
+See below for an explanation for each of the navigators.
+
+?> All the modals, layout, text and buttons are shared between the different examples to make it easier to maintain. You can find the code in `examples/shared`. For the moment, the shared folder is used with a npm path `"shared": "file:../shared"`. There isn't any live-reload solution yet, so you will have to remove the `node_modules` from the example folder after you finished to change the `shared` folder.
 
 ## React Native Navigation
 
-This is probably the simplest navigator to handle this bevahior. There is a method called `showOverlay` that will open any screen you want on top of the current screen.
+This is probably the simplest navigator to handle this bevahior. There is a method called `showOverlay` that will open the Modalize screen on top of the current screen.
 
 You can run the example by doing:
 
@@ -23,9 +29,9 @@ react-native run-ios
 
 ## React Navigation
 
-WIP
+This example use react-navigation and run under Expo. Modalize is wrapped along the AppNavigator to be able to display the modal on top of the bottom navigator.
 
-EXPO LINK
+> An Expo app is avalaible at the [following link](https://expo.io/@jeremdsgn/modalize-react-navigation).
 
 You can run the example by doing:
 
@@ -35,16 +41,16 @@ yarn
 yarn start
 ```
 
-## React Native Expo
+## Expo
 
-This example is just using the simplest Expo configuration without any router. Besides, `Modalize` is not using the `withReactModal` props, depending where you include the modal, it might be overlay with another component, because it's related to its parent: `{ positon: 'absolute, top: 0, right: 0, bottom: 0, left: 0 }`.
+This example is runing under Expo without any navigator. Also, in this example `withReactModal` is `false`, which mean the Modal might be displayed under another component depending where you use it.
 
-EXPO LINK
+> An Expo app is avalaible at the [following link](https://expo.io/@jeremdsgn/modalize-expo).
 
 You can run the example by doing:
 
 ```bash
-cd examples/react-native-expo
+cd examples/expo
 yarn
 yarn start
 ```
