@@ -3,7 +3,11 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-nativ
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
-export default class InputForm extends React.PureComponent {
+interface IProps {
+  onClosed?: () => void;
+}
+
+export default class InputForm extends React.PureComponent<IProps> {
 
   private modal: React.RefObject<Modalize> = React.createRef();
 
@@ -28,6 +32,14 @@ export default class InputForm extends React.PureComponent {
     </TouchableOpacity>
   );
 
+  private onClosed = () => {
+    const { onClosed } = this.props;
+
+    if (onClosed) {
+      onClosed();
+    }
+  }
+
   public openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
@@ -48,6 +60,7 @@ export default class InputForm extends React.PureComponent {
           component: this.renderFooter,
           isAbsolute: false,
         }}
+        onClosed={this.onClosed}
         adjustToContentHeight
       >
         {this.renderContent()}

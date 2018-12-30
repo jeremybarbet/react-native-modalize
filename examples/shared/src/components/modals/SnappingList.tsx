@@ -3,7 +3,11 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
-export default class SnappingList extends React.PureComponent {
+interface IProps {
+  onClosed?: () => void;
+}
+
+export default class SnappingList extends React.PureComponent<IProps> {
 
   private modal: React.RefObject<Modalize> = React.createRef();
 
@@ -30,6 +34,14 @@ export default class SnappingList extends React.PureComponent {
     </View>
   );
 
+  private onClosed = () => {
+    const { onClosed } = this.props;
+
+    if (onClosed) {
+      onClosed();
+    }
+  }
+
   public openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
@@ -45,6 +57,7 @@ export default class SnappingList extends React.PureComponent {
           isAbsolute: false,
         }}
         height={350}
+        onClosed={this.onClosed}
       >
         {this.renderContent()}
       </Modalize>

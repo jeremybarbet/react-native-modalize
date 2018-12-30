@@ -4,7 +4,9 @@ As explained [here](./PROPSMETHODS?id=withreactmodal), it's not recommanded to u
 
 This is why most of the major navigator implemented their owns ways to handle the modal/overlay behaviors. Both `react-native-navigation` and `react-navigation` examples are made using a bottom tabbar because it's a very common design pattern. But you can also find an example without any navigation under the `react-native-expo` folder.
 
-?> All the modals, layout, text and buttons are shared between the different examples to make it easier to maintain. You can find the code in `examples/shared` folder. Even though, each examples are using the shared folder using a file npm path `"shared": "file:../shared",`. There isn't any live-reload solution yet to change the shared folder and modifify instantly the examples folders.
+?> All the modals, layout, text and buttons are shared between the different examples to make it easier to maintain. You can find the code in `examples/shared` folder.
+
+!> For the moment, each examples are using the shared folder using a npm path `"shared": "file:../shared",`. There isn't any live-reload solution yet to change the shared folder and modifify instantly the examples folders. So you will have to remove the `node_modules` from the example folder after you finished to change the `shared` folder.
 
 ## React Native Navigation
 

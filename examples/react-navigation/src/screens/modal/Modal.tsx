@@ -4,7 +4,7 @@ import { Layout, Footer, Button } from 'shared';
 import { ModalContext } from '../../../App';
 
 interface IProps {
-  toggleModal: (id: string) => void;
+  toggleModal: (id?: string) => void;
 }
 
 interface ILink {
@@ -16,15 +16,13 @@ export default class ModalScreen extends React.PureComponent<IProps> {
 
   static contextType = ModalContext;
 
-  private onPress = (id: string) => {
-    this.props.toggleModal(id);
-  }
-
   private renderButtons = (links: ILink[]) => {
+    const { toggleModal } = this.props;
+
     return links.map(({ id, name }, i) => (
       <Button
         key={i}
-        onPress={() => this.onPress(id)}
+        onPress={() => toggleModal(id)}
         name={name}
       />
     ));

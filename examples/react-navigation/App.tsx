@@ -3,13 +3,13 @@ import * as React from 'react';
 import AppNavigator from './src/screens';
 import Modalize from './src/components/modalize/Modalize';
 
-interface IState {
-  toggleModal: (id: string) => void;
+export interface IState {
+  toggleModal: (id?: string) => void;
   type: string;
   isOpen: boolean;
 }
 
-export const ModalContext = React.createContext({
+export const ModalContext = React.createContext<IState>({
   toggleModal: () => {},
   type: 'MODAL_DEFAULT',
   isOpen: false,
@@ -17,17 +17,15 @@ export const ModalContext = React.createContext({
 
 export default class App extends React.PureComponent<any, IState> {
 
-  private toggleModal: (id: string) => void;
+  private toggleModal: (id?: string) => void;
 
   constructor(props: any) {
     super(props);
 
-    this.toggleModal = (id: string) => {
-      console.log('-id', id);
-
+    this.toggleModal = (id?: string) => {
       this.setState({
-        type: id,
-        isOpen: true,
+        type: id || 'MODAL_DEFAULT',
+        isOpen: Boolean(id),
       });
     };
 
@@ -44,11 +42,8 @@ export default class App extends React.PureComponent<any, IState> {
         <AppNavigator />
 
         <ModalContext.Consumer>
-          {({ isOpen, type }) => (
-            <Modalize
-              isOpen={isOpen}
-              type={type}
-            />
+          {(context) => (
+            <Modalize context={context} />
           )}
         </ModalContext.Consumer>
       </ModalContext.Provider>

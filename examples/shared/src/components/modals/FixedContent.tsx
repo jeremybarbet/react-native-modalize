@@ -3,7 +3,11 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, ImageStyle } from 'rea
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
-export default class FixedContent extends React.PureComponent {
+interface IProps {
+  onClosed?: () => void;
+}
+
+export default class FixedContent extends React.PureComponent<IProps> {
 
   private modal: React.RefObject<Modalize> = React.createRef();
 
@@ -30,6 +34,14 @@ export default class FixedContent extends React.PureComponent {
     );
   };
 
+  private onClosed = () => {
+    const { onClosed } = this.props;
+
+    if (onClosed) {
+      onClosed();
+    }
+  }
+
   public openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
@@ -47,6 +59,7 @@ export default class FixedContent extends React.PureComponent {
       <Modalize
         ref={this.modal}
         adjustToContentHeight
+        onClosed={this.onClosed}
       >
         {this.renderContent()}
       </Modalize>

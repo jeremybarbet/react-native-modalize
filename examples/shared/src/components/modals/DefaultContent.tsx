@@ -3,7 +3,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
-export default class DefaultContent extends React.PureComponent {
+interface IProps {
+  onClosed?: () => void;
+}
+
+export default class DefaultContent extends React.PureComponent<IProps> {
 
   private modal: React.RefObject<Modalize> = React.createRef();
 
@@ -15,6 +19,14 @@ export default class DefaultContent extends React.PureComponent {
     </View>
   );
 
+  private onClosed = () => {
+    const { onClosed } = this.props;
+
+    if (onClosed) {
+      onClosed();
+    }
+  }
+
   public openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
@@ -23,7 +35,10 @@ export default class DefaultContent extends React.PureComponent {
 
   render() {
     return (
-      <Modalize ref={this.modal}>
+      <Modalize
+        ref={this.modal}
+        onClosed={this.onClosed}
+      >
         {this.renderContent()}
       </Modalize>
     );
