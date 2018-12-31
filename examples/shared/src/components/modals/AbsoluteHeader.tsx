@@ -110,5 +110,3 @@ const s = StyleSheet.create({
     color: '#666',
   },
 });
-
-// export default AbsoluteHeader;
