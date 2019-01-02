@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Navigation } from 'react-native-navigation';
-import { Layout, Footer, Button, AbsoluteHeader, DefaultContent, FixedContent, InputForm, SnappingList } from 'shared';
+import { Layout, Footer, Button, AbsoluteHeader, DefaultContent, FixedContent, InputForm, SnappingList } from 'react-native-modalize/shared';
 
 import { MODALIZE } from '..';
 

@@ -6,10 +6,13 @@
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "rm -rf ./lib/* && yarn lint && tsc",
-    "start": "yarn run cpx 'src/**/*.{ts,tsx}' 'examples/react-native-navigation/node_modules/react-native-modalize' --watch",
+    "start": "sh ./start.sh",
     "prepublish": "yarn run build",
     "lint": "tslint 'src/**/*.ts?(x)'",
-    "postversion": "sh ./post-version.sh"
+    "postversion": "sh ./post-version.sh",
+    "watch:expo": "yarn run cpx 'examples-shared/**/*' 'examples/expo/node_modules/react-native-modalize/shared' --watch",
+    "watch:react-native-navigation": "yarn run cpx 'examples-shared/**/*' 'examples/react-native-navigation/node_modules/react-native-modalize/shared' --watch",
+    "watch:react-navigation": "yarn run cpx 'examples-shared/**/*' 'examples/react-navigation/node_modules/react-native-modalize/shared' --watch"
   },
   "keywords": [
     "react-native",

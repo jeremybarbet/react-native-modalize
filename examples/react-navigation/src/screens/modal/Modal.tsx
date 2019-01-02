@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Footer, Button } from 'shared';
+import { Layout, Footer, Button } from 'react-native-modalize/shared';
 
 import { ModalContext } from '../../../App';
 

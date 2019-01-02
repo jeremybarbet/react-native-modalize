@@ -14,8 +14,8 @@
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-31-with-hooks-dangerzone.tar.gz",
     "react-native-modalize": "file:../../src",
+    "react-native-modalize/shared": "file:../../examples-shared",
     "react-navigation": "2.18.2",
-    "shared": "file:../shared",
     "tslib": "1.9.3"
   },
   "devDependencies": {

@@ -1,11 +1,3 @@
 # Development
 
-```bash
-cd example/
-yarn
-yarn start
-cd ..
-yarn start
-```
-
-Make sure to make modal's changes into `src/` folder, and things relating to examples into `example/` 🤷🏻‍♀️
+I'd recommend running one of the examples to be able to change `Modalize`. To do so, check out [this page](/EXAMPLES.md).

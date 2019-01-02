@@ -17,7 +17,7 @@ export default class DefaultContent extends React.PureComponent<IProps> {
       <Text style={s.content__subheading}>November 11st 2018</Text>
       <Text style={s.content__paragraph}>{faker.lorem.paragraphs(8)}</Text>
     </View>
-  );
+  )
 
   private onClosed = () => {
     const { onClosed } = this.props;
@@ -31,7 +31,7 @@ export default class DefaultContent extends React.PureComponent<IProps> {
     if (this.modal.current) {
       this.modal.current.open();
     }
-  };
+  }
 
   render() {
     return (

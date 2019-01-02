@@ -18,13 +18,16 @@ See below for an explanation for each of the navigators.
 
 This is probably the simplest navigator to handle this bevahior. There is a method called `showOverlay` that will open the Modalize screen on top of the current screen.
 
-You can run the example by doing:
+You can run this example by doing:
 
 ```bash
+cd react-native-modalize
+yarn start react-native-navigation
+# Another tab
 cd examples/react-native-navigation
-yarn
-yarn start
 react-native run-ios
+# Another tab
+yarn watch:react-native-navigation
 ```
 
 ## React Navigation
@@ -33,12 +36,13 @@ This example use react-navigation and run under Expo. Modalize is wrapped along 
 
 > An Expo app is avalaible at the [following link](https://expo.io/@jeremdsgn/modalize-react-navigation).
 
-You can run the example by doing:
+You can run this example by doing:
 
 ```bash
-cd examples/react-navigation
-yarn
-yarn start
+cd react-native-modalize
+yarn start react-navigation
+# Another tab
+yarn watch:react-navigation
 ```
 
 ## Expo
@@ -47,10 +51,11 @@ This example is runing under Expo without any navigator. Also, in this example `
 
 > An Expo app is avalaible at the [following link](https://expo.io/@jeremdsgn/modalize-expo).
 
-You can run the example by doing:
+You can run this example by doing:
 
 ```bash
-cd examples/expo
-yarn
-yarn start
+cd react-native-modalize
+yarn start expo
+# Another tab
+yarn watch:expo
 ```

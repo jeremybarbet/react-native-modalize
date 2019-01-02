@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Header, Footer, Button, AbsoluteHeader, DefaultContent, FixedContent, InputForm, SnappingList } from 'shared';
+import { Layout, Header, Footer, Button, AbsoluteHeader, DefaultContent, FixedContent, InputForm, SnappingList } from 'react-native-modalize/shared';
 
 const App = () => {
   const modal: any[] = [];
