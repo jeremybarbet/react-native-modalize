@@ -69,6 +69,11 @@ export interface IProps {
   keyboardShouldPersistTaps?: 'never' | 'always' | 'handled';
 
   /**
+   * Define the behavior of the keyboard when having inputs inside the modal.
+   * @default 'never'
+   */
+  keyboardAvoidingBehavior?: 'height' | 'position' | 'padding';
+  /**
    * Define if Modalize has to be wrap with the Modal component from react-native. (iOS specific)
    * @default false
    */

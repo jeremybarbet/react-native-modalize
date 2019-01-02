@@ -506,7 +506,7 @@ export default class Modalize extends React.Component<IProps, IState> {
         onHandlerStateChange={this.onHandleChildren}
       >
         <AnimatedKeyboardAvoidingView
-          behavior="position"
+          behavior={this.props.keyboardAvoidingBehavior || 'position'}
           style={{ marginBottom }}
           enabled={enabled}
         >
@@ -602,7 +602,7 @@ export default class Modalize extends React.Component<IProps, IState> {
             {showContent && (
               <AnimatedKeyboardAvoidingView
                 style={[s.modalize__content, this.modalizeContent, style]}
-                behavior="padding"
+                behavior={this.props.keyboardAvoidingBehavior || 'padding'}
                 enabled={enabled}
               >
                 {this.renderHandle()}
