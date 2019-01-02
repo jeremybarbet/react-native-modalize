@@ -30,6 +30,38 @@ Define where the handle on top of the modal should be positioned.
 | ------------------------- | -------- | --------- |
 | enum('outside', 'inside') | No       | `outside` |
 
+### `useScrollView`
+
+Define if you want to use scroll view on children.
+
+| Type    | Required | Default |
+|---------|----------|---------|
+| boolean | No       | `true`  |
+
+### `isSnap`
+
+Define if you want to snap to full screen.
+
+| Type    | Required | Default |
+|---------|----------|---------|
+| boolean | No       | `false` |
+
+### `avoidKeyboard`
+
+Define if you want to avoid the keyboard.
+
+| Type    | Required | Default |
+|---------|----------|---------|
+| boolean | No       | `false` |
+
+### `keyboardDismissMode`
+
+Define keyboard dismiss mode.
+
+| Type                                   | Required | Default   |
+|----------------------------------------|----------|-----------|
+| enum('none', 'on-drag', 'interactive') | No       | `on-drag` |
+
 ### `style`
 
 Define the style of the modal.

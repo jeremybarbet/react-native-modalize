@@ -1,4 +1,4 @@
-import { Animated, ViewStyle, RegisteredStyle } from 'react-native';
+import { Animated, RegisteredStyle, ViewStyle } from 'react-native';
 
 interface IComponent {
   /**
@@ -27,22 +27,58 @@ export interface IProps {
    * Define where the handle on top of the modal should be positioned.
    * @default 'outside'
    */
-  handlePosition: 'outside' | 'inside';
+  handlePosition?: 'outside' | 'inside';
+
+  /**
+   * Define if you want to use scroll view on the children.
+   * @default true
+   */
+  useScrollView?: boolean;
+
+  /**
+   * Define if you want to snap to full screen.
+   * @default false
+   */
+  isSnap?: boolean;
+
+  /**
+   * Define if you want to avoid the keyboard.
+   * @default false
+   */
+  avoidKeyboard?: boolean;
+
+  /**
+   * Define keyboard dismiss mode.
+   * @default false
+   */
+  keyboardDismissMode?: 'none' | 'on-drag' | 'interactive';
 
   /**
    * Define the style of the modal.
    */
-  style?: ViewStyle | ViewStyle[] | RegisteredStyle<ViewStyle> | RegisteredStyle<ViewStyle[]>;
+  style?:
+    | ViewStyle
+    | ViewStyle[]
+    | RegisteredStyle<ViewStyle>
+    | RegisteredStyle<ViewStyle[]>;
 
   /**
    * Define the style of the handle on top of the modal.
    */
-  handleStyle?: ViewStyle | ViewStyle[] | RegisteredStyle<ViewStyle> | RegisteredStyle<ViewStyle[]>;
+  handleStyle?:
+    | ViewStyle
+    | ViewStyle[]
+    | RegisteredStyle<ViewStyle>
+    | RegisteredStyle<ViewStyle[]>;
 
   /**
    * Define the style of the overlay.
    */
-  overlayStyle?: ViewStyle | ViewStyle[] | RegisteredStyle<ViewStyle> | RegisteredStyle<ViewStyle[]>;
+  overlayStyle?:
+    | ViewStyle
+    | ViewStyle[]
+    | RegisteredStyle<ViewStyle>
+    | RegisteredStyle<ViewStyle[]>;
 
   /**
    * Use the native thread to execute the animations.
