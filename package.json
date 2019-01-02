@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rm -rf ./lib/* && yarn lint && tsc",
     "start": "yarn run cpx 'src/**/*.{ts,tsx}' 'examples/react-native-navigation/node_modules/react-native-modalize' --watch",
-    "prepublish": "yarn run build",
+    "prepublish": "yarn build",
     "lint": "tslint 'src/**/*.ts?(x)'",
     "postversion": "sh ./post-version.sh"
   },
