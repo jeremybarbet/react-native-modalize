@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, View, Platform, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules } from 'react-native';
+import { Animated, View, Platform, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules, ScrollView } from 'react-native';
 import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent, TapGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 import { IProps, IState } from './Options';
@@ -36,6 +36,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   private modalOverlay: React.RefObject<PanGestureHandler> = React.createRef();
   private modalOverlayTap: React.RefObject<TapGestureHandler> = React.createRef();
   private willCloseModalize: boolean = false;
+  private scrollView: React.RefObject<ScrollView> = React.createRef();
 
   constructor(props: IProps) {
     super(props);
@@ -117,6 +118,18 @@ export default class Modalize extends React.Component<IProps, IState> {
     }
 
     this.onAnimateClose();
+  }
+
+  public scrollTo = (option: {
+    y: number,
+    animated: boolean,
+  }): void => {
+    if (this.scrollView.current) {
+      const ScrollViewRef = (this.scrollView.current as any).getNode();
+      if (ScrollViewRef) {
+        ScrollViewRef.scrollTo(option);
+      }
+    }
   }
 
   private get isIos(): boolean {
@@ -515,6 +528,7 @@ export default class Modalize extends React.Component<IProps, IState> {
               showsVerticalScrollIndicator={showsVerticalScrollIndicator}
               keyboardDismissMode={keyboardDismissMode}
               keyboardShouldPersistTaps={keyboardShouldPersistTaps}
+              ref={this.scrollView}
             >
               {children}
             </Animated.ScrollView>
