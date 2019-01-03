@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
@@ -15,7 +16,22 @@ export default class DefaultContent extends React.PureComponent<IProps> {
     <View style={s.content}>
       <Text style={s.content__heading}>Article title</Text>
       <Text style={s.content__subheading}>November 11st 2018</Text>
-      <Text style={s.content__paragraph}>{faker.lorem.paragraphs(8)}</Text>
+      <Text style={s.content__paragraph}>{faker.lorem.paragraphs(4)}</Text>
+
+      <ScrollView
+        style={s.content__scrollview}
+        showsHorizontalScrollIndicator={false}
+        horizontal
+      >
+        {[...Array(5).keys()].map((_, i) => (
+          <View
+            key={i}
+            style={s.content__block}
+          />
+        ))}
+      </ScrollView>
+
+      <Text style={s.content__paragraph}>{faker.lorem.paragraphs(4)}</Text>
     </View>
   )
 
@@ -70,5 +86,18 @@ const s = StyleSheet.create({
     fontWeight: '200',
     lineHeight: 22,
     color: '#666',
+  },
+
+  content__scrollview: {
+    marginVertical: 20,
+  },
+
+  content__block: {
+    width: 200,
+    height: 80,
+
+    marginRight: 20,
+
+    backgroundColor: '#ccc',
   },
 });
