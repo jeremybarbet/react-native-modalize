@@ -44,7 +44,6 @@ export default class DefaultContent extends React.PureComponent<IProps> {
           />
         ))}
       </ScrollView>
-
     </View>
   )
 
