@@ -14,7 +14,7 @@ The full [documentation is available here](https://jeremybarbet.github.io/react-
 
 ## Demo
 
-There is multiple examples runing through differents navigators, with more informations [here](/EXAMPLES.md)
+There is multiple examples runing through differents navigators, with more informations [here](https://jeremybarbet.github.io/react-native-modalize/#/EXAMPLES.md)
 
 - React Native Navigation: See `examples/react-native-navigation`
 - React Navigation: [See demo](https://expo.io/@jeremdsgn/modalize-react-navigation)
