@@ -32,7 +32,7 @@ export default class FixedContent extends React.PureComponent<IProps> {
         </TouchableOpacity>
       </View>
     );
-  };
+  }
 
   private onClosed = () => {
     const { onClosed } = this.props;
@@ -46,13 +46,13 @@ export default class FixedContent extends React.PureComponent<IProps> {
     if (this.modal.current) {
       this.modal.current.open();
     }
-  };
+  }
 
   public closeModal = () => {
     if (this.modal.current) {
       this.modal.current.close();
     }
-  };
+  }
 
   render() {
     return (

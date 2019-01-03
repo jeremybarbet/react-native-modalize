@@ -20,7 +20,7 @@ export default class AbsoluteHeader extends React.PureComponent<IProps> {
     >
       <Image source={require('../../assets/images/cross.png')} />
     </TouchableOpacity>
-  );
+  )
 
   private renderContent = () => (
     <View style={s.content}>
@@ -28,7 +28,7 @@ export default class AbsoluteHeader extends React.PureComponent<IProps> {
       <Text style={s.content__subheading}>November 11st 2018</Text>
       <Text style={s.content__paragraph}>{faker.lorem.paragraphs(8)}</Text>
     </View>
-  );
+  )
 
   private onClosed = () => {
     const { onClosed } = this.props;

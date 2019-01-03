@@ -15,7 +15,7 @@ export default class SnappingList extends React.PureComponent<IProps> {
     <View style={s.modal__header}>
       <Text style={s.modal__headerText}>50 users online</Text>
     </View>
-  );
+  )
 
   private renderContent = () => (
     <View style={s.content}>
@@ -32,7 +32,7 @@ export default class SnappingList extends React.PureComponent<IProps> {
         </View>
       ))}
     </View>
-  );
+  )
 
   private onClosed = () => {
     const { onClosed } = this.props;
@@ -46,7 +46,7 @@ export default class SnappingList extends React.PureComponent<IProps> {
     if (this.modal.current) {
       this.modal.current.open();
     }
-  };
+  }
 
   render() {
     return (
