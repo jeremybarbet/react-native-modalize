@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
@@ -7,6 +7,8 @@ import faker from 'faker';
 interface IProps {
   onClosed?: () => void;
 }
+
+const { width } = Dimensions.get('window');
 
 export default class DefaultContent extends React.PureComponent<IProps> {
 
@@ -16,11 +18,11 @@ export default class DefaultContent extends React.PureComponent<IProps> {
     <View style={s.content}>
       <Text style={s.content__heading}>Article title</Text>
       <Text style={s.content__subheading}>November 11st 2018</Text>
-      <Text style={s.content__paragraph}>{faker.lorem.paragraphs(4)}</Text>
+      <Text style={s.content__paragraph}>{faker.lorem.paragraphs(3)}</Text>
+      <Text style={[s.content__subheading, { marginTop: 30 }]}>Horizontal ScrollView</Text>
 
       <ScrollView
         style={s.content__scrollview}
-        showsHorizontalScrollIndicator={false}
         horizontal
       >
         {[...Array(5).keys()].map((_, i) => (
@@ -31,7 +33,18 @@ export default class DefaultContent extends React.PureComponent<IProps> {
         ))}
       </ScrollView>
 
-      <Text style={s.content__paragraph}>{faker.lorem.paragraphs(4)}</Text>
+      <Text style={s.content__paragraph}>{faker.lorem.paragraphs(2)}</Text>
+      <Text style={[s.content__subheading, { marginTop: 30 }]}>Vertical ScrollView</Text>
+
+      <ScrollView style={[s.content__scrollview, { height: 200 }]}>
+        {[...Array(5).keys()].map((_, i) => (
+          <View
+            key={i}
+            style={[s.content__block, { width, marginBottom: 20 }]}
+          />
+        ))}
+      </ScrollView>
+
     </View>
   )
 
