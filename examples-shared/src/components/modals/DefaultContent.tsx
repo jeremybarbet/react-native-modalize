@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TextInput } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
@@ -44,6 +44,8 @@ export default class DefaultContent extends React.PureComponent<IProps> {
           />
         ))}
       </ScrollView>
+
+      <TextInput style={s.content__input} placeholder="Type your username" />
     </View>
   )
 
@@ -111,5 +113,17 @@ const s = StyleSheet.create({
     marginRight: 20,
 
     backgroundColor: '#ccc',
+  },
+
+  content__input: {
+    paddingVertical: 15,
+    marginBottom: 10,
+
+    width: '100%',
+
+    borderWidth: 1,
+    borderColor: 'transparent',
+    borderBottomColor: '#cdcdcd',
+    borderRadius: 6,
   },
 });

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, ImageStyle } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
@@ -14,14 +14,10 @@ export default class FixedContent extends React.PureComponent<IProps> {
   private renderContent = () => {
     return (
       <View style={s.content}>
-        <Image
-          style={s.content__icon as ImageStyle}
-          source={require('../../assets/images/send.png')}
-        />
-
         <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
         <Text style={s.content__heading}>Send the message?</Text>
         <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
+        <TextInput style={s.content__input} placeholder="Type your username" />
 
         <TouchableOpacity
           style={s.content__button}
@@ -58,8 +54,8 @@ export default class FixedContent extends React.PureComponent<IProps> {
     return (
       <Modalize
         ref={this.modal}
-        adjustToContentHeight
         onClosed={this.onClosed}
+        adjustToContentHeight
       >
         {this.renderContent()}
       </Modalize>
@@ -95,12 +91,24 @@ const s = StyleSheet.create({
 
   content__description: {
     paddingTop: 10,
-    paddingBottom: 20,
+    paddingBottom: 10,
 
     fontSize: 15,
     fontWeight: '200',
     lineHeight: 22,
     color: '#666',
+  },
+
+  content__input: {
+    paddingVertical: 15,
+    marginBottom: 20,
+
+    width: '100%',
+
+    borderWidth: 1,
+    borderColor: 'transparent',
+    borderBottomColor: '#cdcdcd',
+    borderRadius: 6,
   },
 
   content__button: {

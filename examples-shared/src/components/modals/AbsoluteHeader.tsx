@@ -18,7 +18,10 @@ export default class AbsoluteHeader extends React.PureComponent<IProps> {
       onPress={this.closeModal}
       hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }}
     >
-      <Image source={require('../../assets/images/cross.png')} />
+      <Image
+        source={{ uri: 'https://flaticons.net/gd/makefg.php?i=icons/Mobile%20Application/Close.png&r=255&g=255&b=255' }}
+        style={{ width: '40%', height: '40%' }}
+      />
     </TouchableOpacity>
   )
 
