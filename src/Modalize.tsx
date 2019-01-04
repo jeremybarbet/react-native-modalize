@@ -408,7 +408,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
     if (!this.isHandleOutside) {
       handleStyles.push(s.handleBottom);
-      shapeStyles.push(s.handle__shapeBottom);
+      shapeStyles.push(s.handle__shapeBottom, handleStyle);
     }
 
     return (
