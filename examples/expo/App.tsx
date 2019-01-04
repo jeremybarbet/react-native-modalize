@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Header, Footer, Button, AbsoluteHeader, DefaultContent, FixedContent, InputForm, SnappingList } from 'react-native-modalize/shared';
+import { Layout, Header, Footer, Button, AbsoluteHeader, DefaultContent, FixedContent, InputForm, SnappingList, CustomStyle } from 'react-native-modalize/shared';
 
 const App = () => {
   const modal: any[] = [];
@@ -27,6 +27,7 @@ const App = () => {
         'Modal with a snapping list',
         'Modal with an absolute header',
         'Modal with an input',
+        'Modal with custom style',
       ])}
 
       <Footer />
@@ -36,6 +37,7 @@ const App = () => {
       <SnappingList ref={(el: SnappingList) => { modal[2] = el; }} />
       <AbsoluteHeader ref={(el: AbsoluteHeader) => { modal[3] = el; }} />
       <InputForm ref={(el: InputForm) => { modal[4] = el; }} />
+      <CustomStyle ref={(el: CustomStyle) => { modal[5] = el; }} />
     </Layout>
   );
 }
