@@ -10,7 +10,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 **What's the React modal's warning?**
 
-In a future version of `react-native`, the `Modal` component will be moved out from the core. Check [this page](/DEVELOPMENT.md) to get more details.
+In a future version of `react-native`, the `Modal` component will be moved out from the core. Check [this page](/EXAMPLES.md) to get more details.
 
 **Can we have more transition and options to customize Modalize?**
 
