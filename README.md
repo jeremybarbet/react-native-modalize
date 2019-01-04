@@ -8,6 +8,12 @@ A modal that loves ScrollViews.
 
 This component had been built with `react-native-gesture-handler` to address the common issue of scrolling and swipping behaviors you can face with a modal with react-native. This component is built-in with a `ScrollView`, you don't have to include it by yourself, just pass your content, and the component will handle the rest for you.
 
+It resolves the following issues:
+
+- Swipping to dismiss Modalize
+- Scrolling within a ScrollView
+- Handling the keyboard automatically
+
 ## Getting Started
 
 The full [documentation is available here](https://jeremybarbet.github.io/react-native-modalize) on GitHub Pages.
