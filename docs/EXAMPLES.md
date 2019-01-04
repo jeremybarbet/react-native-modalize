@@ -1,4 +1,4 @@
-# Development and examples
+# Examples
 
 With these three following examples you will see:
 
