@@ -4,9 +4,13 @@
 
 A React component that will define the content of the modal.
 
-Modalize is built-in with a `ScrollView` which mean you don't need to pass one.
+Modalize is built-in with a `ScrollView` which mean you don't need to pass one. Even though, if you need another one inside, you can pass a `ScrollView`. But for this, you need to use:
 
-Even though, if you need a horizontal scroll inside your modal, you can pass a `ScrollView`. But for this, you need to use the one from RNGH: `import { ScrollView } from 'react-native-gesture-handler';`.
+```jsx
+import { ScrollView } from 'react-native-gesture-handler';
+```
+
+?> Check the `Default Content` example to see use of multiples scrollviews: `examples-shared/src/components/modals/DefaultContent.tsx`.
 
 | Type     | Required |
 | -------- | -------- |

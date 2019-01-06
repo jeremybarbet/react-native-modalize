@@ -1,15 +1,19 @@
 {
   "name": "react-native-modalize",
-  "version": "1.0.0-alpha.19",
+  "version": "1.0.0-alpha.20",
   "description": "A modal that loves ScrollViews.",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "rm -rf ./lib/* && yarn lint && tsc",
-    "start": "yarn run cpx 'src/**/*.{ts,tsx}' 'examples/react-native-navigation/node_modules/react-native-modalize' --watch",
+    "start": "sh ./start.sh",
     "prepublish": "yarn build",
     "lint": "tslint 'src/**/*.ts?(x)'",
-    "postversion": "sh ./post-version.sh"
+    "postversion": "sh ./post-version.sh",
+    "watch:modalize": "yarn cpx 'src/**/**' 'examples-shared/node_modules/react-native-modalize' --watch",
+    "watch:expo": "concurrently \"yarn watch:modalize\" \"yarn cpx 'examples-shared/**/*' 'examples/expo/node_modules/react-native-modalize/shared' --watch\"",
+    "watch:react-native-navigation": "concurrently \"yarn watch:modalize\" \"yarn cpx 'examples-shared/**/*' 'examples/react-native-navigation/node_modules/react-native-modalize/shared' --watch\"",
+    "watch:react-navigation": "concurrently \"yarn watch:modalize\" \"yarn cpx 'examples-shared/**/*' 'examples/react-navigation/node_modules/react-native-modalize/shared' --watch\""
   },
   "keywords": [
     "react-native",
@@ -29,6 +33,7 @@
   "devDependencies": {
     "@types/react": "16.4.18",
     "@types/react-native": "0.57.19",
+    "concurrently": "4.1.0",
     "cpx": "1.5.0",
     "react": "16.6.3",
     "react-native": "0.57.8",

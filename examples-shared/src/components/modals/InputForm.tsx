@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, ImageStyle } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
@@ -7,32 +7,30 @@ interface IProps {
   onClosed?: () => void;
 }
 
-export default class FixedContent extends React.PureComponent<IProps> {
+export default class InputForm extends React.PureComponent<IProps> {
 
   private modal: React.RefObject<Modalize> = React.createRef();
 
   private renderContent = () => {
     return (
       <View style={s.content}>
-        <Image
-          style={s.content__icon as ImageStyle}
-          source={require('../../assets/images/send.png')}
-        />
-
         <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
         <Text style={s.content__heading}>Send the message?</Text>
-        <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
-
-        <TouchableOpacity
-          style={s.content__button}
-          activeOpacity={0.9}
-          onPress={this.closeModal}
-        >
-          <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
-        </TouchableOpacity>
+        <Text style={s.content__description}>{faker.lorem.lines(1)}</Text>
+        <TextInput style={s.content__input} placeholder="Type your username" />
       </View>
     );
-  };
+  }
+
+  private renderFooter = () => (
+    <TouchableOpacity
+      style={s.modal__footer}
+      activeOpacity={0.8}
+      onPress={this.closeModal}
+    >
+      <Text style={s.modal__footerText}>{'Submit'.toUpperCase()}</Text>
+    </TouchableOpacity>
+  )
 
   private onClosed = () => {
     const { onClosed } = this.props;
@@ -46,20 +44,24 @@ export default class FixedContent extends React.PureComponent<IProps> {
     if (this.modal.current) {
       this.modal.current.open();
     }
-  };
+  }
 
   public closeModal = () => {
     if (this.modal.current) {
       this.modal.current.close();
     }
-  };
+  }
 
   render() {
     return (
       <Modalize
         ref={this.modal}
-        adjustToContentHeight
+        footer={{
+          component: this.renderFooter,
+          isAbsolute: false,
+        }}
         onClosed={this.onClosed}
+        adjustToContentHeight
       >
         {this.renderContent()}
       </Modalize>
@@ -70,13 +72,6 @@ export default class FixedContent extends React.PureComponent<IProps> {
 const s = StyleSheet.create({
   content: {
     padding: 20,
-  },
-
-  content__icon: {
-    width: 32,
-    height: 32,
-
-    marginBottom: 20,
   },
 
   content__subheading: {
@@ -95,7 +90,7 @@ const s = StyleSheet.create({
 
   content__description: {
     paddingTop: 10,
-    paddingBottom: 20,
+    paddingBottom: 5,
 
     fontSize: 15,
     fontWeight: '200',
@@ -103,16 +98,25 @@ const s = StyleSheet.create({
     color: '#666',
   },
 
-  content__button: {
+  content__input: {
     paddingVertical: 15,
+    marginBottom: 10,
 
     width: '100%',
 
-    backgroundColor: '#333',
+    borderWidth: 1,
+    borderColor: 'transparent',
+    borderBottomColor: '#cdcdcd',
     borderRadius: 6,
   },
 
-  content__buttonText: {
+  modal__footer: {
+    backgroundColor: '#333',
+  },
+
+  modal__footerText: {
+    paddingVertical: 25,
+
     color: '#fff',
     fontSize: 15,
     fontWeight: '600',

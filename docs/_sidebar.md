@@ -1,12 +1,13 @@
 - Getting started
   - [Installation](/INSTALLATION)
   - [Usage](/USAGE)
-  - [Examples](/EXAMPLES)
-  - [Features](/FEATURES)
+
 - Guide
+  - [Features](/FEATURES)
   - [Props and Methods](/PROPSMETHODS)
+  - [Examples](/EXAMPLES)
   - [Q&A](/QANDA)
-  - [Development](/DEVELOPMENT)
+
 - **Links**
   - [![Expo](https://icongr.am/feather/code.svg?size=16&color=808080) Expo](https://expo.io/@jeremdsgn/react-native-modalize)
   - [![Github](https://icongram.jgog.in/simple/github.svg?color=808080&size=16) Github](https://github.com/jeremybarbet/react-native-modalize)

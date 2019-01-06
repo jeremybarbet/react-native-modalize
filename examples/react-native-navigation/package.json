@@ -12,8 +12,8 @@
     "react-native": "npm:@brunolemos/react-native",
     "react-native-gesture-handler": "1.0.12",
     "react-native-modalize": "1.0.0-alpha.19",
-    "react-native-navigation": "2.4.0",
-    "shared": "file:../shared"
+    "react-native-modalize/shared": "file:../../examples-shared",
+    "react-native-navigation": "2.4.0"
   },
   "devDependencies": {
     "@types/faker": "4.1.4",

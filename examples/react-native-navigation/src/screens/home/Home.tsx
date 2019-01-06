@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Header, Footer } from 'shared';
+import { Layout, Header, Footer } from 'react-native-modalize/shared';
 
 const HomeScreen = () => (
   <Layout>

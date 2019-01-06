@@ -7,7 +7,7 @@ interface IProps {
   onClosed?: () => void;
 }
 
-export default class InputForm extends React.PureComponent<IProps> {
+export default class FixedContent extends React.PureComponent<IProps> {
 
   private modal: React.RefObject<Modalize> = React.createRef();
 
@@ -16,21 +16,19 @@ export default class InputForm extends React.PureComponent<IProps> {
       <View style={s.content}>
         <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
         <Text style={s.content__heading}>Send the message?</Text>
-        <Text style={s.content__description}>{faker.lorem.lines(1)}</Text>
+        <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
         <TextInput style={s.content__input} placeholder="Type your username" />
+
+        <TouchableOpacity
+          style={s.content__button}
+          activeOpacity={0.9}
+          onPress={this.closeModal}
+        >
+          <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
+        </TouchableOpacity>
       </View>
     );
-  };
-
-  private renderFooter = () => (
-    <TouchableOpacity
-      style={s.modal__footer}
-      activeOpacity={0.8}
-      onPress={this.closeModal}
-    >
-      <Text style={s.modal__footerText}>{'Submit'.toUpperCase()}</Text>
-    </TouchableOpacity>
-  );
+  }
 
   private onClosed = () => {
     const { onClosed } = this.props;
@@ -44,22 +42,18 @@ export default class InputForm extends React.PureComponent<IProps> {
     if (this.modal.current) {
       this.modal.current.open();
     }
-  };
+  }
 
   public closeModal = () => {
     if (this.modal.current) {
       this.modal.current.close();
     }
-  };
+  }
 
   render() {
     return (
       <Modalize
         ref={this.modal}
-        footer={{
-          component: this.renderFooter,
-          isAbsolute: false,
-        }}
         onClosed={this.onClosed}
         adjustToContentHeight
       >
@@ -72,6 +66,13 @@ export default class InputForm extends React.PureComponent<IProps> {
 const s = StyleSheet.create({
   content: {
     padding: 20,
+  },
+
+  content__icon: {
+    width: 32,
+    height: 32,
+
+    marginBottom: 20,
   },
 
   content__subheading: {
@@ -90,7 +91,7 @@ const s = StyleSheet.create({
 
   content__description: {
     paddingTop: 10,
-    paddingBottom: 5,
+    paddingBottom: 10,
 
     fontSize: 15,
     fontWeight: '200',
@@ -100,7 +101,7 @@ const s = StyleSheet.create({
 
   content__input: {
     paddingVertical: 15,
-    marginBottom: 10,
+    marginBottom: 20,
 
     width: '100%',
 
@@ -110,13 +111,16 @@ const s = StyleSheet.create({
     borderRadius: 6,
   },
 
-  modal__footer: {
+  content__button: {
+    paddingVertical: 15,
+
+    width: '100%',
+
     backgroundColor: '#333',
+    borderRadius: 6,
   },
 
-  modal__footerText: {
-    paddingVertical: 25,
-
+  content__buttonText: {
     color: '#fff',
     fontSize: 15,
     fontWeight: '600',

@@ -5,7 +5,10 @@
     "slug": "modalize-expo",
     "privacy": "public",
     "sdkVersion": "31.0.0",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
@@ -22,6 +25,7 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "githubUrl": "https://github.com/jeremybarbet/react-native-modalize"
   }
 }

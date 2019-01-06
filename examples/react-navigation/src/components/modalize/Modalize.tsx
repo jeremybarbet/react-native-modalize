@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View } from 'react-native';
-import { AbsoluteHeader, DefaultContent, FixedContent, InputForm, SnappingList } from 'shared';
+import { AbsoluteHeader, DefaultContent, FixedContent, InputForm, SnappingList } from 'react-native-modalize/shared';
 
 import { ModalContext, IState } from '../../../App';
 
