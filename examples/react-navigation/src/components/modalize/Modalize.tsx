@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View } from 'react-native';
-import { AbsoluteHeader, DefaultContent, FixedContent, InputForm, SnappingList } from 'react-native-modalize/shared';
+import { AbsoluteHeader, DefaultContent, FixedContent, SnappingList, CustomStyle } from 'react-native-modalize/shared';
 
 import { ModalContext, IState } from '../../../App';
 
@@ -13,7 +13,7 @@ const modals = [
   { id: 'MODAL_FIXED', component: <FixedContent /> },
   { id: 'MODAL_SNAPPING', component: <SnappingList /> },
   { id: 'MODAL_ABSOLUTE', component: <AbsoluteHeader /> },
-  { id: 'MODAL_INPUT', component: <InputForm /> },
+  { id: 'MODAL_CUSTOM', component: <CustomStyle /> },
 ];
 
 export default class Modalize extends React.PureComponent<IProps> {
