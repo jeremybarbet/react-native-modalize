@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Layout, Header, Footer, Button, AbsoluteHeader, DefaultContent, FixedContent, SnappingList, CustomStyle } from 'react-native-modalize/shared';
 
 const App = () => {

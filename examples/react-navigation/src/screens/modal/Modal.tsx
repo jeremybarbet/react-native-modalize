@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Layout, Footer, Button } from 'react-native-modalize/shared';
 
 import { ModalContext } from '../../../App';
