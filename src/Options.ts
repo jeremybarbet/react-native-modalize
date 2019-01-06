@@ -70,7 +70,6 @@ export interface IProps {
 
   /**
    * Define the behavior of the keyboard when having inputs inside the modal.
-   * @default 'never'
    */
   keyboardAvoidingBehavior?: 'height' | 'position' | 'padding';
   /**

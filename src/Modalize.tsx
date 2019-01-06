@@ -33,10 +33,10 @@ export default class Modalize extends React.Component<IProps, IState> {
   private modal: React.RefObject<TapGestureHandler> = React.createRef();
   private modalChildren: React.RefObject<PanGestureHandler> = React.createRef();
   private modalScrollView: React.RefObject<NativeViewGestureHandler> = React.createRef();
+  private scrollView: React.RefObject<ScrollView> = React.createRef();
   private modalOverlay: React.RefObject<PanGestureHandler> = React.createRef();
   private modalOverlayTap: React.RefObject<TapGestureHandler> = React.createRef();
   private willCloseModalize: boolean = false;
-  private scrollView: React.RefObject<ScrollView> = React.createRef();
 
   constructor(props: IProps) {
     super(props);
@@ -120,15 +120,10 @@ export default class Modalize extends React.Component<IProps, IState> {
     this.onAnimateClose();
   }
 
-  public scrollTo = (option: {
-    y: number,
-    animated: boolean,
-  }): void => {
+  public scrollTo: ScrollView['scrollTo'] = (option) => {
     if (this.scrollView.current) {
-      const ScrollViewRef = (this.scrollView.current as any).getNode();
-      if (ScrollViewRef) {
-        ScrollViewRef.scrollTo(option);
-      }
+      const scrollViewRef = (this.scrollView.current as any).getNode();
+      scrollViewRef.scrollTo(option);
     }
   }
 
@@ -479,6 +474,7 @@ export default class Modalize extends React.Component<IProps, IState> {
       showsVerticalScrollIndicator,
       adjustToContentHeight,
       keyboardShouldPersistTaps,
+      keyboardAvoidingBehavior,
     } = this.props;
 
     const {
@@ -506,7 +502,7 @@ export default class Modalize extends React.Component<IProps, IState> {
         onHandlerStateChange={this.onHandleChildren}
       >
         <AnimatedKeyboardAvoidingView
-          behavior={this.props.keyboardAvoidingBehavior || 'position'}
+          behavior={keyboardAvoidingBehavior || 'position'}
           style={{ marginBottom }}
           enabled={enabled}
         >
@@ -516,6 +512,7 @@ export default class Modalize extends React.Component<IProps, IState> {
             simultaneousHandlers={this.modalChildren}
           >
             <Animated.ScrollView
+              ref={this.scrollView}
               style={scrollViewHeight}
               bounces={enableBounces}
               onScrollBeginDrag={Animated.event(
@@ -528,7 +525,6 @@ export default class Modalize extends React.Component<IProps, IState> {
               showsVerticalScrollIndicator={showsVerticalScrollIndicator}
               keyboardDismissMode={keyboardDismissMode}
               keyboardShouldPersistTaps={keyboardShouldPersistTaps}
-              ref={this.scrollView}
             >
               {children}
             </Animated.ScrollView>
@@ -580,7 +576,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private renderModalize = (): React.ReactNode => {
-    const { style, adjustToContentHeight } = this.props;
+    const { style, adjustToContentHeight, keyboardAvoidingBehavior } = this.props;
     const { isVisible, lastSnap, showContent } = this.state;
     const enabled = this.isIos && adjustToContentHeight;
 
@@ -602,7 +598,7 @@ export default class Modalize extends React.Component<IProps, IState> {
             {showContent && (
               <AnimatedKeyboardAvoidingView
                 style={[s.modalize__content, this.modalizeContent, style]}
-                behavior={this.props.keyboardAvoidingBehavior || 'padding'}
+                behavior={keyboardAvoidingBehavior || 'padding'}
                 enabled={enabled}
               >
                 {this.renderHandle()}
