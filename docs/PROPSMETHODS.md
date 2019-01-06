@@ -98,6 +98,16 @@ If you have any inputs inside your cont and you want to manage how to dismiss th
 | ---------------------------------- | -------- | -------- |
 | enum('never', 'always', 'handled') | No       | `never`  |
 
+### `keyboardAvoidingBehavior`
+
+Define the behavior of the modal when keyboard is active.
+
+If you have any inputs inside your cont and you want to manage how the view should change when the keyboard is active. See [`react-native` documentation](https://facebook.github.io/react-native/docs/keyboardavoidingview#behavior) for more informations.
+
+| Type                                  | Required | Default  |
+| ------------------------------------- | -------- | -------- |
+| enum('height', 'position', 'padding') | No       | `null`  |
+
 ### `withReactModal`
 
 Define if `Modalize` has to be wrap with the Modal component from react-native.
@@ -193,3 +203,11 @@ The method to close the modal. You don't need to call it to dismiss the modal, s
 | Type     | Required |
 | -------- | -------- |
 | function | No       |
+
+### `scrollTo()`
+
+The method is used to programmatically scroll the modal content
+
+| Type                                                        | Required |
+| ----------------------------------------------------------- | -------- |
+| function: (option:{ y: number, animated: boolean }) => void | No       |
