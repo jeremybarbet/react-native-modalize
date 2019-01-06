@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
+import Button from '../button/Button';
 
 interface IProps {
   onClosed?: () => void;
@@ -19,6 +20,9 @@ export default class SnappingList extends React.PureComponent<IProps> {
 
   private renderContent = () => (
     <View style={s.content}>
+      <View style={s.content__buttonContainer}>
+        <Button onPress={this.scrollDown} name="Scroll Down" />
+      </View>
       {[...Array(50).keys()].map((_, i) => (
         <View style={s.content__row} key={i}>
           <View style={s.content__avatar}>
@@ -45,6 +49,15 @@ export default class SnappingList extends React.PureComponent<IProps> {
   public openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
+    }
+  }
+
+  private scrollDown = () => {
+    if (this.modal.current) {
+      this.modal.current.scrollTo({
+        y: 200,
+        animated: true,
+      });
     }
   }
 
@@ -81,6 +94,11 @@ const s = StyleSheet.create({
 
   content: {
     paddingHorizontal: 15,
+  },
+
+  content__buttonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   content__row: {
