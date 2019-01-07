@@ -1,6 +1,6 @@
 # Examples
 
-With these three following examples you will see:
+These three examples are made to show you:
 
 - How to use the modal using different navigators
 - How to avoid using the Modal from React Native
@@ -8,17 +8,15 @@ With these three following examples you will see:
 
 React Native team will soon remove from the core a lot of components, including the `Modal`. This is why it's not recommended to use [withReactModal](/PROPSMETHODS?id=withreactmodal) props.
 
-This is why most of the major navigators implemented theirs owns ways to handle the modal/overlay behavior. Both `react-native-navigation` and `react-navigation` examples are made using a bottom tab bar since it's a very common design pattern and show you how to use `Modalize` according to the navigators' best practices.
+This is why most of the major navigators implemented theirs owns ways to handle the modal/overlay behavior. Both `react-native-navigation` and `react-navigation` examples are made using a bottom tab bar since it's a very common design pattern and show you how to use `Modalize` according to their documentation.
 
-See below for an explanation of each navigators.
+?> The components are shared between these examples and are used as a local npm package `react-native-modalize/shared` and you can find the source in the `examples-shared` folder.
 
-Run first in the root folder:
+See below for an explanation of each navigators. Run first in the root folder:
 
 ```bash
 yarn
 ```
-
-?> All the modals, layout, text and buttons are shared between the different examples to make it easier to maintain. You can find the code in the `examples-shared` folder.
 
 ## React Native Navigation
 
@@ -35,6 +33,7 @@ Another tab
 ```bash
 cd examples/react-native-navigation
 react-native run-ios
+cd ../..
 yarn watch:react-native-navigation
 ```
 
