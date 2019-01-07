@@ -13,7 +13,6 @@
     "faker": "4.1.0",
     "react": "16.7.0-alpha.2",
     "react-native": "https://github.com/expo/react-native/archive/sdk-31-with-hooks-dangerzone.tar.gz",
-    "react-native-modalize": "file:../../src",
     "react-native-modalize/shared": "file:../../examples-shared",
     "tslib": "1.9.3"
   },

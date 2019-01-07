@@ -11,7 +11,6 @@
     "react": "16.7.0-alpha.2",
     "react-native": "npm:@brunolemos/react-native",
     "react-native-gesture-handler": "1.0.12",
-    "react-native-modalize": "1.0.0-alpha.19",
     "react-native-modalize/shared": "file:../../examples-shared",
     "react-native-navigation": "2.4.0"
   },
