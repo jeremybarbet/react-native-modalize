@@ -292,6 +292,14 @@ export default class Modalize extends React.Component<IProps, IState> {
     this.setState({ scrollViewHeight });
   }
 
+  private onHandleComponent = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
+    if (nativeEvent.oldState === State.BEGAN) {
+      this.beginScrollY.setValue(0);
+    }
+
+    this.onHandleChildren({ nativeEvent });
+  }
+
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
     const { height, useNativeDriver, adjustToContentHeight } = this.props;
     const { lastSnap, contentHeight } = this.state;
@@ -419,7 +427,7 @@ export default class Modalize extends React.Component<IProps, IState> {
           [{ nativeEvent: { translationY: this.dragY } }],
           { useNativeDriver },
         )}
-        onHandlerStateChange={this.onHandleChildren}
+        onHandlerStateChange={this.onHandleComponent}
       >
         <Animated.View style={handleStyles}>
           <View style={shapeStyles} />
@@ -447,7 +455,7 @@ export default class Modalize extends React.Component<IProps, IState> {
           [{ nativeEvent: { translationY: this.dragY } }],
           { useNativeDriver },
         )}
-        onHandlerStateChange={this.onHandleChildren}
+        onHandlerStateChange={this.onHandleComponent}
       >
         <Animated.View
           style={s.component}
