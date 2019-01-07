@@ -104,9 +104,9 @@ Define if `Modalize` has to be wrap with the Modal component from react-native.
 
 ?> It's not recommended to pass it at `true`. Check the [examples' documentation](/EXAMPLES.md) to find the best way to handle it.
 
-| Type     | Required | Default  | Platform |
-| -------- | -------- | -------- | -------- |
-| bool     | No       | `false`  | iOS      |
+| Type     | Required | Default  |
+| -------- | -------- | -------- |
+| bool     | No       | `false`  |
 
 ### `withHandle`
 

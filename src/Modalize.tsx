@@ -633,7 +633,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   render(): React.ReactNode {
     const { withReactModal } = this.props;
 
-    if (withReactModal && this.isIos) {
+    if (withReactModal) {
       return this.renderReactModal(
         this.renderModalize(),
       );
