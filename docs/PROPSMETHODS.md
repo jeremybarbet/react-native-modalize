@@ -116,28 +116,21 @@ Define if the handle on top of the modal is display or not.
 | -------- | -------- | -------- |
 | bool     | No       | `true`   |
 
-### `header`
+### `HeaderComponent`
 
 A header component outside of the ScrollView, on top of the modal.
 
-- If your header has to be at the top of the modal, without floating on the content you pass `isAbsolute: false`
-- If your header has to float on top of the content, like a close squared button, you have to `isAbsolute: true`. It will skip the height calculation of the header and avoid to change the scrollview height.
+| Type     | Required |
+| -------- | -------- |
+| node     | No       |
 
-?> Don't forget to specify the `isAbsolute` props when defining an header.
-
-| Type                                          | Required |
-| --------------------------------------------- | -------- |
-| object: { component: node, isAbsolute: bool } | No       |
-
-### `footer`
+### `FooterComponent`
 
 A footer component outside of the ScrollView, on top of the modal.
 
-See above for the details about the props.
-
-| Type                                          | Required |
-| --------------------------------------------- | -------- |
-| object: { component: node, isAbsolute: bool } | No       |
+| Type     | Required |
+| -------- | -------- |
+| node     | No       |
 
 ### `onOpen`
 

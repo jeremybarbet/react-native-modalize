@@ -57,10 +57,7 @@ export default class AbsoluteHeader extends React.PureComponent<IProps> {
     return (
       <Modalize
         ref={this.modal}
-        header={{
-          component: this.renderHeader,
-          isAbsolute: true,
-        }}
+        HeaderComponent={this.renderHeader}
         withHandle={false}
         onClosed={this.onClosed}
       >
