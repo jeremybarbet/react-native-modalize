@@ -128,7 +128,7 @@ Refer to the [`react-native` scroll view documentation](https://facebook.github.
 
 ### `flatListProps`
 
-An object to pass any of the react-native flat list's props and replace the scrollview with it.
+An object to pass any of the react-native flat list's props. and replace the scrollview with it.
 
 Refer to the [`react-native` flat list documentation](https://facebook.github.io/react-native/docs/flatlist#props) to know all the avaibles props.
 

@@ -74,12 +74,12 @@ export interface IProps {
   scrollViewProps: ScrollViewProps;
 
   /*
-   * An object to pass any of the react-native flatList's props and replace the scrollview with it.
+   * An object to pass any of the react-native flatList's props.
    */
   flatListProps: FlatListProps<any>;
 
   /*
-   * An object to pass any of the react-native sectionList's props and replace the scrollview with it.
+   * An object to pass any of the react-native sectionList's props.
    */
   sectionListProps: SectionListProps<any>;
 

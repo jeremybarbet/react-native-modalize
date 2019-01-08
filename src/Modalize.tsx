@@ -54,6 +54,22 @@ export default class Modalize extends React.Component<IProps, IState> {
       );
     }
 
+    if ((props.scrollViewProps || props.children) && props.flatListProps) {
+      console.error(
+        '[react-native-modalize] `flatListProps` You can\'t use the ScrollView and the FlatList at the ' +
+        'same time. As soon as you use `flatListProps` it will replaces the default ScrollView with ' +
+        'a FlatList component. Remove the `children` and/or `scrollViewProps` to fix the error.',
+      );
+    }
+
+    if ((props.scrollViewProps || props.children) && props.sectionListProps) {
+      console.error(
+        '[react-native-modalize] `sectionListProps` You can\'t use the ScrollView and the SectionList at the ' +
+        'same time. As soon as you use `sectionListProps` it will replaces the default ScrollView with ' +
+        'a SectionList component. Remove the `children` and/or `scrollViewProps` to fix the error.',
+      );
+    }
+
     if (props.height) {
       this.snaps.push(0, modalHeight - props.height, modalHeight);
     } else {
@@ -181,7 +197,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private isAbsolute = (Component: React.ReactNode): boolean => {
     // @ts-ignore
-    const style: any = Component && StyleSheet.flatten(Component().props.style);
+    const style: StyleProp<any> = Component && StyleSheet.flatten(Component().props.style);
 
     return style && style.position === 'absolute';
   }
@@ -477,10 +493,10 @@ export default class Modalize extends React.Component<IProps, IState> {
   private renderContent = (): React.ReactNode => {
     const {
       children,
-      useNativeDriver,
-      showsVerticalScrollIndicator,
-      adjustToContentHeight,
-      keyboardShouldPersistTaps,
+      // useNativeDriver,
+      // showsVerticalScrollIndicator,
+      // adjustToContentHeight,
+      // keyboardShouldPersistTaps,
       scrollViewProps,
       flatListProps,
       sectionListProps,
@@ -491,12 +507,12 @@ export default class Modalize extends React.Component<IProps, IState> {
       enableBounces,
       scrollViewHeight,
       keyboardEnableScroll,
-      keyboardToggle,
+      // keyboardToggle,
     } = this.state;
 
     const scrollEnabled = contentHeight === 0 || keyboardEnableScroll;
-    const marginBottom = adjustToContentHeight ? 0 : keyboardToggle ? this.handleHeight : 0;
-    const enabled = this.isIos && !adjustToContentHeight;
+    // const marginBottom = adjustToContentHeight ? 0 : keyboardToggle ? this.handleHeight : 0;
+    // const enabled = this.isIos && !adjustToContentHeight;
     const keyboardDismissMode = this.isIos ? 'interactive' : 'on-drag';
 
     const opts = {
@@ -553,25 +569,25 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private renderChildren = (): React.ReactNode => {
     const {
-      children,
+      // children,
       useNativeDriver,
-      showsVerticalScrollIndicator,
+      // showsVerticalScrollIndicator,
       adjustToContentHeight,
-      keyboardShouldPersistTaps,
+      // keyboardShouldPersistTaps,
     } = this.props;
 
     const {
-      contentHeight,
-      enableBounces,
-      scrollViewHeight,
-      keyboardEnableScroll,
+      // contentHeight,
+      // enableBounces,
+      // scrollViewHeight,
+      // keyboardEnableScroll,
       keyboardToggle,
     } = this.state;
 
-    const scrollEnabled = contentHeight === 0 || keyboardEnableScroll;
+    // const scrollEnabled = contentHeight === 0 || keyboardEnableScroll;
     const marginBottom = adjustToContentHeight ? 0 : keyboardToggle ? this.handleHeight : 0;
     const enabled = this.isIos && !adjustToContentHeight;
-    const keyboardDismissMode = this.isIos ? 'interactive' : 'on-drag';
+    // const keyboardDismissMode = this.isIos ? 'interactive' : 'on-drag';
 
     return (
       <PanGestureHandler
@@ -594,7 +610,9 @@ export default class Modalize extends React.Component<IProps, IState> {
             waitFor={this.modal}
             simultaneousHandlers={this.modalChildren}
           >
-            <Animated.ScrollView
+            {this.renderContent()}
+
+            {/* <Animated.ScrollView
               style={scrollViewHeight}
               bounces={enableBounces}
               onScrollBeginDrag={Animated.event(
@@ -609,7 +627,7 @@ export default class Modalize extends React.Component<IProps, IState> {
               keyboardShouldPersistTaps={keyboardShouldPersistTaps}
             >
               {children}
-            </Animated.ScrollView>
+            </Animated.ScrollView> */}
           </NativeViewGestureHandler>
         </AnimatedKeyboardAvoidingView>
       </PanGestureHandler>
