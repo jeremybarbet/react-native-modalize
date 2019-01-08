@@ -210,4 +210,4 @@ The method is used to programmatically scroll the modal content.
 
 | Type                                                        | Required |
 | ----------------------------------------------------------- | -------- |
-| function: (option:{ y: number, animated: boolean }) => void | No       |
+| function: (options: { y: number, animated: boolean }) | No       |
