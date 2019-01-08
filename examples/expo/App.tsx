@@ -1,5 +1,5 @@
-import React from 'react';
-import { Layout, Header, Footer, Button, AbsoluteHeader, DefaultContent, FixedContent, InputForm, SnappingList, CustomStyle } from 'react-native-modalize/shared';
+import * as React from 'react';
+import { Layout, Header, Footer, Button, AbsoluteHeader, DefaultContent, FixedContent, SnappingList, CustomStyle } from 'react-native-modalize/shared';
 
 const App = () => {
   const modal: any[] = [];
@@ -26,7 +26,6 @@ const App = () => {
         'Modal with a fixed content',
         'Modal with a snapping list',
         'Modal with an absolute header',
-        'Modal with an input',
         'Modal with custom style',
       ])}
 
@@ -36,8 +35,7 @@ const App = () => {
       <FixedContent ref={(el: FixedContent) => { modal[1] = el; }} />
       <SnappingList ref={(el: SnappingList) => { modal[2] = el; }} />
       <AbsoluteHeader ref={(el: AbsoluteHeader) => { modal[3] = el; }} />
-      <InputForm ref={(el: InputForm) => { modal[4] = el; }} />
-      <CustomStyle ref={(el: CustomStyle) => { modal[5] = el; }} />
+      <CustomStyle ref={(el: CustomStyle) => { modal[4] = el; }} />
     </Layout>
   );
 }

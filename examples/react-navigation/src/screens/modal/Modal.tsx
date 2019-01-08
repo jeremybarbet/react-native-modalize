@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Layout, Footer, Button } from 'react-native-modalize/shared';
 
 import { ModalContext } from '../../../App';
@@ -36,7 +36,7 @@ export default class ModalScreen extends React.PureComponent<IProps> {
           { id: 'MODAL_FIXED', name: 'Modal with a fixed content' },
           { id: 'MODAL_SNAPPING', name: 'Modal with a snapping list' },
           { id: 'MODAL_ABSOLUTE', name: 'Modal with an absolute header' },
-          { id: 'MODAL_INPUT', name: 'Modal with an input' },
+          { id: 'MODAL_CUSTOM', name: 'Modal with custom style' },
         ])}
 
         <Footer />

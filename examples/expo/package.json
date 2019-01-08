@@ -9,10 +9,10 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "expo": "31.0.2",
+    "expo": "32.0.0",
     "faker": "4.1.0",
-    "react": "16.7.0-alpha.2",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-31-with-hooks-dangerzone.tar.gz",
+    "react": "16.7.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-modalize": "file:../../src",
     "react-native-modalize/shared": "file:../../examples-shared",
     "tslib": "1.9.3"
@@ -21,7 +21,7 @@
     "@types/expo": "30.0.0",
     "@types/faker": "4.1.4",
     "@types/react": "16.7.18",
-    "@types/react-native": "0.57.22",
+    "@types/react-native": "0.57.25",
     "babel-preset-expo": "5.0.0",
     "react-native-typescript-transformer": "1.2.10",
     "schedule": "0.4.0",

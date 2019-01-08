@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, View, Platform, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules, ScrollView } from 'react-native';
+import { Animated, View, Platform, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules, StyleSheet, ScrollView } from 'react-native';
 import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent, TapGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 import { IProps, IState } from './Options';
@@ -122,7 +122,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   public scrollTo = (options: ScrollView['scrollTo']): void => {
     if (this.scrollView.current) {
-      (this.scrollView.current as any).getNode().scrollTo(option);
+      (this.scrollView.current as any).getNode().scrollTo(options);
     }
   }
 
@@ -182,6 +182,13 @@ export default class Modalize extends React.Component<IProps, IState> {
         outputRange: [0, 1],
       }),
     };
+  }
+
+  private isAbsolute = (Component: React.ReactNode): boolean => {
+    // @ts-ignore
+    const style: any = Component && StyleSheet.flatten(Component().props.style);
+
+    return style && style.position === 'absolute';
   }
 
   private onAnimateOpen = (): void => {
@@ -299,6 +306,14 @@ export default class Modalize extends React.Component<IProps, IState> {
     this.setState({ scrollViewHeight });
   }
 
+  private onHandleComponent = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
+    if (nativeEvent.oldState === State.BEGAN) {
+      this.beginScrollY.setValue(0);
+    }
+
+    this.onHandleChildren({ nativeEvent });
+  }
+
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
     const { height, useNativeDriver, adjustToContentHeight } = this.props;
     const { lastSnap, contentHeight } = this.state;
@@ -380,13 +395,11 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private renderComponent = (Component: React.ReactNode, name: string): React.ReactNode => {
-    const { header, footer } = this.props;
-
     // @ts-ignore
     const element = React.isValidElement(Component) ? Component : <Component />;
 
     // We don't need to calculate header and footer if they are absolutely positioned
-    if (header && header.isAbsolute || footer && footer.isAbsolute) {
+    if (Component && this.isAbsolute(Component)) {
       return element;
     }
 
@@ -426,7 +439,7 @@ export default class Modalize extends React.Component<IProps, IState> {
           [{ nativeEvent: { translationY: this.dragY } }],
           { useNativeDriver },
         )}
-        onHandlerStateChange={this.onHandleChildren}
+        onHandlerStateChange={this.onHandleComponent}
       >
         <Animated.View style={handleStyles}>
           <View style={shapeStyles} />
@@ -436,14 +449,14 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private renderHeader = (): React.ReactNode => {
-    const { useNativeDriver, header } = this.props;
+    const { useNativeDriver, HeaderComponent } = this.props;
 
-    if (!header) {
+    if (!HeaderComponent) {
       return null;
     }
 
-    if (header.isAbsolute) {
-      return this.renderComponent(header.component, 'header');
+    if (this.isAbsolute(HeaderComponent)) {
+      return this.renderComponent(HeaderComponent, 'header');
     }
 
     return (
@@ -454,13 +467,13 @@ export default class Modalize extends React.Component<IProps, IState> {
           [{ nativeEvent: { translationY: this.dragY } }],
           { useNativeDriver },
         )}
-        onHandlerStateChange={this.onHandleChildren}
+        onHandlerStateChange={this.onHandleComponent}
       >
         <Animated.View
           style={s.component}
           pointerEvents="box-none"
         >
-          {this.renderComponent(header.component, 'header')}
+          {this.renderComponent(HeaderComponent, 'header')}
         </Animated.View>
       </PanGestureHandler>
     );
@@ -534,13 +547,13 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private renderFooter = (): React.ReactNode => {
-    const { footer } = this.props;
+    const { FooterComponent } = this.props;
 
-    if (!footer) {
+    if (!FooterComponent) {
       return null;
     }
 
-    return this.renderComponent(footer.component, 'footer');
+    return this.renderComponent(FooterComponent, 'footer');
   }
 
   private renderOverlay = (): React.ReactNode => {
@@ -634,7 +647,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   render(): React.ReactNode {
     const { withReactModal } = this.props;
 
-    if (withReactModal && this.isIos) {
+    if (withReactModal) {
       return this.renderReactModal(
         this.renderModalize(),
       );

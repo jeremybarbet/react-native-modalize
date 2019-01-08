@@ -1,17 +1,5 @@
 import { Animated, ViewStyle, RegisteredStyle } from 'react-native';
 
-interface IComponent {
-  /**
-   * A React component that will define the header or footer.
-   */
-  component: React.ReactNode;
-
-  /**
-   * Define if the component will be floating on top of the content or not
-   */
-  isAbsolute: boolean;
-}
-
 export interface IProps {
   /**
    * A React component that will define the content of the modal.
@@ -87,12 +75,12 @@ export interface IProps {
   /**
    * A header component outside of the ScrollView, on top of the modal.
    */
-  header?: IComponent;
+  HeaderComponent?: React.ReactNode;
 
   /**
    * A footer component outside of the ScrollView, on top of the modal.
    */
-  footer?: IComponent;
+  FooterComponent?: React.ReactNode;
 
   /**
    * Callback function when the `open` method is triggered.
@@ -162,7 +150,7 @@ export interface IState {
   enableBounces: boolean;
 
   /**
-   * Define the ScrollView height. If `header` or `footer` are passed and have `isAbsolute: false`, theirs heights will be substracted to the ScrollView's height.
+   * Define the ScrollView height. If `header` or `footer` are passed and are not `position: 'absolute'`, theirs heights will be substracted to the ScrollView's height.
    */
   scrollViewHeight: ViewStyle[];
 

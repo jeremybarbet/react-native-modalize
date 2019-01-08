@@ -5,7 +5,6 @@ import Layout from './src/components/layout/Layout';
 import AbsoluteHeader from './src/components/modals/AbsoluteHeader';
 import DefaultContent from './src/components/modals/DefaultContent';
 import FixedContent from './src/components/modals/FixedContent';
-import InputForm from './src/components/modals/InputForm';
 import SnappingList from './src/components/modals/SnappingList';
 import CustomStyle from './src/components/modals/CustomStyle';
 
@@ -17,7 +16,6 @@ export {
   AbsoluteHeader,
   DefaultContent,
   FixedContent,
-  InputForm,
   SnappingList,
   CustomStyle,
 };

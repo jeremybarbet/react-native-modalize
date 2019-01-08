@@ -8,17 +8,17 @@
   },
   "dependencies": {
     "faker": "4.1.0",
-    "react": "16.7.0-alpha.2",
-    "react-native": "npm:@brunolemos/react-native",
+    "react": "16.7.0",
+    "react-native": "0.57.8",
     "react-native-gesture-handler": "1.0.12",
-    "react-native-modalize": "1.0.0-alpha.19",
+    "react-native-modalize": "file:../../src",
     "react-native-modalize/shared": "file:../../examples-shared",
     "react-native-navigation": "2.4.0"
   },
   "devDependencies": {
     "@types/faker": "4.1.4",
     "@types/react": "16.7.18",
-    "@types/react-native": "0.57.22",
+    "@types/react-native": "0.57.25",
     "@types/react-test-renderer": "16.0.3",
     "babel-plugin-module-resolver": "3.1.1",
     "metro-react-native-babel-preset": "0.51.1",

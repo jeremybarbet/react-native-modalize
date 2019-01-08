@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Navigation } from 'react-native-navigation';
-import { Layout, Footer, Button, AbsoluteHeader, DefaultContent, FixedContent, InputForm, SnappingList } from 'react-native-modalize/shared';
+import { Layout, Footer, Button, AbsoluteHeader, DefaultContent, FixedContent, SnappingList, CustomStyle } from 'react-native-modalize/shared';
 
 import { MODALIZE } from '..';
 
@@ -42,7 +42,7 @@ const Modal = () => {
         { name: 'Modal with a fixed content', component: <FixedContent /> },
         { name: 'Modal with a snapping list', component: <SnappingList /> },
         { name: 'Modal with an absolute header', component: <AbsoluteHeader /> },
-        { name: 'Modal with an input', component: <InputForm /> },
+        { name: 'Modal with custom style', component: <CustomStyle /> },
       ])}
 
       <Footer />

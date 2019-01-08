@@ -1,6 +1,6 @@
 {
   "name": "react-native-modalize",
-  "version": "1.0.0-alpha.20",
+  "version": "1.0.0-alpha.21",
   "description": "A modal that loves ScrollViews.",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
@@ -8,7 +8,7 @@
     "build": "rm -rf ./lib/* && yarn lint && tsc",
     "start": "sh ./start.sh",
     "prepublish": "yarn build",
-    "lint": "tslint 'src/**/*.ts?(x)'",
+    "lint": "tslint 'src/**/*.ts?(x)' 'examples-shared/src/**/*.ts?(x)'",
     "postversion": "sh ./post-version.sh",
     "watch:modalize": "yarn cpx 'src/**/**' 'examples-shared/node_modules/react-native-modalize' --watch",
     "watch:expo": "concurrently \"yarn watch:modalize\" \"yarn cpx 'examples-shared/**/*' 'examples/expo/node_modules/react-native-modalize/shared' --watch\"",
@@ -31,14 +31,14 @@
     "url": "https://github.com/jeremybarbet/react-native-modalize"
   },
   "devDependencies": {
-    "@types/react": "16.4.18",
-    "@types/react-native": "0.57.19",
+    "@types/react": "16.7.18",
+    "@types/react-native": "0.57.25",
     "concurrently": "4.1.0",
     "cpx": "1.5.0",
-    "react": "16.6.3",
+    "react": "16.7.0",
     "react-native": "0.57.8",
     "react-native-gesture-handler": "1.0.12",
-    "tslint": "5.11.0",
+    "tslint": "5.12.0",
     "tslint-config-airbnb": "5.11.1",
     "typescript": "3.2.2"
   },
