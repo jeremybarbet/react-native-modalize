@@ -1,10 +1,10 @@
-import { Animated, ViewStyle, RegisteredStyle } from 'react-native';
+import { Animated, ViewStyle, RegisteredStyle, ScrollViewProps, FlatListProps, SectionListProps } from 'react-native';
 
 export interface IProps {
   /**
    * A React component that will define the content of the modal.
    */
-  children: React.ReactNode;
+  children?: React.ReactNode;
 
   /**
    * A number that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
@@ -71,6 +71,21 @@ export interface IProps {
    * @default true
    */
   withHandle?: boolean;
+
+  /*
+   * An object to pass any of the react-native scrollView's props.
+   */
+  scrollViewProps?: ScrollViewProps;
+
+  /*
+   * An object to pass any of the react-native flatList's props.
+   */
+  flatListProps?: FlatListProps<any>;
+
+  /*
+   * An object to pass any of the react-native sectionList's props.
+   */
+  sectionListProps?: SectionListProps<any>;
 
   /**
    * A header component outside of the ScrollView, on top of the modal.

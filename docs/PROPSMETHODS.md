@@ -126,9 +126,39 @@ Define if the handle on top of the modal is display or not.
 | -------- | -------- | -------- |
 | bool     | No       | `true`   |
 
+### `scrollViewProps`
+
+An object to pass any of the react-native scroll view's props.
+
+Refer to the [`react-native` scroll view documentation](https://facebook.github.io/react-native/docs/scrollview#props) to know all the avaibles props.
+
+| Type     | Required |
+| -------- | -------- |
+| object   | No       |
+
+### `flatListProps`
+
+An object to pass any of the react-native flat list's props. and replace the scrollview with it.
+
+Refer to the [`react-native` flat list documentation](https://facebook.github.io/react-native/docs/flatlist#props) to know all the avaibles props.
+
+| Type     | Required |
+| -------- | -------- |
+| object   | No       |
+
+### `sectionListProps`
+
+An object to pass any of the react-native section list's props and replace the scrollview with it.
+
+Refer to the [`react-native` section list documentation](https://facebook.github.io/react-native/docs/sectionlist#props) to know all the avaibles props.
+
+| Type     | Required |
+| -------- | -------- |
+| object   | No       |
+
 ### `HeaderComponent`
 
-A header component outside of the ScrollView, on top of the modal.
+A header component outside of the ScrollView, at the top of the modal.
 
 | Type     | Required |
 | -------- | -------- |
@@ -136,7 +166,7 @@ A header component outside of the ScrollView, on top of the modal.
 
 ### `FooterComponent`
 
-A footer component outside of the ScrollView, on top of the modal.
+A footer component outside of the ScrollView, at the bottom of the modal.
 
 | Type     | Required |
 | -------- | -------- |

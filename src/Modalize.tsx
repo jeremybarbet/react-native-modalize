@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, View, Platform, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules, StyleSheet, ScrollView } from 'react-native';
+import { Animated, View, Platform, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules, StyleSheet, ScrollView, FlatList, SectionList } from 'react-native';
 import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent, TapGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 import { IProps, IState } from './Options';
@@ -8,6 +8,8 @@ import s from './Modalize.styles';
 const { StatusBarManager } = NativeModules;
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 const THRESHOLD = 150;
 
 export default class Modalize extends React.Component<IProps, IState> {
@@ -50,6 +52,22 @@ export default class Modalize extends React.Component<IProps, IState> {
         'to be moved out of the core in the future. I\'d recommend migrating to something like ' +
         'react-navigation or react-native-navigation\'s to wrap Modalize. Check out the documentation ' +
         'for more informations.',
+      );
+    }
+
+    if ((props.scrollViewProps || props.children) && props.flatListProps) {
+      console.error(
+        '[react-native-modalize] `flatListProps` You can\'t use the ScrollView and the FlatList at the ' +
+        'same time. As soon as you use `flatListProps` it will replaces the default ScrollView with ' +
+        'a FlatList component. Remove the `children` and/or `scrollViewProps` to fix the error.',
+      );
+    }
+
+    if ((props.scrollViewProps || props.children) && props.sectionListProps) {
+      console.error(
+        '[react-native-modalize] `sectionListProps` You can\'t use the ScrollView and the SectionList at the ' +
+        'same time. As soon as you use `sectionListProps` it will replaces the default ScrollView with ' +
+        'a SectionList component. Remove the `children` and/or `scrollViewProps` to fix the error.',
       );
     }
 
@@ -186,7 +204,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private isAbsolute = (Component: React.ReactNode): boolean => {
     // @ts-ignore
-    const style: any = Component && StyleSheet.flatten(Component().props.style);
+    const style: StyleProp<any> = Component && StyleSheet.flatten(Component().props.style);
 
     return style && style.position === 'absolute';
   }
@@ -479,28 +497,59 @@ export default class Modalize extends React.Component<IProps, IState> {
     );
   }
 
-  private renderChildren = (): React.ReactNode => {
-    const {
-      children,
-      useNativeDriver,
-      showsVerticalScrollIndicator,
-      adjustToContentHeight,
-      keyboardShouldPersistTaps,
-      keyboardAvoidingBehavior,
-    } = this.props;
-
-    const {
-      contentHeight,
-      enableBounces,
-      scrollViewHeight,
-      keyboardEnableScroll,
-      keyboardToggle,
-    } = this.state;
-
+  private renderContent = (): React.ReactNode => {
+    const { children, scrollViewProps, flatListProps, sectionListProps } = this.props;
+    const { contentHeight, enableBounces, scrollViewHeight, keyboardEnableScroll } = this.state;
     const scrollEnabled = contentHeight === 0 || keyboardEnableScroll;
+    const keyboardDismissMode = this.isIos ? 'interactive' : 'on-drag';
+
+    const opts = {
+      ref: this.scrollView,
+      style: scrollViewHeight,
+      bounces: enableBounces,
+      onScrollBeginDrag: Animated.event(
+        [{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }],
+        { useNativeDriver: false },
+      ),
+      scrollEventThrottle: 16,
+      onLayout: this.onScrollViewLayout,
+      scrollEnabled,
+    };
+
+    if (flatListProps) {
+      return (
+        <AnimatedFlatList
+          {...opts}
+          {...flatListProps}
+        />
+      );
+    }
+
+    if (sectionListProps) {
+      return (
+        <AnimatedSectionList
+          {...opts}
+          {...sectionListProps}
+        />
+      );
+    }
+
+    return (
+      <Animated.ScrollView
+        {...opts}
+        {...scrollViewProps}
+        keyboardDismissMode={keyboardDismissMode}
+      >
+        {children}
+      </Animated.ScrollView>
+    );
+  }
+
+  private renderChildren = (): React.ReactNode => {
+    const { useNativeDriver, adjustToContentHeight, keyboardAvoidingBehavior } = this.props;
+    const { keyboardToggle } = this.state;
     const marginBottom = adjustToContentHeight ? 0 : keyboardToggle ? this.handleHeight : 0;
     const enabled = this.isIos && !adjustToContentHeight;
-    const keyboardDismissMode = this.isIos ? 'interactive' : 'on-drag';
 
     return (
       <PanGestureHandler
@@ -523,23 +572,7 @@ export default class Modalize extends React.Component<IProps, IState> {
             waitFor={this.modal}
             simultaneousHandlers={this.modalChildren}
           >
-            <Animated.ScrollView
-              ref={this.scrollView}
-              style={scrollViewHeight}
-              bounces={enableBounces}
-              onScrollBeginDrag={Animated.event(
-                [{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }],
-                { useNativeDriver: false },
-              )}
-              scrollEventThrottle={16}
-              onLayout={this.onScrollViewLayout}
-              scrollEnabled={scrollEnabled}
-              showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-              keyboardDismissMode={keyboardDismissMode}
-              keyboardShouldPersistTaps={keyboardShouldPersistTaps}
-            >
-              {children}
-            </Animated.ScrollView>
+            {this.renderContent()}
           </NativeViewGestureHandler>
         </AnimatedKeyboardAvoidingView>
       </PanGestureHandler>

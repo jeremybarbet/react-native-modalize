@@ -7,6 +7,8 @@ import DefaultContent from './src/components/modals/DefaultContent';
 import FixedContent from './src/components/modals/FixedContent';
 import SnappingList from './src/components/modals/SnappingList';
 import CustomStyle from './src/components/modals/CustomStyle';
+import FlatList from './src/components/modals/FlatList';
+import SectionList from './src/components/modals/SectionList';
 
 export {
   Button,
@@ -18,4 +20,6 @@ export {
   FixedContent,
   SnappingList,
   CustomStyle,
+  FlatList,
+  SectionList,
 };
