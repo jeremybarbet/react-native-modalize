@@ -201,6 +201,6 @@ The method to close the modal. You don't need to call it to dismiss the modal, s
 
 The method is used to programmatically scroll the modal content.
 
-| Type                                                        | Required |
-| ----------------------------------------------------------- | -------- |
+| Type                                                  | Required |
+| ----------------------------------------------------- | -------- |
 | function: (options: { y: number, animated: boolean }) | No       |
