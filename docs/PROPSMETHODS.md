@@ -206,7 +206,7 @@ The method to close the modal. You don't need to call it to dismiss the modal, s
 
 ### `scrollTo()`
 
-The method is used to programmatically scroll the modal content
+The method is used to programmatically scroll the modal content.
 
 | Type                                                        | Required |
 | ----------------------------------------------------------- | -------- |
