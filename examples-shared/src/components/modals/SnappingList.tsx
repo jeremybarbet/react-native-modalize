@@ -33,7 +33,7 @@ export default class SnappingList extends React.PureComponent<IProps> {
         </View>
       ))}
       <View style={s.content__buttonContainer}>
-        <Button onPress={this.scrollToTop} name="Scroll Down" />
+        <Button onPress={this.scrollToTop} name="Scroll to Top" />
       </View>
     </View>
   )
