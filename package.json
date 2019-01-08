@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rm -rf ./lib/* && yarn lint && tsc",
     "start": "sh ./start.sh",
-    "prepublish": "yarn run build",
+    "prepublish": "yarn build",
     "lint": "tslint 'src/**/*.ts?(x)' 'examples-shared/src/**/*.ts?(x)'",
     "postversion": "sh ./post-version.sh",
     "watch:modalize": "yarn cpx 'src/**/**' 'examples-shared/node_modules/react-native-modalize' --watch",
