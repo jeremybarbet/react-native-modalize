@@ -122,8 +122,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   public scrollTo: ScrollView['scrollTo'] = (option) => {
     if (this.scrollView.current) {
-      const scrollViewRef = (this.scrollView.current as any).getNode();
-      scrollViewRef.scrollTo(option);
+      (this.scrollView.current as any).getNode().scrollTo(option);
     }
   }
 

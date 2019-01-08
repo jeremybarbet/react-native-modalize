@@ -104,9 +104,9 @@ Define the behavior of the modal when keyboard is active.
 
 If you have any inputs inside your cont and you want to manage how the view should change when the keyboard is active. See [`react-native` documentation](https://facebook.github.io/react-native/docs/keyboardavoidingview#behavior) for more informations.
 
-| Type                                  | Required | Default  |
-| ------------------------------------- | -------- | -------- |
-| enum('height', 'position', 'padding') | No       | `null`  |
+| Type                                  | Required |
+| ------------------------------------- | -------- |
+| enum('height', 'position', 'padding') | No       |
 
 ### `withReactModal`
 

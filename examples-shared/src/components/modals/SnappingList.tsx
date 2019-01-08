@@ -20,9 +20,6 @@ export default class SnappingList extends React.PureComponent<IProps> {
 
   private renderContent = () => (
     <View style={s.content}>
-      <View style={s.content__buttonContainer}>
-        <Button onPress={this.scrollDown} name="Scroll Down" />
-      </View>
       {[...Array(50).keys()].map((_, i) => (
         <View style={s.content__row} key={i}>
           <View style={s.content__avatar}>
@@ -35,6 +32,9 @@ export default class SnappingList extends React.PureComponent<IProps> {
           <Text style={s.content__name}>{faker.name.findName()}</Text>
         </View>
       ))}
+      <View style={s.content__buttonContainer}>
+        <Button onPress={this.scrollToTop} name="Scroll Down" />
+      </View>
     </View>
   )
 
@@ -52,10 +52,10 @@ export default class SnappingList extends React.PureComponent<IProps> {
     }
   }
 
-  private scrollDown = () => {
+  private scrollToTop = () => {
     if (this.modal.current) {
       this.modal.current.scrollTo({
-        y: 200,
+        y: 0,
         animated: true,
       });
     }
