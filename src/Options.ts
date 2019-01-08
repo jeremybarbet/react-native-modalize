@@ -1,4 +1,4 @@
-import { Animated, ViewStyle, RegisteredStyle } from 'react-native';
+import { Animated, ViewStyle, RegisteredStyle, ScrollViewProps, FlatListProps, SectionListProps } from 'react-native';
 
 export interface IProps {
   /**
@@ -67,6 +67,21 @@ export interface IProps {
    * @default true
    */
   withHandle?: boolean;
+
+  /*
+   * An object to pass any of the react-native scrollView's props.
+   */
+  scrollViewProps: ScrollViewProps;
+
+  /*
+   * An object to pass any of the react-native flatList's props and replace the scrollview with it.
+   */
+  flatListProps: FlatListProps<any>;
+
+  /*
+   * An object to pass any of the react-native sectionList's props and replace the scrollview with it.
+   */
+  sectionListProps: SectionListProps<any>;
 
   /**
    * A header component outside of the ScrollView, on top of the modal.

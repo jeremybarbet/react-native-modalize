@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, View, Platform, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules, StyleSheet } from 'react-native';
+import { Animated, View, Platform, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules, StyleSheet, FlatList, SectionList } from 'react-native';
 import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent, TapGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 import { IProps, IState } from './Options';
@@ -8,6 +8,8 @@ import s from './Modalize.styles';
 const { StatusBarManager } = NativeModules;
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 const THRESHOLD = 150;
 
 export default class Modalize extends React.Component<IProps, IState> {
@@ -469,6 +471,83 @@ export default class Modalize extends React.Component<IProps, IState> {
           {this.renderComponent(HeaderComponent, 'header')}
         </Animated.View>
       </PanGestureHandler>
+    );
+  }
+
+  private renderContent = (): React.ReactNode => {
+    const {
+      children,
+      useNativeDriver,
+      showsVerticalScrollIndicator,
+      adjustToContentHeight,
+      keyboardShouldPersistTaps,
+      scrollViewProps,
+      flatListProps,
+      sectionListProps,
+    } = this.props;
+
+    const {
+      contentHeight,
+      enableBounces,
+      scrollViewHeight,
+      keyboardEnableScroll,
+      keyboardToggle,
+    } = this.state;
+
+    const scrollEnabled = contentHeight === 0 || keyboardEnableScroll;
+    const marginBottom = adjustToContentHeight ? 0 : keyboardToggle ? this.handleHeight : 0;
+    const enabled = this.isIos && !adjustToContentHeight;
+    const keyboardDismissMode = this.isIos ? 'interactive' : 'on-drag';
+
+    const opts = {
+      style: scrollViewHeight,
+      bounces: enableBounces,
+      onScrollBeginDrag: Animated.event(
+        [{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }],
+        { useNativeDriver: false },
+      ),
+      scrollEventThrottle: 16,
+      onLayout: this.onScrollViewLayout,
+      scrollEnabled,
+    };
+
+    if (flatListProps) {
+      return (
+        <AnimatedFlatList
+          {...opts}
+          {...flatListProps}
+        />
+      );
+    }
+
+    if (sectionListProps) {
+      return (
+        <AnimatedSectionList
+          {...opts}
+          {...sectionListProps}
+        />
+      );
+    }
+
+    return (
+      <Animated.ScrollView
+        {...opts}
+        // style={scrollViewHeight}
+        // bounces={enableBounces}
+        // onScrollBeginDrag={Animated.event(
+        //   [{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }],
+        //   { useNativeDriver: false },
+        // )}
+        // scrollEventThrottle={16}
+        // onLayout={this.onScrollViewLayout}
+        // scrollEnabled={scrollEnabled}
+        // showsVerticalScrollIndicator={showsVerticalScrollIndicator}
+        keyboardDismissMode={keyboardDismissMode}
+        // keyboardShouldPersistTaps={keyboardShouldPersistTaps}
+        {...scrollViewProps}
+      >
+        {children}
+      </Animated.ScrollView>
     );
   }
 
