@@ -1,7 +1,7 @@
 {
   "name": "react-native-modalize",
   "version": "1.0.0-alpha.21",
-  "description": "A modal that loves ScrollViews.",
+  "description": "A modal that loves scrollable content.",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
@@ -17,11 +17,17 @@
   },
   "keywords": [
     "react-native",
+    "react",
     "native",
     "modal",
     "android",
     "ios",
-    "scrollview"
+    "scrollview",
+    "flatlist",
+    "sectionlist",
+    "scroll",
+    "swipe",
+    "snap"
   ],
   "author": "Jérémy Barbet",
   "license": "MIT",
