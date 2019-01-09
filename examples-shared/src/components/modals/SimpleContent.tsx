@@ -10,7 +10,7 @@ interface IProps {
 
 const { width } = Dimensions.get('window');
 
-export default class DefaultContent extends React.PureComponent<IProps> {
+export default class SimpleContent extends React.PureComponent<IProps> {
 
   private modal: React.RefObject<Modalize> = React.createRef();
 

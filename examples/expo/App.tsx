@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Layout, Header, Footer, Button, AbsoluteHeader, DefaultContent, FixedContent, SnappingList, CustomStyle, FlatList, SectionList } from 'react-native-modalize/shared';
+import { Layout, Header, Footer, Button, AbsoluteHeader, SimpleContent, FixedContent, SnappingList, CustomStyle, FlatList, SectionList } from 'react-native-modalize/shared';
 
 const App = () => {
   const modal: any[] = [];
@@ -22,7 +22,7 @@ const App = () => {
       />
 
       {renderButtons([
-        'Modal with a default content',
+        'Modal with a simple content',
         'Modal with a fixed content',
         'Modal with a snapping list',
         'Modal with an absolute header',
@@ -33,7 +33,7 @@ const App = () => {
 
       <Footer />
 
-      <DefaultContent ref={(el: DefaultContent) => { modal[0] = el; }} />
+      <SimpleContent ref={(el: SimpleContent) => { modal[0] = el; }} />
       <FixedContent ref={(el: FixedContent) => { modal[1] = el; }} />
       <SnappingList ref={(el: SnappingList) => { modal[2] = el; }} />
       <AbsoluteHeader ref={(el: AbsoluteHeader) => { modal[3] = el; }} />

@@ -32,7 +32,7 @@ export default class ModalScreen extends React.PureComponent<IProps> {
     return (
       <Layout>
         {this.renderButtons([
-          { id: 'MODAL_DEFAULT', name: 'Modal with a default content' },
+          { id: 'MODAL_SIMPLE', name: 'Modal with a simple content' },
           { id: 'MODAL_FIXED', name: 'Modal with a fixed content' },
           { id: 'MODAL_SNAPPING', name: 'Modal with a snapping list' },
           { id: 'MODAL_ABSOLUTE', name: 'Modal with an absolute header' },

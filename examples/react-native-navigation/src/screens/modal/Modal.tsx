@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Navigation } from 'react-native-navigation';
-import { Layout, Footer, Button, AbsoluteHeader, DefaultContent, FixedContent, SnappingList, CustomStyle, FlatList, SectionList } from 'react-native-modalize/shared';
+import { Layout, Footer, Button, AbsoluteHeader, SimpleContent, FixedContent, SnappingList, CustomStyle, FlatList, SectionList } from 'react-native-modalize/shared';
 
 import { MODALIZE } from '..';
 
@@ -38,7 +38,7 @@ const Modal = () => {
   return (
     <Layout>
       {renderButtons([
-        { name: 'Modal with a default content', component: <DefaultContent /> },
+        { name: 'Modal with a simple content', component: <SimpleContent /> },
         { name: 'Modal with a fixed content', component: <FixedContent /> },
         { name: 'Modal with a snapping list', component: <SnappingList /> },
         { name: 'Modal with an absolute header', component: <AbsoluteHeader /> },
