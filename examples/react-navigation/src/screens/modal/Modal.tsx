@@ -37,6 +37,8 @@ export default class ModalScreen extends React.PureComponent<IProps> {
           { id: 'MODAL_SNAPPING', name: 'Modal with a snapping list' },
           { id: 'MODAL_ABSOLUTE', name: 'Modal with an absolute header' },
           { id: 'MODAL_CUSTOM', name: 'Modal with custom style' },
+          { id: 'MODAL_FLAT', name: 'Modal with a Flat List' },
+          { id: 'MODAL_SECTION', name: 'Modal with a Section List' },
         ])}
 
         <Footer />

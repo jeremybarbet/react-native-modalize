@@ -18,8 +18,6 @@ export default class Modalize extends React.Component<IProps, IState> {
     handlePosition: 'outside',
     useNativeDriver: true,
     adjustToContentHeight: false,
-    showsVerticalScrollIndicator: false,
-    keyboardShouldPersistTaps: 'never',
     withReactModal: false,
     withHandle: true,
   };

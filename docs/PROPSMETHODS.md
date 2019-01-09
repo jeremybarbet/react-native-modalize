@@ -4,17 +4,13 @@
 
 A React component that will define the content of the modal.
 
-Modalize is built-in with a `ScrollView` which mean you don't need to pass one. Even though, if you need another one inside, you can pass a `ScrollView`. But for this, you need to use:
+By passing a children props it will use the default `ScrollView` component. However, if you want to use a `FlatList` or a `SectionList` check the details [here](/PROPSMETHODS.md?id=flatListProps) and [here](/PROPSMETHODS.md?id=sectionListProps).
 
-```jsx
-import { ScrollView } from 'react-native-gesture-handler';
-```
-
-?> Check the `Default Content` example to see use of multiples scrollviews: `examples-shared/src/components/modals/DefaultContent.tsx`.
+?> If you want to use another ScrollView inside the modal, check the **Default Content** example: `examples-shared/src/components/modals/DefaultContent.tsx`. It uses the ScrollView from `react-native-gesture-handler`.
 
 | Type     | Required |
 | -------- | -------- |
-| node     | Yes      |
+| node     | No       |
 
 ### `height`
 
@@ -24,7 +20,7 @@ The value you pass is the height of the modal before being full opened.
 
 | Type     | Required |
 | -------- | -------- |
-| number   | Yes      |
+| number   | No       |
 
 ### `handlePosition`
 
@@ -50,7 +46,7 @@ Define the style of the handle on top of the modal.
 
 | Type     | Required |
 | -------- | -------- |
-| style     | No      |
+| style    | No       |
 
 ### `overlayStyle`
 
@@ -58,7 +54,7 @@ Define the style of the overlay.
 
 | Type     | Required |
 | -------- | -------- |
-| style     | No      |
+| style    | No       |
 
 ### `useNativeDriver`
 
@@ -78,25 +74,7 @@ Shrink the modal to your content's height.
 
 | Type     | Required | Default  |
 | -------- | -------- | -------- |
-| bool     | Yes      | `false`  |
-
-### `showsVerticalScrollIndicator`
-
-Define if you want to toggle the vertical scroll indicator.
-
-| Type     | Required | Default  |
-| -------- | -------- | -------- |
-| bool     | Yes      | `false`  |
-
-### `keyboardShouldPersistTaps`
-
-Define the behavior of the keyboard when having inputs inside the modal.
-
-If you have any inputs inside your cont and you want to manage how to dismiss the keyboard. See [`react-native` documentation](https://facebook.github.io/react-native/docs/scrollview#keyboardshouldpersisttaps) for more informations.
-
-| Type                               | Required | Default  |
-| ---------------------------------- | -------- | -------- |
-| enum('never', 'always', 'handled') | No       | `never`  |
+| bool     | No       | `false`  |
 
 ### `keyboardAvoidingBehavior`
 
@@ -128,9 +106,9 @@ Define if the handle on top of the modal is display or not.
 
 ### `scrollViewProps`
 
-An object to pass any of the react-native scroll view's props.
+An object to pass any of the react-native ScrollView's props.
 
-Refer to the [`react-native` scroll view documentation](https://facebook.github.io/react-native/docs/scrollview#props) to know all the avaibles props.
+Refer to the [`react-native` ScrollView documentation](https://facebook.github.io/react-native/docs/#props) to know all the avaibles props.
 
 | Type     | Required |
 | -------- | -------- |
@@ -138,9 +116,9 @@ Refer to the [`react-native` scroll view documentation](https://facebook.github.
 
 ### `flatListProps`
 
-An object to pass any of the react-native flat list's props. and replace the scrollview with it.
+An object to pass any of the react-native FlatList's props. Using this props will replace the default `ScrollView` with the `FlatList` component.
 
-Refer to the [`react-native` flat list documentation](https://facebook.github.io/react-native/docs/flatlist#props) to know all the avaibles props.
+Refer to the [`react-native` FlatList documentation](https://facebook.github.io/react-native/docs/flatlist#props) to know all the avaibles props.
 
 | Type     | Required |
 | -------- | -------- |
@@ -148,9 +126,9 @@ Refer to the [`react-native` flat list documentation](https://facebook.github.io
 
 ### `sectionListProps`
 
-An object to pass any of the react-native section list's props and replace the scrollview with it.
+An object to pass any of the react-native SectionList's props. Using this props will replace the default `ScrollView` with the `SectionList` component.
 
-Refer to the [`react-native` section list documentation](https://facebook.github.io/react-native/docs/sectionlist#props) to know all the avaibles props.
+Refer to the [`react-native` SectionList documentation](https://facebook.github.io/react-native/docs/sectionlist#props) to know all the avaibles props.
 
 | Type     | Required |
 | -------- | -------- |

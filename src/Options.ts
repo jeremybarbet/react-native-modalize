@@ -45,18 +45,6 @@ export interface IProps {
   adjustToContentHeight?: boolean;
 
   /**
-   * Define if you want to toggle the vertical scroll indicator.
-   * @default false
-   */
-  showsVerticalScrollIndicator?: boolean;
-
-  /**
-   * Define the behavior of the keyboard when having inputs inside the modal.
-   * @default 'never'
-   */
-  keyboardShouldPersistTaps?: 'never' | 'always' | 'handled';
-
-  /**
    * Define the behavior of the keyboard when having inputs inside the modal.
    */
   keyboardAvoidingBehavior?: 'height' | 'position' | 'padding';
@@ -73,17 +61,17 @@ export interface IProps {
   withHandle?: boolean;
 
   /*
-   * An object to pass any of the react-native scrollView's props.
+   * An object to pass any of the react-native ScrollView's props.
    */
   scrollViewProps?: ScrollViewProps;
 
   /*
-   * An object to pass any of the react-native flatList's props.
+   * An object to pass any of the react-native FlatList's props.
    */
   flatListProps?: FlatListProps<any>;
 
   /*
-   * An object to pass any of the react-native sectionList's props.
+   * An object to pass any of the react-native SectionList's props.
    */
   sectionListProps?: SectionListProps<any>;
 
@@ -175,7 +163,7 @@ export interface IState {
   keyboardEnableScroll: boolean;
 
   /**
-   * Store if the keyboard is displayed. Used to change the offset on the scrollview when the keyboard is open.
+   * Store if the keyboard is displayed. Used to change the offset on the ScrollView when the keyboard is open.
    */
   keyboardToggle: boolean;
 }
