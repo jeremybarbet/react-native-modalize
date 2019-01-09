@@ -32,7 +32,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   private reverseBeginScrollY: Animated.AnimatedMultiplication;
   private modal: React.RefObject<TapGestureHandler> = React.createRef();
   private modalChildren: React.RefObject<PanGestureHandler> = React.createRef();
-  private modalScrollView: React.RefObject<NativeViewGestureHandler> = React.createRef();
+  private modalContentView: React.RefObject<NativeViewGestureHandler> = React.createRef();
   private contentView: React.RefObject<ScrollView | FlatList<any> | SectionList<any>> = React.createRef();
   private modalOverlay: React.RefObject<PanGestureHandler> = React.createRef();
   private modalOverlayTap: React.RefObject<TapGestureHandler> = React.createRef();
@@ -103,7 +103,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
-    this.onScrollViewChange();
+    this.onContentViewChange();
 
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
     Keyboard.addListener('keyboardWillShow', this.onKeyboardShow);
@@ -299,7 +299,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     });
   }
 
-  private onScrollViewChange = (keyboardHeight?: number): void => {
+  private onContentViewChange = (keyboardHeight?: number): void => {
     const { adjustToContentHeight } = this.props;
     const { contentHeight, modalHeight, headerHeight, footerHeight } = this.state;
     const contentViewHeight = [];
@@ -402,12 +402,12 @@ export default class Modalize extends React.Component<IProps, IState> {
     const { height } = event.endCoordinates;
 
     this.setState({ keyboardToggle: true });
-    this.onScrollViewChange(height);
+    this.onContentViewChange(height);
   }
 
   private onKeyboardHide = () => {
     this.setState({ keyboardToggle: false });
-    this.onScrollViewChange();
+    this.onContentViewChange();
   }
 
   private renderComponent = (Component: React.ReactNode, name: string): React.ReactNode => {
@@ -420,7 +420,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     }
 
     const onLayout = ({ nativeEvent }: LayoutChangeEvent) =>
-      this.setState({ [`${name}Height`]: nativeEvent.layout.height } as any, this.onScrollViewChange);
+      this.setState({ [`${name}Height`]: nativeEvent.layout.height } as any, this.onContentViewChange);
 
     return (
       <View
@@ -552,7 +552,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     return (
       <PanGestureHandler
         ref={this.modalChildren}
-        simultaneousHandlers={[this.modalScrollView, this.modal]}
+        simultaneousHandlers={[this.modalContentView, this.modal]}
         shouldCancelWhenOutside={false}
         onGestureEvent={Animated.event(
           [{ nativeEvent: { translationY: this.dragY } }],
@@ -566,7 +566,7 @@ export default class Modalize extends React.Component<IProps, IState> {
           enabled={enabled}
         >
           <NativeViewGestureHandler
-            ref={this.modalScrollView}
+            ref={this.modalContentView}
             waitFor={this.modal}
             simultaneousHandlers={this.modalChildren}
           >
