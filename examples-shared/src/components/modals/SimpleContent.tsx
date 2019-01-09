@@ -14,10 +14,13 @@ export default class SimpleContent extends React.PureComponent<IProps> {
 
   private modal: React.RefObject<Modalize> = React.createRef();
 
-  private renderContent = () => (
-    <View style={s.content}>
+  private renderContent = () => [
+    <View style={s.content__header} key="0">
       <Text style={s.content__heading}>Article title</Text>
       <Text style={s.content__subheading}>November 11st 2018</Text>
+    </View>,
+
+    <View style={s.content__inside} key="1">
       <Text style={s.content__paragraph}>{faker.lorem.paragraphs(3)}</Text>
       <Text style={[s.content__subheading, { marginTop: 30 }]}>Horizontal ScrollView</Text>
 
@@ -45,9 +48,12 @@ export default class SimpleContent extends React.PureComponent<IProps> {
         ))}
       </ScrollView>
 
-      <TextInput style={s.content__input} placeholder="Type your username" />
-    </View>
-  )
+      <TextInput
+        style={s.content__input}
+        placeholder="Type your username"
+      />
+    </View>,
+  ]
 
   private onClosed = () => {
     const { onClosed } = this.props;
@@ -68,6 +74,10 @@ export default class SimpleContent extends React.PureComponent<IProps> {
       <Modalize
         ref={this.modal}
         onClosed={this.onClosed}
+        scrollViewProps={{
+          showsVerticalScrollIndicator: false,
+          stickyHeaderIndices: [0],
+        }}
       >
         {this.renderContent()}
       </Modalize>
@@ -76,8 +86,13 @@ export default class SimpleContent extends React.PureComponent<IProps> {
 }
 
 const s = StyleSheet.create({
-  content: {
+  content__header: {
     padding: 15,
+    paddingBottom: 0,
+
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
   },
 
   content__heading: {
@@ -93,6 +108,10 @@ const s = StyleSheet.create({
 
     fontSize: 16,
     color: '#ccc',
+  },
+
+  content__inside: {
+    padding: 15,
   },
 
   content__paragraph: {
