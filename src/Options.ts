@@ -148,14 +148,14 @@ export interface IState {
   footerHeight: number;
 
   /**
-   * When we scroll to the bottom of the ScrollView we want the bounce animation but when we reach the top again, we want it disabled. (iOS specific)
+   * When we scroll to the bottom of the ContentView we want the bounce animation but when we reach the top again, we want it disabled. (iOS specific)
    */
   enableBounces: boolean;
 
   /**
-   * Define the ScrollView height. If `header` or `footer` are passed and are not `position: 'absolute'`, theirs heights will be substracted to the ScrollView's height.
+   * Define the ContentView height. If `header` or `footer` are passed and are not `position: 'absolute'`, theirs heights will be substracted to the ContentView's height.
    */
-  scrollViewHeight: ViewStyle[];
+  contentViewHeight: ViewStyle[];
 
   /**
    * Define the scroll has to be enable or not depending of the keyboard status.
@@ -163,7 +163,7 @@ export interface IState {
   keyboardEnableScroll: boolean;
 
   /**
-   * Store if the keyboard is displayed. Used to change the offset on the ScrollView when the keyboard is open.
+   * Store if the keyboard is displayed. Used to change the offset on the ContentView when the keyboard is open.
    */
   keyboardToggle: boolean;
 }

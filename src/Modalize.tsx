@@ -33,7 +33,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   private modal: React.RefObject<TapGestureHandler> = React.createRef();
   private modalChildren: React.RefObject<PanGestureHandler> = React.createRef();
   private modalScrollView: React.RefObject<NativeViewGestureHandler> = React.createRef();
-  private scrollView: React.RefObject<ScrollView> = React.createRef();
+  private contentView: React.RefObject<ScrollView | FlatList<any> | SectionList<any>> = React.createRef();
   private modalOverlay: React.RefObject<PanGestureHandler> = React.createRef();
   private modalOverlayTap: React.RefObject<TapGestureHandler> = React.createRef();
   private willCloseModalize: boolean = false;
@@ -87,7 +87,7 @@ export default class Modalize extends React.Component<IProps, IState> {
       headerHeight: 0,
       footerHeight: 0,
       enableBounces: true,
-      scrollViewHeight: [],
+      contentViewHeight: [],
       keyboardEnableScroll: false,
       keyboardToggle: false,
     };
@@ -137,8 +137,8 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   public scrollTo = (...args: Parameters<ScrollView['scrollTo']>): void => {
-    if (this.scrollView.current) {
-      (this.scrollView.current as any).getNode().scrollTo(...args);
+    if (this.contentView.current) {
+      (this.contentView.current as any).getNode().scrollTo(...args);
     }
   }
 
@@ -276,7 +276,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     });
   }
 
-  private onScrollViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
+  private onContentViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
     const { adjustToContentHeight, height } = this.props;
     const { contentHeight, modalHeight } = this.state;
 
@@ -302,24 +302,24 @@ export default class Modalize extends React.Component<IProps, IState> {
   private onScrollViewChange = (keyboardHeight?: number): void => {
     const { adjustToContentHeight } = this.props;
     const { contentHeight, modalHeight, headerHeight, footerHeight } = this.state;
-    const scrollViewHeight = [];
+    const contentViewHeight = [];
 
     if (keyboardHeight) {
       const statusBarHeight = this.isIphoneX ? 48 : this.isIos ? 20 : StatusBarManager.HEIGHT;
       const height = screenHeight - keyboardHeight - headerHeight - footerHeight - this.handleHeight - statusBarHeight;
 
       if (contentHeight > height) {
-        scrollViewHeight.push({ height });
+        contentViewHeight.push({ height });
         this.setState({ keyboardEnableScroll: true });
       }
     } else if (!adjustToContentHeight) {
       const height = modalHeight - headerHeight - footerHeight;
 
-      scrollViewHeight.push({ height });
+      contentViewHeight.push({ height });
       this.setState({ keyboardEnableScroll: false });
     }
 
-    this.setState({ scrollViewHeight });
+    this.setState({ contentViewHeight });
   }
 
   private onHandleComponent = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
@@ -497,20 +497,20 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private renderContent = (): React.ReactNode => {
     const { children, scrollViewProps, flatListProps, sectionListProps } = this.props;
-    const { contentHeight, enableBounces, scrollViewHeight, keyboardEnableScroll } = this.state;
+    const { contentHeight, enableBounces, contentViewHeight, keyboardEnableScroll } = this.state;
     const scrollEnabled = contentHeight === 0 || keyboardEnableScroll;
     const keyboardDismissMode = this.isIos ? 'interactive' : 'on-drag';
 
     const opts = {
-      ref: this.scrollView,
-      style: scrollViewHeight,
+      ref: this.contentView,
+      style: contentViewHeight,
       bounces: enableBounces,
       onScrollBeginDrag: Animated.event(
         [{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }],
         { useNativeDriver: false },
       ),
       scrollEventThrottle: 16,
-      onLayout: this.onScrollViewLayout,
+      onLayout: this.onContentViewLayout,
       scrollEnabled,
     };
 
