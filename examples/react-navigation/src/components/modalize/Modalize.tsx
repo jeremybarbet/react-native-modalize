@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View } from 'react-native';
-import { AbsoluteHeader, DefaultContent, FixedContent, SnappingList, CustomStyle } from 'react-native-modalize/shared';
+import { AbsoluteHeader, SimpleContent, FixedContent, SnappingList, CustomStyle, FlatList, SectionList } from 'react-native-modalize/shared';
 
 import { ModalContext, IState } from '../../../App';
 
@@ -9,11 +9,13 @@ interface IProps {
 }
 
 const modals = [
-  { id: 'MODAL_DEFAULT', component: <DefaultContent /> },
+  { id: 'MODAL_SIMPLE', component: <SimpleContent /> },
   { id: 'MODAL_FIXED', component: <FixedContent /> },
   { id: 'MODAL_SNAPPING', component: <SnappingList /> },
   { id: 'MODAL_ABSOLUTE', component: <AbsoluteHeader /> },
   { id: 'MODAL_CUSTOM', component: <CustomStyle /> },
+  { id: 'MODAL_FLAT', component: <FlatList /> },
+  { id: 'MODAL_SECTION', component: <SectionList /> },
 ];
 
 export default class Modalize extends React.PureComponent<IProps> {

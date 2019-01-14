@@ -3,10 +3,12 @@ import Footer from './src/components/footer/Footer';
 import Header from './src/components/header/Header';
 import Layout from './src/components/layout/Layout';
 import AbsoluteHeader from './src/components/modals/AbsoluteHeader';
-import DefaultContent from './src/components/modals/DefaultContent';
+import SimpleContent from './src/components/modals/SimpleContent';
 import FixedContent from './src/components/modals/FixedContent';
 import SnappingList from './src/components/modals/SnappingList';
 import CustomStyle from './src/components/modals/CustomStyle';
+import FlatList from './src/components/modals/FlatList';
+import SectionList from './src/components/modals/SectionList';
 
 export {
   Button,
@@ -14,8 +16,10 @@ export {
   Header,
   Layout,
   AbsoluteHeader,
-  DefaultContent,
+  SimpleContent,
   FixedContent,
   SnappingList,
   CustomStyle,
+  FlatList,
+  SectionList,
 };

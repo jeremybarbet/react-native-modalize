@@ -1,10 +1,10 @@
-import { Animated, ViewStyle, RegisteredStyle } from 'react-native';
+import { Animated, ViewStyle, RegisteredStyle, ScrollViewProps, FlatListProps, SectionListProps } from 'react-native';
 
 export interface IProps {
   /**
    * A React component that will define the content of the modal.
    */
-  children: React.ReactNode;
+  children?: React.ReactNode;
 
   /**
    * A number that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
@@ -45,18 +45,6 @@ export interface IProps {
   adjustToContentHeight?: boolean;
 
   /**
-   * Define if you want to toggle the vertical scroll indicator.
-   * @default false
-   */
-  showsVerticalScrollIndicator?: boolean;
-
-  /**
-   * Define the behavior of the keyboard when having inputs inside the modal.
-   * @default 'never'
-   */
-  keyboardShouldPersistTaps?: 'never' | 'always' | 'handled';
-
-  /**
    * Define the behavior of the keyboard when having inputs inside the modal.
    */
   keyboardAvoidingBehavior?: 'height' | 'position' | 'padding';
@@ -71,6 +59,21 @@ export interface IProps {
    * @default true
    */
   withHandle?: boolean;
+
+  /*
+   * An object to pass any of the react-native ScrollView's props.
+   */
+  scrollViewProps?: ScrollViewProps;
+
+  /*
+   * An object to pass any of the react-native FlatList's props.
+   */
+  flatListProps?: FlatListProps<any>;
+
+  /*
+   * An object to pass any of the react-native SectionList's props.
+   */
+  sectionListProps?: SectionListProps<any>;
 
   /**
    * A header component outside of the ScrollView, on top of the modal.
@@ -145,14 +148,14 @@ export interface IState {
   footerHeight: number;
 
   /**
-   * When we scroll to the bottom of the ScrollView we want the bounce animation but when we reach the top again, we want it disabled. (iOS specific)
+   * When we scroll to the bottom of the ContentView we want the bounce animation but when we reach the top again, we want it disabled. (iOS specific)
    */
   enableBounces: boolean;
 
   /**
-   * Define the ScrollView height. If `header` or `footer` are passed and are not `position: 'absolute'`, theirs heights will be substracted to the ScrollView's height.
+   * Define the ContentView height. If `header` or `footer` are passed and are not `position: 'absolute'`, theirs heights will be substracted to the ContentView's height.
    */
-  scrollViewHeight: ViewStyle[];
+  contentViewHeight: ViewStyle[];
 
   /**
    * Define the scroll has to be enable or not depending of the keyboard status.
@@ -160,7 +163,7 @@ export interface IState {
   keyboardEnableScroll: boolean;
 
   /**
-   * Store if the keyboard is displayed. Used to change the offset on the scrollview when the keyboard is open.
+   * Store if the keyboard is displayed. Used to change the offset on the ContentView when the keyboard is open.
    */
   keyboardToggle: boolean;
 }
