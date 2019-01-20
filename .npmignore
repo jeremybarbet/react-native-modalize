@@ -2,15 +2,16 @@
 #
 .DS_Store
 
-# node.js
+# Node
 #
 node_modules/
 npm-debug.log
 yarn-error.log
 yarn.lock
 
-# misc
+# Misc
 #
+.expo
 .vscode/
 docs/
 examples/
@@ -19,3 +20,5 @@ src/
 post-version.sh
 start.sh
 .watchmanconfig
+tsconfig.json
+tslint.json
