@@ -9,16 +9,16 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "expo": "32.0.0",
+    "expo": "31.0.0",
     "faker": "4.1.0",
     "react": "16.7.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
     "react-native-modalize": "file:../../src",
     "react-native-modalize/shared": "file:../../examples-shared",
     "tslib": "1.9.3"
   },
   "devDependencies": {
-    "@types/expo": "30.0.0",
+    "@types/expo": "31.0.8",
     "@types/faker": "4.1.4",
     "@types/react": "16.7.18",
     "@types/react-native": "0.57.25",

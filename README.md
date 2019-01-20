@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/react-native-modalize.svg)](https://badge.fury.io/js/react-native-modalize)
 
-> 🚨 **Warning** Latest version of `react-native-gesture-handler` makes the scroll/swipe behavior not usable. You need to use `"react-native-gesture-handler": "1.0.9"` and if you are using expo: `"expo": "31.0.0"` and `"react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz"` to make it works properly, I'll fix this asap.
+> 🚨 **Warning** If you are using `expo`, the latest version makes the scroll/swipe behavior not usable. You need to use `"expo": "31.0.0"` and `"react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz"` to make it works properly. I will dig in to see what's the issue.
 
 **This package is still in an early stage, use it with caution.** 🖖
 
