@@ -25,21 +25,21 @@ export default class FlatList extends React.PureComponent<IProps> {
     return [
       {
         title: 'January 2019',
-        data: [...Array(10).keys()].map(_ => ({
+        data: Array(10).fill(0).map(_ => ({
           product: faker.commerce.productName(),
           price: faker.commerce.price(),
         })),
       },
       {
         title: 'December 2018',
-        data: [...Array(12).keys()].map(_ => ({
+        data: Array(12).fill(0).map(_ => ({
           product: faker.commerce.productName(),
           price: faker.commerce.price(),
         })),
       },
       {
         title: 'November 2018',
-        data: [...Array(4).keys()].map(_ => ({
+        data: Array(4).fill(0).map(_ => ({
           product: faker.commerce.productName(),
           price: faker.commerce.price(),
         })),

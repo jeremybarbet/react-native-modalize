@@ -28,7 +28,7 @@ export default class SimpleContent extends React.PureComponent<IProps> {
         style={s.content__scrollview}
         horizontal
       >
-        {[...Array(5).keys()].map((_, i) => (
+        {Array(5).fill(0).map((_, i) => (
           <View
             key={i}
             style={s.content__block}
@@ -40,7 +40,7 @@ export default class SimpleContent extends React.PureComponent<IProps> {
       <Text style={[s.content__subheading, { marginTop: 30 }]}>Vertical ScrollView</Text>
 
       <ScrollView style={[s.content__scrollview, { height: 200 }]}>
-        {[...Array(5).keys()].map((_, i) => (
+        {Array(5).fill(0).map((_, i) => (
           <View
             key={i}
             style={[s.content__block, { width, marginBottom: 20 }]}

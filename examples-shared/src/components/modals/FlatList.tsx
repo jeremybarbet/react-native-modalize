@@ -17,7 +17,7 @@ export default class FlatList extends React.PureComponent<IProps> {
   private modal: React.RefObject<Modalize> = React.createRef();
 
   get data(): IData[] {
-    return [...Array(50).keys()].map(_ => ({
+    return Array(50).fill(0).map(_ => ({
       name: faker.name.findName(),
       email: faker.internet.email(),
     }));

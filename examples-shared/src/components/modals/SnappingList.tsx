@@ -21,7 +21,7 @@ export default class SnappingList extends React.PureComponent<IProps> {
 
   private renderContent = () => (
     <View style={s.content}>
-      {[...Array(50).keys()].map((_, i) => (
+      {Array(50).fill(0).map((_, i) => (
         <View style={s.content__row} key={i}>
           <View style={s.content__avatar}>
             <Image
