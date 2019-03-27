@@ -16,13 +16,17 @@ It resolves the following issues:
 - Scrolling within a ScrollView
 - Handling the keyboard automatically
 
+## Installation
+
+```bash
+yarn add react-native-modalize
+```
+
+Check out [`react-native-gesture-handler`'s documentation](https://kmagiera.github.io/react-native-gesture-handler/docs/getting-started.html) to set it up.
+
 ## Getting Started
 
-The full [documentation is available here](https://jeremybarbet.github.io/react-native-modalize) on GitHub Pages.
-
-## Examples
-
-There is multiple examples runing through differents navigators, with more informations [here](https://jeremybarbet.github.io/react-native-modalize/#/EXAMPLES.md)
+The full [documentation is available here](https://jeremybarbet.github.io/react-native-modalize). There is multiple examples runing through differents navigators, with more informations [here](https://jeremybarbet.github.io/react-native-modalize/#/EXAMPLES.md)
 
 - React Native Navigation: See `examples/react-native-navigation`
 - React Navigation: [See demo](https://expo.io/@jeremdsgn/modalize-react-navigation)
