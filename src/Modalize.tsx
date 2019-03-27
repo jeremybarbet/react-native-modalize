@@ -393,7 +393,13 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private onBackPress = async (): Promise<boolean> => {
-    this.close();
+    const { onBackButtonPress } = this.props;
+
+    if (onBackButtonPress) {
+      onBackButtonPress();
+    } else {
+      this.close();
+    }
 
     return true;
   }

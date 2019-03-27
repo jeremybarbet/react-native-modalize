@@ -104,6 +104,13 @@ export interface IProps {
    * Callback function when the modal is closed.
    */
   onClosed?: () => void;
+
+  /**
+   * onBackButtonPress is called when the user taps the hardware back button on
+   * Android or the menu button on Apple TV. You can any function you want,
+   * but you will have to close the modal by yourself.
+   */
+  onBackButtonPress?: () => void;
 }
 
 export interface IState {
