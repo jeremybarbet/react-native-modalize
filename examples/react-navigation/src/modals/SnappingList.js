@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
-import Button from '../button/Button';
+import { Button } from '../button/Button';
 
 export class SnappingList extends React.PureComponent {
 
