@@ -10,10 +10,10 @@
     "prepublish": "yarn build",
     "lint": "tslint 'src/**/*.ts?(x)' 'examples-shared/src/**/*.ts?(x)'",
     "postversion": "sh ./post-version.sh",
-    "watch:modalize": "yarn cpx 'src/**/**' 'examples-shared/node_modules/react-native-modalize' --watch",
+    "watch:modalize": "yarn tsc --watch",
     "watch:expo": "concurrently \"yarn watch:modalize\" \"yarn cpx 'examples-shared/**/*' 'examples/expo/node_modules/react-native-modalize/shared' --watch\"",
     "watch:react-native-navigation": "concurrently \"yarn watch:modalize\" \"yarn cpx 'examples-shared/**/*' 'examples/react-native-navigation/node_modules/react-native-modalize/shared' --watch\"",
-    "watch:react-navigation": "concurrently \"yarn watch:modalize\" \"yarn cpx 'examples-shared/**/*' 'examples/react-navigation/node_modules/react-native-modalize/shared' --watch\""
+    "watch:react-navigation": "concurrently \"yarn watch:modalize\" \"yarn cpx 'lib/**/*' 'examples/react-navigation/node_modules/react-native-modalize/lib' --watch\""
   },
   "keywords": [
     "react-native",
