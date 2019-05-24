@@ -201,6 +201,10 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private isAbsolute = (Component: React.ReactNode): boolean => {
+    if (!React.isValidElement(Component)) {
+      return false;
+    }
+
     // @ts-ignore
     const style: StyleProp<any> = Component && StyleSheet.flatten(Component().props.style);
 
