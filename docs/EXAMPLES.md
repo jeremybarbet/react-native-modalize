@@ -10,11 +10,10 @@ React Native team will soon remove from the core a lot of components, including 
 
 This is why most of the major navigators implemented theirs owns ways to handle the modal/overlay behavior. Both `react-native-navigation` and `react-navigation` examples are made using a bottom tab bar since it's a very common design pattern and show you how to use `Modalize` according to their documentation.
 
-?> The components are shared between these examples and are used as a local npm package `react-native-modalize/shared` and you can find the source in the `examples-shared` folder.
-
 See below for an explanation of each navigators. Run first in the root folder:
 
 ```bash
+cd react-native-modalize
 yarn
 ```
 
@@ -25,34 +24,25 @@ This is probably the simplest navigator to handle this bevahior. There is a meth
 You can run this example by:
 
 ```bash
-yarn start react-native-navigation
-```
-
-Another tab
-
-```bash
 cd examples/react-native-navigation
-react-native run-ios
-cd ../..
-yarn watch:react-native-navigation
+yarn
+yarn start # tab 1
+yarn watch:react-native-navigation # tab 2
+yarn ios (or android) # tab 3
 ```
 
 ## React Navigation
 
 This example use react-navigation and run under Expo. Modalize is wrapped along the AppNavigator to be able to display the modal on top of the bottom navigator.
 
-> An Expo app is avalaible at the [following link](https://expo.io/@jeremdsgn/modalize-react-navigation).
-
 You can run this example by:
 
 ```bash
-yarn start react-navigation
-```
-
-Another tab
-
-```bash
-yarn watch:react-navigation
+cd examples/react-navigation
+yarn
+yarn start # tab 1
+yarn watch:react-navigation # tab 2
+yarn ios (or android) # tab 3
 ```
 
 ## Expo
