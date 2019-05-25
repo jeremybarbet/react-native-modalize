@@ -6,7 +6,6 @@
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "rm -rf ./lib/* && yarn lint && tsc",
-    "start": "sh ./start.sh",
     "prepublish": "yarn build",
     "lint": "tslint 'src/**/*.ts?(x)'",
     "postversion": "sh ./post-version.sh",

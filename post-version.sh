@@ -2,7 +2,9 @@
 PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')
 
 # Change dependency version on the footer component
-perl -pi -e "s/> — v(.*)/> — v$PACKAGE_VERSION/" ./examples-shared/src/components/footer/Footer.tsx
+perl -pi -e "s/> — v(.*)/> — v$PACKAGE_VERSION/" ./examples/expo/src/footer/Footer.js
+perl -pi -e "s/> — v(.*)/> — v$PACKAGE_VERSION/" ./examples/react-navigation/src/footer/Footer.js
+perl -pi -e "s/> — v(.*)/> — v$PACKAGE_VERSION/" ./examples/react-native-navigation/src/footer/Footer.js
 
 # Remove default tag from npm version
 git tag -d v$PACKAGE_VERSION

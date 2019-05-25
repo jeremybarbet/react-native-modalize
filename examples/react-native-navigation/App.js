@@ -12,7 +12,7 @@ import { CustomStyle } from './src/modals/CustomStyle';
 import { FlatList } from './src/modals/FlatList';
 import { SectionList } from './src/modals/SectionList';
 
-const App = () => {
+export const App = () => {
   const modal = [];
 
   const renderButtons = (links) => {
@@ -28,8 +28,8 @@ const App = () => {
   return (
     <Layout>
       <Header
-        subheading="Run with Expo"
-        copy="Simple example without any navigation"
+        subheading="Run with React Native Navigation"
+        copy="Uses showOverlay method"
       />
 
       {renderButtons([
@@ -53,6 +53,4 @@ const App = () => {
       <SectionList ref={el => { modal[6] = el; }} />
     </Layout>
   );
-}
-
-export default App;
+};

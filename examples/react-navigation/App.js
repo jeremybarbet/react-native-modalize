@@ -28,8 +28,8 @@ export const App = () => {
   return (
     <Layout>
       <Header
-        subheading="Run with Expo"
-        copy="Simple example without any navigation"
+        subheading="Run with React Navigation"
+        copy="Uses StackRoot method"
       />
 
       {renderButtons([

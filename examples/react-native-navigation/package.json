@@ -1,9 +1,11 @@
 {
-  "name": "react-native-navigation",
+  "name": "react-native-navigation-example",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "ios": "react-native run-ios --simulator='iPhone Xs'",
+    "android": "cd ./android && ./gradlew app:assembleDebug && ./gradlew installDebug"
   },
   "dependencies": {
     "faker": "4.1.0",

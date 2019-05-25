@@ -102,7 +102,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.reactnavigation"
+        applicationId "com.reactnavigationexample"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
