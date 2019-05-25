@@ -1,5 +1,5 @@
 {
-  "name": "react-navigation",
+  "name": "react-native-navigation",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -11,7 +11,7 @@
     "react-native": "0.59.8",
     "react-native-gesture-handler": "1.2.1",
     "react-native-modalize": "file:../../src",
-    "react-navigation": "3.11.0"
+    "react-native-navigation": "2.20.2"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",

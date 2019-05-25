@@ -12,7 +12,7 @@ import { CustomStyle } from './src/modals/CustomStyle';
 import { FlatList } from './src/modals/FlatList';
 import { SectionList } from './src/modals/SectionList';
 
-export const App = () => {
+const App = () => {
   const modal = [];
 
   const renderButtons = (links) => {
@@ -53,4 +53,6 @@ export const App = () => {
       <SectionList ref={el => { modal[6] = el; }} />
     </Layout>
   );
-};
+}
+
+export default App;
