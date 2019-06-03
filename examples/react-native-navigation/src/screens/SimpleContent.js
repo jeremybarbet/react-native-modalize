@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TextInput } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { Navigation } from 'react-native-navigation';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
@@ -9,6 +10,10 @@ const { width } = Dimensions.get('window');
 export class SimpleContent extends React.PureComponent {
 
   modal = React.createRef();
+
+  componentDidMount() {
+    this.openModal();
+  }
 
   renderContent = () => [
     <View style={s.content__header} key="0">
@@ -52,11 +57,7 @@ export class SimpleContent extends React.PureComponent {
   ]
 
   onClosed = () => {
-    const { onClosed } = this.props;
-
-    if (onClosed) {
-      onClosed();
-    }
+    Navigation.dismissOverlay(this.props.componentId);
   }
 
   openModal = () => {

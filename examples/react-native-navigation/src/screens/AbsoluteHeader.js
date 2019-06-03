@@ -1,11 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { Navigation } from 'react-native-navigation';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
 export class AbsoluteHeader extends React.PureComponent {
 
   modal = React.createRef();
+
+  componentDidMount() {
+    this.openModal();
+  }
 
   renderHeader = () => (
     <TouchableOpacity
@@ -30,11 +35,7 @@ export class AbsoluteHeader extends React.PureComponent {
   )
 
   onClosed = () => {
-    const { onClosed } = this.props;
-
-    if (onClosed) {
-      onClosed();
-    }
+    Navigation.dismissOverlay(this.props.componentId);
   }
 
   openModal = () => {

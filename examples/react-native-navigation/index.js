@@ -1,16 +1,12 @@
 import { Navigation } from 'react-native-navigation';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 
-import { App } from './App';
+import { Screens, startApp } from './src/screens';
 
-Navigation.registerComponent('navigation.playground.AppScreen', () => gestureHandlerRootHOC(App));
+Screens.forEach((ScreenComponent, key) =>
+  Navigation.registerComponent(key, () => gestureHandlerRootHOC(ScreenComponent)),
+);
 
 Navigation.events().registerAppLaunchedListener(() => {
-  Navigation.setRoot({
-    root: {
-      component: {
-        name: 'navigation.playground.AppScreen',
-      },
-    },
-  });
+  startApp();
 });

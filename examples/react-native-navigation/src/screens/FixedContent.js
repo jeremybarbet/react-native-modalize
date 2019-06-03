@@ -1,11 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
+import { Navigation } from 'react-native-navigation';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
 export class FixedContent extends React.PureComponent {
 
   modal = React.createRef();
+
+  componentDidMount() {
+    this.openModal();
+  }
 
   renderContent = () => {
     return (
@@ -27,11 +32,7 @@ export class FixedContent extends React.PureComponent {
   }
 
   onClosed = () => {
-    const { onClosed } = this.props;
-
-    if (onClosed) {
-      onClosed();
-    }
+    Navigation.dismissOverlay(this.props.componentId);
   }
 
   openModal = () => {

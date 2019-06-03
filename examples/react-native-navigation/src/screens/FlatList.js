@@ -1,11 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { Navigation } from 'react-native-navigation';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
 export class FlatList extends React.PureComponent {
 
   modal = React.createRef();
+
+  componentDidMount() {
+    this.openModal();
+  }
 
   get data() {
     return Array(50).fill(0).map(_ => ({
@@ -22,11 +27,7 @@ export class FlatList extends React.PureComponent {
   )
 
   onClosed = () => {
-    const { onClosed } = this.props;
-
-    if (onClosed) {
-      onClosed();
-    }
+    Navigation.dismissOverlay(this.props.componentId);
   }
 
   openModal = () => {

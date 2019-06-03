@@ -1,13 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
+import { Navigation } from 'react-native-navigation';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
-import { Button } from '../button/Button';
+import { Button } from '../components/button/Button';
 
 export class SnappingList extends React.PureComponent {
 
   modal = React.createRef();
+
+  componentDidMount() {
+    this.openModal();
+  }
 
   renderHeader = () => (
     <View style={s.modal__header}>
@@ -37,11 +42,7 @@ export class SnappingList extends React.PureComponent {
   )
 
   onClosed = () => {
-    const { onClosed } = this.props;
-
-    if (onClosed) {
-      onClosed();
-    }
+    Navigation.dismissOverlay(this.props.componentId);
   }
 
   openModal = () => {
