@@ -8,7 +8,7 @@ These three examples are made to show you:
 
 React Native team will soon remove from the core a lot of components, including the `Modal`. This is why it's not recommended to use [withReactModal](/PROPSMETHODS?id=withreactmodal) props.
 
-This is why most of the major navigators implemented theirs owns ways to handle the modal/overlay behavior. Both `react-native-navigation` and `react-navigation` examples are made using a bottom tab bar since it's a very common design pattern and show you how to use `Modalize` according to their documentation.
+This is why most of the major navigators implemented theirs owns ways to handle the modal/overlay behavior. `react-native-navigation` uses the `showOverlay` method and `react-navigation` is just imported on the screen you want to display the modal.
 
 See below for an explanation of each navigators. Run first in the root folder:
 
@@ -33,7 +33,7 @@ yarn ios (or android) # tab 3
 
 ## React Navigation
 
-This example use react-navigation and run under Expo. Modalize is wrapped along the AppNavigator to be able to display the modal on top of the bottom navigator.
+This example use react-navigation. Modalize is used on the screen you need to toggle it.
 
 You can run this example by:
 
@@ -45,21 +45,8 @@ yarn watch:react-navigation # tab 2
 yarn ios (or android) # tab 3
 ```
 
-## Expo
+## Expo (TODO)
 
 This example is runing under Expo without any navigator. Also, in this example `withReactModal` is `false`, which mean the Modal might be displayed under another component depending where you use it.
 
 > An Expo app is avalaible at the [following link](https://expo.io/@jeremdsgn/modalize-expo).
-
-You can run this example by:
-
-```bash
-yarn start expo
-```
-
-Another tab
-
-```
-yarn watch:expo
-```
-

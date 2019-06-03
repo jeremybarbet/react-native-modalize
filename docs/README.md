@@ -20,4 +20,4 @@ There is multiple examples runing through differents navigators, with more infor
 
 - React Native Navigation `examples/react-native-navigation`
 - React Navigation `examples/react-navigation`
-- Expo `examples/expo`
+- Expo `examples/expo` (TODO)
