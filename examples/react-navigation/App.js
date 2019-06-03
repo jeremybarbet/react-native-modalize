@@ -1,16 +1,16 @@
 import React from 'react';
 
-import { Layout } from './src/layout/Layout';
-import { Header } from './src/header/Header';
-import { Footer } from './src/footer/Footer';
-import { Button } from './src/button/Button';
-import { AbsoluteHeader } from './src/modals/AbsoluteHeader';
-import { SimpleContent } from './src/modals/SimpleContent';
-import { FixedContent } from './src/modals/FixedContent';
-import { SnappingList } from './src/modals/SnappingList';
-import { CustomStyle } from './src/modals/CustomStyle';
-import { FlatList } from './src/modals/FlatList';
-import { SectionList } from './src/modals/SectionList';
+import { Layout } from './src/components/layout/Layout';
+import { Header } from './src/components/header/Header';
+import { Footer } from './src/components/footer/Footer';
+import { Button } from './src/components/button/Button';
+import { AbsoluteHeader } from './src/components/modals/AbsoluteHeader';
+import { SimpleContent } from './src/components/modals/SimpleContent';
+import { FixedContent } from './src/components/modals/FixedContent';
+import { SnappingList } from './src/components/modals/SnappingList';
+import { CustomStyle } from './src/components/modals/CustomStyle';
+import { FlatList } from './src/components/modals/FlatList';
+import { SectionList } from './src/components/modals/SectionList';
 
 export const App = () => {
   const modal = [];
@@ -29,7 +29,7 @@ export const App = () => {
     <Layout>
       <Header
         subheading="Run with React Navigation"
-        copy="Uses StackRoot method"
+        copy="Import your modal on the screen you need"
       />
 
       {renderButtons([
