@@ -5,7 +5,6 @@
 - Guide
   - [Features](/FEATURES)
   - [Props and Methods](/PROPSMETHODS)
-  - [Development](/DEVELOPMENT)
   - [Examples](/EXAMPLES)
   - [Q&A](/QANDA)
 

@@ -14,4 +14,4 @@ In a future version of `react-native`, the `Modal` component will be moved out f
 
 **Can we have more transition and options to customize Modalize?**
 
-This component is very opinionated. I want it first to solves to three most complicated issues of swipping/scrolling and handling a keyboard within the Modal.
+This component is very opinionated. I want it first to solves to three most complicated issues of swipping/scrolling and handling a keyboard within the Modal before adding this kind of feature.
