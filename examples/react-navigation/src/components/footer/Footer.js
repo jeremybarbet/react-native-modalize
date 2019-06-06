@@ -4,7 +4,7 @@ import { View, StyleSheet, Text, Linking } from 'react-native';
 export const Footer = () => (
   <View style={s.footer}>
     <Text style={s.footer__copy}>
-      Created by <Text style={s.footer__author} onPress={() => Linking.openURL('https://github.com/jeremybarbet')}>Jérémy Barbet</Text> — v1.0.0-alpha.23
+      Created by <Text style={s.footer__author} onPress={() => Linking.openURL('https://github.com/jeremybarbet')}>Jérémy Barbet</Text> — v1.0.0
     </Text>
   </View>
 );
