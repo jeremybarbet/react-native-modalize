@@ -6,7 +6,7 @@ A React component that will define the content of the modal.
 
 By passing a children props it will use the default `ScrollView` component. However, if you want to use a `FlatList` or a `SectionList` check the details [here](/PROPSMETHODS.md?id=flatListProps) and [here](/PROPSMETHODS.md?id=sectionListProps).
 
-?> If you want to use another ScrollView inside the modal, check the **Default Content** example: `examples-shared/src/components/modals/SimpleContent.tsx`. It uses the ScrollView from `react-native-gesture-handler`.
+?> If you want to use another ScrollView inside the modal, check the **Default Content** example: `examples/expo/src/modals/SimpleContent.tsx`. It uses the ScrollView from `react-native-gesture-handler`.
 
 | Type     | Required |
 | -------- | -------- |

@@ -9,33 +9,32 @@ import Modalize from 'react-native-modalize';
 **2. Add the modal in your render function, and use the `open` method to open the modal**
 
 ```jsx
-import * as React from 'react';
+import React, { useRef } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Modalize from 'react-native-modalize';
 
-export default class MyApp extends React.PureComponent {
+export const MyApp = () => {
+  const modalRef = useRef<Modalize>(null);
 
-  modal = React.createRef();
+  const onOpen = () => {
+    const modal = modalRef.current;
 
-  onOpen = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
+    if (modal) {
+      modal.open();
     }
-  }
+  };
 
-  render () {
-    return (
-      <View>
-        <TouchableOpacity onPress={this.onOpen}>
-          <Text>Open the modal</Text>
-        </TouchableOpacity>
+  return (
+    <>
+      <TouchableOpacity onPress={onOpen}>
+        <Text>Open the modal</Text>
+      </TouchableOpacity>
 
-        <Modalize ref={this.modal}>
-          ...your content
-        </Modalize>
-      </View>
-    );
-  }
+      <Modalize ref={modalRef}>
+        ...your content
+      </Modalize>
+    </>
+  );
 }
 ```
 

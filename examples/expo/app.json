@@ -1,19 +1,19 @@
 {
   "expo": {
-    "name": "modalize-expo",
-    "description": "An example of Modalize using Expo.",
-    "slug": "modalize-expo",
+    "name": "expo-example",
+    "slug": "expo-example",
     "privacy": "public",
-    "sdkVersion": "31.0.0",
+    "sdkVersion": "33.0.0",
     "platforms": [
       "ios",
-      "android"
+      "android",
+      "web"
     ],
-    "version": "0.0.1",
+    "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/icon.png",
+    "icon": "./assets/icon.png",
     "splash": {
-      "image": "./src/assets/splash.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,11 +21,10 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
-      "./src/assets/*"
+      "**/*"
     ],
     "ios": {
       "supportsTablet": true
-    },
-    "githubUrl": "https://github.com/jeremybarbet/react-native-modalize"
+    }
   }
 }

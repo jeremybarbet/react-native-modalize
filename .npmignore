@@ -15,10 +15,8 @@ yarn.lock
 .vscode/
 docs/
 examples/
-examples-shared/
 src/
 post-version.sh
-start.sh
 .watchmanconfig
 tsconfig.json
 tslint.json

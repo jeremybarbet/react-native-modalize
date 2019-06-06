@@ -1,30 +1,23 @@
 {
-  "name": "modalize-with-expo",
   "main": "node_modules/expo/AppEntry.js",
-  "private": true,
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
+    "web": "expo start --web",
     "eject": "expo eject"
   },
   "dependencies": {
-    "expo": "31.0.0",
+    "expo": "^33.0.0",
     "faker": "4.1.0",
-    "react": "16.7.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
+    "react": "16.8.3",
+    "react-dom": "^16.8.6",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
     "react-native-modalize": "file:../../src",
-    "react-native-modalize/shared": "file:../../examples-shared",
-    "tslib": "1.9.3"
+    "react-native-web": "^0.11.4"
   },
   "devDependencies": {
-    "@types/expo": "31.0.8",
-    "@types/faker": "4.1.4",
-    "@types/react": "16.7.18",
-    "@types/react-native": "0.57.25",
-    "babel-preset-expo": "5.0.0",
-    "react-native-typescript-transformer": "1.2.10",
-    "schedule": "0.4.0",
-    "typescript": "3.2.2"
-  }
+    "babel-preset-expo": "^5.1.1"
+  },
+  "private": true
 }
