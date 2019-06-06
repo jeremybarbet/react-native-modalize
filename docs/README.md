@@ -4,9 +4,7 @@
 
 A modal that loves scrollable content.
 
-This component has been built with `react-native-gesture-handler` to address the common issue of **scrolling**, **swipping** and handling the **keyboard** behaviors, you can face with react-native's modal.
-
-This component comes with a ScrollView, the default content renderer, a FlatList and a SectionList. They are all three built-in and make your life easier, just pass your content and Modalize will handle the rest for you.
+This component has been built with `react-native-gesture-handler` to address the common issue of **scrolling**, **swipping** and handling the **keyboard** behaviors, you can face with react-native's modal. This component comes with a ScrollView, the default content renderer, a FlatList and a SectionList. They are all three built-in and make your life easier, just pass your content and Modalize will handle the rest for you.
 
 <p align="left">
   <img src="https://user-images.githubusercontent.com/937328/48359862-ca19bc80-e695-11e8-9e66-6ed182f3dd87.gif" height="532" />
