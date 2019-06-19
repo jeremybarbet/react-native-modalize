@@ -11,6 +11,7 @@ import { SnappingList } from './src/components/modals/SnappingList';
 import { CustomStyle } from './src/components/modals/CustomStyle';
 import { FlatList } from './src/components/modals/FlatList';
 import { SectionList } from './src/components/modals/SectionList';
+import { AlwaysOpen } from './src/components/modals/AlwaysOpen';
 
 export default () => {
   const modal = [];
@@ -40,6 +41,7 @@ export default () => {
         'Modal with custom style',
         'Modal with a Flat List',
         'Modal with a Section List',
+        'Modal always open',
       ])}
 
       <Footer />
@@ -51,6 +53,7 @@ export default () => {
       <CustomStyle ref={el => { modal[4] = el; }} />
       <FlatList ref={el => { modal[5] = el; }} />
       <SectionList ref={el => { modal[6] = el; }} />
+      <AlwaysOpen ref={el => { modal[7] = el; }} />
     </Layout>
   );
 };

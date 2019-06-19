@@ -100,6 +100,10 @@ export default class Modalize extends React.Component<IProps, IState> {
       new Animated.Value(-1),
       this.beginScrollY,
     );
+
+    if (props.alwaysOpen) {
+      this.onAnimateOpen(props.alwaysOpen);
+    }
   }
 
   componentDidMount() {
@@ -211,10 +215,10 @@ export default class Modalize extends React.Component<IProps, IState> {
     return style && style.position === 'absolute';
   }
 
-  private onAnimateOpen = (): void => {
+  private onAnimateOpen = (alwaysOpen?: number): void => {
     const { onOpened, height, useNativeDriver } = this.props;
     const { overlay, modalHeight } = this.state;
-    const toValue = height ? modalHeight - height : 0;
+    const toValue = alwaysOpen ? alwaysOpen : height ? modalHeight - height : 0;
 
     this.setState({
       isVisible: true,
