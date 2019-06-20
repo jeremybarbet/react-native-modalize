@@ -22,6 +22,16 @@ The value you pass is the height of the modal before being full opened.
 | -------- | -------- |
 | number   | No       |
 
+### `alwaysOpen`
+
+A number that will make the modal visible all the time. You can still [open](/PROPSMETHODS.md?id=open) and [close](/PROPSMETHODS.md?id=close) it, using the build-in methods.
+
+The value you pass is the height of the visible part of the modal on top of the screen.
+
+| Type     | Required |
+| -------- | -------- |
+| number   | No       |
+
 ### `handlePosition`
 
 Define where the handle on top of the modal should be positioned.

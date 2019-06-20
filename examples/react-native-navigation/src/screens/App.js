@@ -4,8 +4,9 @@ import { Navigation } from 'react-native-navigation';
 import { ABSOLUTE_HEADER, CUSTOM_STYLE, FIXED_CONTENT, FLAT_LIST, SECTION_LIST, SIMPLE_CONTENT, SNAPPING_LIST } from '../screens';
 import { Layout } from '../components/layout/Layout';
 import { Header } from '../components/header/Header';
-import { Footer } from '../components/footer/Footer';
 import { Button } from '../components/button/Button';
+
+import { AlwaysOpen } from './AlwaysOpen';
 
 export const App = () => {
   const handleOverlay = (name) => {
@@ -29,10 +30,7 @@ export const App = () => {
 
   return (
     <Layout>
-      <Header
-        subheading="Run with React Native Navigation"
-        copy="Uses showOverlay method"
-      />
+      <Header subheading="Run with React Native Navigation" />
 
       {renderButtons([
         { name: 'Modal with a simple content', id: SIMPLE_CONTENT },
@@ -44,7 +42,7 @@ export const App = () => {
         { name: 'Modal with a Section List', id: SECTION_LIST },
       ])}
 
-      <Footer />
+      <AlwaysOpen />
     </Layout>
   );
 };

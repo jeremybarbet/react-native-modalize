@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Linking } from 'react-native';
 
-export const Header = ({ subheading, copy }) => (
+export const Header = ({ subheading }) => (
   <View style={s.header}>
     <Text style={s.header__heading}>Modalize</Text>
     <Text style={s.header__subheading}>{subheading}</Text>
-    <Text style={s.header__copy}>{copy}</Text>
+
+    <Text style={s.header__copy}>
+      Created by <Text style={s.header__author} onPress={() => Linking.openURL('https://github.com/jeremybarbet')}>Jérémy Barbet</Text> — v1.0.0
+    </Text>
   </View>
 );
 
@@ -36,8 +39,12 @@ const s = StyleSheet.create({
     marginTop: 20,
     marginHorizontal: 40,
 
-    fontSize: 16,
+    fontSize: 14,
     color: '#b5b5b5',
     textAlign: 'center',
+  },
+
+  header__author: {
+    color: '#404040',
   },
 });

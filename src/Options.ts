@@ -12,6 +12,11 @@ export interface IProps {
   height?: number;
 
   /**
+   * Using this props will show the modal all the time, and the number represents how expanded the modal has to be
+   */
+  alwaysOpen?: number;
+
+  /**
    * Define where the handle on top of the modal should be positioned.
    * @default 'outside'
    */
