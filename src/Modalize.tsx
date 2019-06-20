@@ -100,10 +100,6 @@ export default class Modalize extends React.Component<IProps, IState> {
       new Animated.Value(-1),
       this.beginScrollY,
     );
-
-    // if (props.alwaysOpen) {
-    //   this.onAnimateOpen(props.alwaysOpen);
-    // }
   }
 
   componentDidMount() {
@@ -344,7 +340,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
     const { height, useNativeDriver, adjustToContentHeight, alwaysOpen } = this.props;
-    const { lastSnap, contentHeight, modalHeight } = this.state;
+    const { lastSnap, contentHeight, modalHeight, overlay } = this.state;
     const { velocityY, translationY } = nativeEvent;
 
     this.setState({ enableBounces: this.beginScrollYValue > 0 || translationY < 0 });
@@ -392,6 +388,15 @@ export default class Modalize extends React.Component<IProps, IState> {
       this.translateY.setValue(toValue);
       this.translateY.flattenOffset();
       this.dragY.setValue(0);
+
+      if (alwaysOpen) {
+        Animated.timing(overlay, {
+          toValue: Number(destSnapPoint <= 0),
+          duration: 280,
+          easing: Easing.ease,
+          useNativeDriver,
+        }).start();
+      }
 
       Animated.spring(this.translateY, {
         velocity: velocityY,
