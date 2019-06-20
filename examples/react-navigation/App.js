@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Layout } from './src/components/layout/Layout';
 import { Header } from './src/components/header/Header';
-import { Footer } from './src/components/footer/Footer';
 import { Button } from './src/components/button/Button';
 import { AbsoluteHeader } from './src/components/modals/AbsoluteHeader';
 import { SimpleContent } from './src/components/modals/SimpleContent';
@@ -11,6 +10,7 @@ import { SnappingList } from './src/components/modals/SnappingList';
 import { CustomStyle } from './src/components/modals/CustomStyle';
 import { FlatList } from './src/components/modals/FlatList';
 import { SectionList } from './src/components/modals/SectionList';
+import { AlwaysOpen } from './src/components/modals/AlwaysOpen';
 
 export const App = () => {
   const modal = [];
@@ -27,10 +27,7 @@ export const App = () => {
 
   return (
     <Layout>
-      <Header
-        subheading="Run with React Navigation"
-        copy="Import your modal on the screen you need"
-      />
+      <Header subheading="Run with React Navigation" />
 
       {renderButtons([
         'Modal with a simple content',
@@ -42,8 +39,6 @@ export const App = () => {
         'Modal with a Section List',
       ])}
 
-      <Footer />
-
       <SimpleContent ref={el => { modal[0] = el; }} />
       <FixedContent ref={el => { modal[1] = el; }} />
       <SnappingList ref={el => { modal[2] = el; }} />
@@ -51,6 +46,7 @@ export const App = () => {
       <CustomStyle ref={el => { modal[4] = el; }} />
       <FlatList ref={el => { modal[5] = el; }} />
       <SectionList ref={el => { modal[6] = el; }} />
+      <AlwaysOpen />
     </Layout>
   );
 };
