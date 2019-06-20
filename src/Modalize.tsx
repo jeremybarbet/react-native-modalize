@@ -101,13 +101,17 @@ export default class Modalize extends React.Component<IProps, IState> {
       this.beginScrollY,
     );
 
-    if (props.alwaysOpen) {
-      this.onAnimateOpen(props.alwaysOpen);
-    }
+    // if (props.alwaysOpen) {
+    //   this.onAnimateOpen(props.alwaysOpen);
+    // }
   }
 
   componentDidMount() {
     this.onContentViewChange();
+
+    if (this.props.alwaysOpen) {
+      this.onAnimateOpen(this.props.alwaysOpen);
+    }
 
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
     Keyboard.addListener('keyboardWillShow', this.onKeyboardShow);
@@ -218,7 +222,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   private onAnimateOpen = (alwaysOpen?: number): void => {
     const { onOpened, height, useNativeDriver } = this.props;
     const { overlay, modalHeight } = this.state;
-    const toValue = alwaysOpen ? alwaysOpen : height ? modalHeight - height : 0;
+    const toValue = alwaysOpen ? modalHeight - alwaysOpen : height ? modalHeight - height : 0;
 
     this.setState({
       isVisible: true,
@@ -227,7 +231,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
     Animated.parallel([
       Animated.timing(overlay, {
-        toValue: 1,
+        toValue: alwaysOpen ? 0 : 1,
         duration: 280,
         easing: Easing.ease,
         useNativeDriver,
@@ -339,8 +343,8 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
-    const { height, useNativeDriver, adjustToContentHeight } = this.props;
-    const { lastSnap, contentHeight } = this.state;
+    const { height, useNativeDriver, adjustToContentHeight, alwaysOpen } = this.props;
+    const { lastSnap, contentHeight, modalHeight } = this.state;
     const { velocityY, translationY } = nativeEvent;
 
     this.setState({ enableBounces: this.beginScrollYValue > 0 || translationY < 0 });
@@ -349,7 +353,7 @@ export default class Modalize extends React.Component<IProps, IState> {
       const toValue = translationY - this.beginScrollYValue;
       let destSnapPoint = 0;
 
-      if (height) {
+      if (height || alwaysOpen) {
         const dragToss = 0.05;
         const endOffsetY = lastSnap + toValue + dragToss * velocityY;
 
@@ -360,7 +364,11 @@ export default class Modalize extends React.Component<IProps, IState> {
             destSnapPoint = snap;
             this.willCloseModalize = false;
 
-            if (snap === this.snapEnd) {
+            if (alwaysOpen) {
+              destSnapPoint = modalHeight - alwaysOpen;
+            }
+
+            if (snap === this.snapEnd && !alwaysOpen) {
               this.willCloseModalize = true;
               this.close();
             }
@@ -368,7 +376,8 @@ export default class Modalize extends React.Component<IProps, IState> {
         });
       } else if (
         translationY > (adjustToContentHeight ? contentHeight / 3 : THRESHOLD) &&
-        this.beginScrollYValue === 0
+        this.beginScrollYValue === 0 &&
+        !alwaysOpen
       ) {
         this.willCloseModalize = true;
         this.close();
@@ -602,8 +611,9 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private renderOverlay = (): React.ReactNode => {
-    const { useNativeDriver, overlayStyle } = this.props;
+    const { useNativeDriver, overlayStyle, alwaysOpen } = this.props;
     const { showContent } = this.state;
+    const pointerEvents = alwaysOpen ? 'box-none' : 'auto';
 
     return (
       <PanGestureHandler
@@ -616,7 +626,10 @@ export default class Modalize extends React.Component<IProps, IState> {
         )}
         onHandlerStateChange={this.onHandleChildren}
       >
-        <Animated.View style={s.overlay}>
+        <Animated.View
+          style={s.overlay}
+          pointerEvents={pointerEvents}
+        >
           {showContent && (
             <TapGestureHandler
               ref={this.modalOverlayTap}
@@ -624,7 +637,10 @@ export default class Modalize extends React.Component<IProps, IState> {
               simultaneousHandlers={this.modalOverlay}
               onHandlerStateChange={this.onHandleOverlay}
             >
-              <Animated.View style={[s.overlay__background, overlayStyle, this.overlayBackground]} />
+              <Animated.View
+                style={[s.overlay__background, overlayStyle, this.overlayBackground]}
+                pointerEvents={pointerEvents}
+              />
             </TapGestureHandler>
           )}
         </Animated.View>
@@ -633,16 +649,17 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private renderModalize = (): React.ReactNode => {
-    const { style, adjustToContentHeight, keyboardAvoidingBehavior } = this.props;
+    const { style, adjustToContentHeight, keyboardAvoidingBehavior, alwaysOpen } = this.props;
     const { isVisible, lastSnap, showContent } = this.state;
     const enabled = this.isIos && adjustToContentHeight;
+    const pointerEvents = alwaysOpen ? 'box-none' : 'auto';
 
     if (!isVisible) {
       return null;
     }
 
     return (
-      <View style={s.modalize}>
+      <View style={s.modalize} pointerEvents={pointerEvents}>
         <TapGestureHandler
           ref={this.modal}
           maxDurationMs={100000}
