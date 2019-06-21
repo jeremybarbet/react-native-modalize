@@ -109,13 +109,11 @@ export default class Modalize extends React.Component<IProps, IState> {
       this.onAnimateOpen(this.props.alwaysOpen);
     }
 
-    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
     Keyboard.addListener('keyboardWillShow', this.onKeyboardShow);
     Keyboard.addListener('keyboardWillHide', this.onKeyboardHide);
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
     Keyboard.removeListener('keyboardWillShow', this.onKeyboardShow);
     Keyboard.removeListener('keyboardWillHide', this.onKeyboardHide);
   }
@@ -220,6 +218,8 @@ export default class Modalize extends React.Component<IProps, IState> {
     const { overlay, modalHeight } = this.state;
     const toValue = alwaysOpen ? modalHeight - alwaysOpen : height ? modalHeight - height : 0;
 
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+
     this.setState({
       isVisible: true,
       showContent: true,
@@ -249,6 +249,8 @@ export default class Modalize extends React.Component<IProps, IState> {
     const { onClosed, useNativeDriver, height } = this.props;
     const { overlay } = this.state;
     const lastSnap = height ? this.snaps[1] : 0;
+
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
 
     this.beginScrollYValue = 0;
     this.beginScrollY.setValue(0);
@@ -415,7 +417,11 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private onBackPress = async (): Promise<boolean> => {
-    const { onBackButtonPress } = this.props;
+    const { onBackButtonPress, alwaysOpen } = this.props;
+
+    if (alwaysOpen) {
+      return false;
+    }
 
     if (onBackButtonPress) {
       onBackButtonPress();
