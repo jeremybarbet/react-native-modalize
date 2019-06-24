@@ -83,4 +83,4 @@ yarn watch:expo
 </p>
 </details>
 
-?> An Expo app is avalaible at the [following link](https://expo.io/@jeremdsgn/modalize-expo).
+?> An Expo app is avalaible at the [following link](https://exp.host/@jeremdsgn/react-native-modalize).

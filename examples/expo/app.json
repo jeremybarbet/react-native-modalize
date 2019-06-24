@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "expo-example",
-    "slug": "expo-example",
+    "name": "react-native-modalize",
+    "slug": "react-native-modalize",
     "privacy": "public",
     "sdkVersion": "33.0.0",
     "platforms": [
