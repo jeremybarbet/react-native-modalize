@@ -20,6 +20,8 @@ export default class Modalize extends React.Component<IProps, IState> {
     adjustToContentHeight: false,
     withReactModal: false,
     withHandle: true,
+    onAnimateOpenDuration: 280,
+    onAnimateCloseDuration: 280
   };
 
   private snaps: number[] = [];
@@ -42,7 +44,9 @@ export default class Modalize extends React.Component<IProps, IState> {
     super(props);
 
     const height = this.isIos ? screenHeight : screenHeight - 10;
-    const modalHeight = height - this.handleHeight - (this.isIphoneX ? 34 : 0);
+    const modalHeight = props.modalHeight
+      ? props.modalHeight
+      : height - this.handleHeight - (this.isIphoneX ? 34 : 0);
 
     if (props.withReactModal) {
       console.warn(
@@ -214,7 +218,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private onAnimateOpen = (alwaysOpen?: number): void => {
-    const { onOpened, height, useNativeDriver } = this.props;
+    const { onOpened, height, useNativeDriver, onAnimateOpenDuration } = this.props;
     const { overlay, modalHeight } = this.state;
     const toValue = alwaysOpen ? modalHeight - alwaysOpen : height ? modalHeight - height : 0;
 
@@ -228,7 +232,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     Animated.parallel([
       Animated.timing(overlay, {
         toValue: alwaysOpen ? 0 : 1,
-        duration: 280,
+        duration: onAnimateOpenDuration,
         easing: Easing.ease,
         useNativeDriver,
       }),
@@ -246,7 +250,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private onAnimateClose = (): void => {
-    const { onClosed, useNativeDriver, height } = this.props;
+    const { onClosed, useNativeDriver, height, onAnimateCloseDuration } = this.props;
     const { overlay } = this.state;
     const lastSnap = height ? this.snaps[1] : 0;
 
@@ -258,14 +262,14 @@ export default class Modalize extends React.Component<IProps, IState> {
     Animated.parallel([
       Animated.timing(overlay, {
         toValue: 0,
-        duration: 280,
+        duration: onAnimateCloseDuration,
         easing: Easing.ease,
         useNativeDriver,
       }),
 
       Animated.timing(this.translateY, {
         toValue: screenHeight,
-        duration: 280,
+        duration: onAnimateCloseDuration,
         easing: Easing.out(Easing.ease),
         useNativeDriver,
       }),

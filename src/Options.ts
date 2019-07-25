@@ -12,6 +12,11 @@ export interface IProps {
   height?: number;
 
   /**
+   * A number that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
+   */
+  modalHeight?: number;
+
+  /**
    * Using this props will show the modal all the time, and the number represents how expanded the modal has to be
    */
   alwaysOpen?: number;
