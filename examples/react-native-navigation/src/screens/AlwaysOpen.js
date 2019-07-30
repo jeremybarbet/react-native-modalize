@@ -19,7 +19,7 @@ export class AlwaysOpen extends React.PureComponent {
     return (
       <Modalize
         ref={this.modal}
-        style={s.content__modal}
+        modalStyle={s.content__modal}
         alwaysOpen={85}
         handlePosition="inside"
       >

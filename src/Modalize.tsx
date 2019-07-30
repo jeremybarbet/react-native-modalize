@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { Animated, View, Platform, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules, StyleSheet, ScrollView, FlatList, SectionList } from 'react-native';
+import { Animated, View, Dimensions, Modal, Easing, LayoutChangeEvent, StyleProp, BackHandler, KeyboardAvoidingView, Keyboard, NativeModules, ScrollView, FlatList, SectionList } from 'react-native';
 import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler, PanGestureHandlerStateChangeEvent, TapGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 import { IProps, IState } from './Options';
+import { getSpringConfig, isIphoneX, isIos, hasAbsoluteStyle } from './utils';
 import s from './Modalize.styles';
 
 const { StatusBarManager } = NativeModules;
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
@@ -20,6 +21,14 @@ export default class Modalize extends React.Component<IProps, IState> {
     adjustToContentHeight: false,
     withReactModal: false,
     withHandle: true,
+    openAnimationConfig: {
+      timing: { duration: 280 },
+      spring: { speed: 14, bounciness: 5 },
+    },
+    closeAnimationConfig: {
+      timing: { duration: 280 },
+      spring: { speed: 14, bounciness: 5 },
+    },
   };
 
   private snaps: number[] = [];
@@ -41,8 +50,9 @@ export default class Modalize extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-    const height = this.isIos ? screenHeight : screenHeight - 10;
-    const modalHeight = height - this.handleHeight - (this.isIphoneX ? 34 : 0);
+    const fullHeight = isIos() ? screenHeight : screenHeight - 10;
+    const computedHeight = fullHeight - this.handleHeight - (isIphoneX() ? 34 : 0);
+    const modalHeight = props.modalHeight || computedHeight;
 
     if (props.withReactModal) {
       console.warn(
@@ -69,8 +79,8 @@ export default class Modalize extends React.Component<IProps, IState> {
       );
     }
 
-    if (props.height) {
-      this.snaps.push(0, modalHeight - props.height, modalHeight);
+    if (props.snapPoint) {
+      this.snaps.push(0, modalHeight - props.snapPoint, modalHeight);
     } else {
       this.snaps.push(0, modalHeight);
     }
@@ -78,7 +88,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     this.snapEnd = this.snaps[this.snaps.length - 1];
 
     this.state = {
-      lastSnap: props.height ? modalHeight - props.height : 0,
+      lastSnap: props.snapPoint ? modalHeight - props.snapPoint : 0,
       isVisible: false,
       showContent: true,
       overlay: new Animated.Value(0),
@@ -144,17 +154,6 @@ export default class Modalize extends React.Component<IProps, IState> {
     }
   }
 
-  private get isIos(): boolean {
-    return Platform.OS === 'ios';
-  }
-
-  private get isIphoneX(): boolean {
-    // @ts-ignore
-    const isIphone = this.isIos && !Platform.isPad && !Platform.isTVOS;
-
-    return isIphone && ((screenHeight === 812 || screenWidth === 812) || (screenHeight === 896 || screenWidth === 896));
-  }
-
   private get isHandleOutside(): boolean {
     const { handlePosition } = this.props;
 
@@ -202,21 +201,11 @@ export default class Modalize extends React.Component<IProps, IState> {
     };
   }
 
-  private isAbsolute = (Component: React.ReactNode): boolean => {
-    if (!React.isValidElement(Component)) {
-      return false;
-    }
-
-    // @ts-ignore
-    const style: StyleProp<any> = Component && StyleSheet.flatten(Component().props.style);
-
-    return style && style.position === 'absolute';
-  }
-
   private onAnimateOpen = (alwaysOpen?: number): void => {
-    const { onOpened, height, useNativeDriver } = this.props;
+    const { onOpened, snapPoint, useNativeDriver, openAnimationConfig } = this.props;
+    const { timing, spring } = openAnimationConfig!;
     const { overlay, modalHeight } = this.state;
-    const toValue = alwaysOpen ? modalHeight - alwaysOpen : height ? modalHeight - height : 0;
+    const toValue = alwaysOpen ? modalHeight - alwaysOpen : snapPoint ? modalHeight - snapPoint : 0;
 
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
 
@@ -228,14 +217,14 @@ export default class Modalize extends React.Component<IProps, IState> {
     Animated.parallel([
       Animated.timing(overlay, {
         toValue: alwaysOpen ? 0 : 1,
-        duration: 280,
+        duration: timing.duration,
         easing: Easing.ease,
         useNativeDriver,
       }),
 
       Animated.spring(this.translateY, {
+        ...getSpringConfig(spring),
         toValue,
-        bounciness: 5,
         useNativeDriver,
       }),
     ]).start(() => {
@@ -246,9 +235,10 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private onAnimateClose = (): void => {
-    const { onClosed, useNativeDriver, height } = this.props;
+    const { onClosed, useNativeDriver, snapPoint, closeAnimationConfig } = this.props;
+    const { timing, spring } = closeAnimationConfig!;
     const { overlay } = this.state;
-    const lastSnap = height ? this.snaps[1] : 0;
+    const lastSnap = snapPoint ? this.snaps[1] : 0;
 
     BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
 
@@ -258,15 +248,14 @@ export default class Modalize extends React.Component<IProps, IState> {
     Animated.parallel([
       Animated.timing(overlay, {
         toValue: 0,
-        duration: 280,
+        duration: timing.duration,
         easing: Easing.ease,
         useNativeDriver,
       }),
 
-      Animated.timing(this.translateY, {
+      Animated.spring(this.translateY, {
+        ...getSpringConfig(spring),
         toValue: screenHeight,
-        duration: 280,
-        easing: Easing.out(Easing.ease),
         useNativeDriver,
       }),
     ]).start(() => {
@@ -287,13 +276,13 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private onContentViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
-    const { adjustToContentHeight, height } = this.props;
+    const { adjustToContentHeight, snapPoint } = this.props;
     const { contentHeight, modalHeight } = this.state;
 
     if (
       !adjustToContentHeight ||
       modalHeight <= nativeEvent.layout.height ||
-      height ||
+      snapPoint ||
       this.contentAlreadyCalculated
     ) {
       return;
@@ -315,7 +304,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     const contentViewHeight = [];
 
     if (keyboardHeight) {
-      const statusBarHeight = this.isIphoneX ? 48 : this.isIos ? 20 : StatusBarManager.HEIGHT;
+      const statusBarHeight = isIphoneX() ? 48 : isIos() ? 20 : StatusBarManager.HEIGHT;
       const height = screenHeight - keyboardHeight - headerHeight - footerHeight - this.handleHeight - statusBarHeight;
 
       if (contentHeight > height) {
@@ -341,7 +330,8 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
-    const { height, useNativeDriver, adjustToContentHeight, alwaysOpen } = this.props;
+    const { snapPoint, useNativeDriver, adjustToContentHeight, alwaysOpen, closeAnimationConfig } = this.props;
+    const { timing, spring } = closeAnimationConfig!;
     const { lastSnap, contentHeight, modalHeight, overlay } = this.state;
     const { velocityY, translationY } = nativeEvent;
 
@@ -351,7 +341,7 @@ export default class Modalize extends React.Component<IProps, IState> {
       const toValue = translationY - this.beginScrollYValue;
       let destSnapPoint = 0;
 
-      if (height || alwaysOpen) {
+      if (snapPoint || alwaysOpen) {
         const dragToss = 0.05;
         const endOffsetY = lastSnap + toValue + dragToss * velocityY;
 
@@ -394,16 +384,15 @@ export default class Modalize extends React.Component<IProps, IState> {
       if (alwaysOpen) {
         Animated.timing(overlay, {
           toValue: Number(destSnapPoint <= 0),
-          duration: 280,
+          duration: timing.duration,
           easing: Easing.ease,
           useNativeDriver,
         }).start();
       }
 
       Animated.spring(this.translateY, {
+        ...getSpringConfig(spring),
         velocity: velocityY,
-        tension: 50,
-        friction: 12,
         toValue: destSnapPoint,
         useNativeDriver,
       }).start();
@@ -449,7 +438,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     const element = React.isValidElement(Component) ? Component : <Component />;
 
     // We don't need to calculate header and footer if they are absolutely positioned
-    if (Component && this.isAbsolute(Component)) {
+    if (Component && hasAbsoluteStyle(Component)) {
       return element;
     }
 
@@ -505,7 +494,7 @@ export default class Modalize extends React.Component<IProps, IState> {
       return null;
     }
 
-    if (this.isAbsolute(HeaderComponent)) {
+    if (hasAbsoluteStyle(HeaderComponent)) {
       return this.renderComponent(HeaderComponent, 'header');
     }
 
@@ -533,7 +522,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     const { children, scrollViewProps, flatListProps, sectionListProps } = this.props;
     const { contentHeight, enableBounces, contentViewHeight, keyboardEnableScroll } = this.state;
     const scrollEnabled = contentHeight === 0 || keyboardEnableScroll;
-    const keyboardDismissMode = this.isIos ? 'interactive' : 'on-drag';
+    const keyboardDismissMode = isIos() ? 'interactive' : 'on-drag';
 
     const opts = {
       ref: this.contentView,
@@ -581,7 +570,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     const { useNativeDriver, adjustToContentHeight, keyboardAvoidingBehavior } = this.props;
     const { keyboardToggle } = this.state;
     const marginBottom = adjustToContentHeight ? 0 : keyboardToggle ? this.handleHeight : 0;
-    const enabled = this.isIos && !adjustToContentHeight;
+    const enabled = isIos() && !adjustToContentHeight;
 
     return (
       <PanGestureHandler
@@ -660,9 +649,9 @@ export default class Modalize extends React.Component<IProps, IState> {
   }
 
   private renderModalize = (): React.ReactNode => {
-    const { style, adjustToContentHeight, keyboardAvoidingBehavior, alwaysOpen } = this.props;
+    const { modalStyle, adjustToContentHeight, keyboardAvoidingBehavior, alwaysOpen } = this.props;
     const { isVisible, lastSnap, showContent } = this.state;
-    const enabled = this.isIos && adjustToContentHeight;
+    const enabled = isIos() && adjustToContentHeight;
     const pointerEvents = alwaysOpen ? 'box-none' : 'auto';
 
     if (!isVisible) {
@@ -682,7 +671,7 @@ export default class Modalize extends React.Component<IProps, IState> {
           >
             {showContent && (
               <AnimatedKeyboardAvoidingView
-                style={[s.modalize__content, this.modalizeContent, style]}
+                style={[s.modalize__content, this.modalizeContent, modalStyle]}
                 behavior={keyboardAvoidingBehavior || 'padding'}
                 enabled={enabled}
               >

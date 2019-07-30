@@ -33,10 +33,19 @@ export class CustomStyle extends React.PureComponent {
       <Modalize
         ref={this.modal}
         onClosed={this.onClosed}
-        style={s.modal}
+        modalStyle={s.modal}
+        modalHeight={350}
         overlayStyle={s.overlay}
         handleStyle={s.handle}
         handlePosition="inside"
+        openAnimationConfig={{
+          timing: { duration: 400 },
+          spring: { speed: 20, bounciness: 10 }
+        }}
+        closeAnimationConfig={{
+          timing: { duration: 400 },
+          spring: { speed: 20, bounciness: 10 }
+        }}
         adjustToContentHeight
       >
         {this.renderContent()}
