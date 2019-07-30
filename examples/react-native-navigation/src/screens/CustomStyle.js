@@ -37,6 +37,7 @@ export class CustomStyle extends React.PureComponent {
         style={s.modal}
         overlayStyle={s.overlay}
         handleStyle={s.handle}
+        modalHeight={350}
         handlePosition="inside"
         adjustToContentHeight
       >

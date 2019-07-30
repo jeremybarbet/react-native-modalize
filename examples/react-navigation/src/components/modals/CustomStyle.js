@@ -34,6 +34,7 @@ export class CustomStyle extends React.PureComponent {
         ref={this.modal}
         onClosed={this.onClosed}
         style={s.modal}
+        modalHeight={350}
         overlayStyle={s.overlay}
         handleStyle={s.handle}
         handlePosition="inside"

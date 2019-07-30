@@ -21,7 +21,6 @@ export class AlwaysOpen extends React.PureComponent {
         ref={this.modal}
         style={s.content__modal}
         alwaysOpen={85}
-        modalHeight={350}
         handlePosition="inside"
       >
         {this.renderContent()}
