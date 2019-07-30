@@ -33,7 +33,7 @@ export class CustomStyle extends React.PureComponent {
       <Modalize
         ref={this.modal}
         onClosed={this.onClosed}
-        style={s.modal}
+        modalStyle={s.modal}
         modalHeight={350}
         overlayStyle={s.overlay}
         handleStyle={s.handle}

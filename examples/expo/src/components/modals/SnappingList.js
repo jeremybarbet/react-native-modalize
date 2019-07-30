@@ -64,7 +64,7 @@ export class SnappingList extends React.PureComponent {
       <Modalize
         ref={this.modal}
         HeaderComponent={this.renderHeader}
-        height={350}
+        snapPoint={350}
         onClosed={this.onClosed}
       >
         {this.renderContent()}

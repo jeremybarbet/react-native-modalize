@@ -1,5 +1,20 @@
 import { Animated, ViewStyle, RegisteredStyle, ScrollViewProps, FlatListProps, SectionListProps } from 'react-native';
 
+export interface ISpringProps {
+  friction?: number;
+  tension?: number;
+  speed?: number;
+  bounciness?: number;
+  stiffness?: number;
+  damping?: number;
+  mass?: number;
+}
+
+export interface IConfigProps {
+  duration: number;
+  spring: ISpringProps;
+}
+
 export interface IProps {
   /**
    * A React component that will define the content of the modal.
@@ -9,22 +24,12 @@ export interface IProps {
   /**
    * A number that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
    */
-  height?: number;
-  
+  snapPoint?: number;
+
   /**
-   * A number that set the modal's total height which works with alwaysOpen prop
+   * A number to define the modal's total height
    */
   modalHeight?: number;
-
-  /**
-   * A number that will change the opening animation duration
-   */
-  onAnimateOpenDuration?: number;
-
-  /**
-   * A number that will change the closing animation duration
-   */
-  onAnimateCloseDuration?: number;
 
   /**
    * Using this props will show the modal all the time, and the number represents how expanded the modal has to be
@@ -40,7 +45,7 @@ export interface IProps {
   /**
    * Define the style of the modal.
    */
-  style?: ViewStyle | ViewStyle[] | RegisteredStyle<ViewStyle> | RegisteredStyle<ViewStyle[]>;
+  modalStyle?: ViewStyle | ViewStyle[] | RegisteredStyle<ViewStyle> | RegisteredStyle<ViewStyle[]>;
 
   /**
    * Define the style of the handle on top of the modal.
@@ -57,6 +62,16 @@ export interface IProps {
    * @default true
    */
   useNativeDriver?: boolean;
+
+  /**
+   * Object to change the open animations
+   */
+  openAnimationConfig?: IConfigProps;
+
+  /**
+   * Object to change the open animations
+   */
+  closeAnimationConfig?: IConfigProps;
 
   /**
    * Shrink the modal to your content's height.
