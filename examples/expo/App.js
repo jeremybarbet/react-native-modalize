@@ -46,7 +46,7 @@ export default () => {
       <CustomStyle ref={el => { modal[4] = el; }} />
       <FlatList ref={el => { modal[5] = el; }} />
       <SectionList ref={el => { modal[6] = el; }} />
-      {/* <AlwaysOpen /> */}
+      <AlwaysOpen />
     </Layout>
   );
 };

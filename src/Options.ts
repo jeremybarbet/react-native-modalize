@@ -1,5 +1,9 @@
 import { Animated, ViewStyle, RegisteredStyle, ScrollViewProps, FlatListProps, SectionListProps } from 'react-native';
 
+export interface ITimingProps {
+  duration: number;
+}
+
 export interface ISpringProps {
   friction?: number;
   tension?: number;
@@ -11,7 +15,7 @@ export interface ISpringProps {
 }
 
 export interface IConfigProps {
-  duration: number;
+  timing: ITimingProps;
   spring: ISpringProps;
 }
 
@@ -65,11 +69,21 @@ export interface IProps {
 
   /**
    * Object to change the open animations
+   * @default
+   * {
+   * timing: { duration: 280 },
+   * spring: { speed: 14, bounciness: 5 }
+   * }
    */
   openAnimationConfig?: IConfigProps;
 
   /**
-   * Object to change the open animations
+   * Object to change the close animations
+   * @default
+   * {
+   * timing: { duration: 280 },
+   * spring: { speed: 14, bounciness: 5 }
+   * }
    */
   closeAnimationConfig?: IConfigProps;
 

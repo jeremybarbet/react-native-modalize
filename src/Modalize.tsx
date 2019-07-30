@@ -22,12 +22,12 @@ export default class Modalize extends React.Component<IProps, IState> {
     withReactModal: false,
     withHandle: true,
     openAnimationConfig: {
-      duration: 280,
-      spring: { speed: 12, bounciness: 5 },
+      timing: { duration: 280 },
+      spring: { speed: 14, bounciness: 5 },
     },
     closeAnimationConfig: {
-      duration: 280,
-      spring: { tension: 50, friction: 12 },
+      timing: { duration: 280 },
+      spring: { speed: 14, bounciness: 5 },
     },
   };
 
@@ -203,7 +203,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private onAnimateOpen = (alwaysOpen?: number): void => {
     const { onOpened, snapPoint, useNativeDriver, openAnimationConfig } = this.props;
-    const { duration, spring } = openAnimationConfig!;
+    const { timing, spring } = openAnimationConfig!;
     const { overlay, modalHeight } = this.state;
     const toValue = alwaysOpen ? modalHeight - alwaysOpen : snapPoint ? modalHeight - snapPoint : 0;
 
@@ -217,7 +217,7 @@ export default class Modalize extends React.Component<IProps, IState> {
     Animated.parallel([
       Animated.timing(overlay, {
         toValue: alwaysOpen ? 0 : 1,
-        duration,
+        duration: timing.duration,
         easing: Easing.ease,
         useNativeDriver,
       }),
@@ -236,7 +236,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private onAnimateClose = (): void => {
     const { onClosed, useNativeDriver, snapPoint, closeAnimationConfig } = this.props;
-    const { duration } = closeAnimationConfig!;
+    const { timing, spring } = closeAnimationConfig!;
     const { overlay } = this.state;
     const lastSnap = snapPoint ? this.snaps[1] : 0;
 
@@ -248,15 +248,14 @@ export default class Modalize extends React.Component<IProps, IState> {
     Animated.parallel([
       Animated.timing(overlay, {
         toValue: 0,
-        duration,
+        duration: timing.duration,
         easing: Easing.ease,
         useNativeDriver,
       }),
 
-      Animated.timing(this.translateY, {
+      Animated.spring(this.translateY, {
+        ...getSpringConfig(spring),
         toValue: screenHeight,
-        duration,
-        easing: Easing.out(Easing.ease),
         useNativeDriver,
       }),
     ]).start(() => {
@@ -332,7 +331,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
     const { snapPoint, useNativeDriver, adjustToContentHeight, alwaysOpen, closeAnimationConfig } = this.props;
-    const { duration, spring } = closeAnimationConfig!;
+    const { timing, spring } = closeAnimationConfig!;
     const { lastSnap, contentHeight, modalHeight, overlay } = this.state;
     const { velocityY, translationY } = nativeEvent;
 
@@ -385,7 +384,7 @@ export default class Modalize extends React.Component<IProps, IState> {
       if (alwaysOpen) {
         Animated.timing(overlay, {
           toValue: Number(destSnapPoint <= 0),
-          duration,
+          duration: timing.duration,
           easing: Easing.ease,
           useNativeDriver,
         }).start();

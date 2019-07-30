@@ -6,15 +6,7 @@ import { ISpringProps } from './Options';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 export const getSpringConfig = (config: ISpringProps) => {
-  const {
-    friction,
-    tension,
-    speed,
-    bounciness,
-    stiffness,
-    damping,
-    mass,
-  } = config;
+  const { friction, tension, speed, bounciness, stiffness, damping, mass } = config;
 
   if (stiffness || damping || mass) {
     if (bounciness || speed || tension || friction) {

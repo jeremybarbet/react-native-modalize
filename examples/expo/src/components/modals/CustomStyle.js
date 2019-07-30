@@ -39,12 +39,12 @@ export class CustomStyle extends React.PureComponent {
         handleStyle={s.handle}
         handlePosition="inside"
         openAnimationConfig={{
-          duration: 600,
-          spring: { tension: 25, friction: 3 },
+          timing: { duration: 400 },
+          spring: { speed: 20, bounciness: 10 }
         }}
         closeAnimationConfig={{
-          duration: 600,
-          spring: { tension: 25, friction: 3 },
+          timing: { duration: 400 },
+          spring: { speed: 20, bounciness: 10 }
         }}
         adjustToContentHeight
       >

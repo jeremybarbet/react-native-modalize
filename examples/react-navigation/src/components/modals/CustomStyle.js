@@ -38,6 +38,14 @@ export class CustomStyle extends React.PureComponent {
         overlayStyle={s.overlay}
         handleStyle={s.handle}
         handlePosition="inside"
+        openAnimationConfig={{
+          timing: { duration: 400 },
+          spring: { speed: 20, bounciness: 10 }
+        }}
+        closeAnimationConfig={{
+          timing: { duration: 400 },
+          spring: { speed: 20, bounciness: 10 }
+        }}
         adjustToContentHeight
       >
         {this.renderContent()}
