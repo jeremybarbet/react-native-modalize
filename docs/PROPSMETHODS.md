@@ -12,11 +12,19 @@ By passing a children props it will use the default `ScrollView` component. Howe
 | -------- | -------- |
 | node     | No       |
 
-### `height`
+### `snapPoint`
 
 A number that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
 
 The value you pass is the height of the modal before being full opened.
+
+| Type     | Required |
+| -------- | -------- |
+| number   | No       |
+
+### `modalHeight`
+
+A number to define the modal's total height.
 
 | Type     | Required |
 | -------- | -------- |
@@ -40,7 +48,7 @@ Define where the handle on top of the modal should be positioned.
 | ------------------------- | -------- | --------- |
 | enum('outside', 'inside') | No       | `outside` |
 
-### `style`
+### `modalStyle`
 
 Define the style of the modal.
 
@@ -75,6 +83,22 @@ It's not really recommanded to set it to `false`, but sometimes you don't have c
 | Type     | Required | Default  |
 | -------- | -------- | -------- |
 | bool     | No       | `true`   |
+
+### `openAnimationConfig`
+
+Object to change the open animations. There is `Animated.timing` and `Animated.spring` used to animate the modal. That's why the configuration object is splited into two objects to configure both animation.
+
+| Type     | Required | Default                                                               |
+| -------- | -------- | --------------------------------------------------------------------- |
+| object   | No       | `{ timing: { duration: 280 }, spring: { speed: 14, bounciness: 5 } }` |
+
+### `closeAnimationConfig`
+
+Object to change the close animations. There is `Animated.timing` and `Animated.spring` used to animate the modal. That's why the configuration object is splited into two objects to configure both animation.
+
+| Type     | Required | Default                                                               |
+| -------- | -------- | --------------------------------------------------------------------- |
+| object   | No       | `{ timing: { duration: 280 }, spring: { speed: 14, bounciness: 5 } }` |
 
 ### `adjustToContentHeight`
 
