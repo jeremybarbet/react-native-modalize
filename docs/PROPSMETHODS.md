@@ -124,7 +124,9 @@ If you have any inputs inside your cont and you want to manage how the view shou
 
 Define if `Modalize` has to be wrap with the Modal component from react-native.
 
-?> It's not recommended to pass it at `true`. Check the [examples' documentation](/EXAMPLES.md) to find the best way to handle it.
+!> Using this props, or wrapping `Modalize` with the `Modal` from `react-native` will break the swipe gestures. This is a known issue from [`react-native-gesture-handler` #139](https://github.com/kmagiera/react-native-gesture-handler/issues/139).
+
+?> It's not recommended to pass it at `true`. Check the [examples' documentation](/EXAMPLES.md) to find the other ways to handle it.
 
 | Type     | Required | Default  |
 | -------- | -------- | -------- |
