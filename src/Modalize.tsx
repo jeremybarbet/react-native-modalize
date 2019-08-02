@@ -236,7 +236,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private onAnimateClose = (): void => {
     const { onClosed, useNativeDriver, snapPoint, closeAnimationConfig } = this.props;
-    const { timing, spring } = closeAnimationConfig!;
+    const { timing } = closeAnimationConfig!;
     const { overlay } = this.state;
     const lastSnap = snapPoint ? this.snaps[1] : 0;
 
@@ -253,8 +253,9 @@ export default class Modalize extends React.Component<IProps, IState> {
         useNativeDriver,
       }),
 
-      Animated.spring(this.translateY, {
-        ...getSpringConfig(spring),
+      Animated.timing(this.translateY, {
+        duration: timing.duration,
+        easing: Easing.out(Easing.ease),
         toValue: screenHeight,
         useNativeDriver,
       }),
@@ -331,7 +332,7 @@ export default class Modalize extends React.Component<IProps, IState> {
 
   private onHandleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
     const { snapPoint, useNativeDriver, adjustToContentHeight, alwaysOpen, closeAnimationConfig } = this.props;
-    const { timing, spring } = closeAnimationConfig!;
+    const { timing } = closeAnimationConfig!;
     const { lastSnap, contentHeight, modalHeight, overlay } = this.state;
     const { velocityY, translationY } = nativeEvent;
 
@@ -391,7 +392,8 @@ export default class Modalize extends React.Component<IProps, IState> {
       }
 
       Animated.spring(this.translateY, {
-        ...getSpringConfig(spring),
+        tension: 50,
+        friction: 12,
         velocity: velocityY,
         toValue: destSnapPoint,
         useNativeDriver,
