@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Platform, Dimensions, StyleProp, StyleSheet } from 'react-native';
 
 import { ISpringProps } from './Options';
@@ -58,7 +58,8 @@ export const hasAbsoluteStyle = (Component: React.ReactNode): boolean => {
   }
 
   // @ts-ignore
-  const style: StyleProp<any> = Component && StyleSheet.flatten(Component().props.style);
+  const element = typeof Component === 'object' ? Component : Component();
+  const style: StyleProp<any> = Component && StyleSheet.flatten(element.props.style);
 
   return style && style.position === 'absolute';
 };
