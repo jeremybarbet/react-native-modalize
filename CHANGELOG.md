@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [1.2.1] - 2019-08-02
+### Changed
+- Fix issue with hasAbsoluteStyle util
+- Fix flickering on swipe gesture
 - Update documentation
 - Add changelog file
 
