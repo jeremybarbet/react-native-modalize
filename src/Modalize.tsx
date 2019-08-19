@@ -13,7 +13,8 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 const THRESHOLD = 150;
 
-export default class Modalize extends React.Component<IProps, IState> {
+export default class Modalize<FlatListItem = any, SectionListItem = any>
+  extends React.Component<IProps<FlatListItem, SectionListItem>, IState> {
 
   static defaultProps = {
     handlePosition: 'outside',
@@ -47,7 +48,7 @@ export default class Modalize extends React.Component<IProps, IState> {
   private modalOverlayTap: React.RefObject<TapGestureHandler> = React.createRef();
   private willCloseModalize: boolean = false;
 
-  constructor(props: IProps) {
+  constructor(props: IProps<FlatListItem, SectionListItem>) {
     super(props);
 
     const fullHeight = isIos() ? screenHeight : screenHeight - 10;

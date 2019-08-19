@@ -19,7 +19,7 @@ export interface IConfigProps {
   spring: ISpringProps;
 }
 
-export interface IProps {
+export interface IProps<FlatListItem = any, SectionListItem = any> {
   /**
    * A React component that will define the content of the modal.
    */
@@ -117,12 +117,12 @@ export interface IProps {
   /*
    * An object to pass any of the react-native FlatList's props.
    */
-  flatListProps?: FlatListProps<any>;
+  flatListProps?: FlatListProps<FlatListItem>;
 
   /*
    * An object to pass any of the react-native SectionList's props.
    */
-  sectionListProps?: SectionListProps<any>;
+  sectionListProps?: SectionListProps<SectionListItem>;
 
   /**
    * A header component outside of the ScrollView, on top of the modal.
