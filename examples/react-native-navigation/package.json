@@ -10,7 +10,7 @@
   "dependencies": {
     "faker": "4.1.0",
     "react": "16.8.3",
-    "react-native": "0.59.8",
+    "react-native": "0.59.9",
     "react-native-gesture-handler": "1.2.1",
     "react-native-modalize": "file:../../src",
     "react-native-navigation": "2.20.2"
