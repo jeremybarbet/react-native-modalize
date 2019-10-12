@@ -36,7 +36,7 @@
     "url": "https://github.com/jeremybarbet/react-native-modalize"
   },
   "devDependencies": {
-    "@types/react": "16.7.18",
+    "@types/react": "16.9.5",
     "@types/react-native": "0.57.25",
     "concurrently": "4.1.0",
     "cpx": "1.5.0",
