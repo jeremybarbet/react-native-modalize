@@ -130,13 +130,17 @@ export default class Modalize<FlatListItem = any, SectionListItem = any>
   }
 
   public open = (): void => {
-    const { onOpen } = this.props;
+    const { adjustToContentHeight, onOpen } = this.props;
 
     if (onOpen) {
       onOpen();
     }
 
-    this.onAnimateOpen();
+    if (!adjustToContentHeight || this.contentAlreadyCalculated) {
+      this.onAnimateOpen();
+    } else {
+      this.setState({ isVisible: true });
+    }
   }
 
   public close = (): void => {
@@ -297,6 +301,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any>
       modalHeight: contentHeight - this.handleHeight,
     }, () => {
       this.contentAlreadyCalculated = true;
+      this.onAnimateOpen();
     });
   }
 
