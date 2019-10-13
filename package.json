@@ -36,16 +36,16 @@
     "url": "https://github.com/jeremybarbet/react-native-modalize"
   },
   "devDependencies": {
-    "@types/react": "16.7.18",
-    "@types/react-native": "0.57.25",
+    "@types/react": "16.9.5",
+    "@types/react-native": "0.60.19",
     "concurrently": "5.0.0",
     "cpx": "1.5.0",
     "react": "16.8.6",
-    "react-native": "0.59.8",
-    "react-native-gesture-handler": "1.2.1",
-    "tslint": "5.12.0",
-    "tslint-config-airbnb": "5.11.1",
-    "typescript": "3.4.5"
+    "react-native": "0.61.2",
+    "react-native-gesture-handler": "1.4.1",
+    "tslint": "5.20.0",
+    "tslint-config-airbnb": "5.11.2",
+    "typescript": "3.6.4"
   },
   "peerDependencies": {
     "react": "> 15.0.0",
