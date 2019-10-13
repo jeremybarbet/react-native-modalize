@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.2.2] - 2019-10-13
+### Changed
+- Fix flickering issue with adjustToContentHeight by [@charpeni](https://github.com/charpeni)
+- Add renovate to keep packages up-to-date
+- Upgrade dependencies
+
 ## [1.2.1] - 2019-08-02
 ### Changed
 - Fix issue with hasAbsoluteStyle util
@@ -32,7 +38,7 @@ All notable changes to this project will be documented in this file.
 - Add `alwaysOpen` props, to keep the modal always open on the bottom of the screen
 - Bump `js-yaml` package because of security warning
 
-[Unreleased]: https://github.com/jeremybarbet/react-native-modalize/compare/1.2.0...HEAD
+[Unreleased]: https://github.com/jeremybarbet/react-native-modalize/compare/1.2.2...HEAD
 
 ## [1.0.0] - 2019-06-06
 ### Changed
