@@ -291,6 +291,10 @@ export default class Modalize<FlatListItem = any, SectionListItem = any>
       snapPoint ||
       this.contentAlreadyCalculated
     ) {
+      if (modalHeight <= nativeEvent.layout.height) {
+        this.onAnimateOpen();
+      }
+
       return;
     }
 
