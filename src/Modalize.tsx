@@ -645,7 +645,6 @@ export default class Modalize<FlatListItem = any, SectionListItem = any>
           {showContent && (
             <TapGestureHandler
               ref={this.modalOverlayTap}
-              waitFor={this.modalOverlay}
               simultaneousHandlers={this.modalOverlay}
               onHandlerStateChange={this.onHandleOverlay}
             >
