@@ -630,7 +630,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any>
     return (
       <PanGestureHandler
         ref={this.modalOverlay}
-        simultaneousHandlers={[this.modal, this.modalOverlayTap]}
+        simultaneousHandlers={[this.modal]}
         shouldCancelWhenOutside={false}
         onGestureEvent={Animated.event(
           [{ nativeEvent: { translationY: this.dragY } }],
@@ -645,7 +645,6 @@ export default class Modalize<FlatListItem = any, SectionListItem = any>
           {showContent && (
             <TapGestureHandler
               ref={this.modalOverlayTap}
-              simultaneousHandlers={this.modalOverlay}
               onHandlerStateChange={this.onHandleOverlay}
             >
               <Animated.View
