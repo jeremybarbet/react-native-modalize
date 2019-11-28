@@ -42,7 +42,7 @@
     "cpx": "1.5.0",
     "react": "16.10.2",
     "react-native": "0.61.2",
-    "react-native-gesture-handler": "1.4.1",
+    "react-native-gesture-handler": "1.5.2",
     "tslint": "5.20.0",
     "tslint-config-airbnb": "5.11.2",
     "typescript": "3.6.4"
