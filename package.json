@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@types/react": "16.9.5",
-    "@types/react-native": "0.60.19",
+    "@types/react-native": "0.60.25",
     "concurrently": "5.0.0",
     "cpx": "1.5.0",
     "react": "16.10.2",
