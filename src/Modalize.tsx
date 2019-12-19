@@ -309,7 +309,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
       this.contentAlreadyCalculated
     ) {
       if (modalHeight <= nativeEvent.layout.height) {
-        this.onAnimateOpen();
+        this.onAnimateOpen(this.props.alwaysOpen);
       }
 
       return;
@@ -641,7 +641,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
     return (
       <PanGestureHandler
         ref={this.modalOverlay}
-        simultaneousHandlers={[this.modal, this.modalOverlayTap]}
+        simultaneousHandlers={[this.modal]}
         shouldCancelWhenOutside={false}
         onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
           useNativeDriver,
@@ -652,8 +652,6 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
           {showContent && (
             <TapGestureHandler
               ref={this.modalOverlayTap}
-              waitFor={this.modalOverlay}
-              simultaneousHandlers={this.modalOverlay}
               onHandlerStateChange={this.onHandleOverlay}
             >
               <Animated.View
