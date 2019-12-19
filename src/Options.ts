@@ -1,4 +1,11 @@
-import { Animated, ViewStyle, RegisteredStyle, ScrollViewProps, FlatListProps, SectionListProps } from 'react-native';
+import {
+  Animated,
+  ViewStyle,
+  RegisteredStyle,
+  ScrollViewProps,
+  FlatListProps,
+  SectionListProps,
+} from 'react-native';
 
 export interface ITimingProps {
   duration: number;
@@ -59,7 +66,11 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   /**
    * Define the style of the overlay.
    */
-  overlayStyle?: ViewStyle | ViewStyle[] | RegisteredStyle<ViewStyle> | RegisteredStyle<ViewStyle[]>;
+  overlayStyle?:
+    | ViewStyle
+    | ViewStyle[]
+    | RegisteredStyle<ViewStyle>
+    | RegisteredStyle<ViewStyle[]>;
 
   /**
    * Use the native thread to execute the animations.

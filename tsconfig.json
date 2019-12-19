@@ -3,16 +3,23 @@
     "outDir": "lib/",
     "allowSyntheticDefaultImports": true,
     "declaration": true,
-    "jsx": "react-native",
-    "lib": ["esnext"],
-    "target": "es5",
+    "jsx": "react",
+    "lib": ["es2017", "dom"],
+    "target": "es2015",
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
     "strict": true,
     "pretty": true,
     "removeComments": false,
-    "sourceMap": true
+    "sourceMap": true,
+    "noEmit": true,
+    "strictPropertyInitialization": false,
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "noUnusedLocals": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedParameters": true
   },
-  "include": ["src"],
+  "include": ["src"]
 }

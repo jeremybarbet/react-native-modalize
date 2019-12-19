@@ -4,31 +4,36 @@ import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
 export class SectionList extends React.PureComponent {
-
   modal = React.createRef();
 
   get sections() {
     return [
       {
         title: 'January 2019',
-        data: Array(10).fill(0).map(_ => ({
-          product: faker.commerce.productName(),
-          price: faker.commerce.price(),
-        })),
+        data: Array(10)
+          .fill(0)
+          .map(_ => ({
+            product: faker.commerce.productName(),
+            price: faker.commerce.price(),
+          })),
       },
       {
         title: 'December 2018',
-        data: Array(12).fill(0).map(_ => ({
-          product: faker.commerce.productName(),
-          price: faker.commerce.price(),
-        })),
+        data: Array(12)
+          .fill(0)
+          .map(_ => ({
+            product: faker.commerce.productName(),
+            price: faker.commerce.price(),
+          })),
       },
       {
         title: 'November 2018',
-        data: Array(4).fill(0).map(_ => ({
-          product: faker.commerce.productName(),
-          price: faker.commerce.price(),
-        })),
+        data: Array(4)
+          .fill(0)
+          .map(_ => ({
+            product: faker.commerce.productName(),
+            price: faker.commerce.price(),
+          })),
       },
     ];
   }
@@ -38,13 +43,13 @@ export class SectionList extends React.PureComponent {
       <Text style={s.item__product}>{item.product}</Text>
       <Text style={s.item__price}>{item.price}€</Text>
     </View>
-  )
+  );
 
   renderSectionHeader = ({ section }) => (
     <View style={s.header}>
       <Text style={s.header__name}>{section.title.toUpperCase()}</Text>
     </View>
-  )
+  );
 
   onClosed = () => {
     const { onClosed } = this.props;
@@ -52,13 +57,13 @@ export class SectionList extends React.PureComponent {
     if (onClosed) {
       onClosed();
     }
-  }
+  };
 
   openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
     }
-  }
+  };
 
   render() {
     return (

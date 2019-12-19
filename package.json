@@ -7,7 +7,8 @@
   "scripts": {
     "build": "rm -rf ./lib/* && yarn lint && tsc",
     "prepublish": "yarn build",
-    "lint": "tslint 'src/**/*.ts?(x)'",
+    "lint": "tslint 'src/**/*.ts?(x)' && prettier --list-different \"**/*.{json,md,js,jsx,ts,tsx}\"",
+    "prettier": "prettier --write \"**/*.{json,md,js,jsx,ts,tsx}\"",
     "postversion": "sh ./post-version.sh",
     "watch:modalize": "yarn tsc --watch",
     "watch:expo": "concurrently \"yarn watch:modalize\" \"yarn cpx 'src/**/*' 'examples/expo/node_modules/react-native-modalize' --watch\"",
@@ -35,17 +36,48 @@
     "type": "git",
     "url": "https://github.com/jeremybarbet/react-native-modalize"
   },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{ts,tsx}": [
+      "tslint --fix"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "printWidth": 100
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
   "devDependencies": {
-    "@types/react": "16.9.5",
-    "@types/react-native": "0.60.19",
-    "concurrently": "5.0.0",
+    "@commitlint/cli": "8.2.0",
+    "@commitlint/config-conventional": "8.2.0",
+    "@types/react": "16.9.16",
+    "@types/react-native": "0.60.25",
+    "concurrently": "5.0.2",
     "cpx": "1.5.0",
-    "react": "16.10.2",
-    "react-native": "0.61.2",
-    "react-native-gesture-handler": "1.4.1",
-    "tslint": "5.20.0",
+    "husky": "3.1.0",
+    "lint-staged": "9.5.0",
+    "prettier": "1.19.1",
+    "react": "16.12.0",
+    "react-native": "0.61.5",
+    "react-native-gesture-handler": "1.5.2",
+    "tslint": "5.20.1",
     "tslint-config-airbnb": "5.11.2",
-    "typescript": "3.6.4"
+    "tslint-config-prettier": "1.18.0",
+    "typescript": "3.7.3"
   },
   "peerDependencies": {
     "react": "> 15.0.0",

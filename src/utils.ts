@@ -10,10 +10,10 @@ export const getSpringConfig = (config: ISpringProps) => {
 
   if (stiffness || damping || mass) {
     if (bounciness || speed || tension || friction) {
-      console.error(
-        '[react-native-modalize] You can define one of bounciness/speed, tension/friction, ' +
-        'or stiffness/damping/mass, but not more than one',
-      );
+      console.error(`
+        [react-native-modalize] You can define one of bounciness/speed, tension/friction,
+        or stiffness/damping/mass, but not more than one
+      `);
     }
 
     return {
@@ -23,10 +23,10 @@ export const getSpringConfig = (config: ISpringProps) => {
     };
   } else if (bounciness || speed) {
     if (tension || friction || stiffness || damping || mass) {
-      console.error(
-        '[react-native-modalize] You can define one of bounciness/speed, tension/friction, ' +
-        'or stiffness/damping/mass, but not more than one',
-      );
+      console.error(`
+        [react-native-modalize] You can define one of bounciness/speed, tension/friction,
+        or stiffness/damping/mass, but not more than one
+      `);
     }
 
     return {
@@ -41,16 +41,10 @@ export const getSpringConfig = (config: ISpringProps) => {
   };
 };
 
-export const isIos = (): boolean => {
-  return Platform.OS === 'ios';
-};
-
-export const isIphoneX = (): boolean => {
-  // @ts-ignore
-  const isIphone = isIos() && !Platform.isPad && !Platform.isTVOS;
-
-  return isIphone && ((screenHeight === 812 || screenWidth === 812) || (screenHeight === 896 || screenWidth === 896));
-};
+export const isIos = Platform.OS === 'ios';
+export const isIphoneX =
+  isIos &&
+  (screenHeight === 812 || screenWidth === 812 || screenHeight === 896 || screenWidth === 896);
 
 export const hasAbsoluteStyle = (Component: React.ReactNode): boolean => {
   if (!React.isValidElement(Component)) {

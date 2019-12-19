@@ -6,35 +6,36 @@ import faker from 'faker';
 import { Button } from '../button/Button';
 
 export class SnappingList extends React.PureComponent {
-
   modal = React.createRef();
 
   renderHeader = () => (
     <View style={s.modal__header}>
       <Text style={s.modal__headerText}>50 users online</Text>
     </View>
-  )
+  );
 
   renderContent = () => (
     <View style={s.content}>
-      {Array(50).fill(0).map((_, i) => (
-        <View style={s.content__row} key={i}>
-          <View style={s.content__avatar}>
-            <Image
-              style={{ width: '100%', height: '100%' }}
-              source={{ uri: faker.image.avatar() }}
-            />
-          </View>
+      {Array(50)
+        .fill(0)
+        .map((_, i) => (
+          <View style={s.content__row} key={i}>
+            <View style={s.content__avatar}>
+              <Image
+                style={{ width: '100%', height: '100%' }}
+                source={{ uri: faker.image.avatar() }}
+              />
+            </View>
 
-          <Text style={s.content__name}>{faker.name.findName()}</Text>
-        </View>
-      ))}
+            <Text style={s.content__name}>{faker.name.findName()}</Text>
+          </View>
+        ))}
 
       <View style={s.content__button}>
         <Button onPress={this.scrollToTop} name="Scroll to Top" />
       </View>
     </View>
-  )
+  );
 
   onClosed = () => {
     const { onClosed } = this.props;
@@ -42,13 +43,13 @@ export class SnappingList extends React.PureComponent {
     if (onClosed) {
       onClosed();
     }
-  }
+  };
 
   openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
     }
-  }
+  };
 
   scrollToTop = () => {
     if (this.modal.current) {
@@ -57,7 +58,7 @@ export class SnappingList extends React.PureComponent {
         animated: true,
       });
     }
-  }
+  };
 
   render() {
     return (

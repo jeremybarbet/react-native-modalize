@@ -7,7 +7,6 @@ import faker from 'faker';
 const { width } = Dimensions.get('window');
 
 export class SimpleContent extends React.PureComponent {
-
   modal = React.createRef();
 
   renderContent = () => [
@@ -20,36 +19,28 @@ export class SimpleContent extends React.PureComponent {
       <Text style={s.content__paragraph}>{faker.lorem.paragraphs(3)}</Text>
       <Text style={[s.content__subheading, { marginTop: 30 }]}>Horizontal ScrollView</Text>
 
-      <ScrollView
-        style={s.content__scrollview}
-        horizontal
-      >
-        {Array(5).fill(0).map((_, i) => (
-          <View
-            key={i}
-            style={s.content__block}
-          />
-        ))}
+      <ScrollView style={s.content__scrollview} horizontal>
+        {Array(5)
+          .fill(0)
+          .map((_, i) => (
+            <View key={i} style={s.content__block} />
+          ))}
       </ScrollView>
 
       <Text style={s.content__paragraph}>{faker.lorem.paragraphs(2)}</Text>
       <Text style={[s.content__subheading, { marginTop: 30 }]}>Vertical ScrollView</Text>
 
       <ScrollView style={[s.content__scrollview, { height: 200 }]}>
-        {Array(5).fill(0).map((_, i) => (
-          <View
-            key={i}
-            style={[s.content__block, { width, marginBottom: 20 }]}
-          />
-        ))}
+        {Array(5)
+          .fill(0)
+          .map((_, i) => (
+            <View key={i} style={[s.content__block, { width, marginBottom: 20 }]} />
+          ))}
       </ScrollView>
 
-      <TextInput
-        style={s.content__input}
-        placeholder="Type your username"
-      />
+      <TextInput style={s.content__input} placeholder="Type your username" />
     </View>,
-  ]
+  ];
 
   onClosed = () => {
     const { onClosed } = this.props;
@@ -57,13 +48,13 @@ export class SimpleContent extends React.PureComponent {
     if (onClosed) {
       onClosed();
     }
-  }
+  };
 
   openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
     }
-  }
+  };
 
   render() {
     return (

@@ -15,13 +15,9 @@ import { AlwaysOpen } from './src/components/modals/AlwaysOpen';
 export const App = () => {
   const modal = [];
 
-  const renderButtons = (links) => {
+  const renderButtons = links => {
     return links.map((link, i) => (
-      <Button
-        key={i}
-        onPress={() => modal[i].openModal()}
-        name={link}
-      />
+      <Button key={i} onPress={() => modal[i].openModal()} name={link} />
     ));
   };
 
@@ -39,13 +35,41 @@ export const App = () => {
         'Modal with a Section List',
       ])}
 
-      <SimpleContent ref={el => { modal[0] = el; }} />
-      <FixedContent ref={el => { modal[1] = el; }} />
-      <SnappingList ref={el => { modal[2] = el; }} />
-      <AbsoluteHeader ref={el => { modal[3] = el; }} />
-      <CustomStyle ref={el => { modal[4] = el; }} />
-      <FlatList ref={el => { modal[5] = el; }} />
-      <SectionList ref={el => { modal[6] = el; }} />
+      <SimpleContent
+        ref={el => {
+          modal[0] = el;
+        }}
+      />
+      <FixedContent
+        ref={el => {
+          modal[1] = el;
+        }}
+      />
+      <SnappingList
+        ref={el => {
+          modal[2] = el;
+        }}
+      />
+      <AbsoluteHeader
+        ref={el => {
+          modal[3] = el;
+        }}
+      />
+      <CustomStyle
+        ref={el => {
+          modal[4] = el;
+        }}
+      />
+      <FlatList
+        ref={el => {
+          modal[5] = el;
+        }}
+      />
+      <SectionList
+        ref={el => {
+          modal[6] = el;
+        }}
+      />
       <AlwaysOpen />
     </Layout>
   );
