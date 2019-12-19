@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.3.1] - 2019-12-19
+
+### Changed
+
+- Remove uppercase from `options.ts` file
 
 ## [1.3.0] - 2019-12-19
 
@@ -67,7 +71,7 @@ All notable changes to this project will be documented in this file.
 - Add `alwaysOpen` props, to keep the modal always open on the bottom of the screen
 - Bump `js-yaml` package because of security warning
 
-[unreleased]: https://github.com/jeremybarbet/react-native-modalize/compare/1.3.0...HEAD
+[unreleased]: https://github.com/jeremybarbet/react-native-modalize/compare/1.3.1...HEAD
 
 ## [1.0.0] - 2019-06-06
 
