@@ -4,7 +4,6 @@
   "separateMajorMinor": true,
   "groupSlug": "all",
   "automerge": false,
-  "baseBranches": ["staging"],
   "packageRules": [
     {
       "packagePatterns": ["*"],
