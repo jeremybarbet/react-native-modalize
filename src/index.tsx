@@ -1,4 +1,4 @@
-import React, { Component, RefObject, createRef, ReactNode, isValidElement } from 'react';
+import * as React from 'react';
 import {
   Animated,
   View,
@@ -24,9 +24,9 @@ import {
   TapGestureHandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
 
-import { IProps, IState } from './Options';
+import { IProps, IState } from './options';
 import { getSpringConfig, isIphoneX, isIos, hasAbsoluteStyle } from './utils';
-import s from './Modalize.styles';
+import s from './styles';
 
 const { StatusBarManager } = NativeModules;
 const { height: screenHeight } = Dimensions.get('window');
@@ -35,7 +35,7 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 const THRESHOLD = 150;
 
-export default class Modalize<FlatListItem = any, SectionListItem = any> extends Component<
+export class Modalize<FlatListItem = any, SectionListItem = any> extends React.Component<
   IProps<FlatListItem, SectionListItem>,
   IState
 > {
@@ -63,12 +63,14 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
   private dragY: Animated.Value = new Animated.Value(0);
   private translateY: Animated.Value = new Animated.Value(screenHeight);
   private reverseBeginScrollY: Animated.AnimatedMultiplication;
-  private modal: RefObject<TapGestureHandler> = createRef();
-  private modalChildren: RefObject<PanGestureHandler> = createRef();
-  private modalContentView: RefObject<NativeViewGestureHandler> = createRef();
-  private contentView: RefObject<ScrollView | FlatList<any> | SectionList<any>> = createRef();
-  private modalOverlay: RefObject<PanGestureHandler> = createRef();
-  private modalOverlayTap: RefObject<TapGestureHandler> = createRef();
+  private modal: React.RefObject<TapGestureHandler> = React.createRef();
+  private modalChildren: React.RefObject<PanGestureHandler> = React.createRef();
+  private modalContentView: React.RefObject<NativeViewGestureHandler> = React.createRef();
+  private contentView: React.RefObject<
+    ScrollView | FlatList<any> | SectionList<any>
+  > = React.createRef();
+  private modalOverlay: React.RefObject<PanGestureHandler> = React.createRef();
+  private modalOverlayTap: React.RefObject<TapGestureHandler> = React.createRef();
   private willCloseModalize: boolean = false;
 
   constructor(props: IProps<FlatListItem, SectionListItem>) {
@@ -477,9 +479,9 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
     this.onContentViewChange();
   };
 
-  private renderComponent = (Tag: ReactNode, name: string): ReactNode => {
+  private renderComponent = (Tag: React.ReactNode, name: string): React.ReactNode => {
     // @ts-ignore
-    const element = isValidElement(Tag) ? Tag : <Tag />;
+    const element = React.isValidElement(Tag) ? Tag : <Tag />;
 
     // We don't need to calculate header and footer if they are absolutely positioned
     if (Tag && hasAbsoluteStyle(Tag)) {
@@ -499,7 +501,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
     );
   };
 
-  private renderHandle = (): ReactNode => {
+  private renderHandle = (): React.ReactNode => {
     const { handleStyle, useNativeDriver, withHandle } = this.props;
     const handleStyles: any[] = [s.handle];
     const shapeStyles: any[] = [s.handle__shape, handleStyle];
@@ -529,7 +531,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
     );
   };
 
-  private renderHeader = (): ReactNode => {
+  private renderHeader = (): React.ReactNode => {
     const { useNativeDriver, HeaderComponent } = this.props;
 
     if (!HeaderComponent) {
@@ -556,7 +558,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
     );
   };
 
-  private renderContent = (): ReactNode => {
+  private renderContent = (): React.ReactNode => {
     const { children, scrollViewProps, flatListProps, sectionListProps } = this.props;
     const { contentHeight, enableBounces, contentViewHeight, keyboardEnableScroll } = this.state;
     const scrollEnabled = contentHeight === 0 || keyboardEnableScroll;
@@ -590,7 +592,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
     );
   };
 
-  private renderChildren = (): ReactNode => {
+  private renderChildren = (): React.ReactNode => {
     const { useNativeDriver, adjustToContentHeight, keyboardAvoidingBehavior } = this.props;
     const { keyboardToggle } = this.state;
     const marginBottom = adjustToContentHeight ? 0 : keyboardToggle ? this.handleHeight : 0;
@@ -623,7 +625,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
     );
   };
 
-  private renderFooter = (): ReactNode => {
+  private renderFooter = (): React.ReactNode => {
     const { FooterComponent } = this.props;
 
     if (!FooterComponent) {
@@ -633,7 +635,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
     return this.renderComponent(FooterComponent, 'footer');
   };
 
-  private renderOverlay = (): ReactNode => {
+  private renderOverlay = (): React.ReactNode => {
     const { useNativeDriver, overlayStyle, alwaysOpen } = this.props;
     const { showContent } = this.state;
     const pointerEvents = alwaysOpen ? 'box-none' : 'auto';
@@ -665,7 +667,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
     );
   };
 
-  private renderModalize = (): ReactNode => {
+  private renderModalize = (): React.ReactNode => {
     const { modalStyle, adjustToContentHeight, keyboardAvoidingBehavior, alwaysOpen } = this.props;
     const { isVisible, lastSnap, showContent } = this.state;
     const enabled = isIos && adjustToContentHeight;
@@ -699,7 +701,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
     );
   };
 
-  private renderReactModal = (child: ReactNode): ReactNode => {
+  private renderReactModal = (child: React.ReactNode): React.ReactNode => {
     const { useNativeDriver } = this.props;
     const { isVisible } = this.state;
 
@@ -716,7 +718,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
     );
   };
 
-  render(): ReactNode {
+  render(): React.ReactNode {
     const { withReactModal } = this.props;
 
     if (withReactModal) {
