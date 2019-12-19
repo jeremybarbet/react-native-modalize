@@ -13,7 +13,7 @@
     "watch:modalize": "yarn tsc --watch",
     "watch:expo": "concurrently \"yarn watch:modalize\" \"yarn cpx 'src/**/*' 'examples/expo/node_modules/react-native-modalize' --watch\"",
     "watch:react-native-navigation": "concurrently \"yarn watch:modalize\" \"yarn cpx 'src/**/*' 'examples/react-native-navigation/node_modules/react-native-modalize' --watch\"",
-    "watch:react-navigation": "concurrently \"yarn watch:modalize\" \"yarn cpx 'lib/**/*' 'examples/react-navigation/node_modules/react-native-modalize/lib' --watch\""
+    "watch:react-navigation": "concurrently \"yarn watch:modalize\" \"yarn cpx 'src/**/*' 'examples/react-navigation/node_modules/react-native-modalize/lib' --watch\""
   },
   "keywords": [
     "react-native",
