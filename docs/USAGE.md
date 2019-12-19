@@ -3,7 +3,7 @@
 **1. Import Modalize**
 
 ```jsx
-import Modalize from 'react-native-modalize';
+import { Modalize } from 'react-native-modalize';
 ```
 
 **2. Add the modal in your render function, and use the `open` method to open the modal**
@@ -11,7 +11,7 @@ import Modalize from 'react-native-modalize';
 ```jsx
 import React, { useRef } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import Modalize from 'react-native-modalize';
+import { Modalize } from 'react-native-modalize';
 
 export const MyApp = () => {
   const modalRef = useRef<Modalize>(null);

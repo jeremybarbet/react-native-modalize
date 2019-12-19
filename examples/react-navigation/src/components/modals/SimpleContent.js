@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TextInput } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import Modalize from 'react-native-modalize';
+import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
 const { width } = Dimensions.get('window');

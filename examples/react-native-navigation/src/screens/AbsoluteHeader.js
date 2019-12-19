@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Navigation } from 'react-native-navigation';
-import Modalize from 'react-native-modalize';
+import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
 export class AbsoluteHeader extends React.PureComponent {

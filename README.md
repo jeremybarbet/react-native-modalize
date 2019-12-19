@@ -32,7 +32,7 @@ Here is the quick how-to example:
 ```jsx
 import React, { useRef } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import Modalize from 'react-native-modalize';
+import { Modalize } from 'react-native-modalize';
 
 export const MyApp = () => {
   const modalRef = useRef(null);
