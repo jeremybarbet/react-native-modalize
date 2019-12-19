@@ -299,7 +299,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
   };
 
   private onContentViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
-    const { adjustToContentHeight, snapPoint } = this.props;
+    const { adjustToContentHeight, snapPoint, alwaysOpen } = this.props;
     const { contentHeight, modalHeight } = this.state;
 
     if (
@@ -309,7 +309,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
       this.contentAlreadyCalculated
     ) {
       if (modalHeight <= nativeEvent.layout.height) {
-        this.onAnimateOpen(this.props.alwaysOpen);
+        this.onAnimateOpen(alwaysOpen);
       }
 
       return;
