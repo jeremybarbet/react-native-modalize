@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.3.0] - 2019-12-19
+
+### Added
+
+- Dev tools (prettier, commitlint)
+
+### Changed
+
+- _BREAKING_ Move to name import (before) `import Modalize from 'react-native-modalize'` -> (after) `import { Modalize } from 'react-native-modalize'`
+- Fix overlay press to dismiss by [@Esirei](https://github.com/Esirei)
+- Fix initial state when using `alwaysOpen` by [@benjaminreid](https://github.com/benjaminreid)
+- Change renovate to keep all changes in same PR
+- Update packages
+- Update examples
+- Rename source files
+
 ## [1.2.2] - 2019-10-13
 
 ### Changed
@@ -51,7 +67,7 @@ All notable changes to this project will be documented in this file.
 - Add `alwaysOpen` props, to keep the modal always open on the bottom of the screen
 - Bump `js-yaml` package because of security warning
 
-[unreleased]: https://github.com/jeremybarbet/react-native-modalize/compare/1.2.2...HEAD
+[unreleased]: https://github.com/jeremybarbet/react-native-modalize/compare/1.3.0...HEAD
 
 ## [1.0.0] - 2019-06-06
 
