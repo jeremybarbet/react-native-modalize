@@ -1,7 +1,15 @@
 import React from 'react';
 import { Navigation } from 'react-native-navigation';
 
-import { ABSOLUTE_HEADER, CUSTOM_STYLE, FIXED_CONTENT, FLAT_LIST, SECTION_LIST, SIMPLE_CONTENT, SNAPPING_LIST } from '../screens';
+import {
+  ABSOLUTE_HEADER,
+  CUSTOM_STYLE,
+  FIXED_CONTENT,
+  FLAT_LIST,
+  SECTION_LIST,
+  SIMPLE_CONTENT,
+  SNAPPING_LIST,
+} from '../screens';
 import { Layout } from '../components/layout/Layout';
 import { Header } from '../components/header/Header';
 import { Button } from '../components/button/Button';
@@ -9,7 +17,7 @@ import { Button } from '../components/button/Button';
 import { AlwaysOpen } from './AlwaysOpen';
 
 export const App = () => {
-  const handleOverlay = (name) => {
+  const handleOverlay = name => {
     Navigation.showOverlay({
       component: {
         name,
@@ -18,13 +26,9 @@ export const App = () => {
     });
   };
 
-  const renderButtons = (links) => {
+  const renderButtons = links => {
     return links.map((link, i) => (
-      <Button
-        key={i}
-        onPress={() => handleOverlay(link.id)}
-        name={link.name}
-      />
+      <Button key={i} onPress={() => handleOverlay(link.id)} name={link.name} />
     ));
   };
 

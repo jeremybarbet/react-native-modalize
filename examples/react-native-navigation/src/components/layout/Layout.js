@@ -1,11 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-export const Layout = ({ children }) => (
-  <View style={s.app}>
-    {children}
-  </View>
-);
+export const Layout = ({ children }) => <View style={s.app}>{children}</View>;
 
 const s = StyleSheet.create({
   app: {

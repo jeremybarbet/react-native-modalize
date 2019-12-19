@@ -4,7 +4,6 @@ import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
 export class AbsoluteHeader extends React.PureComponent {
-
   modal = React.createRef();
 
   renderHeader = () => (
@@ -15,11 +14,14 @@ export class AbsoluteHeader extends React.PureComponent {
       hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }}
     >
       <Image
-        source={{ uri: 'https://flaticons.net/gd/makefg.php?i=icons/Mobile%20Application/Close.png&r=255&g=255&b=255' }}
+        source={{
+          uri:
+            'https://flaticons.net/gd/makefg.php?i=icons/Mobile%20Application/Close.png&r=255&g=255&b=255',
+        }}
         style={{ width: '40%', height: '40%' }}
       />
     </TouchableOpacity>
-  )
+  );
 
   renderContent = () => (
     <View style={s.content}>
@@ -27,7 +29,7 @@ export class AbsoluteHeader extends React.PureComponent {
       <Text style={s.content__subheading}>November 11st 2018</Text>
       <Text style={s.content__paragraph}>{faker.lorem.paragraphs(8)}</Text>
     </View>
-  )
+  );
 
   onClosed = () => {
     const { onClosed } = this.props;
@@ -35,19 +37,19 @@ export class AbsoluteHeader extends React.PureComponent {
     if (onClosed) {
       onClosed();
     }
-  }
+  };
 
   openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
     }
-  }
+  };
 
   closeModal = () => {
     if (this.modal.current) {
       this.modal.current.close();
     }
-  }
+  };
 
   render() {
     return (

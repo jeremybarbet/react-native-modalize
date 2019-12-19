@@ -35,7 +35,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import Modalize from 'react-native-modalize';
 
 export const MyApp = () => {
-  const modalRef = useRef<Modalize>(null);
+  const modalRef = useRef < Modalize > null;
 
   const onOpen = () => {
     const modal = modalRef.current;
@@ -51,12 +51,10 @@ export const MyApp = () => {
         <Text>Open the modal</Text>
       </TouchableOpacity>
 
-      <Modalize ref={modalRef}>
-        ...your content
-      </Modalize>
+      <Modalize ref={modalRef}>...your content</Modalize>
     </>
   );
-}
+};
 ```
 
 ## Documentation

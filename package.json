@@ -66,7 +66,7 @@
     "@commitlint/config-conventional": "8.2.0",
     "@types/react": "16.9.16",
     "@types/react-native": "0.60.25",
-    "concurrently": "5.0.1",
+    "concurrently": "5.0.2",
     "cpx": "1.5.0",
     "husky": "3.1.0",
     "lint-staged": "9.5.0",

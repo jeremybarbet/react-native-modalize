@@ -4,7 +4,6 @@ import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
 export class CustomStyle extends React.PureComponent {
-
   modal = React.createRef();
 
   renderContent = () => (
@@ -12,7 +11,7 @@ export class CustomStyle extends React.PureComponent {
       <Text style={s.content__heading}>Article title</Text>
       <Text style={s.content__paragraph}>{faker.lorem.paragraphs(3)}</Text>
     </View>
-  )
+  );
 
   onClosed = () => {
     const { onClosed } = this.props;
@@ -20,13 +19,13 @@ export class CustomStyle extends React.PureComponent {
     if (onClosed) {
       onClosed();
     }
-  }
+  };
 
   openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
     }
-  }
+  };
 
   render() {
     return (
@@ -40,11 +39,11 @@ export class CustomStyle extends React.PureComponent {
         handlePosition="inside"
         openAnimationConfig={{
           timing: { duration: 400 },
-          spring: { speed: 20, bounciness: 10 }
+          spring: { speed: 20, bounciness: 10 },
         }}
         closeAnimationConfig={{
           timing: { duration: 400 },
-          spring: { speed: 20, bounciness: 10 }
+          spring: { speed: 20, bounciness: 10 },
         }}
         adjustToContentHeight
       >

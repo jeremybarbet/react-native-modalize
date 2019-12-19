@@ -5,7 +5,6 @@ import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
 export class FixedContent extends React.PureComponent {
-
   modal = React.createRef();
 
   componentDidMount() {
@@ -20,40 +19,32 @@ export class FixedContent extends React.PureComponent {
         <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
         <TextInput style={s.content__input} placeholder="Type your username" />
 
-        <TouchableOpacity
-          style={s.content__button}
-          activeOpacity={0.9}
-          onPress={this.closeModal}
-        >
+        <TouchableOpacity style={s.content__button} activeOpacity={0.9} onPress={this.closeModal}>
           <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
         </TouchableOpacity>
       </View>
     );
-  }
+  };
 
   onClosed = () => {
     Navigation.dismissOverlay(this.props.componentId);
-  }
+  };
 
   openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
     }
-  }
+  };
 
   closeModal = () => {
     if (this.modal.current) {
       this.modal.current.close();
     }
-  }
+  };
 
   render() {
     return (
-      <Modalize
-        ref={this.modal}
-        onClosed={this.onClosed}
-        adjustToContentHeight
-      >
+      <Modalize ref={this.modal} onClosed={this.onClosed} adjustToContentHeight>
         {this.renderContent()}
       </Modalize>
     );

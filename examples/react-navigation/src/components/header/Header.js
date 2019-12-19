@@ -7,7 +7,14 @@ export const Header = ({ subheading }) => (
     <Text style={s.header__subheading}>{subheading}</Text>
 
     <Text style={s.header__copy}>
-      Created by <Text style={s.header__author} onPress={() => Linking.openURL('https://github.com/jeremybarbet')}>Jérémy Barbet</Text> — v1.2.3
+      Created by{' '}
+      <Text
+        style={s.header__author}
+        onPress={() => Linking.openURL('https://github.com/jeremybarbet')}
+      >
+        Jérémy Barbet
+      </Text>{' '}
+      — v1.2.3
     </Text>
   </View>
 );

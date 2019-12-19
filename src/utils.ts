@@ -12,7 +12,7 @@ export const getSpringConfig = (config: ISpringProps) => {
     if (bounciness || speed || tension || friction) {
       console.error(
         '[react-native-modalize] You can define one of bounciness/speed, tension/friction, ' +
-        'or stiffness/damping/mass, but not more than one',
+          'or stiffness/damping/mass, but not more than one',
       );
     }
 
@@ -25,7 +25,7 @@ export const getSpringConfig = (config: ISpringProps) => {
     if (tension || friction || stiffness || damping || mass) {
       console.error(
         '[react-native-modalize] You can define one of bounciness/speed, tension/friction, ' +
-        'or stiffness/damping/mass, but not more than one',
+          'or stiffness/damping/mass, but not more than one',
       );
     }
 
@@ -49,7 +49,10 @@ export const isIphoneX = (): boolean => {
   // @ts-ignore
   const isIphone = isIos() && !Platform.isPad && !Platform.isTVOS;
 
-  return isIphone && ((screenHeight === 812 || screenWidth === 812) || (screenHeight === 896 || screenWidth === 896));
+  return (
+    isIphone &&
+    (screenHeight === 812 || screenWidth === 812 || screenHeight === 896 || screenWidth === 896)
+  );
 };
 
 export const hasAbsoluteStyle = (Component: React.ReactNode): boolean => {

@@ -81,15 +81,15 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
     if (props.withReactModal) {
       console.warn(
         '[react-native-modalize] `withReactModal` is set to `true`. Modal from react-native is going ' +
-          'to be moved out of the core in the future. I\'d recommend migrating to something like ' +
-          'react-navigation or react-native-navigation\'s to wrap Modalize. Check out the documentation ' +
+          "to be moved out of the core in the future. I'd recommend migrating to something like " +
+          "react-navigation or react-native-navigation's to wrap Modalize. Check out the documentation " +
           'for more informations.',
       );
     }
 
     if ((props.scrollViewProps || props.children) && props.flatListProps) {
       console.error(
-        '[react-native-modalize] `flatListProps` You can\'t use the ScrollView and the FlatList at the ' +
+        "[react-native-modalize] `flatListProps` You can't use the ScrollView and the FlatList at the " +
           'same time. As soon as you use `flatListProps` it will replaces the default ScrollView with ' +
           'a FlatList component. Remove the `children` and/or `scrollViewProps` to fix the error.',
       );
@@ -97,7 +97,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
 
     if ((props.scrollViewProps || props.children) && props.sectionListProps) {
       console.error(
-        '[react-native-modalize] `sectionListProps` You can\'t use the ScrollView and the SectionList at the ' +
+        "[react-native-modalize] `sectionListProps` You can't use the ScrollView and the SectionList at the " +
           'same time. As soon as you use `sectionListProps` it will replaces the default ScrollView with ' +
           'a SectionList component. Remove the `children` and/or `scrollViewProps` to fix the error.',
       );

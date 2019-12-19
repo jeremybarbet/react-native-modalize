@@ -4,7 +4,6 @@ import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
 export class AlwaysOpen extends React.PureComponent {
-
   modal = React.createRef();
 
   renderContent = () => (
@@ -13,7 +12,7 @@ export class AlwaysOpen extends React.PureComponent {
       <Text style={s.content__heading}>Always open modal!</Text>
       <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
     </View>
-  )
+  );
 
   render() {
     return (

@@ -4,14 +4,15 @@ import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
 export class FlatList extends React.PureComponent {
-
   modal = React.createRef();
 
   get data() {
-    return Array(50).fill(0).map(_ => ({
-      name: faker.name.findName(),
-      email: faker.internet.email(),
-    }));
+    return Array(50)
+      .fill(0)
+      .map(_ => ({
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+      }));
   }
 
   renderItem = ({ item }) => (
@@ -19,7 +20,7 @@ export class FlatList extends React.PureComponent {
       <Text style={s.item__name}>{item.name}</Text>
       <Text style={s.item__email}>{item.email}</Text>
     </View>
-  )
+  );
 
   onClosed = () => {
     const { onClosed } = this.props;
@@ -27,13 +28,13 @@ export class FlatList extends React.PureComponent {
     if (onClosed) {
       onClosed();
     }
-  }
+  };
 
   openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
     }
-  }
+  };
 
   render() {
     return (
