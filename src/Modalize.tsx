@@ -74,8 +74,8 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
   constructor(props: IProps<FlatListItem, SectionListItem>) {
     super(props);
 
-    const fullHeight = isIos() ? screenHeight : screenHeight - 10;
-    const computedHeight = fullHeight - this.handleHeight - (isIphoneX() ? 34 : 0);
+    const fullHeight = isIos ? screenHeight : screenHeight - 10;
+    const computedHeight = fullHeight - this.handleHeight - (isIphoneX ? 34 : 0);
     const modalHeight = props.modalHeight || computedHeight;
 
     if (props.withReactModal) {
@@ -335,7 +335,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
     const contentViewHeight = [];
 
     if (keyboardHeight) {
-      const statusBarHeight = isIphoneX() ? 48 : isIos() ? 20 : StatusBarManager.HEIGHT;
+      const statusBarHeight = isIphoneX ? 48 : isIos ? 20 : StatusBarManager.HEIGHT;
       const height =
         screenHeight -
         keyboardHeight -
@@ -560,7 +560,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
     const { children, scrollViewProps, flatListProps, sectionListProps } = this.props;
     const { contentHeight, enableBounces, contentViewHeight, keyboardEnableScroll } = this.state;
     const scrollEnabled = contentHeight === 0 || keyboardEnableScroll;
-    const keyboardDismissMode = isIos() ? 'interactive' : 'on-drag';
+    const keyboardDismissMode = isIos ? 'interactive' : 'on-drag';
 
     const opts = {
       ref: this.contentView,
@@ -594,7 +594,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
     const { useNativeDriver, adjustToContentHeight, keyboardAvoidingBehavior } = this.props;
     const { keyboardToggle } = this.state;
     const marginBottom = adjustToContentHeight ? 0 : keyboardToggle ? this.handleHeight : 0;
-    const enabled = isIos() && !adjustToContentHeight;
+    const enabled = isIos && !adjustToContentHeight;
 
     return (
       <PanGestureHandler
@@ -668,7 +668,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any> extends
   private renderModalize = (): ReactNode => {
     const { modalStyle, adjustToContentHeight, keyboardAvoidingBehavior, alwaysOpen } = this.props;
     const { isVisible, lastSnap, showContent } = this.state;
-    const enabled = isIos() && adjustToContentHeight;
+    const enabled = isIos && adjustToContentHeight;
     const pointerEvents = alwaysOpen ? 'box-none' : 'auto';
 
     if (!isVisible) {
