@@ -292,7 +292,7 @@ export default class Modalize<FlatListItem = any, SectionListItem = any>
       this.contentAlreadyCalculated
     ) {
       if (modalHeight <= nativeEvent.layout.height) {
-        this.onAnimateOpen();
+        this.onAnimateOpen(this.props.alwaysOpen);
       }
 
       return;
