@@ -2,11 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.3] - 2019-12-20
+
+### Changed
+
+- Fix bouncing on opening animation
+- Clean examples from unused functions
+
 ## [1.3.2] - 2019-12-20
 
 ### Added
 
-- New argument to the `closeù method to reset to initial position`alwaysOpen`modal (`close('alwaysOpen')`)
+- New argument to the `close` method to reset to initial position `alwaysOpen` modal (`close('alwaysOpen')`)
 
 ### Changed
 
