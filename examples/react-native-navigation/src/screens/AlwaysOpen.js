@@ -3,14 +3,24 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
+import { Button } from '../button/Button';
+
 export class AlwaysOpen extends React.PureComponent {
   modal = React.createRef();
+
+  closeModal = dest => {
+    if (this.modal.current) {
+      this.modal.current.close(dest);
+    }
+  };
 
   renderContent = () => (
     <View style={s.content}>
       <Text style={s.content__subheading}>{'Introduction'.toUpperCase()}</Text>
       <Text style={s.content__heading}>Always open modal!</Text>
       <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
+      <Button name="Close to initial position" onPress={() => this.closeModal('alwaysOpen')} />
+      <Button name="Close completely" onPress={this.closeModal} />
     </View>
   );
 

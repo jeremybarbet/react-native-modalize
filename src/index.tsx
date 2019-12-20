@@ -163,14 +163,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     }
   };
 
-  public close = (): void => {
+  public close = (dest: 'alwaysOpen' | 'default' = 'default'): void => {
     const { onClose } = this.props;
 
     if (onClose) {
       onClose();
     }
 
-    this.onAnimateClose();
+    this.onAnimateClose(dest);
   };
 
   public scrollTo = (...args: Parameters<ScrollView['scrollTo']>): void => {
@@ -258,11 +258,13 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     });
   };
 
-  private onAnimateClose = (): void => {
-    const { onClosed, useNativeDriver, snapPoint, closeAnimationConfig } = this.props;
+  private onAnimateClose = (dest: 'alwaysOpen' | 'default' = 'default'): void => {
+    const { onClosed, useNativeDriver, snapPoint, closeAnimationConfig, alwaysOpen } = this.props;
     const { timing } = closeAnimationConfig!;
-    const { overlay } = this.state;
-    const lastSnap = snapPoint ? this.snaps[1] : 0;
+    const { overlay, modalHeight } = this.state;
+    const lastSnap = snapPoint ? this.snaps[1] : 80;
+    const toInitialAlwaysOpen = dest === 'alwaysOpen' && Boolean(alwaysOpen);
+    const toValue = toInitialAlwaysOpen ? modalHeight - alwaysOpen! : screenHeight;
 
     BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
 
@@ -280,7 +282,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       Animated.timing(this.translateY, {
         duration: timing.duration,
         easing: Easing.out(Easing.ease),
-        toValue: screenHeight,
+        toValue,
         useNativeDriver,
       }),
     ]).start(() => {
@@ -288,14 +290,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         onClosed();
       }
 
-      this.setState({ showContent: false });
-      this.translateY.setValue(screenHeight);
+      this.setState({ showContent: toInitialAlwaysOpen });
+      this.translateY.setValue(toValue);
       this.dragY.setValue(0);
       this.willCloseModalize = false;
 
       this.setState({
         lastSnap,
-        isVisible: false,
+        isVisible: toInitialAlwaysOpen,
       });
     });
   };

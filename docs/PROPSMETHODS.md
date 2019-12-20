@@ -237,9 +237,11 @@ The method to open the modal.
 
 The method to close the modal. You don't need to call it to dismiss the modal, since you can swipe down to dismiss.
 
-| Type     | Required |
-| -------- | -------- |
-| function | No       |
+?> If you are using `alwaysOpen` props, you can supply a `dest` argument to the `close` method to reset it to the intial position  `close('alwaysOpen')`, and avoiding to close it completely.
+
+| Type                                       | Required |
+| ------------------------------------------ | -------- |
+| function: (dest: 'alwaysOpen' | 'default') | No       |
 
 ### `scrollTo()`
 
