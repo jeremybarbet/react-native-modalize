@@ -6,6 +6,18 @@ import faker from 'faker';
 export class AbsoluteHeader extends React.PureComponent {
   modal = React.createRef();
 
+  openModal = () => {
+    if (this.modal.current) {
+      this.modal.current.open();
+    }
+  };
+
+  closeModal = () => {
+    if (this.modal.current) {
+      this.modal.current.close();
+    }
+  };
+
   renderHeader = () => (
     <TouchableOpacity
       style={s.modal__header}
@@ -31,34 +43,9 @@ export class AbsoluteHeader extends React.PureComponent {
     </View>
   );
 
-  onClosed = () => {
-    const { onClosed } = this.props;
-
-    if (onClosed) {
-      onClosed();
-    }
-  };
-
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
-    }
-  };
-
-  closeModal = () => {
-    if (this.modal.current) {
-      this.modal.current.close();
-    }
-  };
-
   render() {
     return (
-      <Modalize
-        ref={this.modal}
-        HeaderComponent={this.renderHeader}
-        withHandle={false}
-        onClosed={this.onClosed}
-      >
+      <Modalize ref={this.modal} HeaderComponent={this.renderHeader} withHandle={false}>
         {this.renderContent()}
       </Modalize>
     );

@@ -13,14 +13,6 @@ export class CustomStyle extends React.PureComponent {
     </View>
   );
 
-  onClosed = () => {
-    const { onClosed } = this.props;
-
-    if (onClosed) {
-      onClosed();
-    }
-  };
-
   openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
@@ -31,7 +23,6 @@ export class CustomStyle extends React.PureComponent {
     return (
       <Modalize
         ref={this.modal}
-        onClosed={this.onClosed}
         modalStyle={s.modal}
         modalHeight={350}
         overlayStyle={s.overlay}
@@ -45,7 +36,6 @@ export class CustomStyle extends React.PureComponent {
           timing: { duration: 400 },
           spring: { speed: 20, bounciness: 10 },
         }}
-        adjustToContentHeight
       >
         {this.renderContent()}
       </Modalize>

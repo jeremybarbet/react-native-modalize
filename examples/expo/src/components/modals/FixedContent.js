@@ -21,14 +21,6 @@ export class FixedContent extends React.PureComponent {
     );
   };
 
-  onClosed = () => {
-    const { onClosed } = this.props;
-
-    if (onClosed) {
-      onClosed();
-    }
-  };
-
   openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
@@ -43,7 +35,7 @@ export class FixedContent extends React.PureComponent {
 
   render() {
     return (
-      <Modalize ref={this.modal} onClosed={this.onClosed} adjustToContentHeight>
+      <Modalize ref={this.modal} adjustToContentHeight>
         {this.renderContent()}
       </Modalize>
     );

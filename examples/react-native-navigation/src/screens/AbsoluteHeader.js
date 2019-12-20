@@ -11,6 +11,22 @@ export class AbsoluteHeader extends React.PureComponent {
     this.openModal();
   }
 
+  onClosed = () => {
+    Navigation.dismissOverlay(this.props.componentId);
+  };
+
+  openModal = () => {
+    if (this.modal.current) {
+      this.modal.current.open();
+    }
+  };
+
+  closeModal = () => {
+    if (this.modal.current) {
+      this.modal.current.close();
+    }
+  };
+
   renderHeader = () => (
     <TouchableOpacity
       style={s.modal__header}
@@ -35,22 +51,6 @@ export class AbsoluteHeader extends React.PureComponent {
       <Text style={s.content__paragraph}>{faker.lorem.paragraphs(8)}</Text>
     </View>
   );
-
-  onClosed = () => {
-    Navigation.dismissOverlay(this.props.componentId);
-  };
-
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
-    }
-  };
-
-  closeModal = () => {
-    if (this.modal.current) {
-      this.modal.current.close();
-    }
-  };
 
   render() {
     return (

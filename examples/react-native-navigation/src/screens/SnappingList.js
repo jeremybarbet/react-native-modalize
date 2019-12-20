@@ -13,6 +13,16 @@ export class SnappingList extends React.PureComponent {
     this.openModal();
   }
 
+  onClosed = () => {
+    Navigation.dismissOverlay(this.props.componentId);
+  };
+
+  openModal = () => {
+    if (this.modal.current) {
+      this.modal.current.open();
+    }
+  };
+
   renderHeader = () => (
     <View style={s.modal__header}>
       <Text style={s.modal__headerText}>50 users online</Text>
@@ -41,16 +51,6 @@ export class SnappingList extends React.PureComponent {
       </View>
     </View>
   );
-
-  onClosed = () => {
-    Navigation.dismissOverlay(this.props.componentId);
-  };
-
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
-    }
-  };
 
   scrollToTop = () => {
     if (this.modal.current) {

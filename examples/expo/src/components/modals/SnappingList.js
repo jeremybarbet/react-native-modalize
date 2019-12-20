@@ -37,14 +37,6 @@ export class SnappingList extends React.PureComponent {
     </View>
   );
 
-  onClosed = () => {
-    const { onClosed } = this.props;
-
-    if (onClosed) {
-      onClosed();
-    }
-  };
-
   openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
@@ -62,12 +54,7 @@ export class SnappingList extends React.PureComponent {
 
   render() {
     return (
-      <Modalize
-        ref={this.modal}
-        HeaderComponent={this.renderHeader}
-        snapPoint={350}
-        onClosed={this.onClosed}
-      >
+      <Modalize ref={this.modal} HeaderComponent={this.renderHeader} snapPoint={350}>
         {this.renderContent()}
       </Modalize>
     );

@@ -14,6 +14,16 @@ export class SimpleContent extends React.PureComponent {
     this.openModal();
   }
 
+  onClosed = () => {
+    Navigation.dismissOverlay(this.props.componentId);
+  };
+
+  openModal = () => {
+    if (this.modal.current) {
+      this.modal.current.open();
+    }
+  };
+
   renderContent = () => [
     <View style={s.content__header} key="0">
       <Text style={s.content__heading}>Article title</Text>
@@ -46,16 +56,6 @@ export class SimpleContent extends React.PureComponent {
       <TextInput style={s.content__input} placeholder="Type your username" />
     </View>,
   ];
-
-  onClosed = () => {
-    Navigation.dismissOverlay(this.props.componentId);
-  };
-
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
-    }
-  };
 
   render() {
     return (

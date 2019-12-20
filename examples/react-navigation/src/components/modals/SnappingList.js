@@ -8,6 +8,21 @@ import { Button } from '../button/Button';
 export class SnappingList extends React.PureComponent {
   modal = React.createRef();
 
+  openModal = () => {
+    if (this.modal.current) {
+      this.modal.current.open();
+    }
+  };
+
+  scrollToTop = () => {
+    if (this.modal.current) {
+      this.modal.current.scrollTo({
+        y: 0,
+        animated: true,
+      });
+    }
+  };
+
   renderHeader = () => (
     <View style={s.modal__header}>
       <Text style={s.modal__headerText}>50 users online</Text>
@@ -37,37 +52,9 @@ export class SnappingList extends React.PureComponent {
     </View>
   );
 
-  onClosed = () => {
-    const { onClosed } = this.props;
-
-    if (onClosed) {
-      onClosed();
-    }
-  };
-
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
-    }
-  };
-
-  scrollToTop = () => {
-    if (this.modal.current) {
-      this.modal.current.scrollTo({
-        y: 0,
-        animated: true,
-      });
-    }
-  };
-
   render() {
     return (
-      <Modalize
-        ref={this.modal}
-        HeaderComponent={this.renderHeader}
-        snapPoint={350}
-        onClosed={this.onClosed}
-      >
+      <Modalize ref={this.modal} HeaderComponent={this.renderHeader} snapPoint={350}>
         {this.renderContent()}
       </Modalize>
     );

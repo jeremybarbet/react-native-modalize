@@ -31,14 +31,6 @@ export class AbsoluteHeader extends React.PureComponent {
     </View>
   );
 
-  onClosed = () => {
-    const { onClosed } = this.props;
-
-    if (onClosed) {
-      onClosed();
-    }
-  };
-
   openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
@@ -53,12 +45,7 @@ export class AbsoluteHeader extends React.PureComponent {
 
   render() {
     return (
-      <Modalize
-        ref={this.modal}
-        HeaderComponent={this.renderHeader}
-        withHandle={false}
-        onClosed={this.onClosed}
-      >
+      <Modalize ref={this.modal} HeaderComponent={this.renderHeader} withHandle={false}>
         {this.renderContent()}
       </Modalize>
     );

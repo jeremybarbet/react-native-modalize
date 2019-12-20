@@ -6,6 +6,18 @@ import faker from 'faker';
 export class FixedContent extends React.PureComponent {
   modal = React.createRef();
 
+  openModal = () => {
+    if (this.modal.current) {
+      this.modal.current.open();
+    }
+  };
+
+  closeModal = () => {
+    if (this.modal.current) {
+      this.modal.current.close();
+    }
+  };
+
   renderContent = () => {
     return (
       <View style={s.content}>
@@ -21,29 +33,9 @@ export class FixedContent extends React.PureComponent {
     );
   };
 
-  onClosed = () => {
-    const { onClosed } = this.props;
-
-    if (onClosed) {
-      onClosed();
-    }
-  };
-
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
-    }
-  };
-
-  closeModal = () => {
-    if (this.modal.current) {
-      this.modal.current.close();
-    }
-  };
-
   render() {
     return (
-      <Modalize ref={this.modal} onClosed={this.onClosed} adjustToContentHeight>
+      <Modalize ref={this.modal} adjustToContentHeight>
         {this.renderContent()}
       </Modalize>
     );

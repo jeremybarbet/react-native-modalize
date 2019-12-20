@@ -20,13 +20,6 @@ export class FlatList extends React.PureComponent {
       }));
   }
 
-  renderItem = ({ item }) => (
-    <View style={s.item}>
-      <Text style={s.item__name}>{item.name}</Text>
-      <Text style={s.item__email}>{item.email}</Text>
-    </View>
-  );
-
   onClosed = () => {
     Navigation.dismissOverlay(this.props.componentId);
   };
@@ -36,6 +29,13 @@ export class FlatList extends React.PureComponent {
       this.modal.current.open();
     }
   };
+
+  renderItem = ({ item }) => (
+    <View style={s.item}>
+      <Text style={s.item__name}>{item.name}</Text>
+      <Text style={s.item__email}>{item.email}</Text>
+    </View>
+  );
 
   render() {
     return (

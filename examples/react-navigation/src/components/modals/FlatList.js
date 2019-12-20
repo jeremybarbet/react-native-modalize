@@ -15,6 +15,12 @@ export class FlatList extends React.PureComponent {
       }));
   }
 
+  openModal = () => {
+    if (this.modal.current) {
+      this.modal.current.open();
+    }
+  };
+
   renderItem = ({ item }) => (
     <View style={s.item}>
       <Text style={s.item__name}>{item.name}</Text>
@@ -22,25 +28,10 @@ export class FlatList extends React.PureComponent {
     </View>
   );
 
-  onClosed = () => {
-    const { onClosed } = this.props;
-
-    if (onClosed) {
-      onClosed();
-    }
-  };
-
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
-    }
-  };
-
   render() {
     return (
       <Modalize
         ref={this.modal}
-        onClosed={this.onClosed}
         flatListProps={{
           data: this.data,
           renderItem: this.renderItem,

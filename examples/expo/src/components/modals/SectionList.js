@@ -51,14 +51,6 @@ export class SectionList extends React.PureComponent {
     </View>
   );
 
-  onClosed = () => {
-    const { onClosed } = this.props;
-
-    if (onClosed) {
-      onClosed();
-    }
-  };
-
   openModal = () => {
     if (this.modal.current) {
       this.modal.current.open();
@@ -69,7 +61,6 @@ export class SectionList extends React.PureComponent {
     return (
       <Modalize
         ref={this.modal}
-        onClosed={this.onClosed}
         sectionListProps={{
           sections: this.sections,
           renderItem: this.renderItem,

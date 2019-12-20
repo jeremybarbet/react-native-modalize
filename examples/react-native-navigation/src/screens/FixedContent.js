@@ -11,21 +11,6 @@ export class FixedContent extends React.PureComponent {
     this.openModal();
   }
 
-  renderContent = () => {
-    return (
-      <View style={s.content}>
-        <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
-        <Text style={s.content__heading}>Send the message?</Text>
-        <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
-        <TextInput style={s.content__input} placeholder="Type your username" />
-
-        <TouchableOpacity style={s.content__button} activeOpacity={0.9} onPress={this.closeModal}>
-          <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
   onClosed = () => {
     Navigation.dismissOverlay(this.props.componentId);
   };
@@ -40,6 +25,21 @@ export class FixedContent extends React.PureComponent {
     if (this.modal.current) {
       this.modal.current.close();
     }
+  };
+
+  renderContent = () => {
+    return (
+      <View style={s.content}>
+        <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
+        <Text style={s.content__heading}>Send the message?</Text>
+        <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
+        <TextInput style={s.content__input} placeholder="Type your username" />
+
+        <TouchableOpacity style={s.content__button} activeOpacity={0.9} onPress={this.closeModal}>
+          <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   render() {

@@ -9,6 +9,12 @@ const { width } = Dimensions.get('window');
 export class SimpleContent extends React.PureComponent {
   modal = React.createRef();
 
+  openModal = () => {
+    if (this.modal.current) {
+      this.modal.current.open();
+    }
+  };
+
   renderContent = () => [
     <View style={s.content__header} key="0">
       <Text style={s.content__heading}>Article title</Text>
@@ -42,25 +48,10 @@ export class SimpleContent extends React.PureComponent {
     </View>,
   ];
 
-  onClosed = () => {
-    const { onClosed } = this.props;
-
-    if (onClosed) {
-      onClosed();
-    }
-  };
-
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
-    }
-  };
-
   render() {
     return (
       <Modalize
         ref={this.modal}
-        onClosed={this.onClosed}
         scrollViewProps={{
           showsVerticalScrollIndicator: false,
           stickyHeaderIndices: [0],
