@@ -47,11 +47,11 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     withHandle: true,
     openAnimationConfig: {
       timing: { duration: 280 },
-      spring: { speed: 14, bounciness: 4 },
+      spring: { speed: 14, bounciness: 5 },
     },
     closeAnimationConfig: {
       timing: { duration: 280 },
-      spring: { speed: 14, bounciness: 4 },
+      spring: { speed: 14, bounciness: 5 },
     },
   };
 
@@ -207,6 +207,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
           translateY: Animated.add(this.translateY, valueY).interpolate({
             inputRange: [0, this.snapEnd],
             outputRange: [0, this.snapEnd],
+            extrapolate: 'clamp',
           }),
         },
       ],
