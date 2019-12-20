@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.2] - 2019-12-20
+
+### Added
+
+- New argument to the `closeù method to reset to initial position`alwaysOpen`modal (`close('alwaysOpen')`)
+
+### Changed
+
+- Fix glitchy issue `onAnimateOpen` cause by `extrapolate: clamp` and `spring` animation
+
 ## [1.3.1] - 2019-12-19
 
 ### Changed
@@ -70,8 +80,6 @@ All notable changes to this project will be documented in this file.
 
 - Add `alwaysOpen` props, to keep the modal always open on the bottom of the screen
 - Bump `js-yaml` package because of security warning
-
-[unreleased]: https://github.com/jeremybarbet/react-native-modalize/compare/1.3.1...HEAD
 
 ## [1.0.0] - 2019-06-06
 
