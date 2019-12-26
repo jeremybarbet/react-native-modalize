@@ -46,11 +46,11 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     withReactModal: false,
     withHandle: true,
     openAnimationConfig: {
-      timing: { duration: 280 },
+      timing: { duration: 280, easing: Easing.ease },
       spring: { speed: 14, bounciness: 4 },
     },
     closeAnimationConfig: {
-      timing: { duration: 280 },
+      timing: { duration: 280, easing: Easing.ease },
       spring: { speed: 14, bounciness: 4 },
     },
   };
@@ -129,7 +129,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     };
 
     this.beginScrollY.addListener(({ value }) => (this.beginScrollYValue = value));
-
     this.reverseBeginScrollY = Animated.multiply(new Animated.Value(-1), this.beginScrollY);
   }
 
@@ -246,11 +245,18 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         useNativeDriver,
       }),
 
-      Animated.spring(this.translateY, {
-        ...getSpringConfig(spring),
-        toValue,
-        useNativeDriver,
-      }),
+      spring
+        ? Animated.spring(this.translateY, {
+            ...getSpringConfig(spring),
+            toValue,
+            useNativeDriver,
+          })
+        : Animated.timing(this.translateY, {
+            toValue,
+            duration: timing.duration,
+            easing: timing.easing,
+            useNativeDriver,
+          }),
     ]).start(() => {
       if (onOpened) {
         onOpened();
@@ -258,13 +264,13 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
       setTimeout(() => {
         this.setState({ isOpening: false });
-      }, 500);
+      }, 400);
     });
   };
 
   private onAnimateClose = (dest: 'alwaysOpen' | 'default' = 'default'): void => {
     const { onClosed, useNativeDriver, snapPoint, closeAnimationConfig, alwaysOpen } = this.props;
-    const { timing } = closeAnimationConfig!;
+    const { timing, spring } = closeAnimationConfig!;
     const { overlay, modalHeight } = this.state;
     const lastSnap = snapPoint ? this.snaps[1] : 80;
     const toInitialAlwaysOpen = dest === 'alwaysOpen' && Boolean(alwaysOpen);
@@ -283,12 +289,18 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         useNativeDriver,
       }),
 
-      Animated.timing(this.translateY, {
-        duration: timing.duration,
-        easing: Easing.out(Easing.ease),
-        toValue,
-        useNativeDriver,
-      }),
+      spring
+        ? Animated.spring(this.translateY, {
+            ...getSpringConfig(spring),
+            toValue,
+            useNativeDriver,
+          })
+        : Animated.timing(this.translateY, {
+            duration: timing.duration,
+            easing: Easing.out(Easing.ease),
+            toValue,
+            useNativeDriver,
+          }),
     ]).start(() => {
       if (onClosed) {
         onClosed();
@@ -697,6 +709,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
                 {this.renderHeader()}
                 {this.renderChildren()}
                 {this.renderFooter()}
+                <View style={s.modalize__mask} pointerEvents="none" />
               </AnimatedKeyboardAvoidingView>
             )}
 

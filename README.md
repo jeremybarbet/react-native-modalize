@@ -23,6 +23,12 @@ This component has been built with `react-native-gesture-handler` to address the
 yarn add react-native-modalize
 ```
 
+If you are not using expo, you will have to install `react-native-gesture-handler`
+
+```bash
+yarn add react-native-gesture-handler
+```
+
 Check out [`react-native-gesture-handler`'s documentation](https://kmagiera.github.io/react-native-gesture-handler/docs/getting-started.html) to set it up.
 
 ## Usage

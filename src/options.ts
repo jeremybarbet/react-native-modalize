@@ -5,10 +5,14 @@ import {
   ScrollViewProps,
   FlatListProps,
   SectionListProps,
+  EasingFunction,
 } from 'react-native';
 
 export interface ITimingProps {
   duration: number;
+  easing?: EasingFunction;
+  delay?: number;
+  isInteraction?: boolean;
 }
 
 export interface ISpringProps {

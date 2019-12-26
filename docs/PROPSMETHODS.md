@@ -86,19 +86,19 @@ It's not really recommanded to set it to `false`, but sometimes you don't have c
 
 ### `openAnimationConfig`
 
-Object to change the open animations. There is `Animated.timing` and `Animated.spring` used to animate the modal. That's why the configuration object is splited into two objects to configure both animation.
+Object to change the open animations. You can either pass a timing (`Animated.timing`) or a spring (`Animated.spring`) animation.
 
-| Type     | Required | Default                                                               |
-| -------- | -------- | --------------------------------------------------------------------- |
-| object   | No       | `{ timing: { duration: 280 }, spring: { speed: 14, bounciness: 5 } }` |
+| Type     | Required | Default                                    |
+| -------- | -------- | ------------------------------------------ |
+| object   | No       | `{ spring: { speed: 14, bounciness: 4 } }` |
 
 ### `closeAnimationConfig`
 
-Object to change the close animations. There is `Animated.timing` and `Animated.spring` used to animate the modal. That's why the configuration object is splited into two objects to configure both animation.
+Object to change the close animations. You can either pass a timing (`Animated.timing`) or a spring (`Animated.spring`) animation.
 
-| Type     | Required | Default                                                               |
-| -------- | -------- | --------------------------------------------------------------------- |
-| object   | No       | `{ timing: { duration: 280 }, spring: { speed: 14, bounciness: 5 } }` |
+| Type     | Required | Default                                    |
+| -------- | -------- | ------------------------------------------ |
+| object   | No       | `{ spring: { speed: 14, bounciness: 5 } }` |
 
 ### `adjustToContentHeight`
 

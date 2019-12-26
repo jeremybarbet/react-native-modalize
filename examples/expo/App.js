@@ -23,7 +23,7 @@ export default () => {
 
   return (
     <Layout>
-      <Header subheading="Run with React Navigation" />
+      <Header subheading="Run with Expo" />
 
       {renderButtons([
         'Modal with a simple content',
