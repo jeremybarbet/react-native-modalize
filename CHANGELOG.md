@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.4] - 2019-12-26
+
+### Changed
+
+- Better spring/timing props
+- Mask for empty space with bounce
+
 ## [1.3.3] - 2019-12-20
 
 ### Changed
