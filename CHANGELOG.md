@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.5] - 2019-12-27
+
+### Changed
+
+- Revert bouncing translate
+
 ## [1.3.4] - 2019-12-26
 
 ### Changed
