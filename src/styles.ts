@@ -36,17 +36,6 @@ export default StyleSheet.create({
     elevation: 4,
   },
 
-  modalize__mask: {
-    position: 'absolute',
-    right: 0,
-    bottom: -40,
-    left: 0,
-
-    height: 40,
-
-    backgroundColor: '#fff',
-  },
-
   handle: {
     position: 'absolute',
     top: -20,

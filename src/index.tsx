@@ -125,7 +125,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       contentViewHeight: [],
       keyboardEnableScroll: false,
       keyboardToggle: false,
-      isOpening: false,
     };
 
     this.beginScrollY.addListener(({ value }) => (this.beginScrollYValue = value));
@@ -195,7 +194,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   }
 
   private get modalizeContent(): StyleProp<any> {
-    const { modalHeight, isOpening } = this.state;
+    const { modalHeight } = this.state;
     const valueY = Animated.add(this.dragY, this.reverseBeginScrollY);
 
     return {
@@ -204,7 +203,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         {
           translateY: Animated.add(this.translateY, valueY).interpolate({
             inputRange: [-40, 0, this.snapEnd],
-            outputRange: [isOpening ? -40 : 0, 0, this.snapEnd],
+            outputRange: [0, 0, this.snapEnd],
             extrapolate: 'clamp',
           }),
         },
@@ -234,7 +233,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     this.setState({
       isVisible: true,
       showContent: true,
-      isOpening: true,
     });
 
     Animated.parallel([
@@ -261,10 +259,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       if (onOpened) {
         onOpened();
       }
-
-      setTimeout(() => {
-        this.setState({ isOpening: false });
-      }, 400);
     });
   };
 
@@ -709,7 +703,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
                 {this.renderHeader()}
                 {this.renderChildren()}
                 {this.renderFooter()}
-                <View style={s.modalize__mask} pointerEvents="none" />
               </AnimatedKeyboardAvoidingView>
             )}
 

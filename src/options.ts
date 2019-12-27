@@ -189,11 +189,6 @@ export interface IState {
   isVisible: boolean;
 
   /**
-   * Follow the status of the opening animation
-   */
-  isOpening: boolean;
-
-  /**
    * During the closing animation we hide the content to avoid jumping/blink issues while using `withReactModal: true`.
    */
   showContent: boolean;
