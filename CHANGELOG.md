@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.6] - 2019-12-28
+
+### Changed
+
+- Use timing function onAnimateClose
+
 ## [1.3.5] - 2019-12-27
 
 ### Changed
