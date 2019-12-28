@@ -51,7 +51,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     },
     closeAnimationConfig: {
       timing: { duration: 280, easing: Easing.ease },
-      spring: { speed: 14, bounciness: 4 },
     },
   };
 
