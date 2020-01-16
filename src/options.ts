@@ -112,6 +112,25 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    * Define the behavior of the keyboard when having inputs inside the modal.
    */
   keyboardAvoidingBehavior?: 'height' | 'position' | 'padding';
+
+  /**
+   * KeyboardAvoidingView.keyboardVerticalOffset
+   * @default 0
+   */
+  keyboardAvoidingOffset?: number;
+
+  /**
+   * Using this prop will enable/disable pan gesture
+   * @default true
+   */
+  panGestureEnabled?: boolean;
+
+  /**
+   * Using this prop will enable/disable overlay tap gesture
+   * @default true
+   */
+  closeOnOverlayTap?: boolean;
+
   /**
    * Define if Modalize has to be wrap with the Modal component from react-native. (iOS specific)
    * @default false
@@ -237,4 +256,9 @@ export interface IState {
    * Store if the keyboard is displayed. Used to change the offset on the ContentView when the keyboard is open.
    */
   keyboardToggle: boolean;
+
+  /**
+   * Store height of the keyboard.
+   */
+  keyboardHeight: number;
 }

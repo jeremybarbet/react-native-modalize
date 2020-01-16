@@ -10,10 +10,11 @@ import {
   BackHandler,
   KeyboardAvoidingView,
   Keyboard,
-  NativeModules,
   ScrollView,
   FlatList,
   SectionList,
+  Platform,
+  ViewStyle,
 } from 'react-native';
 import {
   PanGestureHandler,
@@ -28,7 +29,6 @@ import { IProps, IState } from './options';
 import { getSpringConfig, isIphoneX, isIos, hasAbsoluteStyle } from './utils';
 import s from './styles';
 
-const { StatusBarManager } = NativeModules;
 const { height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -43,6 +43,8 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     handlePosition: 'outside',
     useNativeDriver: true,
     adjustToContentHeight: false,
+    panGestureEnabled: true,
+    closeOnOverlayTap: true,
     withReactModal: false,
     withHandle: true,
     openAnimationConfig: {
@@ -124,6 +126,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       contentViewHeight: [],
       keyboardEnableScroll: false,
       keyboardToggle: false,
+      keyboardHeight: 0,
     };
 
     this.beginScrollY.addListener(({ value }) => (this.beginScrollYValue = value));
@@ -137,13 +140,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       this.onAnimateOpen(this.props.alwaysOpen);
     }
 
-    Keyboard.addListener('keyboardWillShow', this.onKeyboardShow);
-    Keyboard.addListener('keyboardWillHide', this.onKeyboardHide);
+    // willShow, willHide doesn't support on Android
+    Keyboard.addListener('keyboardDidShow', this.onKeyboardShow);
+    Keyboard.addListener('keyboardDidHide', this.onKeyboardHide);
   }
 
   componentWillUnmount() {
-    Keyboard.removeListener('keyboardWillShow', this.onKeyboardShow);
-    Keyboard.removeListener('keyboardWillHide', this.onKeyboardHide);
+    Keyboard.removeListener('keyboardDidShow', this.onKeyboardShow);
+    Keyboard.removeListener('keyboardDidHide', this.onKeyboardHide);
   }
 
   public open = (): void => {
@@ -186,18 +190,23 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     const { withHandle } = this.props;
 
     if (!withHandle) {
-      return 20;
+      return 0;
     }
 
     return this.isHandleOutside ? 35 : 20;
   }
 
   private get modalizeContent(): StyleProp<any> {
-    const { modalHeight } = this.state;
+    const { modalHeight, keyboardHeight } = this.state;
     const valueY = Animated.add(this.dragY, this.reverseBeginScrollY);
 
     return {
-      height: modalHeight,
+      height:
+        modalHeight -
+        Platform.select({
+          ios: 0,
+          android: keyboardHeight,
+        })!,
       transform: [
         {
           translateY: Animated.add(this.translateY, valueY).interpolate({
@@ -342,26 +351,12 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     );
   };
 
-  private onContentViewChange = (keyboardHeight?: number): void => {
+  private onContentViewChange = (): void => {
     const { adjustToContentHeight } = this.props;
-    const { contentHeight, modalHeight, headerHeight, footerHeight } = this.state;
-    const contentViewHeight = [];
+    const { modalHeight, headerHeight, footerHeight } = this.state;
+    const contentViewHeight: ViewStyle[] = [];
 
-    if (keyboardHeight) {
-      const statusBarHeight = isIphoneX ? 48 : isIos ? 20 : StatusBarManager.HEIGHT;
-      const height =
-        screenHeight -
-        keyboardHeight -
-        headerHeight -
-        footerHeight -
-        this.handleHeight -
-        statusBarHeight;
-
-      if (contentHeight > height) {
-        contentViewHeight.push({ height });
-        this.setState({ keyboardEnableScroll: true });
-      }
-    } else if (!adjustToContentHeight) {
+    if (!adjustToContentHeight) {
       const height = modalHeight - headerHeight - footerHeight;
 
       contentViewHeight.push({ height });
@@ -481,13 +476,11 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   private onKeyboardShow = (event: any) => {
     const { height } = event.endCoordinates;
 
-    this.setState({ keyboardToggle: true });
-    this.onContentViewChange(height);
+    this.setState({ keyboardToggle: true, keyboardHeight: height });
   };
 
   private onKeyboardHide = () => {
-    this.setState({ keyboardToggle: false });
-    this.onContentViewChange();
+    this.setState({ keyboardToggle: false, keyboardHeight: 0 });
   };
 
   private renderComponent = (Tag: React.ReactNode, name: string): React.ReactNode => {
@@ -513,7 +506,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private renderHandle = (): React.ReactNode => {
-    const { handleStyle, useNativeDriver, withHandle } = this.props;
+    const { handleStyle, useNativeDriver, withHandle, panGestureEnabled } = this.props;
     const handleStyles: any[] = [s.handle];
     const shapeStyles: any[] = [s.handle__shape, handleStyle];
 
@@ -528,6 +521,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
     return (
       <PanGestureHandler
+        enabled={panGestureEnabled}
         simultaneousHandlers={this.modal}
         shouldCancelWhenOutside={false}
         onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
@@ -543,7 +537,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private renderHeader = (): React.ReactNode => {
-    const { useNativeDriver, HeaderComponent } = this.props;
+    const { useNativeDriver, HeaderComponent, panGestureEnabled } = this.props;
 
     if (!HeaderComponent) {
       return null;
@@ -555,6 +549,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
     return (
       <PanGestureHandler
+        enabled={panGestureEnabled}
         simultaneousHandlers={this.modal}
         shouldCancelWhenOutside={false}
         onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
@@ -571,13 +566,12 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
   private renderContent = (): React.ReactNode => {
     const { children, scrollViewProps, flatListProps, sectionListProps } = this.props;
-    const { contentHeight, enableBounces, contentViewHeight, keyboardEnableScroll } = this.state;
+    const { contentHeight, enableBounces, keyboardEnableScroll } = this.state;
     const scrollEnabled = contentHeight === 0 || keyboardEnableScroll;
     const keyboardDismissMode = isIos ? 'interactive' : 'on-drag';
 
     const opts = {
       ref: this.contentView,
-      style: contentViewHeight,
       bounces: enableBounces,
       onScrollBeginDrag: Animated.event(
         [{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }],
@@ -604,14 +598,12 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private renderChildren = (): React.ReactNode => {
-    const { useNativeDriver, adjustToContentHeight, keyboardAvoidingBehavior } = this.props;
-    const { keyboardToggle } = this.state;
-    const marginBottom = adjustToContentHeight ? 0 : keyboardToggle ? this.handleHeight : 0;
-    const enabled = isIos && !adjustToContentHeight;
+    const { useNativeDriver, adjustToContentHeight, panGestureEnabled } = this.props;
 
     return (
       <PanGestureHandler
         ref={this.modalChildren}
+        enabled={panGestureEnabled}
         simultaneousHandlers={[this.modalContentView, this.modal]}
         shouldCancelWhenOutside={false}
         onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
@@ -619,11 +611,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         })}
         onHandlerStateChange={this.onHandleChildren}
       >
-        <AnimatedKeyboardAvoidingView
-          behavior={keyboardAvoidingBehavior || 'position'}
-          style={{ marginBottom }}
-          enabled={enabled}
-        >
+        <Animated.View style={!adjustToContentHeight ? s.flex1 : null}>
           <NativeViewGestureHandler
             ref={this.modalContentView}
             waitFor={this.modal}
@@ -631,7 +619,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
           >
             {this.renderContent()}
           </NativeViewGestureHandler>
-        </AnimatedKeyboardAvoidingView>
+        </Animated.View>
       </PanGestureHandler>
     );
   };
@@ -647,13 +635,20 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private renderOverlay = (): React.ReactNode => {
-    const { useNativeDriver, overlayStyle, alwaysOpen } = this.props;
+    const {
+      useNativeDriver,
+      overlayStyle,
+      alwaysOpen,
+      panGestureEnabled,
+      closeOnOverlayTap,
+    } = this.props;
     const { showContent } = this.state;
     const pointerEvents = alwaysOpen ? 'box-none' : 'auto';
 
     return (
       <PanGestureHandler
         ref={this.modalOverlay}
+        enabled={panGestureEnabled}
         simultaneousHandlers={[this.modal]}
         shouldCancelWhenOutside={false}
         onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
@@ -665,6 +660,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
           {showContent && (
             <TapGestureHandler
               ref={this.modalOverlayTap}
+              enabled={panGestureEnabled || closeOnOverlayTap}
               onHandlerStateChange={this.onHandleOverlay}
             >
               <Animated.View
@@ -679,9 +675,15 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private renderModalize = (): React.ReactNode => {
-    const { modalStyle, adjustToContentHeight, keyboardAvoidingBehavior, alwaysOpen } = this.props;
+    const {
+      keyboardAvoidingOffset,
+      modalStyle,
+      keyboardAvoidingBehavior,
+      alwaysOpen,
+      panGestureEnabled,
+    } = this.props;
     const { isVisible, lastSnap, showContent } = this.state;
-    const enabled = isIos && adjustToContentHeight;
+    const enabled = isIos;
     const pointerEvents = alwaysOpen ? 'box-none' : 'auto';
 
     if (!isVisible) {
@@ -690,10 +692,16 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
     return (
       <View style={s.modalize} pointerEvents={pointerEvents}>
-        <TapGestureHandler ref={this.modal} maxDurationMs={100000} maxDeltaY={lastSnap}>
+        <TapGestureHandler
+          ref={this.modal}
+          maxDurationMs={100000}
+          maxDeltaY={lastSnap}
+          enabled={panGestureEnabled}
+        >
           <View style={s.modalize__wrapper} pointerEvents="box-none">
             {showContent && (
               <AnimatedKeyboardAvoidingView
+                keyboardVerticalOffset={keyboardAvoidingOffset}
                 style={[s.modalize__content, this.modalizeContent, modalStyle]}
                 behavior={keyboardAvoidingBehavior || 'padding'}
                 enabled={enabled}
