@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
-import { Button } from '../button/Button';
+import { Button } from '../components/button/Button';
 
 export class AlwaysOpen extends React.PureComponent {
   modal = React.createRef();
