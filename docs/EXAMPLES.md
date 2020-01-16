@@ -29,7 +29,7 @@ yarn start
 ```bash
 cd examples/react-native-navigation
 yarn ios (or android)
-cd ../..
+cd ../
 yarn watch:react-native-navigation
 ```
 </p>
@@ -54,7 +54,7 @@ yarn start
 ```bash
 cd examples/react-navigation
 yarn ios (or android)
-cd ../..
+cd ../
 yarn watch:react-navigation
 ```
 </p>
@@ -77,7 +77,7 @@ yarn start
 
 #### Tab #2
 ```bash
-cd ../..
+cd ../
 yarn watch:expo
 ```
 </p>
