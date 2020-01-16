@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Platform, Dimensions, StyleProp, StyleSheet } from 'react-native';
 
-import { ISpringProps } from './Options';
+import { ISpringProps } from './options';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
