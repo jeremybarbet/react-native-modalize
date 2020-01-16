@@ -562,7 +562,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         })}
         onHandlerStateChange={this.onHandleComponent}
       >
-        <Animated.View style={s.component} pointerEvents="box-none">
+        <Animated.View style={s.component}>
           {this.renderComponent(HeaderComponent, 'header')}
         </Animated.View>
       </PanGestureHandler>
