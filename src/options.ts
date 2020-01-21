@@ -220,7 +220,7 @@ export interface IState {
   /**
    * Store the height of the modal. Depends on the `height` props and devices' height.
    */
-  modalHeight: number;
+  modalHeight: number | undefined;
 
   /**
    * Calculate the content's height. Used when `adjustToContentHeight: true`.
@@ -228,29 +228,9 @@ export interface IState {
   contentHeight: number;
 
   /**
-   * Calculate the header's height. Used when `header` props is defined.
-   */
-  headerHeight: number;
-
-  /**
-   * Calculate the footer's height. Used when `footer` props is defined.
-   */
-  footerHeight: number;
-
-  /**
    * When we scroll to the bottom of the ContentView we want the bounce animation but when we reach the top again, we want it disabled. (iOS specific)
    */
   enableBounces: boolean;
-
-  /**
-   * Define the ContentView height. If `header` or `footer` are passed and are not `position: 'absolute'`, theirs heights will be substracted to the ContentView's height.
-   */
-  contentViewHeight: ViewStyle[];
-
-  /**
-   * Define the scroll has to be enable or not depending of the keyboard status.
-   */
-  keyboardEnableScroll: boolean;
 
   /**
    * Store if the keyboard is displayed. Used to change the offset on the ContentView when the keyboard is open.

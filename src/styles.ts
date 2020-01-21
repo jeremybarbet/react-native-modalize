@@ -91,7 +91,12 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.65)',
   },
 
-  flex1: {
+  content__container: {
     flex: 1,
+  },
+
+  content__adjustHeight: {
+    flexGrow: 0,
+    flexShrink: 1,
   },
 });
