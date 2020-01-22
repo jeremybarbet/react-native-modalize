@@ -482,13 +482,11 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private renderComponent = (Tag: React.ReactNode): React.ReactNode => {
-    // @ts-ignore
-    const element = React.isValidElement(Tag) ? Tag : <Tag />;
-
-    return (
-      <View style={s.component} pointerEvents="box-none">
-        {element}
-      </View>
+    return React.isValidElement(Tag) ? (
+      Tag
+    ) : (
+      // @ts-ignore
+      <Tag />
     );
   };
 
