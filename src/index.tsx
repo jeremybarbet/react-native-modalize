@@ -668,13 +668,12 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       panGestureEnabled,
     } = this.props;
     const { isVisible, lastSnap, showContent } = this.state;
-    const enabled = isIos;
     const pointerEvents = alwaysOpen ? 'box-none' : 'auto';
 
     const keyboardAvoidingViewProps: KeyboardAvoidingViewProps = {
       keyboardVerticalOffset: keyboardAvoidingOffset,
       behavior: keyboardAvoidingBehavior || 'padding',
-      enabled,
+      enabled: isIos,
       style: [s.modalize__content, this.modalizeContent, modalStyle],
     };
 
