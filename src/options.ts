@@ -109,7 +109,14 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   adjustToContentHeight?: boolean;
 
   /**
+   * TODO: Describe this prop
+   * @default Platform.select({ios:true,android:false})
+   */
+  avoidKeyboardLikeIOS?: boolean;
+
+  /**
    * Define the behavior of the keyboard when having inputs inside the modal.
+   * @default padding
    */
   keyboardAvoidingBehavior?: 'height' | 'position' | 'padding';
 

@@ -44,6 +44,10 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     handlePosition: 'outside',
     useNativeDriver: true,
     adjustToContentHeight: false,
+    avoidKeyboardLikeIOS: Platform.select({
+      ios: true,
+      android: false,
+    }),
     panGestureEnabled: true,
     closeOnOverlayTap: true,
     withReactModal: false,
@@ -664,6 +668,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       keyboardAvoidingBehavior,
       alwaysOpen,
       panGestureEnabled,
+      avoidKeyboardLikeIOS,
     } = this.props;
     const { isVisible, lastSnap, showContent } = this.state;
     const pointerEvents = alwaysOpen ? 'box-none' : 'auto';
@@ -671,11 +676,11 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     const keyboardAvoidingViewProps: KeyboardAvoidingViewProps = {
       keyboardVerticalOffset: keyboardAvoidingOffset,
       behavior: keyboardAvoidingBehavior || 'padding',
-      enabled: isIos,
+      enabled: avoidKeyboardLikeIOS,
       style: [s.modalize__content, this.modalizeContent, modalStyle],
     };
 
-    if (!isIos) {
+    if (!avoidKeyboardLikeIOS) {
       keyboardAvoidingViewProps.onLayout = this.onModalizeContentLayout;
     }
 
