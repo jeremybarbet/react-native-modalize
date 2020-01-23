@@ -83,7 +83,9 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   constructor(props: IProps<FlatListItem, SectionListItem>) {
     super(props);
 
-    const fullHeight = isIos ? screenHeight : screenHeight - (StatusBar.currentHeight || 0);
+    const fullHeight = isIos
+      ? screenHeight
+      : screenHeight - (isIos ? StatusBar.currentHeight || 0 : 10);
     const computedHeight = fullHeight - this.handleHeight - (isIphoneX ? 34 : 0);
     const modalHeight = props.modalHeight || computedHeight;
 
@@ -142,7 +144,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       this.onAnimateOpen(this.props.alwaysOpen);
     }
 
-    // willShow, willHide doesn't support on Android
     Keyboard.addListener('keyboardDidShow', this.onKeyboardShow);
     Keyboard.addListener('keyboardDidHide', this.onKeyboardHide);
   }

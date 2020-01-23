@@ -109,8 +109,8 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   adjustToContentHeight?: boolean;
 
   /**
-   * TODO: Describe this prop
-   * @default Platform.select({ios:true,android:false})
+   * Define keyboard's Android behavior like iOS's one.
+   * @default Platform.select({ ios: true, android: false })
    */
   avoidKeyboardLikeIOS?: boolean;
 

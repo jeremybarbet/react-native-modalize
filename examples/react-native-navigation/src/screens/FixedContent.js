@@ -44,7 +44,12 @@ export class FixedContent extends React.PureComponent {
 
   render() {
     return (
-      <Modalize ref={this.modal} onClosed={this.onClosed} adjustToContentHeight>
+      <Modalize
+        ref={this.modal}
+        onClosed={this.onClosed}
+        adjustToContentHeight
+        avoidKeyboardLikeIOS
+      >
         {this.renderContent()}
       </Modalize>
     );

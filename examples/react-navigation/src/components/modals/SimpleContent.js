@@ -56,6 +56,7 @@ export class SimpleContent extends React.PureComponent {
           showsVerticalScrollIndicator: false,
           stickyHeaderIndices: [0],
         }}
+        avoidKeyboardLikeIOS
       >
         {this.renderContent()}
       </Modalize>
