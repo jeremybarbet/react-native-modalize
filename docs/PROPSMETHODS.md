@@ -120,6 +120,30 @@ If you have any inputs inside your cont and you want to manage how the view shou
 | ------------------------------------- | -------- |
 | enum('height', 'position', 'padding') | No       |
 
+### `keyboardAvoidingOffset`
+
+See [`react-native` documentation](https://facebook.github.io/react-native/docs/keyboardavoidingview#keyboardverticaloffset) for more informations.
+
+| Type     | Required | Default  |
+| -------- | -------- | -------- |
+| number   | No       | `0`      |
+
+### `panGestureEnabled`
+
+Using this prop will enable/disable pan gesture
+
+| Type     | Required | Default  |
+| -------- | -------- | -------- |
+| bool     | No       | `true`   |
+
+### `closeOnOverlayTap`
+
+Using this prop will enable/disable overlay tap gesture
+
+| Type     | Required | Default  |
+| -------- | -------- | -------- |
+| bool     | No       | `true`   |
+
 ### `withReactModal`
 
 Define if `Modalize` has to be wrap with the Modal component from react-native.
