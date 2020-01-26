@@ -384,6 +384,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       adjustToContentHeight,
       alwaysOpen,
       closeAnimationConfig,
+      dragToss = 0.05,
     } = this.props;
     const { timing } = closeAnimationConfig!;
     const { lastSnap, modalHeight, overlay } = this.state;
@@ -396,7 +397,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       let destSnapPoint = 0;
 
       if (snapPoint || alwaysOpen) {
-        const dragToss = 0.05;
         const endOffsetY = lastSnap + toValue + dragToss * velocityY;
 
         this.snaps.forEach((snap: number) => {
