@@ -59,6 +59,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     closeAnimationConfig: {
       timing: { duration: 280, easing: Easing.ease },
     },
+    dragToss: 0.05,
   };
 
   private snaps: number[] = [];
