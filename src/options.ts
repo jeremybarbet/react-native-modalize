@@ -37,6 +37,11 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   children?: React.ReactNode;
 
   /**
+   * A number that determines the determines the momentum of the scroll required.
+   */
+  dragToss?: number;
+
+  /**
    * A number that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
    */
   snapPoint?: number;
