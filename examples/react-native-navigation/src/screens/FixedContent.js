@@ -52,7 +52,6 @@ export class FixedContent extends React.PureComponent {
         ref={this.modal}
         onClosed={this.onClosed}
         adjustToContentHeight
-        avoidKeyboardLikeIOS
       >
         {this.renderContent()}
       </Modalize>
