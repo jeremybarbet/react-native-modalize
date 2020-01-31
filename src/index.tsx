@@ -48,6 +48,10 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       ios: true,
       android: false,
     }),
+    modalTopOffset: Platform.select({
+      ios: 0,
+      android: StatusBar.currentHeight || 0,
+    }),
     panGestureEnabled: true,
     closeOnOverlayTap: true,
     withReactModal: false,
@@ -84,9 +88,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   constructor(props: IProps<FlatListItem, SectionListItem>) {
     super(props);
 
-    const fullHeight = isIos
-      ? screenHeight
-      : screenHeight - (isIos ? StatusBar.currentHeight || 0 : 10);
+    const fullHeight = screenHeight - props.modalTopOffset!;
     const computedHeight = fullHeight - this.handleHeight - (isIphoneX ? 34 : 0);
     const modalHeight = props.modalHeight || computedHeight;
 
@@ -596,6 +598,9 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
           useNativeDriver,
         })}
+        minDist={20}
+        activeOffsetY={20}
+        activeOffsetX={20}
         onHandlerStateChange={this.onHandleChildren}
       >
         <Animated.View
@@ -696,7 +701,10 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
           ref={this.modal}
           maxDurationMs={100000}
           maxDeltaY={lastSnap}
-          enabled={panGestureEnabled}
+          enabled={Platform.select({
+            ios: false,
+            android: panGestureEnabled,
+          })}
         >
           <View style={s.modalize__wrapper} pointerEvents="box-none">
             {showContent && (

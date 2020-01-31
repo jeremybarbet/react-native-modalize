@@ -33,7 +33,11 @@ export class FixedContent extends React.PureComponent {
         <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
         <Text style={s.content__heading}>Send the message?</Text>
         <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
-        <TextInput style={s.content__input} placeholder="Type your username" />
+        <TextInput
+          style={s.content__input}
+          placeholder="Type your username"
+          clearButtonMode="while-editing"
+        />
 
         <TouchableOpacity style={s.content__button} activeOpacity={0.9} onPress={this.closeModal}>
           <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
@@ -48,7 +52,6 @@ export class FixedContent extends React.PureComponent {
         ref={this.modal}
         onClosed={this.onClosed}
         adjustToContentHeight
-        avoidKeyboardLikeIOS
       >
         {this.renderContent()}
       </Modalize>

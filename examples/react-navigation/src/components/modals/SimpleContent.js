@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TextInput } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, Dimensions, TextInput, ScrollView } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
@@ -44,7 +43,11 @@ export class SimpleContent extends React.PureComponent {
           ))}
       </ScrollView>
 
-      <TextInput style={s.content__input} placeholder="Type your username" />
+      <TextInput
+        style={s.content__input}
+        placeholder="Type your username"
+        clearButtonMode="while-editing"
+      />
     </View>,
   ];
 
@@ -56,7 +59,6 @@ export class SimpleContent extends React.PureComponent {
           showsVerticalScrollIndicator: false,
           stickyHeaderIndices: [0],
         }}
-        avoidKeyboardLikeIOS
       >
         {this.renderContent()}
       </Modalize>
