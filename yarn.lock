@@ -1029,10 +1029,10 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
   integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
 
-"@types/react-native@0.61.7":
-  version "0.61.7"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.61.7.tgz#e0315b5f627d61470c7f58d7298e732aab90b2c5"
-  integrity sha512-LUhIiZUfGA0+2+/+KeHDpHfBmVYZdw1vwikYF2yTap5duuXtw3SUYn6kiPyBwFf++PmhWJeGeId94vAYbptvaw==
+"@types/react-native@0.61.9":
+  version "0.61.9"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.61.9.tgz#db7be9a0be63aadaaec36f1261eeb83cfe3e23d7"
+  integrity sha512-9eVeMPAvekLVNKq0G7v83mFKCdflB7v1Yiaup1J3Fd7oEInuLWv7sC3vssQ7wTekdxlFMHYroOrqVlNRqXuq0g==
   dependencies:
     "@types/react" "*"
 
@@ -3466,10 +3466,10 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
-lint-staged@10.0.3:
-  version "10.0.3"
-  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-10.0.3.tgz#fd27e25c308fb857d9cb44caa5fa845408d07df4"
-  integrity sha512-N071+M0yxKX0u67UOB8emFms29ekzrKoX1UlPcLS615O/rhx3+xRk5so8uU4tjdg4yNsD3ntdPSsuZnUPzblLA==
+lint-staged@10.0.7:
+  version "10.0.7"
+  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-10.0.7.tgz#d205f92d9359419a23bc6aa3b6f8546b1998da64"
+  integrity sha512-Byj0F4l7GYUpYYHEqyFH69NiI6ICTg0CeCKbhRorL+ickbzILKUlZLiyCkljZV02wnoh7yH7PmFyYm9PRNwk9g==
   dependencies:
     chalk "^3.0.0"
     commander "^4.0.1"
