@@ -696,7 +696,10 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
           ref={this.modal}
           maxDurationMs={100000}
           maxDeltaY={lastSnap}
-          enabled={panGestureEnabled}
+          enabled={Platform.select({
+            ios: false,
+            android: panGestureEnabled,
+          })}
         >
           <View style={s.modalize__wrapper} pointerEvents="box-none">
             {showContent && (

@@ -53,7 +53,11 @@ export class SimpleContent extends React.PureComponent {
           ))}
       </ScrollView>
 
-      <TextInput style={s.content__input} placeholder="Type your username" />
+      <TextInput
+        style={s.content__input}
+        placeholder="Type your username"
+        clearButtonMode="while-editing"
+      />
     </View>,
   ];
 
