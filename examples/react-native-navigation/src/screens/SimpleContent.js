@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TextInput } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, Dimensions, TextInput, ScrollView } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';

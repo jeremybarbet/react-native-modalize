@@ -596,6 +596,9 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
           useNativeDriver,
         })}
+        minDist={20}
+        activeOffsetY={20}
+        activeOffsetX={20}
         onHandlerStateChange={this.onHandleChildren}
       >
         <Animated.View
