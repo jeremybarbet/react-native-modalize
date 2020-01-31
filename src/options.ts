@@ -47,6 +47,11 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   modalHeight?: number;
 
   /**
+   * A number to define the modal's top offset
+   */
+  modalTopOffset?: number;
+
+  /**
    * Using this props will show the modal all the time, and the number represents how expanded the modal has to be
    */
   alwaysOpen?: number;

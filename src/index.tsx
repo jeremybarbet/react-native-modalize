@@ -48,6 +48,10 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       ios: true,
       android: false,
     }),
+    modalTopOffset: Platform.select({
+      ios: 0,
+      android: StatusBar.currentHeight || 0,
+    }),
     panGestureEnabled: true,
     closeOnOverlayTap: true,
     withReactModal: false,
@@ -84,9 +88,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   constructor(props: IProps<FlatListItem, SectionListItem>) {
     super(props);
 
-    const fullHeight = isIos
-      ? screenHeight
-      : screenHeight - (StatusBar.currentHeight || 0);
+    const fullHeight = screenHeight - props.modalTopOffset!;
     const computedHeight = fullHeight - this.handleHeight - (isIphoneX ? 34 : 0);
     const modalHeight = props.modalHeight || computedHeight;
 
