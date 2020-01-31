@@ -234,15 +234,6 @@ Callback function when the modal is opened.
 | -------- | -------- |
 | function | No       |
 
-### `onReachTop`
-
-Callback function when the modal reaches the top (modal/screen height)
-?> Not to be conflicted with `onOpened` which is triggered when the modal opens after previously been closed or on mount when using `alwaysOpen` prop. `onReachTop` is always triggered when you scroll an open modal from any point on the screen to the very top.
-
-| Type     | Required |
-| -------- | -------- |
-| function | No       |
-
 ### `onClose`
 
 Callback function when the `close` method is triggered.
