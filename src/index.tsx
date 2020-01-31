@@ -451,11 +451,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         velocity: velocityY,
         toValue: destSnapPoint,
         useNativeDriver,
-      }).start(() => {
-        if (this.props.onReachTop) {
-          this.props.onReachTop(Boolean(destSnapPoint <= 0));
-        }
-      });
+      }).start();
     }
   };
 
