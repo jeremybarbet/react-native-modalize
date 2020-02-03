@@ -6,6 +6,8 @@ A React component that will define the content of the modal.
 
 By passing a children props it will use the default `ScrollView` component. However, if you want to use a `FlatList` or a `SectionList` check the details [here](/PROPSMETHODS.md?id=flatListProps) and [here](/PROPSMETHODS.md?id=sectionListProps).
 
+!> Since version `1.3.7-rc.1` you need to explicitly passed the component
+
 ?> If you want to use another ScrollView inside the modal, check the **Default Content** example: `examples/expo/src/modals/SimpleContent.tsx`. It uses the ScrollView from `react-native-gesture-handler`.
 
 | Type     | Required |
@@ -171,36 +173,6 @@ Define if the handle on top of the modal is display or not.
 | Type     | Required | Default  |
 | -------- | -------- | -------- |
 | bool     | No       | `true`   |
-
-### `scrollViewProps`
-
-An object to pass any of the react-native ScrollView's props.
-
-Refer to the [`react-native` ScrollView documentation](https://facebook.github.io/react-native/docs/#props) to know all the avaibles props.
-
-| Type     | Required |
-| -------- | -------- |
-| object   | No       |
-
-### `flatListProps`
-
-An object to pass any of the react-native FlatList's props. Using this props will replace the default `ScrollView` with the `FlatList` component.
-
-Refer to the [`react-native` FlatList documentation](https://facebook.github.io/react-native/docs/flatlist#props) to know all the avaibles props.
-
-| Type     | Required |
-| -------- | -------- |
-| object   | No       |
-
-### `sectionListProps`
-
-An object to pass any of the react-native SectionList's props. Using this props will replace the default `ScrollView` with the `SectionList` component.
-
-Refer to the [`react-native` SectionList documentation](https://facebook.github.io/react-native/docs/sectionlist#props) to know all the avaibles props.
-
-| Type     | Required |
-| -------- | -------- |
-| object   | No       |
 
 ### `HeaderComponent`
 

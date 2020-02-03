@@ -53,14 +53,10 @@ export class SimpleContent extends React.PureComponent {
 
   render() {
     return (
-      <Modalize
-        ref={this.modal}
-        scrollViewProps={{
-          showsVerticalScrollIndicator: false,
-          stickyHeaderIndices: [0],
-        }}
-      >
-        {this.renderContent()}
+      <Modalize ref={this.modal}>
+        <Animated.ScrollView showsVerticalScrollIndicator={false} stickyHeaderIndices={[0]}>
+          {this.renderContent()}
+        </Animated.ScrollView>
       </Modalize>
     );
   }

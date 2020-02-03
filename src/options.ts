@@ -1,12 +1,4 @@
-import {
-  Animated,
-  ViewStyle,
-  RegisteredStyle,
-  ScrollViewProps,
-  FlatListProps,
-  SectionListProps,
-  EasingFunction,
-} from 'react-native';
+import { Animated, ViewStyle, RegisteredStyle, EasingFunction } from 'react-native';
 
 export interface ITimingProps {
   duration: number;
@@ -30,7 +22,7 @@ export interface IConfigProps {
   spring: ISpringProps;
 }
 
-export interface IProps<FlatListItem = any, SectionListItem = any> {
+export interface IProps {
   /**
    * A React component that will define the content of the modal.
    */
@@ -160,21 +152,6 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    * @default true
    */
   withHandle?: boolean;
-
-  /*
-   * An object to pass any of the react-native ScrollView's props.
-   */
-  scrollViewProps?: ScrollViewProps;
-
-  /*
-   * An object to pass any of the react-native FlatList's props.
-   */
-  flatListProps?: FlatListProps<FlatListItem>;
-
-  /*
-   * An object to pass any of the react-native SectionList's props.
-   */
-  sectionListProps?: SectionListProps<SectionListItem>;
 
   /**
    * A header component outside of the ScrollView, on top of the modal.

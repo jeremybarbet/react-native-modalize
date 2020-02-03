@@ -68,17 +68,15 @@ export class SectionList extends React.PureComponent {
 
   render() {
     return (
-      <Modalize
-        ref={this.modal}
-        onClosed={this.onClosed}
-        sectionListProps={{
-          sections: this.sections,
-          renderItem: this.renderItem,
-          renderSectionHeader: this.renderSectionHeader,
-          keyExtractor: (item, index) => `${item.title}-${index}`,
-          showsVerticalScrollIndicator: false,
-        }}
-      />
+      <Modalize ref={this.modal} onClosed={this.onClosed}>
+        <Animated.SectionList
+          sections={this.sections}
+          renderItem={this.renderItem}
+          renderSectionHeader={this.renderSectionHeader}
+          keyExtractor={(item, index) => `${item.title}-${index}`}
+          showsVerticalScrollIndicator={false}
+        />
+      </Modalize>
     );
   }
 }

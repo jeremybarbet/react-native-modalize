@@ -27,19 +27,17 @@ import {
 } from 'react-native-gesture-handler';
 
 import { IProps, IState } from './options';
-import { getSpringConfig, isIphoneX, isIos, hasAbsoluteStyle } from './utils';
+import { composeRefs } from './utils/compose-refs';
+import { isIphoneX } from './utils/devices';
+import { getSpringConfig } from './utils/get-spring-config';
+import { hasAbsoluteStyle } from './utils/has-absolute-style';
 import s from './styles';
 
 const { height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
-const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 const THRESHOLD = 150;
 
-export class Modalize<FlatListItem = any, SectionListItem = any> extends React.Component<
-  IProps<FlatListItem, SectionListItem>,
-  IState
-> {
+export class Modalize extends React.Component<IProps, IState> {
   static defaultProps = {
     handlePosition: 'outside',
     useNativeDriver: true,
@@ -85,7 +83,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   private willCloseModalize: boolean = false;
   private initialComputedModalHeight: number = 0;
 
-  constructor(props: IProps<FlatListItem, SectionListItem>) {
+  constructor(props: IProps) {
     super(props);
 
     const fullHeight = screenHeight - props.modalTopOffset!;
@@ -103,18 +101,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     if (props.modalHeight && props.adjustToContentHeight) {
       console.error(
         `[react-native-modalize] You cannot use both 'modalHeight' and 'adjustToContentHeight' props at the same time. Only choose one of the two.`,
-      );
-    }
-
-    if ((props.scrollViewProps || props.children) && props.flatListProps) {
-      console.error(
-        `[react-native-modalize] 'flatListProps' You can\'t use the ScrollView and the FlatList at the 'same time. As soon as you use 'flatListProps' it will replaces the default ScrollView with 'a FlatList component. Remove the 'children' and/or 'scrollViewProps' to fix the error.`,
-      );
-    }
-
-    if ((props.scrollViewProps || props.children) && props.sectionListProps) {
-      console.error(
-        `[react-native-modalize] 'sectionListProps' You can\'t use the ScrollView and the SectionList at the 'same time. As soon as you use 'sectionListProps' it will replaces the default ScrollView with 'a SectionList component. Remove the 'children' and/or 'scrollViewProps' to fix the error.`,
       );
     }
 
@@ -559,14 +545,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private renderContent = (): React.ReactNode => {
-    const { children, scrollViewProps, flatListProps, sectionListProps } = this.props;
+    const { children } = this.props;
     const { enableBounces } = this.state;
-    const keyboardDismissMode = isIos ? 'interactive' : 'on-drag';
 
-    // https://github.com/seznam/compose-react-refs
+    // console.log('-children.props', children.props);
+
     const opts = {
-      // ref: this.contentView,
-      ref: children.props.ref,
+      // ref: composeRefs((children as any).props?.ref, this.contentView),
+      ref: this.contentView,
       bounces: enableBounces,
       onScrollBeginDrag: Animated.event(
         [{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }],
@@ -576,21 +562,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       onLayout: this.onContentViewLayout,
     };
 
-    if (flatListProps) {
-      return <AnimatedFlatList {...opts} {...flatListProps} />;
-    }
-
-    if (sectionListProps) {
-      return <AnimatedSectionList {...opts} {...sectionListProps} />;
-    }
-
-    // return (
-    //   <Animated.ScrollView {...opts} {...scrollViewProps} keyboardDismissMode={keyboardDismissMode}>
-    //     {children}
-    //   </Animated.ScrollView>
-    // );
-
-    return React.cloneElement((children as any), { ...opts, ...scrollViewProps, keyboardDismissMode });
+    return React.cloneElement(children as any, { ...opts });
   };
 
   private renderChildren = (): React.ReactNode => {
@@ -687,7 +659,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     const { isVisible, lastSnap, showContent } = this.state;
     const pointerEvents = alwaysOpen ? 'box-none' : 'auto';
 
-    const keyboardAvoidingViewProps: KeyboardAvoidingViewProps = {
+    const keyboardAvoidingViewProps: Animated.AnimatedProps<KeyboardAvoidingViewProps> = {
       keyboardVerticalOffset: keyboardAvoidingOffset,
       behavior: keyboardAvoidingBehavior || 'padding',
       enabled: avoidKeyboardLikeIOS,

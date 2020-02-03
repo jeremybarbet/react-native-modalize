@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Animated } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
@@ -59,16 +59,15 @@ export class SectionList extends React.PureComponent {
 
   render() {
     return (
-      <Modalize
-        ref={this.modal}
-        sectionListProps={{
-          sections: this.sections,
-          renderItem: this.renderItem,
-          renderSectionHeader: this.renderSectionHeader,
-          keyExtractor: (item, index) => `${item.title}-${index}`,
-          showsVerticalScrollIndicator: false,
-        }}
-      />
+      <Modalize ref={this.modal}>
+        <Animated.SectionList
+          sections={this.sections}
+          renderItem={this.renderItem}
+          renderSectionHeader={this.renderSectionHeader}
+          keyExtractor={(item, index) => `${item.title}-${index}`}
+          showsVerticalScrollIndicator={false}
+        />
+      </Modalize>
     );
   }
 }

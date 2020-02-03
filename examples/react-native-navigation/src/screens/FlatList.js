@@ -39,16 +39,15 @@ export class FlatList extends React.PureComponent {
 
   render() {
     return (
-      <Modalize
-        ref={this.modal}
-        onClosed={this.onClosed}
-        flatListProps={{
-          data: this.data,
-          renderItem: this.renderItem,
-          keyExtractor: item => item.email,
-          showsVerticalScrollIndicator: false,
-        }}
-      />
+      <Modalize ref={this.modal} onClosed={this.onClosed}>
+        <Animated.FlatList
+          ref={this.flatList}
+          data={this.data}
+          renderItem={this.renderItem}
+          keyExtractor={item => item.email}
+          showsVerticalScrollIndicator={false}
+        />
+      </Modalize>
     );
   }
 }
