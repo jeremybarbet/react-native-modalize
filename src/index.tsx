@@ -563,8 +563,10 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     const { enableBounces } = this.state;
     const keyboardDismissMode = isIos ? 'interactive' : 'on-drag';
 
+    // https://github.com/seznam/compose-react-refs
     const opts = {
-      ref: this.contentView,
+      // ref: this.contentView,
+      ref: children.props.ref,
       bounces: enableBounces,
       onScrollBeginDrag: Animated.event(
         [{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }],
@@ -582,11 +584,13 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       return <AnimatedSectionList {...opts} {...sectionListProps} />;
     }
 
-    return (
-      <Animated.ScrollView {...opts} {...scrollViewProps} keyboardDismissMode={keyboardDismissMode}>
-        {children}
-      </Animated.ScrollView>
-    );
+    // return (
+    //   <Animated.ScrollView {...opts} {...scrollViewProps} keyboardDismissMode={keyboardDismissMode}>
+    //     {children}
+    //   </Animated.ScrollView>
+    // );
+
+    return React.cloneElement((children as any), { ...opts, ...scrollViewProps, keyboardDismissMode });
   };
 
   private renderChildren = (): React.ReactNode => {

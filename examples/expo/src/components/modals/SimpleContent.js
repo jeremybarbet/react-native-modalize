@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TextInput, ScrollView, Animated } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
@@ -60,7 +60,9 @@ export class SimpleContent extends React.PureComponent {
           stickyHeaderIndices: [0],
         }}
       >
-        {this.renderContent()}
+        <Animated.ScrollView>
+          {this.renderContent()}
+        </Animated.ScrollView>
       </Modalize>
     );
   }
