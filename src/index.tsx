@@ -284,14 +284,12 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       if (onOpened) {
         onOpened();
       }
-
       if (onPositionChange) {
         if (alwaysOpen || snapPoint) {
           this.modalPosition = 'initial';
         } else {
           this.modalPosition = 'top';
         }
-
         onPositionChange(this.modalPosition);
       }
     });
