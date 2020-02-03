@@ -80,6 +80,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   private modalOverlayTap: React.RefObject<TapGestureHandler> = React.createRef();
   private willCloseModalize: boolean = false;
   private initialComputedModalHeight: number = 0;
+  private modalPosition: 'top' | 'initial';
 
   constructor(props: IProps<FlatListItem, SectionListItem>) {
     super(props);
@@ -455,7 +456,10 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
       if (this.props.onPositionChange && this.beginScrollYValue === 0) {
         const modalPosition = Boolean(destSnapPoint <= 0) ? 'top' : 'initial';
-        this.props.onPositionChange(modalPosition);
+        if (this.modalPosition !== modalPosition) {
+          this.props.onPositionChange(modalPosition);
+          this.modalPosition = modalPosition;
+        }
       }
     }
   };
