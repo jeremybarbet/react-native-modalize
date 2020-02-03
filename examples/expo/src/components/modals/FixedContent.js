@@ -39,7 +39,7 @@ export class FixedContent extends React.PureComponent {
 
   render() {
     return (
-      <Modalize ref={this.modal} adjustToContentHeight>
+      <Modalize ref={this.modal} adjustToContentHeight onPositionChange={(pos) => console.log('-pos', pos)}>
         {this.renderContent()}
       </Modalize>
     );

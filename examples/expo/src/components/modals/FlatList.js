@@ -38,6 +38,7 @@ export class FlatList extends React.PureComponent {
           keyExtractor: item => item.email,
           showsVerticalScrollIndicator: false,
         }}
+        onPositionChange={(pos) => console.log('-pos', pos)}
       />
     );
   }

@@ -45,7 +45,7 @@ export class AbsoluteHeader extends React.PureComponent {
 
   render() {
     return (
-      <Modalize ref={this.modal} HeaderComponent={this.renderHeader} withHandle={false}>
+      <Modalize ref={this.modal} HeaderComponent={this.renderHeader} withHandle={false} onPositionChange={(pos) => console.log('-pos', pos)}>
         {this.renderContent()}
       </Modalize>
     );

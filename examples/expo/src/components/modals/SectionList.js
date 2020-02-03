@@ -68,6 +68,7 @@ export class SectionList extends React.PureComponent {
           keyExtractor: (item, index) => `${item.title}-${index}`,
           showsVerticalScrollIndicator: false,
         }}
+        onPositionChange={(pos) => console.log('-pos', pos)}
       />
     );
   }

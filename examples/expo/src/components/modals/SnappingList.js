@@ -54,7 +54,7 @@ export class SnappingList extends React.PureComponent {
 
   render() {
     return (
-      <Modalize ref={this.modal} HeaderComponent={this.renderHeader} snapPoint={350}>
+      <Modalize ref={this.modal} HeaderComponent={this.renderHeader} snapPoint={350} onPositionChange={(pos) => console.log('-pos', pos)}>
         {this.renderContent()}
       </Modalize>
     );

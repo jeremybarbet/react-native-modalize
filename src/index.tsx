@@ -379,21 +379,23 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     const { adjustToContentHeight, snapPoint, alwaysOpen } = this.props;
     const { contentHeight, modalHeight } = this.state;
 
-    if (
-      !adjustToContentHeight ||
-      (modalHeight || 0) <= nativeEvent.layout.height ||
-      snapPoint ||
-      this.contentAlreadyCalculated
-    ) {
-      if ((modalHeight || 0) <= nativeEvent.layout.height) {
-        this.onAnimateOpen(alwaysOpen);
-      }
+    // if (
+    //   !adjustToContentHeight ||
+    //   (modalHeight || 0) <= nativeEvent.layout.height ||
+    //   snapPoint ||
+    //   this.contentAlreadyCalculated
+    // ) {
+    //   if ((modalHeight || 0) <= nativeEvent.layout.height) {
+    //     this.onAnimateOpen(alwaysOpen);
+    //   }
 
+    //   return;
+    // }
+
+    if (!adjustToContentHeight) {
       return;
     }
 
-    // @todo: modalHeight should be equal to the nativeEvent's height,
-    // and not to the state's value which is 0 at the first mount
     this.setState(
       {
         contentHeight: nativeEvent.layout.height || contentHeight,

@@ -31,6 +31,7 @@ export class AlwaysOpen extends React.PureComponent {
         modalStyle={s.content__modal}
         alwaysOpen={85}
         handlePosition="inside"
+        onPositionChange={(pos) => console.log('-pos', pos)}
       >
         {this.renderContent()}
       </Modalize>

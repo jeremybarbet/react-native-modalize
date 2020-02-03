@@ -59,6 +59,7 @@ export class SimpleContent extends React.PureComponent {
           showsVerticalScrollIndicator: false,
           stickyHeaderIndices: [0],
         }}
+        onPositionChange={(pos) => console.log('-pos', pos)}
       >
         {this.renderContent()}
       </Modalize>
