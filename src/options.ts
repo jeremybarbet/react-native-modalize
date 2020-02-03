@@ -210,10 +210,10 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
 
   /**
    * Callback function which determines if the modal has reached the top
-   * i.e. whether it's completely opened to modal/screen height or not,
-   * or is at the initial point (snap point or alwaysOpened Height)
+   * i.e. completely opened to modal/screen height, or is at the initial
+   * point (snapPoint or alwaysOpened height)
    */
-  onPositionChange?: (arg: 'top' | 'initial') => void;
+  onPositionChange?: (position: 'top' | 'initial') => void;
 }
 
 export interface IState {
