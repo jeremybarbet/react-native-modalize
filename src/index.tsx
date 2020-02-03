@@ -84,6 +84,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   private modalOverlayTap: React.RefObject<TapGestureHandler> = React.createRef();
   private willCloseModalize: boolean = false;
   private initialComputedModalHeight: number = 0;
+  private modalPosition: 'top' | 'initial';
 
   constructor(props: IProps<FlatListItem, SectionListItem>) {
     super(props);
@@ -236,7 +237,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   }
 
   private onAnimateOpen = (alwaysOpen?: number): void => {
-    const { onOpened, snapPoint, useNativeDriver, openAnimationConfig } = this.props;
+    const {
+      onOpened,
+      snapPoint,
+      useNativeDriver,
+      openAnimationConfig,
+      onPositionChange,
+    } = this.props;
+
     const { timing, spring } = openAnimationConfig!;
     const { overlay, modalHeight } = this.state;
     const toValue = alwaysOpen
@@ -276,11 +284,26 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       if (onOpened) {
         onOpened();
       }
+      if (onPositionChange) {
+        if (alwaysOpen || snapPoint) {
+          this.modalPosition = 'initial';
+        } else {
+          this.modalPosition = 'top';
+        }
+        onPositionChange(this.modalPosition);
+      }
     });
   };
 
   private onAnimateClose = (dest: 'alwaysOpen' | 'default' = 'default'): void => {
-    const { onClosed, useNativeDriver, snapPoint, closeAnimationConfig, alwaysOpen } = this.props;
+    const {
+      onClosed,
+      useNativeDriver,
+      snapPoint,
+      closeAnimationConfig,
+      alwaysOpen,
+      onPositionChange,
+    } = this.props;
     const { timing, spring } = closeAnimationConfig!;
     const { overlay, modalHeight } = this.state;
     const lastSnap = snapPoint ? this.snaps[1] : 80;
@@ -315,6 +338,11 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     ]).start(() => {
       if (onClosed) {
         onClosed();
+      }
+
+      if (alwaysOpen && dest === 'alwaysOpen' && onPositionChange) {
+        onPositionChange('initial');
+        this.modalPosition = 'initial';
       }
 
       this.setState({ showContent: toInitialAlwaysOpen });
@@ -391,6 +419,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       alwaysOpen,
       closeAnimationConfig,
       dragToss,
+      onPositionChange,
     } = this.props;
     const { timing } = closeAnimationConfig!;
     const { lastSnap, modalHeight, overlay } = this.state;
@@ -457,6 +486,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         toValue: destSnapPoint,
         useNativeDriver,
       }).start();
+
+      if (onPositionChange && this.beginScrollYValue === 0) {
+        const modalPosition = Boolean(destSnapPoint <= 0) ? 'top' : 'initial';
+        if (this.modalPosition !== modalPosition) {
+          onPositionChange(modalPosition);
+          this.modalPosition = modalPosition;
+        }
+      }
     }
   };
 

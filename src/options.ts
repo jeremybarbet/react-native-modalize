@@ -212,6 +212,13 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    * but you will have to close the modal by yourself.
    */
   onBackButtonPress?: () => void;
+
+  /**
+   * Callback function which determines if the modal has reached the top
+   * i.e. completely opened to modal/screen height, or is at the initial
+   * point (snapPoint or alwaysOpened height)
+   */
+  onPositionChange?: (position: 'top' | 'initial') => void;
 }
 
 export interface IState {
