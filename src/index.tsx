@@ -453,8 +453,9 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         useNativeDriver,
       }).start();
 
-      if (this.props.onReachTop) {
-        this.props.onReachTop(Boolean(destSnapPoint <= 0));
+      if (this.props.onPositionChange && this.beginScrollYValue === 0) {
+        const modalPosition = Boolean(destSnapPoint <= 0) ? 'top' : 'initial';
+        this.props.onPositionChange(modalPosition);
       }
     }
   };
