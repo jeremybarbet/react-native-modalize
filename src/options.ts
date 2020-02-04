@@ -164,17 +164,17 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   /*
    * An object to pass any of the react-native ScrollView's props.
    */
-  scrollViewProps?: ScrollViewProps;
+  scrollViewProps?: Animated.AnimatedProps<ScrollViewProps>;
 
   /*
    * An object to pass any of the react-native FlatList's props.
    */
-  flatListProps?: FlatListProps<FlatListItem>;
+  flatListProps?: Animated.AnimatedProps<FlatListProps<FlatListItem>>;
 
   /*
    * An object to pass any of the react-native SectionList's props.
    */
-  sectionListProps?: SectionListProps<SectionListItem>;
+  sectionListProps?: Animated.AnimatedProps<SectionListProps<SectionListItem>>;
 
   /**
    * A header component outside of the ScrollView, on top of the modal.
