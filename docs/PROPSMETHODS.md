@@ -222,6 +222,18 @@ Callback function when the modal is closed.
 | -------- | -------- |
 | function | No       |
 
+### `onPositionChange`
+
+Callback function when the modal reaches the `top` (modal/screen height) or `initial` point (snapPoint or alwaysOpen height).
+
+?> Not to be conflicted with `onOpened` which is triggered when the modal opens for the first time.
+
+| Type                                    | Required |
+| --------------------------------------- | -------- |
+| function: (position: 'top' \| 'initial') | No       |
+
+
+
 <br/>
 <br/>
 <br/>
@@ -245,7 +257,7 @@ The method to close the modal. You don't need to call it to dismiss the modal, s
 
 | Type                                       | Required |
 | ------------------------------------------ | -------- |
-| function: (dest: 'alwaysOpen' | 'default') | No       |
+| function: (dest: 'alwaysOpen' \| 'default') | No       |
 
 ### `scrollTo()`
 

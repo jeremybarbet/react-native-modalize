@@ -67,7 +67,6 @@ export class Modalize extends React.Component<IProps, IState> {
   private snaps: number[] = [];
   private snapEnd: number;
   private beginScrollYValue: number = 0;
-  private contentAlreadyCalculated: boolean = false;
   private beginScrollY: Animated.Value = new Animated.Value(0);
   private dragY: Animated.Value = new Animated.Value(0);
   private translateY: Animated.Value = new Animated.Value(screenHeight);
@@ -82,6 +81,7 @@ export class Modalize extends React.Component<IProps, IState> {
   private modalOverlayTap: React.RefObject<TapGestureHandler> = React.createRef();
   private willCloseModalize: boolean = false;
   private initialComputedModalHeight: number = 0;
+  private modalPosition: 'top' | 'initial';
 
   constructor(props: IProps) {
     super(props);
@@ -143,17 +143,13 @@ export class Modalize extends React.Component<IProps, IState> {
   }
 
   public open = (): void => {
-    const { adjustToContentHeight, onOpen } = this.props;
+    const { onOpen } = this.props;
 
     if (onOpen) {
       onOpen();
     }
 
-    if (!adjustToContentHeight || this.contentAlreadyCalculated) {
-      this.onAnimateOpen();
-    } else {
-      this.setState({ isVisible: true });
-    }
+    this.onAnimateOpen();
   };
 
   public close = (dest: 'alwaysOpen' | 'default' = 'default'): void => {
@@ -222,7 +218,14 @@ export class Modalize extends React.Component<IProps, IState> {
   }
 
   private onAnimateOpen = (alwaysOpen?: number): void => {
-    const { onOpened, snapPoint, useNativeDriver, openAnimationConfig } = this.props;
+    const {
+      onOpened,
+      snapPoint,
+      useNativeDriver,
+      openAnimationConfig,
+      onPositionChange,
+    } = this.props;
+
     const { timing, spring } = openAnimationConfig!;
     const { overlay, modalHeight } = this.state;
     const toValue = alwaysOpen
@@ -262,11 +265,28 @@ export class Modalize extends React.Component<IProps, IState> {
       if (onOpened) {
         onOpened();
       }
+
+      if (onPositionChange) {
+        if (alwaysOpen || snapPoint) {
+          this.modalPosition = 'initial';
+        } else {
+          this.modalPosition = 'top';
+        }
+
+        onPositionChange(this.modalPosition);
+      }
     });
   };
 
   private onAnimateClose = (dest: 'alwaysOpen' | 'default' = 'default'): void => {
-    const { onClosed, useNativeDriver, snapPoint, closeAnimationConfig, alwaysOpen } = this.props;
+    const {
+      onClosed,
+      useNativeDriver,
+      snapPoint,
+      closeAnimationConfig,
+      alwaysOpen,
+      onPositionChange,
+    } = this.props;
     const { timing, spring } = closeAnimationConfig!;
     const { overlay, modalHeight } = this.state;
     const lastSnap = snapPoint ? this.snaps[1] : 80;
@@ -303,6 +323,11 @@ export class Modalize extends React.Component<IProps, IState> {
         onClosed();
       }
 
+      if (alwaysOpen && dest === 'alwaysOpen' && onPositionChange) {
+        onPositionChange('initial');
+        this.modalPosition = 'initial';
+      }
+
       this.setState({ showContent: toInitialAlwaysOpen });
       this.translateY.setValue(toValue);
       this.dragY.setValue(0);
@@ -331,36 +356,6 @@ export class Modalize extends React.Component<IProps, IState> {
     });
   };
 
-  private onContentViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
-    const { adjustToContentHeight, snapPoint, alwaysOpen } = this.props;
-    const { contentHeight, modalHeight } = this.state;
-
-    if (
-      !adjustToContentHeight ||
-      (modalHeight || 0) <= nativeEvent.layout.height ||
-      snapPoint ||
-      this.contentAlreadyCalculated
-    ) {
-      if ((modalHeight || 0) <= nativeEvent.layout.height) {
-        this.onAnimateOpen(alwaysOpen);
-      }
-
-      return;
-    }
-
-    // @todo: modalHeight should be equal to the nativeEvent's height,
-    // and not to the state's value which is 0 at the first mount
-    this.setState(
-      {
-        contentHeight: nativeEvent.layout.height || contentHeight,
-      },
-      () => {
-        this.contentAlreadyCalculated = true;
-        this.onAnimateOpen();
-      },
-    );
-  };
-
   private onHandleComponent = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
     if (nativeEvent.oldState === State.BEGAN) {
       this.beginScrollY.setValue(0);
@@ -377,6 +372,7 @@ export class Modalize extends React.Component<IProps, IState> {
       alwaysOpen,
       closeAnimationConfig,
       dragToss,
+      onPositionChange,
     } = this.props;
     const { timing } = closeAnimationConfig!;
     const { lastSnap, modalHeight, overlay } = this.state;
@@ -443,6 +439,15 @@ export class Modalize extends React.Component<IProps, IState> {
         toValue: destSnapPoint,
         useNativeDriver,
       }).start();
+
+      if (onPositionChange && this.beginScrollYValue === 0) {
+        const modalPosition = Boolean(destSnapPoint <= 0) ? 'top' : 'initial';
+
+        if (this.modalPosition !== modalPosition) {
+          onPositionChange(modalPosition);
+          this.modalPosition = modalPosition;
+        }
+      }
     }
   };
 
@@ -548,8 +553,6 @@ export class Modalize extends React.Component<IProps, IState> {
     const { children } = this.props;
     const { enableBounces } = this.state;
 
-    // console.log('-children.props', children.props);
-
     const opts = {
       // ref: composeRefs((children as any).props?.ref, this.contentView),
       ref: this.contentView,
@@ -559,7 +562,6 @@ export class Modalize extends React.Component<IProps, IState> {
         { useNativeDriver: false },
       ),
       scrollEventThrottle: 16,
-      onLayout: this.onContentViewLayout,
     };
 
     return React.cloneElement(children as any, { ...opts });
