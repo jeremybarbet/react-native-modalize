@@ -69,7 +69,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   private snaps: number[] = [];
   private snapEnd: number;
   private beginScrollYValue: number = 0;
-  private contentAlreadyCalculated: boolean = false;
   private beginScrollY: Animated.Value = new Animated.Value(0);
   private dragY: Animated.Value = new Animated.Value(0);
   private translateY: Animated.Value = new Animated.Value(screenHeight);
@@ -158,17 +157,13 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   }
 
   public open = (): void => {
-    const { adjustToContentHeight, onOpen } = this.props;
+    const { onOpen } = this.props;
 
     if (onOpen) {
       onOpen();
     }
 
-    if (!adjustToContentHeight || this.contentAlreadyCalculated) {
-      this.onAnimateOpen();
-    } else {
-      this.setState({ isVisible: true });
-    }
+    this.onAnimateOpen();
   };
 
   public close = (dest: 'alwaysOpen' | 'default' = 'default'): void => {
@@ -373,38 +368,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
           })!,
       ),
     });
-  };
-
-  private onContentViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
-    const { adjustToContentHeight, snapPoint, alwaysOpen } = this.props;
-    const { contentHeight, modalHeight } = this.state;
-
-    // if (
-    //   !adjustToContentHeight ||
-    //   (modalHeight || 0) <= nativeEvent.layout.height ||
-    //   snapPoint ||
-    //   this.contentAlreadyCalculated
-    // ) {
-    //   if ((modalHeight || 0) <= nativeEvent.layout.height) {
-    //     this.onAnimateOpen(alwaysOpen);
-    //   }
-
-    //   return;
-    // }
-
-    if (!adjustToContentHeight) {
-      return;
-    }
-
-    this.setState(
-      {
-        contentHeight: nativeEvent.layout.height || contentHeight,
-      },
-      () => {
-        this.contentAlreadyCalculated = true;
-        this.onAnimateOpen();
-      },
-    );
   };
 
   private onHandleComponent = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
@@ -613,7 +576,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         { useNativeDriver: false },
       ),
       scrollEventThrottle: 16,
-      onLayout: this.onContentViewLayout,
+      keyboardDismissMode,
     };
 
     if (flatListProps) {
@@ -625,7 +588,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     }
 
     return (
-      <Animated.ScrollView {...opts} {...scrollViewProps} keyboardDismissMode={keyboardDismissMode}>
+      <Animated.ScrollView {...opts} {...scrollViewProps}>
         {children}
       </Animated.ScrollView>
     );

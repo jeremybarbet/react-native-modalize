@@ -36,7 +36,6 @@ export class CustomStyle extends React.PureComponent {
           timing: { duration: 400 },
           spring: { speed: 20, bounciness: 10 },
         }}
-        onPositionChange={(pos) => console.log('-pos', pos)}
       >
         {this.renderContent()}
       </Modalize>
