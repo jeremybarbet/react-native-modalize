@@ -253,19 +253,13 @@ Callback function when the modal is closed.
 ### `onPositionChange`
 
 Callback function when the modal reaches the `top` (modal/screen height) or `initial` point (snapPoint or alwaysOpen height).
-<<<<<<< HEAD
 
-=======
->>>>>>> docs: update docs with onPosition change prop
 ?> Not to be conflicted with `onOpened` which is triggered when the modal opens for the first time.
 
 | Type                                    | Required |
 | --------------------------------------- | -------- |
-<<<<<<< HEAD
 | function: (position: 'top' \| 'initial') | No       |
-=======
-| function: (position: 'top' | 'initial') | No       |
->>>>>>> docs: update docs with onPosition change prop
+
 
 
 <br/>
