@@ -14,7 +14,7 @@ export const Header = ({ subheading }) => (
       >
         Jérémy Barbet
       </Text>{' '}
-      — v1.3.7-rc.1
+      — v1.3.7-rc.2
     </Text>
   </View>
 );
