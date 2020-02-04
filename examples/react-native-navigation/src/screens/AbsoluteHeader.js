@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
@@ -60,7 +60,7 @@ export class AbsoluteHeader extends React.PureComponent {
         withHandle={false}
         onClosed={this.onClosed}
       >
-        {this.renderContent()}
+        <Animated.ScrollView>{this.renderContent()}</Animated.ScrollView>
       </Modalize>
     );
   }

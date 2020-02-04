@@ -27,33 +27,26 @@ export class FixedContent extends React.PureComponent {
     }
   };
 
-  renderContent = () => {
-    return (
-      <View style={s.content}>
-        <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
-        <Text style={s.content__heading}>Send the message?</Text>
-        <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
-        <TextInput
-          style={s.content__input}
-          placeholder="Type your username"
-          clearButtonMode="while-editing"
-        />
+  renderContent = () => (
+    <View style={s.content}>
+      <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
+      <Text style={s.content__heading}>Send the message?</Text>
+      <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
+      <TextInput
+        style={s.content__input}
+        placeholder="Type your username"
+        clearButtonMode="while-editing"
+      />
 
-        <TouchableOpacity style={s.content__button} activeOpacity={0.9} onPress={this.closeModal}>
-          <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+      <TouchableOpacity style={s.content__button} activeOpacity={0.9} onPress={this.closeModal}>
+        <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   render() {
     return (
-      <Modalize
-        ref={this.modal}
-        onClosed={this.onClosed}
-        scrollViewProps={{ scrollEnabled: false }}
-        adjustToContentHeight
-      >
+      <Modalize ref={this.modal} onClosed={this.onClosed} adjustToContentHeight>
         {this.renderContent()}
       </Modalize>
     );

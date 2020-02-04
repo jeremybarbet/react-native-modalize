@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
@@ -46,7 +46,7 @@ export class AbsoluteHeader extends React.PureComponent {
   render() {
     return (
       <Modalize ref={this.modal} HeaderComponent={this.renderHeader} withHandle={false}>
-        {this.renderContent()}
+        <Animated.ScrollView>{this.renderContent()}</Animated.ScrollView>
       </Modalize>
     );
   }

@@ -6,24 +6,22 @@ import faker from 'faker';
 export class FixedContent extends React.PureComponent {
   modal = React.createRef();
 
-  renderContent = () => {
-    return (
-      <View style={s.content}>
-        <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
-        <Text style={s.content__heading}>Send the message?</Text>
-        <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
-        <TextInput
-          style={s.content__input}
-          placeholder="Type your username"
-          clearButtonMode="while-editing"
-        />
+  renderContent = () => (
+    <View style={s.content}>
+      <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
+      <Text style={s.content__heading}>Send the message?</Text>
+      <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
+      <TextInput
+        style={s.content__input}
+        placeholder="Type your username"
+        clearButtonMode="while-editing"
+      />
 
-        <TouchableOpacity style={s.content__button} activeOpacity={0.9} onPress={this.closeModal}>
-          <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+      <TouchableOpacity style={s.content__button} activeOpacity={0.9} onPress={this.closeModal}>
+        <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   openModal = () => {
     if (this.modal.current) {
@@ -39,7 +37,7 @@ export class FixedContent extends React.PureComponent {
 
   render() {
     return (
-      <Modalize ref={this.modal} scrollViewProps={{ scrollEnabled: false }} adjustToContentHeight>
+      <Modalize ref={this.modal} adjustToContentHeight>
         {this.renderContent()}
       </Modalize>
     );
