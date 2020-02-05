@@ -72,6 +72,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   private beginScrollYValue: number = 0;
   private beginScrollY: Animated.Value = new Animated.Value(0);
   private dragY: Animated.Value = new Animated.Value(0);
+  private dragYValue: number = 0;
   private translateY: Animated.Value = new Animated.Value(screenHeight);
   private reverseBeginScrollY: Animated.AnimatedMultiplication;
   private modal: React.RefObject<TapGestureHandler> = React.createRef();
@@ -140,6 +141,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       disableScroll: props.alwaysOpen ? true : undefined,
     };
 
+    this.dragY.addListener(({ value }) => (this.dragYValue = value));
     this.beginScrollY.addListener(({ value }) => (this.beginScrollYValue = value));
     this.reverseBeginScrollY = Animated.multiply(new Animated.Value(-1), this.beginScrollY);
   }
@@ -206,13 +208,17 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   private get modalizeContent(): StyleProp<any> {
     const { modalHeight } = this.state;
     const valueY = Animated.add(this.dragY, this.reverseBeginScrollY);
+    const cancel = this.dragYValue !== 0 && this.beginScrollYValue !== 0;
 
     return {
       height: modalHeight,
       maxHeight: this.initialComputedModalHeight,
       transform: [
         {
-          translateY: Animated.add(this.translateY, valueY).interpolate({
+          translateY: (cancel
+            ? this.translateY
+            : Animated.add(this.translateY, valueY)
+          ).interpolate({
             inputRange: [-40, 0, this.snapEnd],
             outputRange: [0, 0, this.snapEnd],
             extrapolate: 'clamp',
@@ -409,6 +415,11 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     const { velocityY, translationY } = nativeEvent;
 
     this.setState({ enableBounces: this.beginScrollYValue > 0 || translationY < 0 });
+
+    // In a state where we only use the scrollview and not gesture of the PanGestureHandler
+    if (translationY !== 0 && this.beginScrollYValue !== 0) {
+      return;
+    }
 
     if (nativeEvent.oldState === State.ACTIVE) {
       const toValue = translationY - this.beginScrollYValue;
