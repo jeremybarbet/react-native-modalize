@@ -27,7 +27,9 @@ import {
 } from 'react-native-gesture-handler';
 
 import { IProps, IState } from './options';
-import { getSpringConfig, isIphoneX, isIos, hasAbsoluteStyle } from './utils';
+import { getSpringConfig } from './utils/get-spring-config';
+import { isIphoneX, isIos } from './utils/devices';
+import { hasAbsoluteStyle } from './utils/has-absolute-style';
 import s from './styles';
 
 const { height: screenHeight } = Dimensions.get('window');
