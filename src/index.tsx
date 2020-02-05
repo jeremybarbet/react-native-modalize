@@ -137,7 +137,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       enableBounces: true,
       keyboardToggle: false,
       keyboardHeight: 0,
-      disableScroll: undefined,
+      disableScroll: props.alwaysOpen ? true : undefined,
     };
 
     this.beginScrollY.addListener(({ value }) => (this.beginScrollYValue = value));
@@ -470,10 +470,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         useNativeDriver,
       }).start();
 
-      if (onPositionChange && this.beginScrollYValue === 0) {
+      if (this.beginScrollYValue === 0) {
         const modalPosition = Boolean(destSnapPoint <= 0) ? 'top' : 'initial';
 
-        if (this.modalPosition !== modalPosition) {
+        if (modalPosition === 'top') {
+          this.setState({ disableScroll: false });
+        }
+
+        if (onPositionChange && this.modalPosition !== modalPosition) {
           onPositionChange(modalPosition);
           this.modalPosition = modalPosition;
         }
