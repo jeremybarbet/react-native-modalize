@@ -44,6 +44,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     handlePosition: 'outside',
     useNativeDriver: true,
     adjustToContentHeight: false,
+    disableScrollIfPossible: true,
     avoidKeyboardLikeIOS: Platform.select({
       ios: true,
       android: false,
@@ -136,6 +137,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       enableBounces: true,
       keyboardToggle: false,
       keyboardHeight: 0,
+      disableScroll: undefined,
     };
 
     this.beginScrollY.addListener(({ value }) => (this.beginScrollYValue = value));
@@ -370,6 +372,20 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     });
   };
 
+  private onContentViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
+    const { adjustToContentHeight, disableScrollIfPossible } = this.props;
+
+    if (!adjustToContentHeight) {
+      return;
+    }
+
+    const { height } = nativeEvent.layout;
+    const shorterHeight = height < this.initialComputedModalHeight;
+    const disableScroll = shorterHeight && disableScrollIfPossible;
+
+    this.setState({ disableScroll });
+  };
+
   private onHandleComponent = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
     if (nativeEvent.oldState === State.BEGAN) {
       this.beginScrollY.setValue(0);
@@ -565,7 +581,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
   private renderContent = (): React.ReactNode => {
     const { children, scrollViewProps, flatListProps, sectionListProps } = this.props;
-    const { enableBounces } = this.state;
+    const { enableBounces, disableScroll } = this.state;
     const keyboardDismissMode = isIos ? 'interactive' : 'on-drag';
 
     const opts = {
@@ -576,6 +592,8 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         { useNativeDriver: false },
       ),
       scrollEventThrottle: 16,
+      onLayout: this.onContentViewLayout,
+      scrollEnabled: !disableScroll,
       keyboardDismissMode,
     };
 

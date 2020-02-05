@@ -120,6 +120,12 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   adjustToContentHeight?: boolean;
 
   /**
+   * Disable the scroll when the content is shorter than screen's height.
+   * @default true
+   */
+  disableScrollIfPossible: boolean;
+
+  /**
    * Define keyboard's Android behavior like iOS's one.
    * @default Platform.select({ ios: true, android: false })
    */
@@ -256,6 +262,11 @@ export interface IState {
    * When we scroll to the bottom of the ContentView we want the bounce animation but when we reach the top again, we want it disabled. (iOS specific)
    */
   enableBounces: boolean;
+
+  /**
+   * Disable scroll if disableScrollIfPossible is true or if we are the initial position of the snapPoint or alwaysOpen modals
+   */
+  disableScroll: boolean | undefined;
 
   /**
    * Store if the keyboard is displayed. Used to change the offset on the ContentView when the keyboard is open.

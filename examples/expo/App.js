@@ -70,7 +70,7 @@ export default () => {
           modal[6] = el;
         }}
       />
-      <AlwaysOpen />
+      {/* <AlwaysOpen /> */}
     </Layout>
   );
 };

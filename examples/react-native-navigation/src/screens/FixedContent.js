@@ -48,12 +48,7 @@ export class FixedContent extends React.PureComponent {
 
   render() {
     return (
-      <Modalize
-        ref={this.modal}
-        onClosed={this.onClosed}
-        scrollViewProps={{ scrollEnabled: false }}
-        adjustToContentHeight
-      >
+      <Modalize ref={this.modal} onClosed={this.onClosed} adjustToContentHeight>
         {this.renderContent()}
       </Modalize>
     );
