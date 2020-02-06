@@ -486,7 +486,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       if (this.beginScrollYValue === 0) {
         const modalPosition = Boolean(destSnapPoint <= 0) ? 'top' : 'initial';
 
-        if (modalPosition === 'top') {
+        if (!adjustToContentHeight && modalPosition === 'top') {
           this.setState({ disableScroll: false });
         }
 
