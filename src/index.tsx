@@ -598,7 +598,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
   private renderContent = (): React.ReactNode => {
     const { children, scrollViewProps, flatListProps, sectionListProps } = this.props;
-    const { enableBounces, disableScroll } = this.state;
+    const { enableBounces, disableScroll, keyboardToggle } = this.state;
     const keyboardDismissMode = isIos ? 'interactive' : 'on-drag';
 
     const opts = {
@@ -610,7 +610,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       ),
       scrollEventThrottle: 16,
       onLayout: this.onContentViewLayout,
-      scrollEnabled: !disableScroll,
+      scrollEnabled: keyboardToggle || !disableScroll,
       keyboardDismissMode,
     };
 
