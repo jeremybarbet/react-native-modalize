@@ -40,6 +40,11 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    * A number that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
    */
   snapPoint?: number;
+  
+  /**
+   * A number to set max top position.
+   */
+  maxTopPosition?: number;
 
   /**
    * A number to define the modal's total height
@@ -225,6 +230,11 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    * point (snapPoint or alwaysOpened height)
    */
   onPositionChange?: (position: 'top' | 'initial') => void;
+  
+  /**
+   * Callback when modal change status, isOpen or isClose
+   */
+  onSnap?: (isShowFull: boolean) => void;
 }
 
 export interface IState {
