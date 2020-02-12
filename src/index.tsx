@@ -67,6 +67,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       timing: { duration: 280, easing: Easing.ease },
     },
     dragToss: 0.05,
+    maxTopPosition: 0
   };
 
   private snaps: number[] = [];
@@ -465,7 +466,8 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       this.translateY.setValue(toValue);
       this.translateY.flattenOffset();
       this.dragY.setValue(0);
-
+      const isShowFull = destSnapPoint === 0 
+      this.props.onSnap?.(isShowFull)
       if (alwaysOpen) {
         Animated.timing(overlay, {
           toValue: Number(destSnapPoint <= 0),
@@ -474,12 +476,13 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
           useNativeDriver,
         }).start();
       }
-
+      // Add maxTopPosition 
+      const position = destSnapPoint + (destSnapPoint === 0 ?  this.props.maxTopPosition : 0)
       Animated.spring(this.translateY, {
         tension: 50,
         friction: 12,
         velocity: velocityY,
-        toValue: destSnapPoint,
+        toValue: position,
         useNativeDriver,
       }).start();
 
