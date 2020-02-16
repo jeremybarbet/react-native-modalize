@@ -466,8 +466,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       this.translateY.setValue(toValue);
       this.translateY.flattenOffset();
       this.dragY.setValue(0);
-      const isShowFull = destSnapPoint === 0 
-      this.props.onSnap?.(isShowFull)
       if (alwaysOpen) {
         Animated.timing(overlay, {
           toValue: Number(destSnapPoint <= 0),
