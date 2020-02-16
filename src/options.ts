@@ -230,11 +230,6 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    * point (snapPoint or alwaysOpened height)
    */
   onPositionChange?: (position: 'top' | 'initial') => void;
-  
-  /**
-   * Callback when modal change status, isOpen or isClose
-   */
-  onSnap?: (isShowFull: boolean) => void;
 }
 
 export interface IState {
