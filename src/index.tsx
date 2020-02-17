@@ -158,6 +158,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   }
 
   componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
     Keyboard.removeListener('keyboardDidShow', this.onKeyboardShow);
     Keyboard.removeListener('keyboardDidHide', this.onKeyboardHide);
   }
