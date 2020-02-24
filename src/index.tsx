@@ -36,7 +36,6 @@ const { height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
-const THRESHOLD = 150;
 
 export class Modalize<FlatListItem = any, SectionListItem = any> extends React.Component<
   IProps<FlatListItem, SectionListItem>,
@@ -67,6 +66,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       timing: { duration: 280, easing: Easing.ease },
     },
     dragToss: 0.05,
+    threshold: 150,
   };
 
   private snaps: number[] = [];
@@ -163,14 +163,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     Keyboard.removeListener('keyboardDidHide', this.onKeyboardHide);
   }
 
-  public open = (): void => {
+  public open = (position: 'initial' | 'top' = 'initial'): void => {
     const { onOpen } = this.props;
 
     if (onOpen) {
       onOpen();
     }
 
-    this.onAnimateOpen();
+    this.onAnimateOpen(undefined, position);
   };
 
   public close = (dest: 'alwaysOpen' | 'default' = 'default'): void => {
@@ -242,7 +242,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     };
   }
 
-  private onAnimateOpen = (alwaysOpen?: number): void => {
+  private onAnimateOpen = (alwaysOpen?: number, position?: 'initial' | 'top'): void => {
     const {
       onOpened,
       snapPoint,
@@ -255,6 +255,8 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     const { overlay, modalHeight } = this.state;
     const toValue = alwaysOpen
       ? (modalHeight || 0) - alwaysOpen
+      : position === 'top'
+      ? 0
       : snapPoint
       ? (modalHeight || 0) - snapPoint
       : 0;
@@ -292,7 +294,9 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       }
 
       if (onPositionChange) {
-        if (alwaysOpen || snapPoint) {
+        if (position === 'top') {
+          this.modalPosition = 'top';
+        } else if (alwaysOpen || snapPoint) {
           this.modalPosition = 'initial';
         } else {
           this.modalPosition = 'top';
@@ -449,7 +453,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
           }
         });
       } else if (
-        translationY > (adjustToContentHeight ? (modalHeight || 0) / 3 : THRESHOLD) &&
+        translationY > (adjustToContentHeight ? (modalHeight || 0) / 3 : this.props.threshold) &&
         this.beginScrollYValue === 0 &&
         !alwaysOpen
       ) {

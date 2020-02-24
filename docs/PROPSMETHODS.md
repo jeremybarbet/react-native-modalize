@@ -100,6 +100,13 @@ Object to change the close animations. You can either pass a timing (`Animated.t
 | -------- | -------- | ------------------------------------------ |
 | object   | No       | `{ spring: { speed: 14, bounciness: 5 } }` |
 
+### `threshold`
+Number of pixels that the user must drag the modal before snapping to another position
+
+| Type     | Required | Default                                    |
+| -------- | -------- | ------------------------------------------ |
+| number   | No       | `150` |
+
 ### `adjustToContentHeight`
 
 Shrink the modal to your content's height.
@@ -271,17 +278,17 @@ Callback function when the modal reaches the `top` (modal/screen height) or `ini
 
 ### `open()`
 
-The method to open the modal.
+The method to open the modal. If have defined the `snapPoint` prop, then setting `initial` will open the modal at the snapPoint, while setting `top` will open the modal in full screen.
 
-| Type     | Required  |
-| -------- | --------- |
-| function | Yes       |
+| Type     | Required  | Default
+| -------- | --------- | -------
+| function(position: 'initial' \| 'top') | No | `initial`
 
 ### `close()`
 
 The method to close the modal. You don't need to call it to dismiss the modal, since you can swipe down to dismiss.
 
-?> If you are using `alwaysOpen` props, you can supply a `dest` argument to the `close` method to reset it to the intial position  `close('alwaysOpen')`, and avoiding to close it completely.
+If you are using `alwaysOpen` props, you can supply a `dest` argument to the `close` method to reset it to the intial position  `close('alwaysOpen')`, and avoiding to close it completely.
 
 | Type                                       | Required |
 | ------------------------------------------ | -------- |
