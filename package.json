@@ -63,20 +63,20 @@
   "devDependencies": {
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
-    "@types/react": "16.9.19",
-    "@types/react-native": "0.61.9",
+    "@types/react": "16.9.22",
+    "@types/react-native": "0.61.17",
     "concurrently": "5.1.0",
     "cpx": "1.5.0",
-    "husky": "4.2.1",
+    "husky": "4.2.3",
     "lint-staged": "10.0.7",
     "prettier": "1.19.1",
     "react": "16.12.0",
     "react-native": "0.61.5",
-    "react-native-gesture-handler": "1.5.3",
+    "react-native-gesture-handler": "1.6.0",
     "tslint": "5.20.1",
     "tslint-config-airbnb": "5.11.2",
     "tslint-config-prettier": "1.18.0",
-    "typescript": "3.7.5"
+    "typescript": "3.8.2"
   },
   "peerDependencies": {
     "react": "> 15.0.0",
