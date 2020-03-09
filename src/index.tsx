@@ -158,6 +158,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   }
 
   componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
     Keyboard.removeListener('keyboardDidShow', this.onKeyboardShow);
     Keyboard.removeListener('keyboardDidHide', this.onKeyboardHide);
   }
@@ -598,7 +599,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
   private renderContent = (): React.ReactNode => {
     const { children, scrollViewProps, flatListProps, sectionListProps } = this.props;
-    const { enableBounces, disableScroll } = this.state;
+    const { enableBounces, disableScroll, keyboardToggle } = this.state;
     const keyboardDismissMode = isIos ? 'interactive' : 'on-drag';
 
     const opts = {
@@ -610,7 +611,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       ),
       scrollEventThrottle: 16,
       onLayout: this.onContentViewLayout,
-      scrollEnabled: !disableScroll,
+      scrollEnabled: keyboardToggle || !disableScroll,
       keyboardDismissMode,
     };
 
