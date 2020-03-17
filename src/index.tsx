@@ -505,7 +505,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     }
   };
 
-  private onBackPress = async (): Promise<boolean> => {
+  private onBackPress = (): boolean => {
     const { onBackButtonPress, alwaysOpen } = this.props;
 
     if (alwaysOpen) {
@@ -513,7 +513,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     }
 
     if (onBackButtonPress) {
-      onBackButtonPress();
+      return onBackButtonPress();
     } else {
       this.close();
     }

@@ -217,7 +217,7 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    * Android or the menu button on Apple TV. You can any function you want,
    * but you will have to close the modal by yourself.
    */
-  onBackButtonPress?: () => void;
+  onBackButtonPress?: () => boolean;
 
   /**
    * Callback function which determines if the modal has reached the top
