@@ -73,7 +73,7 @@
     "react": "16.13.0",
     "react-native": "0.61.5",
     "react-native-gesture-handler": "1.6.0",
-    "tslint": "5.20.1",
+    "tslint": "6.1.0",
     "tslint-config-airbnb": "5.11.2",
     "tslint-config-prettier": "1.18.0",
     "typescript": "3.8.3"
