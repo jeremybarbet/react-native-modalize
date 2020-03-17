@@ -420,7 +420,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     this.setState({ enableBounces: this.beginScrollYValue > 0 || translationY < 0 });
 
     // In a state where we only use the scrollview and not gesture of the PanGestureHandler
-    if (translationY !== 0 && this.beginScrollYValue !== 0) {
+    if (translationY < 0 && this.beginScrollYValue < 0) {
       return;
     }
 
