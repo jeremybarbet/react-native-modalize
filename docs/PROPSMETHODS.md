@@ -256,11 +256,17 @@ Callback function when the modal reaches the `top` (modal/screen height) or `ini
 
 ?> Not to be conflicted with `onOpened` which is triggered when the modal opens for the first time.
 
-| Type                                    | Required |
-| --------------------------------------- | -------- |
+| Type                                     | Required |
+| ---------------------------------------- | -------- |
 | function: (position: 'top' \| 'initial') | No       |
 
+### `onOverlayPress`
 
+Callback used when you press the overlay.
+
+| Type     | Required |
+| -------- | -------- |
+| function | No       |
 
 <br/>
 <br/>
@@ -283,8 +289,8 @@ The method to close the modal. You don't need to call it to dismiss the modal, s
 
 ?> If you are using `alwaysOpen` props, you can supply a `dest` argument to the `close` method to reset it to the intial position  `close('alwaysOpen')`, and avoiding to close it completely.
 
-| Type                                       | Required |
-| ------------------------------------------ | -------- |
+| Type                                        | Required |
+| ------------------------------------------- | -------- |
 | function: (dest: 'alwaysOpen' \| 'default') | No       |
 
 ### `scrollTo()`

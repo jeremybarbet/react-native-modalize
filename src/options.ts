@@ -195,29 +195,29 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   /**
    * Callback function when the `open` method is triggered.
    */
-  onOpen?: () => void;
+  onOpen?(): void;
 
   /**
    * Callback function when the modal is opened.
    */
-  onOpened?: () => void;
+  onOpened?(): void;
 
   /**
    * Callback function when the `close` method is triggered.
    */
-  onClose?: () => void;
+  onClose?(): void;
 
   /**
    * Callback function when the modal is closed.
    */
-  onClosed?: () => void;
+  onClosed?(): void;
 
   /**
    * onBackButtonPress is called when the user taps the hardware back button on
    * Android or the menu button on Apple TV. You can any function you want,
    * but you will have to close the modal by yourself.
    */
-  onBackButtonPress?: () => boolean;
+  onBackButtonPress?(): boolean;
 
   /**
    * Callback function which determines if the modal has reached the top
@@ -225,6 +225,11 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    * point (snapPoint or alwaysOpened height)
    */
   onPositionChange?: (position: 'top' | 'initial') => void;
+
+  /**
+   * Callback used when you press the overlay.
+   */
+  onOverlayPress?(): void;
 }
 
 export interface IState {

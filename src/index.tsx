@@ -489,7 +489,13 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private onHandleOverlay = ({ nativeEvent }: TapGestureHandlerStateChangeEvent): void => {
+    const { onOverlayPress } = this.props;
+
     if (nativeEvent.oldState === State.ACTIVE && !this.willCloseModalize) {
+      if (onOverlayPress) {
+        onOverlayPress();
+      }
+
       this.close();
     }
   };
