@@ -492,7 +492,10 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     }
   };
 
-  private onHandleOverlay = ({ nativeEvent }: TapGestureHandlerStateChangeEvent): void => {
+  private onHandleOverlay = (
+    { nativeEvent }: TapGestureHandlerStateChangeEvent,
+    alwaysOpen: boolean,
+  ): void => {
     const { onOverlayPress } = this.props;
 
     if (nativeEvent.oldState === State.ACTIVE && !this.willCloseModalize) {
@@ -500,7 +503,9 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         onOverlayPress();
       }
 
-      this.close();
+      const dest = alwaysOpen ? 'alwaysOpen' : 'default';
+
+      this.close(dest);
     }
   };
 
@@ -680,7 +685,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       closeOnOverlayTap,
     } = this.props;
     const { showContent } = this.state;
-    const pointerEvents = alwaysOpen ? 'box-none' : 'auto';
+    const pointerEvents = alwaysOpen && this.modalPosition === 'initial' ? 'box-none' : 'auto';
 
     return (
       <PanGestureHandler
@@ -698,7 +703,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
             <TapGestureHandler
               ref={this.modalOverlayTap}
               enabled={panGestureEnabled || closeOnOverlayTap}
-              onHandlerStateChange={this.onHandleOverlay}
+              onHandlerStateChange={resolve => this.onHandleOverlay(resolve, !!alwaysOpen)}
             >
               <Animated.View
                 style={[s.overlay__background, overlayStyle, this.overlayBackground]}
