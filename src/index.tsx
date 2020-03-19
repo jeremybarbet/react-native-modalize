@@ -376,7 +376,11 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private onContentViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
-    const { adjustToContentHeight, disableScrollIfPossible } = this.props;
+    const { adjustToContentHeight, disableScrollIfPossible, onLayout } = this.props;
+
+    if (onLayout) {
+      onLayout(nativeEvent);
+    }
 
     if (!adjustToContentHeight) {
       return;

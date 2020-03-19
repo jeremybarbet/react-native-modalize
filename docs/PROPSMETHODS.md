@@ -268,6 +268,14 @@ Callback used when you press the overlay.
 | -------- | -------- |
 | function | No       |
 
+### `onLayout`
+
+Callback to subscribe to layout changes. Return the `LayoutRectangle` object from react-native.
+
+| Type                                                                                         | Required |
+| -------------------------------------------------------------------------------------------- | -------- |
+| function: (nativeEvent: { layout: { height: number, width: number, x: number, y: number } }) | No       |
+
 <br/>
 <br/>
 <br/>

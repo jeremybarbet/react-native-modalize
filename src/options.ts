@@ -6,6 +6,7 @@ import {
   FlatListProps,
   SectionListProps,
   EasingFunction,
+  LayoutRectangle,
 } from 'react-native';
 
 export interface ITimingProps {
@@ -230,6 +231,11 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    * Callback used when you press the overlay.
    */
   onOverlayPress?(): void;
+
+  /**
+   * Callback used when you press the overlay.
+   */
+  onLayout?(nativeEvent: { layout: LayoutRectangle }): void;
 }
 
 export interface IState {
