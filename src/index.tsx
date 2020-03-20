@@ -161,14 +161,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     Keyboard.removeListener('keyboardDidHide', this.onKeyboardHide);
   }
 
-  public open = (): void => {
-    const { onOpen } = this.props;
+  public open = (dest: string): void => {
+    const { onOpen, alwaysOpen } = this.props;
 
     if (onOpen) {
       onOpen();
     }
 
-    this.onAnimateOpen();
+    this.onAnimateOpen(alwaysOpen, dest);
   };
 
   public close = (dest: 'alwaysOpen' | 'default' = 'default'): void => {
@@ -236,7 +236,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     };
   }
 
-  private onAnimateOpen = (alwaysOpen?: number): void => {
+  private onAnimateOpen = (alwaysOpen?: number, dest?: string): void => {
     const {
       onOpened,
       snapPoint,
@@ -247,11 +247,16 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
     const { timing, spring } = openAnimationConfig!;
     const { overlay, modalHeight } = this.state;
-    const toValue = alwaysOpen
-      ? (modalHeight || 0) - alwaysOpen
-      : snapPoint
-      ? (modalHeight || 0) - snapPoint
-      : 0;
+
+    let toValue = 0;
+
+    if (dest === 'fullHeight') {
+      toValue = 0;
+    } else if (alwaysOpen) {
+      toValue = (modalHeight || 0) - alwaysOpen;
+    } else if (snapPoint) {
+      toValue = (modalHeight || 0) - snapPoint;
+    }
 
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
 
@@ -286,7 +291,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       }
 
       if (onPositionChange) {
-        if (alwaysOpen || snapPoint) {
+        if (alwaysOpen || (snapPoint && dest === 'default')) {
           this.modalPosition = 'initial';
         } else {
           this.modalPosition = 'top';
