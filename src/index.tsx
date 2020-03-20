@@ -290,13 +290,13 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         onOpened();
       }
 
-      if (onPositionChange) {
-        if (alwaysOpen || (snapPoint && dest === 'default')) {
-          this.modalPosition = 'initial';
-        } else {
-          this.modalPosition = 'top';
-        }
+      if (alwaysOpen || (snapPoint && dest === 'default')) {
+        this.modalPosition = 'initial';
+      } else {
+        this.modalPosition = 'top';
+      }
 
+      if (onPositionChange) {
         onPositionChange(this.modalPosition);
       }
     });
@@ -349,6 +349,9 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
       if (alwaysOpen && dest === 'alwaysOpen' && onPositionChange) {
         onPositionChange('initial');
+      }
+
+      if (alwaysOpen && dest === 'alwaysOpen') {
         this.modalPosition = 'initial';
       }
 
@@ -491,6 +494,9 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
         if (onPositionChange && this.modalPosition !== modalPosition) {
           onPositionChange(modalPosition);
+        }
+
+        if (this.modalPosition !== modalPosition) {
           this.modalPosition = modalPosition;
         }
       }
