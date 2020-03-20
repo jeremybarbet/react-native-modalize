@@ -287,19 +287,21 @@ Callback to subscribe to layout changes. Return the `LayoutRectangle` object fro
 
 The method to open the modal.
 
-| Type     | Required  |
-| -------- | --------- |
-| function | Yes       |
+?> If you are using `snapPoint` prop, you can supply a `dest` argument to the `open` method, to open it to the top directly `open('top')`. You don't have to provide anything if you want the default behavior.
+
+| Type                                 | Required  |
+| ------------------------------------ | --------- |
+| function: (dest?: 'default' | 'top') | Yes       |
 
 ### `close()`
 
 The method to close the modal. You don't need to call it to dismiss the modal, since you can swipe down to dismiss.
 
-?> If you are using `alwaysOpen` props, you can supply a `dest` argument to the `close` method to reset it to the intial position  `close('alwaysOpen')`, and avoiding to close it completely.
+?> If you are using `alwaysOpen` prop, you can supply a `dest` argument to the `close` method to reset it to the intial position `close('alwaysOpen')`, and avoiding to close it completely.
 
-| Type                                        | Required |
-| ------------------------------------------- | -------- |
-| function: (dest: 'alwaysOpen' \| 'default') | No       |
+| Type                                         | Required |
+| -------------------------------------------- | -------- |
+| function: (dest?: 'default' \| 'alwaysOpen') | No       |
 
 ### `scrollTo()`
 
