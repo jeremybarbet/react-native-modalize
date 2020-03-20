@@ -9,6 +9,9 @@ import {
   LayoutRectangle,
 } from 'react-native';
 
+export type TOpen = 'default' | 'top';
+export type TClose = 'default' | 'alwaysOpen';
+
 export interface ITimingProps {
   duration: number;
   easing?: EasingFunction;

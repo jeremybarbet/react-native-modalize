@@ -26,7 +26,7 @@ import {
   TapGestureHandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
 
-import { IProps, IState } from './options';
+import { IProps, IState, TOpen, TClose } from './options';
 import { getSpringConfig } from './utils/get-spring-config';
 import { isIphoneX, isIos } from './utils/devices';
 import { hasAbsoluteStyle } from './utils/has-absolute-style';
@@ -147,8 +147,10 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   }
 
   componentDidMount() {
-    if (this.props.alwaysOpen) {
-      this.onAnimateOpen(this.props.alwaysOpen);
+    const { alwaysOpen } = this.props;
+
+    if (alwaysOpen) {
+      this.onAnimateOpen(alwaysOpen);
     }
 
     Keyboard.addListener('keyboardDidShow', this.onKeyboardShow);
@@ -161,17 +163,17 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     Keyboard.removeListener('keyboardDidHide', this.onKeyboardHide);
   }
 
-  public open = (dest: string): void => {
-    const { onOpen, alwaysOpen } = this.props;
+  public open = (dest: TOpen): void => {
+    const { onOpen } = this.props;
 
     if (onOpen) {
       onOpen();
     }
 
-    this.onAnimateOpen(alwaysOpen, dest);
+    this.onAnimateOpen(undefined, dest);
   };
 
-  public close = (dest: 'alwaysOpen' | 'default' = 'default'): void => {
+  public close = (dest: TClose = 'default'): void => {
     const { onClose } = this.props;
 
     if (onClose) {
@@ -236,7 +238,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     };
   }
 
-  private onAnimateOpen = (alwaysOpen?: number, dest?: string): void => {
+  private onAnimateOpen = (alwaysOpen: number | undefined, dest: TOpen = 'default'): void => {
     const {
       onOpened,
       snapPoint,
@@ -250,7 +252,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
     let toValue = 0;
 
-    if (dest === 'fullHeight') {
+    if (dest === 'top') {
       toValue = 0;
     } else if (alwaysOpen) {
       toValue = (modalHeight || 0) - alwaysOpen;
@@ -302,7 +304,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     });
   };
 
-  private onAnimateClose = (dest: 'alwaysOpen' | 'default' = 'default'): void => {
+  private onAnimateClose = (dest: TClose = 'default'): void => {
     const {
       onClosed,
       useNativeDriver,
@@ -693,7 +695,8 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       closeOnOverlayTap,
     } = this.props;
     const { showContent } = this.state;
-    const pointerEvents = alwaysOpen && this.modalPosition === 'initial' ? 'box-none' : 'auto';
+    const pointerEvents =
+      alwaysOpen && (this.modalPosition === 'initial' || !this.modalPosition) ? 'box-none' : 'auto';
 
     return (
       <PanGestureHandler
