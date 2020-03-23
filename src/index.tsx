@@ -164,13 +164,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   }
 
   public open = (dest: TOpen): void => {
-    const { onOpen } = this.props;
+    const { onOpen, alwaysOpen } = this.props;
+    const initial = alwaysOpen && dest === 'default' ? alwaysOpen : undefined;
 
     if (onOpen) {
       onOpen();
     }
 
-    this.onAnimateOpen(undefined, dest);
+    this.onAnimateOpen(initial, dest);
   };
 
   public close = (dest: TClose = 'default'): void => {
