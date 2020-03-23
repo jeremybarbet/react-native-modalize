@@ -165,13 +165,12 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
   public open = (dest: TOpen): void => {
     const { onOpen, alwaysOpen } = this.props;
-    const initial = alwaysOpen && dest === 'default' ? alwaysOpen : undefined;
 
     if (onOpen) {
       onOpen();
     }
 
-    this.onAnimateOpen(initial, dest);
+    this.onAnimateOpen(alwaysOpen, dest);
   };
 
   public close = (dest: TClose = 'default'): void => {
@@ -268,9 +267,15 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       showContent: true,
     });
 
+    if ((alwaysOpen && dest !== 'top') || (snapPoint && dest === 'default')) {
+      this.modalPosition = 'initial';
+    } else {
+      this.modalPosition = 'top';
+    }
+
     Animated.parallel([
       Animated.timing(overlay, {
-        toValue: alwaysOpen ? 0 : 1,
+        toValue: alwaysOpen && dest === 'default' ? 0 : 1,
         duration: timing.duration,
         easing: Easing.ease,
         useNativeDriver,
@@ -291,12 +296,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     ]).start(() => {
       if (onOpened) {
         onOpened();
-      }
-
-      if (alwaysOpen || (snapPoint && dest === 'default')) {
-        this.modalPosition = 'initial';
-      } else {
-        this.modalPosition = 'top';
       }
 
       if (onPositionChange) {
