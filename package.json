@@ -1,6 +1,6 @@
 {
   "name": "react-native-modalize",
-  "version": "1.3.7-rc.10",
+  "version": "1.3.7-rc.11",
   "description": "A modal that loves scrollable content.",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
