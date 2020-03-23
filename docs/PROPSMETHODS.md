@@ -30,6 +30,14 @@ A number to define the modal's total height.
 | -------- | -------- |
 | number   | No       |
 
+### `modalTopOffset`
+
+A number to define the modal's top offset
+
+| Type     | Required |
+| -------- | -------- |
+| number   | No       |
+
 ### `alwaysOpen`
 
 A number that will make the modal visible all the time. You can still [open](/PROPSMETHODS.md?id=open) and [close](/PROPSMETHODS.md?id=close) it, using the build-in methods.
@@ -100,6 +108,14 @@ Object to change the close animations. You can either pass a timing (`Animated.t
 | -------- | -------- | ------------------------------------------ |
 | object   | No       | `{ spring: { speed: 14, bounciness: 5 } }` |
 
+### `dragToss`
+
+A number that determines the momentum of the scroll required.
+
+| Type     | Required | Default |
+| -------- | -------- | ------- |
+| number   | No       | `0.05`  |
+
 ### `adjustToContentHeight`
 
 Shrink the modal to your content's height.
@@ -109,6 +125,14 @@ Shrink the modal to your content's height.
 | Type     | Required | Default  |
 | -------- | -------- | -------- |
 | bool     | No       | `false`  |
+
+### `disableScrollIfPossible`
+
+Disable the scroll when the content is shorter than screen's height.
+
+| Type     | Required | Default |
+| -------- | -------- | ------- |
+| number   | No       | `true`  |
 
 ### `avoidKeyboardLikeIOS`
 
@@ -245,6 +269,14 @@ Callback function when the `close` method is triggered.
 ### `onClosed`
 
 Callback function when the modal is closed.
+
+| Type     | Required |
+| -------- | -------- |
+| function | No       |
+
+### `onBackButtonPress`
+
+onBackButtonPress is called when the user taps the hardware back button on Android or the menu button on Apple TV. You can any function you want, but you will have to close the modal by yourself.
 
 | Type     | Required |
 | -------- | -------- |
