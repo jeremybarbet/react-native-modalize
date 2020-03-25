@@ -1,4 +1,8 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+import { isWeb } from './utils/devices';
+
+const { height } = Dimensions.get('window');
 
 export default StyleSheet.create({
   modalize: {
@@ -79,6 +83,8 @@ export default StyleSheet.create({
     bottom: 0,
     left: 0,
     zIndex: 0,
+
+    height: isWeb ? height : undefined,
   },
 
   overlay__background: {

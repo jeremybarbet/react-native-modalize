@@ -50,10 +50,12 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     avoidKeyboardLikeIOS: Platform.select({
       ios: true,
       android: false,
+      default: true,
     }),
     modalTopOffset: Platform.select({
       ios: 0,
       android: StatusBar.currentHeight || 0,
+      default: 0,
     }),
     panGestureEnabled: true,
     closeOnOverlayTap: true,
