@@ -737,6 +737,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       alwaysOpen,
       panGestureEnabled,
       avoidKeyboardLikeIOS,
+      adjustToContentHeight,
     } = this.props;
     const { isVisible, lastSnap, showContent } = this.state;
     const pointerEvents = alwaysOpen ? 'box-none' : 'auto';
@@ -748,7 +749,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       style: [s.modalize__content, this.modalizeContent, modalStyle],
     };
 
-    if (!avoidKeyboardLikeIOS) {
+    if (!avoidKeyboardLikeIOS && !adjustToContentHeight) {
       keyboardAvoidingViewProps.onLayout = this.onModalizeContentLayout;
     }
 
