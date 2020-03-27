@@ -165,7 +165,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     Keyboard.removeListener('keyboardDidHide', this.onKeyboardHide);
   }
 
-  public open = (dest: TOpen): void => {
+  public open = (dest?: TOpen): void => {
     const { onOpen, alwaysOpen } = this.props;
 
     if (onOpen) {
