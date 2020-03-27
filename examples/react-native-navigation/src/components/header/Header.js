@@ -44,7 +44,7 @@ const s = StyleSheet.create({
 
   header__copy: {
     marginTop: 20,
-    marginHorizontal: 40,
+    marginHorizontal: 30,
 
     fontSize: 14,
     color: '#b5b5b5',
