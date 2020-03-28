@@ -8,6 +8,7 @@ import {
   EasingFunction,
   LayoutRectangle,
 } from 'react-native';
+import { PanGestureHandlerGestureEvent } from 'react-native-gesture-handler';
 
 export type TOpen = 'default' | 'top';
 export type TClose = 'default' | 'alwaysOpen';
@@ -239,6 +240,12 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    * Callback used when you press the overlay.
    */
   onLayout?(nativeEvent: { layout: LayoutRectangle }): void;
+
+  /**
+   * Callback that expose the modal Animated.Value happening on drag
+   */
+  // onPanListener?(animatedValue: Animated.Value): void;
+  panValue?: Animated.Value;
 }
 
 export interface IState {

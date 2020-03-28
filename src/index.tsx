@@ -30,6 +30,7 @@ import { IProps, IState, TOpen, TClose } from './options';
 import { getSpringConfig } from './utils/get-spring-config';
 import { isIphoneX, isIos } from './utils/devices';
 import { hasAbsoluteStyle } from './utils/has-absolute-style';
+import { clamp } from './utils/clamp';
 import s from './styles';
 
 const { height: screenHeight } = Dimensions.get('window');
@@ -423,6 +424,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       closeAnimationConfig,
       dragToss,
       onPositionChange,
+      panValue,
     } = this.props;
     const { timing } = closeAnimationConfig!;
     const { lastSnap, modalHeight, overlay } = this.state;
@@ -446,9 +448,15 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
             if (alwaysOpen) {
               destSnapPoint = (modalHeight || 0) - alwaysOpen;
+              console.log('-1');
+
+              if (panValue) {
+                panValue.setValue(0);
+              }
             }
 
             if (snap === this.snapEnd && !alwaysOpen) {
+              console.log('-2');
               this.willCloseModalize = true;
               this.close();
             }
@@ -472,6 +480,10 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       this.translateY.setValue(toValue);
       this.translateY.flattenOffset();
       this.dragY.setValue(0);
+
+      // if (panValue) {
+      //   panValue.setValue(1);
+      // }
 
       if (alwaysOpen) {
         Animated.timing(overlay, {
@@ -550,6 +562,17 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
   private onGestureEvent = Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
     useNativeDriver: this.props.useNativeDriver,
+    listener: ({ nativeEvent: { translationY } }: PanGestureHandlerStateChangeEvent) => {
+      const { panValue } =  this.props;
+      const offset = 200;
+
+      if (panValue) {
+        const diff = Math.abs(translationY / (this.initialComputedModalHeight - offset));
+        const y = translationY < 0 ? diff : 1 - diff;
+
+        panValue.setValue(y);
+      }
+    },
   });
 
   private renderComponent = (Tag: React.ReactNode): React.ReactNode => {

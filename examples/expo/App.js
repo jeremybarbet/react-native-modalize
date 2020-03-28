@@ -10,6 +10,7 @@ import { SnappingList } from './src/components/modals/SnappingList';
 import { CustomStyle } from './src/components/modals/CustomStyle';
 import { FlatList } from './src/components/modals/FlatList';
 import { SectionList } from './src/components/modals/SectionList';
+import { PanListener } from './src/components/modals/PanListener';
 import { AlwaysOpen } from './src/components/modals/AlwaysOpen';
 
 export default () => {
@@ -33,6 +34,7 @@ export default () => {
         'Modal with custom style',
         'Modal with a Flat List',
         'Modal with a Section List',
+        'Modal with Pan Listener'
       ])}
 
       <SimpleContent
@@ -70,7 +72,12 @@ export default () => {
           modal[6] = el;
         }}
       />
-      <AlwaysOpen />
+      <PanListener
+        ref={el => {
+          modal[7] = el;
+        }}
+      />
+      {/* <AlwaysOpen /> */}
     </Layout>
   );
 };
