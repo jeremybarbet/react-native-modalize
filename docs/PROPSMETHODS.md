@@ -168,6 +168,14 @@ Using this prop will enable/disable pan gesture
 | -------- | -------- | -------- |
 | bool     | No       | `true`   |
 
+### `panGestureAnimatedValue`
+
+Animated.Value of the modal position between 0 and 1
+
+| Type               | Required |
+| ------------------ | -------- |
+| Animated.Value     | No       |
+
 ### `closeOnOverlayTap`
 
 Using this prop will enable/disable overlay tap gesture

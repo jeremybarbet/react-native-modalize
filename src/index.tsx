@@ -37,6 +37,8 @@ const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAv
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 const THRESHOLD = 150;
+const ACTIVATED = 20;
+const PAN_DURATION = 150;
 
 export class Modalize<FlatListItem = any, SectionListItem = any> extends React.Component<
   IProps<FlatListItem, SectionListItem>,
@@ -248,12 +250,16 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       useNativeDriver,
       openAnimationConfig,
       onPositionChange,
+      panGestureAnimatedValue,
     } = this.props;
 
     const { timing, spring } = openAnimationConfig!;
     const { overlay, modalHeight } = this.state;
 
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+
     let toValue = 0;
+    let toPanValue = 0;
 
     if (dest === 'top') {
       toValue = 0;
@@ -263,7 +269,11 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       toValue = (modalHeight || 0) - snapPoint;
     }
 
-    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+    if (panGestureAnimatedValue && (alwaysOpen || snapPoint)) {
+      toPanValue = 0;
+    } else if (panGestureAnimatedValue && !alwaysOpen && (dest === 'top' || dest === 'default')) {
+      toPanValue = 1;
+    }
 
     this.setState({
       isVisible: true,
@@ -283,6 +293,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         easing: Easing.ease,
         useNativeDriver,
       }),
+
+      panGestureAnimatedValue
+        ? Animated.timing(panGestureAnimatedValue, {
+            toValue: toPanValue,
+            duration: PAN_DURATION,
+            useNativeDriver,
+          })
+        : Animated.delay(0),
 
       spring
         ? Animated.spring(this.translateY, {
@@ -315,6 +333,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       closeAnimationConfig,
       alwaysOpen,
       onPositionChange,
+      panGestureAnimatedValue,
     } = this.props;
     const { timing, spring } = closeAnimationConfig!;
     const { overlay, modalHeight } = this.state;
@@ -334,6 +353,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         easing: Easing.ease,
         useNativeDriver,
       }),
+
+      panGestureAnimatedValue
+        ? Animated.timing(panGestureAnimatedValue, {
+            toValue: 0,
+            duration: PAN_DURATION,
+            useNativeDriver,
+          })
+        : Animated.delay(0),
 
       spring
         ? Animated.spring(this.translateY, {
@@ -423,6 +450,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       closeAnimationConfig,
       dragToss,
       onPositionChange,
+      panGestureAnimatedValue,
     } = this.props;
     const { timing } = closeAnimationConfig!;
     const { lastSnap, modalHeight, overlay } = this.state;
@@ -493,6 +521,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       if (this.beginScrollYValue === 0) {
         const modalPosition = Boolean(destSnapPoint <= 0) ? 'top' : 'initial';
 
+        if (panGestureAnimatedValue) {
+          Animated.timing(panGestureAnimatedValue, {
+            toValue: Number(modalPosition === 'top'),
+            duration: PAN_DURATION,
+            useNativeDriver,
+          }).start();
+        }
+
         if (!adjustToContentHeight && modalPosition === 'top') {
           this.setState({ disableScroll: false });
         }
@@ -548,6 +584,31 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     this.setState({ keyboardToggle: false, keyboardHeight: 0 });
   };
 
+  private onGestureEvent = Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
+    useNativeDriver: this.props.useNativeDriver,
+    listener: ({ nativeEvent: { translationY } }: PanGestureHandlerStateChangeEvent) => {
+      const { panGestureAnimatedValue } = this.props;
+      const offset = 200;
+
+      if (panGestureAnimatedValue) {
+        const diff = Math.abs(translationY / (this.initialComputedModalHeight - offset));
+        const y = translationY < 0 ? diff : 1 - diff;
+
+        let value;
+
+        if (this.modalPosition === 'initial' && translationY > 0) {
+          value = 0;
+        } else if (this.modalPosition === 'top' && translationY <= 0) {
+          value = 1;
+        } else {
+          value = y;
+        }
+
+        panGestureAnimatedValue.setValue(value);
+      }
+    },
+  });
+
   private renderComponent = (Tag: React.ReactNode): React.ReactNode => {
     return React.isValidElement(Tag) ? (
       Tag
@@ -558,7 +619,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private renderHandle = (): React.ReactNode => {
-    const { handleStyle, useNativeDriver, withHandle, panGestureEnabled } = this.props;
+    const { handleStyle, withHandle, panGestureEnabled } = this.props;
     const handleStyles: any[] = [s.handle];
     const shapeStyles: any[] = [s.handle__shape, handleStyle];
 
@@ -576,9 +637,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         enabled={panGestureEnabled}
         simultaneousHandlers={this.modal}
         shouldCancelWhenOutside={false}
-        onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
-          useNativeDriver,
-        })}
+        onGestureEvent={this.onGestureEvent}
         onHandlerStateChange={this.onHandleComponent}
       >
         <Animated.View style={handleStyles}>
@@ -589,7 +648,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private renderHeader = (): React.ReactNode => {
-    const { useNativeDriver, HeaderComponent, panGestureEnabled } = this.props;
+    const { HeaderComponent, panGestureEnabled } = this.props;
 
     if (!HeaderComponent) {
       return null;
@@ -604,9 +663,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         enabled={panGestureEnabled}
         simultaneousHandlers={this.modal}
         shouldCancelWhenOutside={false}
-        onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
-          useNativeDriver,
-        })}
+        onGestureEvent={this.onGestureEvent}
         onHandlerStateChange={this.onHandleComponent}
       >
         <Animated.View style={s.component}>{this.renderComponent(HeaderComponent)}</Animated.View>
@@ -648,7 +705,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private renderChildren = (): React.ReactNode => {
-    const { useNativeDriver, adjustToContentHeight, panGestureEnabled } = this.props;
+    const { adjustToContentHeight, panGestureEnabled } = this.props;
 
     return (
       <PanGestureHandler
@@ -656,12 +713,10 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         enabled={panGestureEnabled}
         simultaneousHandlers={[this.modalContentView, this.modal]}
         shouldCancelWhenOutside={false}
-        onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
-          useNativeDriver,
-        })}
-        minDist={20}
-        activeOffsetY={20}
-        activeOffsetX={20}
+        onGestureEvent={this.onGestureEvent}
+        minDist={ACTIVATED}
+        activeOffsetY={ACTIVATED}
+        activeOffsetX={ACTIVATED}
         onHandlerStateChange={this.onHandleChildren}
       >
         <Animated.View
@@ -690,13 +745,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private renderOverlay = (): React.ReactNode => {
-    const {
-      useNativeDriver,
-      overlayStyle,
-      alwaysOpen,
-      panGestureEnabled,
-      closeOnOverlayTap,
-    } = this.props;
+    const { overlayStyle, alwaysOpen, panGestureEnabled, closeOnOverlayTap } = this.props;
     const { showContent } = this.state;
     const pointerEvents =
       alwaysOpen && (this.modalPosition === 'initial' || !this.modalPosition) ? 'box-none' : 'auto';
@@ -707,9 +756,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         enabled={panGestureEnabled}
         simultaneousHandlers={[this.modal]}
         shouldCancelWhenOutside={false}
-        onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
-          useNativeDriver,
-        })}
+        onGestureEvent={this.onGestureEvent}
         onHandlerStateChange={this.onHandleChildren}
       >
         <Animated.View style={s.overlay} pointerEvents={pointerEvents}>
