@@ -11,6 +11,7 @@ import { CustomStyle } from './src/components/modals/CustomStyle';
 import { FlatList } from './src/components/modals/FlatList';
 import { SectionList } from './src/components/modals/SectionList';
 import { AlwaysOpen } from './src/components/modals/AlwaysOpen';
+import { MenuOverlay } from './src/components/modals/MenuOverlay';
 
 export default () => {
   const modal = [];
@@ -33,6 +34,7 @@ export default () => {
         'Modal with custom style',
         'Modal with a Flat List',
         'Modal with a Section List',
+        'Modal with MenuOverlay',
       ])}
 
       <SimpleContent
@@ -71,6 +73,12 @@ export default () => {
         }}
       />
       <AlwaysOpen />
+
+      <MenuOverlay
+        ref={el => {
+          modal[7] = el;
+        }}
+      />
     </Layout>
   );
 };
