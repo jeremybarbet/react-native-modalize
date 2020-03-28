@@ -9,10 +9,10 @@ export const Button = ({ onPress, name }) => (
 
 const s = StyleSheet.create({
   button: {
-    paddingVertical: 15,
-    marginBottom: 15,
+    paddingVertical: 12,
+    marginBottom: 10,
 
-    width: 240,
+    width: 220,
 
     backgroundColor: '#333',
     borderRadius: 6,

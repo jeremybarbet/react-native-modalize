@@ -9,6 +9,7 @@ import {
   SECTION_LIST,
   SIMPLE_CONTENT,
   SNAPPING_LIST,
+  ANIMATED_VALUE,
 } from '../screens';
 import { Layout } from '../components/layout/Layout';
 import { Header } from '../components/header/Header';
@@ -44,6 +45,7 @@ export const App = () => {
         { name: 'Modal with custom style', id: CUSTOM_STYLE },
         { name: 'Modal with a Flat List', id: FLAT_LIST },
         { name: 'Modal with a Section List', id: SECTION_LIST },
+        { name: 'Modal with an Animated Value', id: ANIMATED_VALUE },
       ])}
 
       <AlwaysOpen />

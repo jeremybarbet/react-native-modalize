@@ -154,6 +154,11 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   panGestureEnabled?: boolean;
 
   /**
+   * Animated.Value of the modal position between 0 and 1
+   */
+  panGestureAnimatedValue?: Animated.Value;
+
+  /**
    * Using this prop will enable/disable overlay tap gesture
    * @default true
    */

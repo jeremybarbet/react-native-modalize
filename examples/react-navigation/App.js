@@ -11,6 +11,7 @@ import { CustomStyle } from './src/components/modals/CustomStyle';
 import { FlatList } from './src/components/modals/FlatList';
 import { SectionList } from './src/components/modals/SectionList';
 import { AlwaysOpen } from './src/components/modals/AlwaysOpen';
+import { AnimatedValue } from './src/components/modals/AnimatedValue';
 
 export const App = () => {
   const modal = [];
@@ -33,6 +34,7 @@ export const App = () => {
         'Modal with custom style',
         'Modal with a Flat List',
         'Modal with a Section List',
+        'Modal with an Animated Value',
       ])}
 
       <SimpleContent
@@ -68,6 +70,11 @@ export const App = () => {
       <SectionList
         ref={el => {
           modal[6] = el;
+        }}
+      />
+      <AnimatedValue
+        ref={el => {
+          modal[7] = el;
         }}
       />
       <AlwaysOpen />

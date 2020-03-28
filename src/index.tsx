@@ -38,6 +38,7 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 const THRESHOLD = 150;
 const ACTIVATED = 20;
+const PAN_DURATION = 150;
 
 export class Modalize<FlatListItem = any, SectionListItem = any> extends React.Component<
   IProps<FlatListItem, SectionListItem>,
@@ -248,12 +249,16 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       useNativeDriver,
       openAnimationConfig,
       onPositionChange,
+      panGestureAnimatedValue,
     } = this.props;
 
     const { timing, spring } = openAnimationConfig!;
     const { overlay, modalHeight } = this.state;
 
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+
     let toValue = 0;
+    let toPanValue = 0;
 
     if (dest === 'top') {
       toValue = 0;
@@ -263,7 +268,11 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       toValue = (modalHeight || 0) - snapPoint;
     }
 
-    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+    if (panGestureAnimatedValue && (alwaysOpen || snapPoint)) {
+      toPanValue = 0;
+    } else if (panGestureAnimatedValue && !alwaysOpen && (dest === 'top' || dest === 'default')) {
+      toPanValue = 1;
+    }
 
     this.setState({
       isVisible: true,
@@ -283,6 +292,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         easing: Easing.ease,
         useNativeDriver,
       }),
+
+      panGestureAnimatedValue
+        ? Animated.timing(panGestureAnimatedValue, {
+            toValue: toPanValue,
+            duration: PAN_DURATION,
+            useNativeDriver,
+          })
+        : Animated.delay(0),
 
       spring
         ? Animated.spring(this.translateY, {
@@ -315,6 +332,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       closeAnimationConfig,
       alwaysOpen,
       onPositionChange,
+      panGestureAnimatedValue,
     } = this.props;
     const { timing, spring } = closeAnimationConfig!;
     const { overlay, modalHeight } = this.state;
@@ -334,6 +352,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         easing: Easing.ease,
         useNativeDriver,
       }),
+
+      panGestureAnimatedValue
+        ? Animated.timing(panGestureAnimatedValue, {
+            toValue: 0,
+            duration: PAN_DURATION,
+            useNativeDriver,
+          })
+        : Animated.delay(0),
 
       spring
         ? Animated.spring(this.translateY, {
@@ -423,6 +449,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       closeAnimationConfig,
       dragToss,
       onPositionChange,
+      panGestureAnimatedValue,
     } = this.props;
     const { timing } = closeAnimationConfig!;
     const { lastSnap, modalHeight, overlay } = this.state;
@@ -493,6 +520,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       if (this.beginScrollYValue === 0) {
         const modalPosition = Boolean(destSnapPoint <= 0) ? 'top' : 'initial';
 
+        if (panGestureAnimatedValue) {
+          Animated.timing(panGestureAnimatedValue, {
+            toValue: Number(modalPosition === 'top'),
+            duration: PAN_DURATION,
+            useNativeDriver,
+          }).start();
+        }
+
         if (!adjustToContentHeight && modalPosition === 'top') {
           this.setState({ disableScroll: false });
         }
@@ -550,6 +585,27 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
   private onGestureEvent = Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
     useNativeDriver: this.props.useNativeDriver,
+    listener: ({ nativeEvent: { translationY } }: PanGestureHandlerStateChangeEvent) => {
+      const { panGestureAnimatedValue } = this.props;
+      const offset = 200;
+
+      if (panGestureAnimatedValue) {
+        const diff = Math.abs(translationY / (this.initialComputedModalHeight - offset));
+        const y = translationY < 0 ? diff : 1 - diff;
+
+        let value;
+
+        if (this.modalPosition === 'initial' && translationY > 0) {
+          value = 0;
+        } else if (this.modalPosition === 'top' && translationY <= 0) {
+          value = 1;
+        } else {
+          value = y;
+        }
+
+        panGestureAnimatedValue.setValue(value);
+      }
+    },
   });
 
   private renderComponent = (Tag: React.ReactNode): React.ReactNode => {
