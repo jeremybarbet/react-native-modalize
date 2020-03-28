@@ -37,6 +37,7 @@ const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAv
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 const THRESHOLD = 150;
+const ACTIVATED = 20;
 
 export class Modalize<FlatListItem = any, SectionListItem = any> extends React.Component<
   IProps<FlatListItem, SectionListItem>,
@@ -656,9 +657,9 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         simultaneousHandlers={[this.modalContentView, this.modal]}
         shouldCancelWhenOutside={false}
         onGestureEvent={this.onGestureEvent}
-        minDist={20}
-        activeOffsetY={20}
-        activeOffsetX={20}
+        minDist={ACTIVATED}
+        activeOffsetY={ACTIVATED}
+        activeOffsetX={ACTIVATED}
         onHandlerStateChange={this.onHandleChildren}
       >
         <Animated.View
