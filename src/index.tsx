@@ -547,6 +547,10 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     this.setState({ keyboardToggle: false, keyboardHeight: 0 });
   };
 
+  private onGestureEvent = Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
+    useNativeDriver: this.props.useNativeDriver,
+  });
+
   private renderComponent = (Tag: React.ReactNode): React.ReactNode => {
     return React.isValidElement(Tag) ? (
       Tag
@@ -557,7 +561,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private renderHandle = (): React.ReactNode => {
-    const { handleStyle, useNativeDriver, withHandle, panGestureEnabled } = this.props;
+    const { handleStyle, withHandle, panGestureEnabled } = this.props;
     const handleStyles: any[] = [s.handle];
     const shapeStyles: any[] = [s.handle__shape, handleStyle];
 
@@ -575,9 +579,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         enabled={panGestureEnabled}
         simultaneousHandlers={this.modal}
         shouldCancelWhenOutside={false}
-        onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
-          useNativeDriver,
-        })}
+        onGestureEvent={this.onGestureEvent}
         onHandlerStateChange={this.onHandleComponent}
       >
         <Animated.View style={handleStyles}>
@@ -588,7 +590,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private renderHeader = (): React.ReactNode => {
-    const { useNativeDriver, HeaderComponent, panGestureEnabled } = this.props;
+    const { HeaderComponent, panGestureEnabled } = this.props;
 
     if (!HeaderComponent) {
       return null;
@@ -603,9 +605,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         enabled={panGestureEnabled}
         simultaneousHandlers={this.modal}
         shouldCancelWhenOutside={false}
-        onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
-          useNativeDriver,
-        })}
+        onGestureEvent={this.onGestureEvent}
         onHandlerStateChange={this.onHandleComponent}
       >
         <Animated.View style={s.component}>{this.renderComponent(HeaderComponent)}</Animated.View>
@@ -647,7 +647,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private renderChildren = (): React.ReactNode => {
-    const { useNativeDriver, adjustToContentHeight, panGestureEnabled } = this.props;
+    const { adjustToContentHeight, panGestureEnabled } = this.props;
 
     return (
       <PanGestureHandler
@@ -655,9 +655,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         enabled={panGestureEnabled}
         simultaneousHandlers={[this.modalContentView, this.modal]}
         shouldCancelWhenOutside={false}
-        onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
-          useNativeDriver,
-        })}
+        onGestureEvent={this.onGestureEvent}
         minDist={20}
         activeOffsetY={20}
         activeOffsetX={20}
@@ -689,13 +687,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private renderOverlay = (): React.ReactNode => {
-    const {
-      useNativeDriver,
-      overlayStyle,
-      alwaysOpen,
-      panGestureEnabled,
-      closeOnOverlayTap,
-    } = this.props;
+    const { overlayStyle, alwaysOpen, panGestureEnabled, closeOnOverlayTap } = this.props;
     const { showContent } = this.state;
     const pointerEvents =
       alwaysOpen && (this.modalPosition === 'initial' || !this.modalPosition) ? 'box-none' : 'auto';
@@ -706,9 +698,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         enabled={panGestureEnabled}
         simultaneousHandlers={[this.modal]}
         shouldCancelWhenOutside={false}
-        onGestureEvent={Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
-          useNativeDriver,
-        })}
+        onGestureEvent={this.onGestureEvent}
         onHandlerStateChange={this.onHandleChildren}
       >
         <Animated.View style={s.overlay} pointerEvents={pointerEvents}>
