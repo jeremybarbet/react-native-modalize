@@ -8,7 +8,6 @@ import {
   EasingFunction,
   LayoutRectangle,
 } from 'react-native';
-import { PanGestureHandlerGestureEvent } from 'react-native-gesture-handler';
 
 export type TOpen = 'default' | 'top';
 export type TClose = 'default' | 'alwaysOpen';
@@ -155,6 +154,11 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   panGestureEnabled?: boolean;
 
   /**
+   * Animated.Value of the modal position between 0 and 1
+   */
+  panGestureAnimatedValue?: Animated.Value;
+
+  /**
    * Using this prop will enable/disable overlay tap gesture
    * @default true
    */
@@ -240,12 +244,6 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    * Callback used when you press the overlay.
    */
   onLayout?(nativeEvent: { layout: LayoutRectangle }): void;
-
-  /**
-   * Callback that expose the modal Animated.Value happening on drag
-   */
-  // onPanListener?(animatedValue: Animated.Value): void;
-  panValue?: Animated.Value;
 }
 
 export interface IState {

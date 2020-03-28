@@ -10,8 +10,8 @@ import { SnappingList } from './src/components/modals/SnappingList';
 import { CustomStyle } from './src/components/modals/CustomStyle';
 import { FlatList } from './src/components/modals/FlatList';
 import { SectionList } from './src/components/modals/SectionList';
-import { PanListener } from './src/components/modals/PanListener';
 import { AlwaysOpen } from './src/components/modals/AlwaysOpen';
+import { AnimatedValue } from './src/components/modals/AnimatedValue';
 
 export default () => {
   const modal = [];
@@ -34,7 +34,7 @@ export default () => {
         'Modal with custom style',
         'Modal with a Flat List',
         'Modal with a Section List',
-        'Modal with Pan Listener'
+        'Modal with an Animated Value',
       ])}
 
       <SimpleContent
@@ -72,12 +72,12 @@ export default () => {
           modal[6] = el;
         }}
       />
-      <PanListener
+      <AnimatedValue
         ref={el => {
           modal[7] = el;
         }}
       />
-      {/* <AlwaysOpen /> */}
+      <AlwaysOpen />
     </Layout>
   );
 };
