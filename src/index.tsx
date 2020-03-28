@@ -69,6 +69,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       timing: { duration: 280, easing: Easing.ease },
     },
     dragToss: 0.05,
+    menuOverlay: undefined,
   };
 
   private snaps: number[] = [];
@@ -738,6 +739,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       panGestureEnabled,
       avoidKeyboardLikeIOS,
       adjustToContentHeight,
+      menuOverlay,
     } = this.props;
     const { isVisible, lastSnap, showContent } = this.state;
     const pointerEvents = alwaysOpen ? 'box-none' : 'auto';
@@ -776,6 +778,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
             )}
 
             {this.renderOverlay()}
+            {menuOverlay && menuOverlay()}
           </View>
         </TapGestureHandler>
       </View>
