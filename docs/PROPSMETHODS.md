@@ -226,6 +226,14 @@ Refer to the [`react-native` SectionList documentation](https://facebook.github.
 | -------- | -------- |
 | object   | No       |
 
+### `menuOverlay`
+
+A menu component/node that will overlay Modalize completely, independent of scrolling. It requires zIndex child with absolute positioning. Check [example](../examples) folder or showcase for preview.
+
+| Type     | Required |
+| -------- | -------- |
+| any      | No       |
+
 ### `HeaderComponent`
 
 A header component outside of the ScrollView, at the top of the modal.
