@@ -310,7 +310,7 @@ onBackButtonPress is called when the user taps the hardware back button on Andro
 
 Callback function when the modal reaches the `top` (modal/screen height) or `initial` point (snapPoint or alwaysOpen height).
 
-?> Not to be conflicted with `onOpened` which is triggered when the modal opens for the first time.
+?> Not to be confused with `onOpened` which is triggered when the modal opens for the first time.
 
 | Type                                     | Required |
 | ---------------------------------------- | -------- |
@@ -345,9 +345,9 @@ The method to open the modal.
 
 ?> If you are using `snapPoint` prop, you can supply a `dest` argument to the `open` method, to open it to the top directly `open('top')`. You don't have to provide anything if you want the default behavior.
 
-| Type                                 | Required  |
-| ------------------------------------ | --------- |
-| function: (dest?: 'default' | 'top') | Yes       |
+| Type                                  | Required  |
+| ------------------------------------- | --------- |
+| function: (dest?: 'default' \| 'top') | Yes       |
 
 ### `close()`
 
