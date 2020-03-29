@@ -234,13 +234,13 @@ Refer to the [`react-native` SectionList documentation](https://facebook.github.
 | -------- | -------- |
 | object   | No       |
 
-### `menuOverlay`
+### `FloatingComponent`
 
-A menu component/node that will overlay Modalize completely, independent of scrolling. It requires zIndex child with absolute positioning. Check [example](../examples) folder or showcase for preview.
+A floating component that will overlay Modalize completely, independent of scrolling. It requires zIndex child with absolute positioning. Check [Flatlist example](../examples).
 
 | Type     | Required |
 | -------- | -------- |
-| any      | No       |
+| node      | No       |
 
 ### `HeaderComponent`
 
