@@ -15,7 +15,6 @@ This component has been built with `react-native-gesture-handler` to address the
   <img src="https://user-images.githubusercontent.com/937328/59955685-238f6880-947b-11e9-81f9-6345fba118f5.gif" height="450" />
   <img src="https://user-images.githubusercontent.com/937328/59955686-238f6880-947b-11e9-896a-bcdb34e827b7.gif" height="450" />
   <img src="https://user-images.githubusercontent.com/937328/59955687-238f6880-947b-11e9-9345-55ea2bc8e458.gif" height="450" />
-  <img src="https://i.imgur.com/7hWODux.gif" height="450"/>
 </p>
 
 
