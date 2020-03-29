@@ -192,10 +192,10 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   sectionListProps?: Animated.AnimatedProps<SectionListProps<SectionListItem>>;
 
   /*
-   * Menu component that will overlay Modalize completely, independent of scrolling.
+   * Floating component that will overlay Modalize completely, independent of scrolling.
     It requires zIndex child with absolute positioning
    */
-  menuOverlay?: any;
+  FloatingComponent?: React.ReactNode;
 
   /**
    * A header component outside of the ScrollView, on top of the modal.

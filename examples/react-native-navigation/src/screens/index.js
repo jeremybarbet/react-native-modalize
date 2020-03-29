@@ -8,7 +8,6 @@ import { FlatList } from './FlatList';
 import { SectionList } from './SectionList';
 import { SimpleContent } from './SimpleContent';
 import { SnappingList } from './SnappingList';
-import { MenuOverlay } from './MenuOverlay';
 import { AnimatedValue } from './AnimatedValue';
 
 export const Screens = new Map();
@@ -21,7 +20,6 @@ export const FLAT_LIST = 'example.FlatList';
 export const SECTION_LIST = 'example.SectionList';
 export const SIMPLE_CONTENT = 'example.SimpleContent';
 export const SNAPPING_LIST = 'example.SnappingList';
-export const MENU_OVERLAY = 'example.MenuOverlay';
 export const ANIMATED_VALUE = 'example.AnimatedValue';
 
 Screens.set(APP, App);
@@ -32,7 +30,6 @@ Screens.set(FLAT_LIST, FlatList);
 Screens.set(SECTION_LIST, SectionList);
 Screens.set(SIMPLE_CONTENT, SimpleContent);
 Screens.set(SNAPPING_LIST, SnappingList);
-Screens.set(MENU_OVERLAY, MenuOverlay);
 Screens.set(ANIMATED_VALUE, AnimatedValue);
 
 export const startApp = () => {
