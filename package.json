@@ -6,7 +6,7 @@
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "rm -rf ./lib/* && yarn lint && tsc",
-    "prepublish": "yarn build",
+    "prepare": "yarn build",
     "lint": "tslint 'src/**/*.ts?(x)' && prettier --list-different \"**/*.{json,md,js,jsx,ts,tsx}\"",
     "prettier": "prettier --write \"**/*.{json,md,js,jsx,ts,tsx}\"",
     "postversion": "sh ./post-version.sh",
