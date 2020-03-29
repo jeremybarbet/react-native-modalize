@@ -56,6 +56,14 @@ Define where the handle on top of the modal should be positioned.
 | ------------------------- | -------- | --------- |
 | enum('outside', 'inside') | No       | `outside` |
 
+### `modalElevation`
+
+A number to define the elevation of the modal on Android. Useful if you have other elements of your app using other values of elevation.
+
+| Type     | Required | Platform |
+| -------- | -------- | -------- |
+| number   | No       | Android  |
+
 ### `modalStyle`
 
 Define the style of the modal.
@@ -192,9 +200,9 @@ Define if `Modalize` has to be wrap with the Modal component from react-native.
 
 ?> It's not recommended to pass it at `true`. Check the [examples' documentation](/EXAMPLES.md) to find the other ways to handle it.
 
-| Type     | Required | Default  |
-| -------- | -------- | -------- |
-| bool     | No       | `false`  |
+| Type     | Required | Default  | Platform |
+| -------- | -------- | -------- | -------- |
+| bool     | No       | `false`  | iOS      |
 
 ### `withHandle`
 

@@ -67,6 +67,11 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   handlePosition: 'outside' | 'inside';
 
   /**
+   * A number to define the elevation of the modal on Android. Useful if you have other elements of your app using other values of elevation. (Android specific)
+   */
+  modalElevation?: number;
+
+  /**
    * Define the style of the modal.
    */
   modalStyle?: ViewStyle | ViewStyle[] | RegisteredStyle<ViewStyle> | RegisteredStyle<ViewStyle[]>;

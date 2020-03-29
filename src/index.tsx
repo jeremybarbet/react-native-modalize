@@ -795,6 +795,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       panGestureEnabled,
       avoidKeyboardLikeIOS,
       adjustToContentHeight,
+      modalElevation: elevation,
     } = this.props;
     const { isVisible, lastSnap, showContent } = this.state;
     const pointerEvents = alwaysOpen ? 'box-none' : 'auto';
@@ -815,7 +816,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     }
 
     return (
-      <View style={s.modalize} pointerEvents={pointerEvents}>
+      <View style={[s.modalize, { elevation }]} pointerEvents={pointerEvents}>
         <TapGestureHandler
           ref={this.modal}
           maxDurationMs={100000}
