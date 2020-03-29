@@ -17,8 +17,6 @@ This component has been built with `react-native-gesture-handler` to address the
   <img src="https://user-images.githubusercontent.com/937328/59955687-238f6880-947b-11e9-9345-55ea2bc8e458.gif" height="450" />
 </p>
 
-
-
 ## Installation
 
 ```bash
