@@ -39,7 +39,7 @@ export class FixedContent extends React.PureComponent {
           clearButtonMode="while-editing"
         />
 
-        <TouchableOpacity style={s.content__button} activeOpacity={0.9} onPress={this.closeModal}>
+        <TouchableOpacity style={s.content__button} activeOpacity={0.75} onPress={this.closeModal}>
           <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
         </TouchableOpacity>
       </View>

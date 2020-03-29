@@ -21,7 +21,7 @@ export class AbsoluteHeader extends React.PureComponent {
   renderHeader = () => (
     <TouchableOpacity
       style={s.modal__header}
-      activeOpacity={0.8}
+      activeOpacity={0.75}
       onPress={this.closeModal}
       hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }}
     >

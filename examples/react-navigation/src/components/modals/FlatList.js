@@ -31,8 +31,8 @@ export class FlatList extends React.PureComponent {
   };
 
   renderFloatingComponent = () => (
-    <TouchableOpacity style={s.floating} onPress={this.scrollToTop}>
-      <Text style={s.text}>Top</Text>
+    <TouchableOpacity style={s.floating} onPress={this.scrollToTop} activeOpacity={0.75}>
+      <Text style={s.floating__text}>Top</Text>
     </TouchableOpacity>
   );
 
@@ -82,19 +82,22 @@ const s = StyleSheet.create({
   },
 
   floating: {
-    position: 'absolute',
-    right: 20,
-    bottom: 20,
-    backgroundColor: 'rgba(66,0,128,1)',
-    width: 60,
-    height: 60,
-    borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 999,
+
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+
+    width: 60,
+    height: 60,
+
+    borderRadius: 30,
+    backgroundColor: '#333',
   },
 
-  text: {
+  floating__text: {
     fontSize: 16,
     color: '#fff',
   },
