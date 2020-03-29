@@ -191,6 +191,11 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    */
   sectionListProps?: Animated.AnimatedProps<SectionListProps<SectionListItem>>;
 
+  /*
+   * A floating component inside the modal wrapper that will be independent of scrolling. It requires `zIndex` child with absolute positioning.
+   */
+  FloatingComponent?: React.ReactNode;
+
   /**
    * A header component outside of the ScrollView, on top of the modal.
    */

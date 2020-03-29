@@ -234,6 +234,14 @@ Refer to the [`react-native` SectionList documentation](https://facebook.github.
 | -------- | -------- |
 | object   | No       |
 
+### `FloatingComponent`
+
+A floating component inside the modal wrapper that will be independent of scrolling. It requires `zIndex` child with absolute positioning. Check out the [Flatlist example](https://github.com/jeremybarbet/react-native-modalize/blob/master/examples/expo/src/components/modals/FlatList.js).
+
+| Type     | Required |
+| -------- | -------- |
+| node     | No       |
+
 ### `HeaderComponent`
 
 A header component outside of the ScrollView, at the top of the modal.

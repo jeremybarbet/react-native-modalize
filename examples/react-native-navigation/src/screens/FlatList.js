@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
@@ -30,6 +30,21 @@ export class FlatList extends React.PureComponent {
     }
   };
 
+  scrollToTop = () => {
+    if (this.modal.current) {
+      this.modal.current.scrollTo({
+        y: 0,
+        animated: true,
+      });
+    }
+  };
+
+  renderFloatingComponent = () => (
+    <TouchableOpacity style={s.floating} onPress={this.scrollToTop}>
+      <Text style={s.text}>Top</Text>
+    </TouchableOpacity>
+  );
+
   renderItem = ({ item }) => (
     <View style={s.item}>
       <Text style={s.item__name}>{item.name}</Text>
@@ -42,6 +57,7 @@ export class FlatList extends React.PureComponent {
       <Modalize
         ref={this.modal}
         onClosed={this.onClosed}
+        FloatingComponent={this.renderFloatingComponent}
         flatListProps={{
           data: this.data,
           renderItem: this.renderItem,
@@ -73,5 +89,23 @@ const s = StyleSheet.create({
     fontSize: 14,
     fontWeight: '200',
     color: '#666',
+  },
+
+  floating: {
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    backgroundColor: 'rgba(66,0,128,1)',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 999,
+  },
+
+  text: {
+    fontSize: 16,
+    color: '#fff',
   },
 });
