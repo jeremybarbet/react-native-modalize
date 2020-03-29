@@ -80,6 +80,7 @@ const s = StyleSheet.create({
     fontWeight: '200',
     color: '#666',
   },
+
   floating: {
     position: 'absolute',
     right: 20,
@@ -92,6 +93,7 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     zIndex: 999,
   },
+
   text: {
     fontSize: 16,
     color: '#fff',

@@ -71,7 +71,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       timing: { duration: 280, easing: Easing.ease },
     },
     dragToss: 0.05,
-    FloatingComponent: undefined,
   };
 
   private snaps: number[] = [];
