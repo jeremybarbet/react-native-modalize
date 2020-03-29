@@ -236,11 +236,11 @@ Refer to the [`react-native` SectionList documentation](https://facebook.github.
 
 ### `FloatingComponent`
 
-A floating component that will overlay Modalize completely, independent of scrolling. It requires zIndex child with absolute positioning. Check [Flatlist example](../examples).
+A floating component inside the modal wrapper that will be independent of scrolling. It requires `zIndex` child with absolute positioning. Check out the [Flatlist example](https://github.com/jeremybarbet/react-native-modalize/blob/master/examples/expo/src/components/modals/FlatList.js).
 
 | Type     | Required |
 | -------- | -------- |
-| node      | No       |
+| node     | No       |
 
 ### `HeaderComponent`
 
