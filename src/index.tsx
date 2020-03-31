@@ -846,9 +846,9 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
             )}
 
             {this.renderOverlay()}
-            {this.renderFloatingComponent()}
           </View>
         </TapGestureHandler>
+        {this.renderFloatingComponent()}
       </View>
     );
   };
