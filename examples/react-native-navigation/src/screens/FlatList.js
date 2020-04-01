@@ -94,7 +94,7 @@ const s = StyleSheet.create({
   floating: {
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 999,
+    zIndex: 9999,
 
     position: 'absolute',
     right: 20,
