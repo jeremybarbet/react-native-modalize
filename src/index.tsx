@@ -144,7 +144,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       keyboardToggle: false,
       keyboardHeight: 0,
       disableScroll: props.alwaysOpen ? true : undefined,
-      adjust: props.adjustToContentHeight,
     };
 
     this.beginScrollY.addListener(({ value }) => (this.beginScrollYValue = value));
@@ -168,7 +167,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     if (nextAdjust !== adjustToContentHeight) {
       this.setState({
         modalHeight: nextAdjust ? undefined : this.initialComputedModalHeight,
-        adjust: nextAdjust,
       });
     }
   }
@@ -717,8 +715,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
   private renderChildren = (): React.ReactNode => {
     const { adjustToContentHeight, panGestureEnabled } = this.props;
-    const { adjust } = this.state;
-    const style = !adjustToContentHeight && adjust ? s.content__container : s.content__adjustHeight;
+    const style = adjustToContentHeight ? s.content__adjustHeight : s.content__container;
 
     return (
       <PanGestureHandler

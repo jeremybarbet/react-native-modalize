@@ -306,9 +306,4 @@ export interface IState {
    * Store height of the keyboard.
    */
   keyboardHeight: number;
-
-  /**
-   * Store if the modal is using adjustToContentHeight props
-   */
-  adjust: boolean | undefined;
 }
