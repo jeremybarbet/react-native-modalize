@@ -603,7 +603,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         const diff = Math.abs(translationY / (this.initialComputedModalHeight - offset));
         const y = translationY < 0 ? diff : 1 - diff;
 
-        let value;
+        let value: number;
 
         if (this.modalPosition === 'initial' && translationY > 0) {
           value = 0;
