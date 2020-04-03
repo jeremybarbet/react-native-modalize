@@ -200,7 +200,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   public scrollTo = (...args: Parameters<ScrollView['scrollTo']>): void => {
     if (this.contentView.current) {
       (this.contentView.current as any)
-        .getNode()
+        .getNode() // TODO: remove this for RN >= 0.62
         .getScrollResponder()
         .scrollTo(...args);
     }
