@@ -300,14 +300,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         toValue: alwaysOpen && dest === 'default' ? 0 : 1,
         duration: timing.duration,
         easing: Easing.ease,
-        useNativeDriver,
+        useNativeDriver: useNativeDriver!,
       }),
 
       panGestureAnimatedValue
         ? Animated.timing(panGestureAnimatedValue, {
             toValue: toPanValue,
             duration: PAN_DURATION,
-            useNativeDriver,
+            useNativeDriver: useNativeDriver!,
           })
         : Animated.delay(0),
 
@@ -315,13 +315,13 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         ? Animated.spring(this.translateY, {
             ...getSpringConfig(spring),
             toValue,
-            useNativeDriver,
+            useNativeDriver: useNativeDriver!,
           })
         : Animated.timing(this.translateY, {
             toValue,
             duration: timing.duration,
             easing: timing.easing,
-            useNativeDriver,
+            useNativeDriver: useNativeDriver!,
           }),
     ]).start(() => {
       if (onOpened) {
@@ -360,14 +360,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         toValue: 0,
         duration: timing.duration,
         easing: Easing.ease,
-        useNativeDriver,
+        useNativeDriver: useNativeDriver!,
       }),
 
       panGestureAnimatedValue
         ? Animated.timing(panGestureAnimatedValue, {
             toValue: 0,
             duration: PAN_DURATION,
-            useNativeDriver,
+            useNativeDriver: useNativeDriver!,
           })
         : Animated.delay(0),
 
@@ -375,13 +375,13 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         ? Animated.spring(this.translateY, {
             ...getSpringConfig(spring),
             toValue,
-            useNativeDriver,
+            useNativeDriver: useNativeDriver!,
           })
         : Animated.timing(this.translateY, {
             duration: timing.duration,
             easing: Easing.out(Easing.ease),
             toValue,
-            useNativeDriver,
+            useNativeDriver: useNativeDriver!,
           }),
     ]).start(() => {
       if (onClosed) {
@@ -515,7 +515,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
           toValue: Number(destSnapPoint <= 0),
           duration: timing.duration,
           easing: Easing.ease,
-          useNativeDriver,
+          useNativeDriver: useNativeDriver!,
         }).start();
       }
 
@@ -524,7 +524,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         friction: 12,
         velocity: velocityY,
         toValue: destSnapPoint,
-        useNativeDriver,
+        useNativeDriver: useNativeDriver!,
       }).start();
 
       if (this.beginScrollYValue === 0) {
@@ -534,7 +534,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
           Animated.timing(panGestureAnimatedValue, {
             toValue: Number(modalPosition === 'top'),
             duration: PAN_DURATION,
-            useNativeDriver,
+            useNativeDriver: useNativeDriver!,
           }).start();
         }
 
@@ -594,7 +594,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private onGestureEvent = Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
-    useNativeDriver: this.props.useNativeDriver,
+    useNativeDriver: this.props.useNativeDriver!,
     listener: ({ nativeEvent: { translationY } }: PanGestureHandlerStateChangeEvent) => {
       const { panGestureAnimatedValue } = this.props;
       const offset = 200;
