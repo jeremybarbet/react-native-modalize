@@ -199,10 +199,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
   public scrollTo = (...args: Parameters<ScrollView['scrollTo']>): void => {
     if (this.contentView.current) {
-      (this.contentView.current as any)
-        .getNode() // TODO: remove this for RN >= 0.62
-        .getScrollResponder()
-        .scrollTo(...args);
+      const ref = (this.contentView.current as any);
+
+      // since RN 0.62 the getNode call has been deprecated
+      const scrollResponder = ref.getScrollResponder
+        ? ref.getScrollResponder()
+        : ref.getNode().getScrollResponder();
+
+      scrollResponder.scrollTo(...args);
     }
   };
 
