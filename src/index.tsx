@@ -144,7 +144,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       keyboardToggle: false,
       keyboardHeight: 0,
       disableScroll: props.alwaysOpen ? true : undefined,
-      adjust: props.adjustToContentHeight,
     };
 
     this.beginScrollY.addListener(({ value }) => (this.beginScrollYValue = value));
@@ -168,7 +167,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     if (nextAdjust !== adjustToContentHeight) {
       this.setState({
         modalHeight: nextAdjust ? undefined : this.initialComputedModalHeight,
-        adjust: nextAdjust,
       });
     }
   }
@@ -189,7 +187,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     this.onAnimateOpen(alwaysOpen, dest);
   };
 
-  public close = (dest: TClose = 'default'): void => {
+  public close = (dest?: TClose): void => {
     const { onClose } = this.props;
 
     if (onClose) {
@@ -201,10 +199,14 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
   public scrollTo = (...args: Parameters<ScrollView['scrollTo']>): void => {
     if (this.contentView.current) {
-      (this.contentView.current as any)
-        .getNode()
-        .getScrollResponder()
-        .scrollTo(...args);
+      const ref = (this.contentView.current as any);
+
+      // since RN 0.62 the getNode call has been deprecated
+      const scrollResponder = ref.getScrollResponder
+        ? ref.getScrollResponder()
+        : ref.getNode().getScrollResponder();
+
+      scrollResponder.scrollTo(...args);
     }
   };
 
@@ -605,7 +607,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         const diff = Math.abs(translationY / (this.initialComputedModalHeight - offset));
         const y = translationY < 0 ? diff : 1 - diff;
 
-        let value;
+        let value: number;
 
         if (this.modalPosition === 'initial' && translationY > 0) {
           value = 0;
@@ -717,8 +719,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
   private renderChildren = (): React.ReactNode => {
     const { adjustToContentHeight, panGestureEnabled } = this.props;
-    const { adjust } = this.state;
-    const style = !adjustToContentHeight && adjust ? s.content__container : s.content__adjustHeight;
+    const style = adjustToContentHeight ? s.content__adjustHeight : s.content__container;
 
     return (
       <PanGestureHandler

@@ -99,9 +99,12 @@ export default StyleSheet.create({
 
   content__container: {
     flex: 1,
+    flexGrow: 1,
+    flexShrink: 1,
   },
 
   content__adjustHeight: {
+    flex: 0,
     flexGrow: 0,
     flexShrink: 1,
   },

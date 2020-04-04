@@ -94,7 +94,7 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    * Use the native thread to execute the animations.
    * @default true
    */
-  useNativeDriver?: boolean;
+  useNativeDriver: boolean;
 
   /**
    * Object to change the open animations
@@ -306,9 +306,4 @@ export interface IState {
    * Store height of the keyboard.
    */
   keyboardHeight: number;
-
-  /**
-   * Store if the modal is using adjustToContentHeight props
-   */
-  adjust: boolean | undefined;
 }
