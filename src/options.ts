@@ -94,7 +94,7 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    * Use the native thread to execute the animations.
    * @default true
    */
-  useNativeDriver?: boolean;
+  useNativeDriver: boolean;
 
   /**
    * Object to change the open animations
