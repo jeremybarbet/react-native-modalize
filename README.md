@@ -35,20 +35,16 @@ Check out [`react-native-gesture-handler`'s documentation](https://kmagiera.gith
 
 Here is the quick how-to example:
 
-```jsx
+```tsx
 import React, { useRef } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 
 export const MyApp = () => {
-  const modalRef = useRef(null);
+  const modalRef = useRef<Modalize>(null);
 
   const onOpen = () => {
-    const modal = modalRef.current;
-
-    if (modal) {
-      modal.open();
-    }
+    modalRef.current?.open();
   };
 
   return (

@@ -1,14 +1,8 @@
 # Usage
 
-**1. Import Modalize**
+**Import and add Modalize in your render function and use the `open` method to open it**
 
-```jsx
-import { Modalize } from 'react-native-modalize';
-```
-
-**2. Add the modal in your render function, and use the `open` method to open the modal**
-
-```jsx
+```tsx
 import React, { useRef } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Modalize } from 'react-native-modalize';
@@ -17,11 +11,7 @@ export const MyApp = () => {
   const modalRef = useRef<Modalize>(null);
 
   const onOpen = () => {
-    const modal = modalRef.current;
-
-    if (modal) {
-      modal.open();
-    }
+    modalRef.current?.open();
   };
 
   return (
@@ -38,4 +28,4 @@ export const MyApp = () => {
 }
 ```
 
-?> This is a really straight-forward example. If you want to see more complex examples on how to implement it along a navigator, check the [examples' documentation](/EXAMPLES.md).
+?> This is a really straight-forward example. If you want to see more complex examples on how to implement it along different navigators and props, check the [examples' documentation](/EXAMPLES.md).
