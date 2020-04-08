@@ -24,6 +24,7 @@ import {
   TapGestureHandler,
   PanGestureHandlerStateChangeEvent,
   TapGestureHandlerStateChangeEvent,
+  GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 
 import { IProps, IState, TOpen, TClose } from './options';
@@ -36,6 +37,7 @@ const { height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
+const GestureHandlerWrapper = GestureHandlerRootView ?? View;
 const THRESHOLD = 150;
 const ACTIVATED = 20;
 const PAN_DURATION = 150;
@@ -829,7 +831,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     }
 
     return (
-      <View style={[s.modalize, { elevation }]} pointerEvents={pointerEvents}>
+      <GestureHandlerWrapper style={[s.modalize, { elevation }]} pointerEvents={pointerEvents}>
         {this.renderFloatingComponent()}
 
         <TapGestureHandler
@@ -851,7 +853,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
             {this.renderOverlay()}
           </View>
         </TapGestureHandler>
-      </View>
+      </GestureHandlerWrapper>
     );
   };
 
