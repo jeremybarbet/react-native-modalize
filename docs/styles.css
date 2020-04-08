@@ -13,6 +13,20 @@ pre > code,
   vertical-align: middle;
 }
 
+.sidebar-nav li {
+  margin: 2px 0;
+}
+
+.app-sub-sidebar ul > li {
+  margin: 0;
+
+  line-height: 22px;
+}
+
+.app-sub-sidebar ul > li code {
+  font-size: 12px;
+}
+
 .markdown-section {
   max-width: 930px;
 }
