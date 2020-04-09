@@ -3,10 +3,10 @@
 1. Install `react-native-modalize`
 
 ```bash
-yarn add react-native-modalize
+yarn add react-native-modalize react-native-gesture-handler
 ```
 
-?> If you are using Modalize `< 1.3.7-rc.18` and not running on Expo, you will need to follow [react-native-gesture-handler's setup guide](https://software-mansion.github.io/react-native-gesture-handler/docs/getting-started.html).
+?> If you are using Modalize `< 1.3.7-rc.18` and not running on Expo, you will need to follow [react-native-gesture-handler's setup guide](https://software-mansion.github.io/react-native-gesture-handler/docs/getting-started.html) to complete the installation.
 
 2. Add Modalize in your component and use the `open` method to open it
 

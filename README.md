@@ -22,10 +22,10 @@ This component comes with a ScrollView, the default content renderer, a FlatList
 ## Installation
 
 ```bash
-yarn add react-native-modalize
+yarn add react-native-modalize react-native-gesture-handler
 ```
 
-For Modalize older than `< 1.3.7-rc.18`, check out [`react-native-gesture-handler`'s documentation](https://software-mansion.github.io/react-native-gesture-handler/docs/getting-started.html) to complete the installation.
+For Modalize older than `< 1.3.7-rc.18`, check out [react-native-gesture-handler's documentation](https://software-mansion.github.io/react-native-gesture-handler/docs/getting-started.html) to complete the installation.
 
 ## Usage
 
