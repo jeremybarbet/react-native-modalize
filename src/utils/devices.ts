@@ -5,4 +5,4 @@ const { width, height } = Dimensions.get('window');
 export const isIos = Platform.OS === 'ios';
 export const isIphoneX =
   isIos && (height === 812 || width === 812 || height === 896 || width === 896);
-export const isWeb = typeof document !== 'undefined';
+export const isWeb = Platform.OS === 'web';
