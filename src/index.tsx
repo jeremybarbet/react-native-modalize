@@ -103,12 +103,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
     this.initialComputedModalHeight = modalHeight;
 
-    if (props.withReactModal) {
-      console.warn(
-        `[react-native-modalize] 'withReactModal' is set to 'true'. Modal from react-native is going to be moved out of the core in the future. I\'d recommend migrating to something like react-navigation or react-native-navigation\'s to wrap Modalize. Check out the documentation for more informations.`,
-      );
-    }
-
     if (props.modalHeight && props.adjustToContentHeight) {
       console.error(
         `[react-native-modalize] You cannot use both 'modalHeight' and 'adjustToContentHeight' props at the same time. Only choose one of the two.`,

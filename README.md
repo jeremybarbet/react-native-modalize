@@ -4,7 +4,9 @@
 
 A modal that loves scrollable content.
 
-This component has been built with `react-native-gesture-handler` to address the common issue of **scrolling**, **swipping** and handling the **keyboard** behaviors, you can face with react-native's modal. This component comes with a ScrollView, the default content renderer, a FlatList and a SectionList. They are all three built-in and make your life easier, just pass your content and Modalize will handle the rest for you.
+This component has been built with `react-native-gesture-handler` to address the common issue of **scrolling**, **swipping** and handling the **keyboard** behaviors, you can face with react-native's modal.
+
+This component comes with a ScrollView, the default content renderer, a FlatList and a SectionList. They are all three built-in and make your life easier, just pass your content and Modalize will handle the rest for you.
 
 <p align="left">
   <img src="https://user-images.githubusercontent.com/937328/59955680-22f6d200-947b-11e9-8744-991a728596df.gif" height="450" />
@@ -23,13 +25,7 @@ This component has been built with `react-native-gesture-handler` to address the
 yarn add react-native-modalize
 ```
 
-If you are not using expo, you will have to install `react-native-gesture-handler`
-
-```bash
-yarn add react-native-gesture-handler
-```
-
-Check out [`react-native-gesture-handler`'s documentation](https://kmagiera.github.io/react-native-gesture-handler/docs/getting-started.html) to set it up.
+For Modalize older than `< 1.3.7-rc.18`, check out [`react-native-gesture-handler`'s documentation](https://software-mansion.github.io/react-native-gesture-handler/docs/getting-started.html) to complete the installation.
 
 ## Usage
 

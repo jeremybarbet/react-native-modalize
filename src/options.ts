@@ -170,7 +170,7 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   closeOnOverlayTap?: boolean;
 
   /**
-   * Define if Modalize has to be wrap with the Modal component from react-native. (iOS specific)
+   * Define if Modalize has to be wrap with the Modal component from react-native.
    * @default false
    */
   withReactModal?: boolean;

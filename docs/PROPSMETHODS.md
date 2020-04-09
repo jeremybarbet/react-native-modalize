@@ -196,13 +196,11 @@ Using this prop will enable/disable overlay tap gesture
 
 Define if `Modalize` has to be wrap with the Modal component from react-native.
 
-!> Using this props, or wrapping `Modalize` with the `Modal` from `react-native` will break the swipe gestures. This is a known issue from [`react-native-gesture-handler` #139](https://github.com/kmagiera/react-native-gesture-handler/issues/139).
+?> In order to work on Android you will need at least `react-native-gesture-handler >= 1.6.0`.
 
-?> It's not recommended to pass it at `true`. Check the [examples' documentation](/EXAMPLES.md) to find the other ways to handle it.
-
-| Type     | Required | Default  | Platform |
-| -------- | -------- | -------- | -------- |
-| bool     | No       | `false`  | iOS      |
+| Type     | Required | Default  |
+| -------- | -------- | -------- |
+| bool     | No       | `false`  |
 
 ### `withHandle`
 
