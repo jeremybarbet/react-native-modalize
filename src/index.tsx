@@ -826,8 +826,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
     return (
       <GestureHandlerWrapper style={[s.modalize, { elevation }]} pointerEvents={pointerEvents}>
-        {this.renderFloatingComponent()}
-
         <TapGestureHandler
           ref={this.modal}
           maxDurationMs={100000}
@@ -847,6 +845,8 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
             {this.renderOverlay()}
           </View>
         </TapGestureHandler>
+
+        {this.renderFloatingComponent()}
       </GestureHandlerWrapper>
     );
   };
