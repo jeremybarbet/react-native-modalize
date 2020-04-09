@@ -1,9 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
-
-const { width } = Dimensions.get('window');
 
 export class SimpleContent extends React.PureComponent {
   modal = React.createRef();
@@ -21,7 +19,7 @@ export class SimpleContent extends React.PureComponent {
     </View>,
 
     <View style={s.content__inside} key="1">
-      <Text style={s.content__paragraph}>{faker.lorem.paragraphs(3)}</Text>
+      <Text style={s.content__paragraph}>{faker.lorem.paragraphs(4)}</Text>
       <Text style={[s.content__subheading, { marginTop: 30 }]}>Horizontal ScrollView</Text>
 
       <ScrollView style={s.content__scrollview} horizontal>
@@ -32,16 +30,7 @@ export class SimpleContent extends React.PureComponent {
           ))}
       </ScrollView>
 
-      <Text style={s.content__paragraph}>{faker.lorem.paragraphs(2)}</Text>
-      <Text style={[s.content__subheading, { marginTop: 30 }]}>Vertical ScrollView</Text>
-
-      <ScrollView style={[s.content__scrollview, { height: 200 }]}>
-        {Array(5)
-          .fill(0)
-          .map((_, i) => (
-            <View key={i} style={[s.content__block, { width, marginBottom: 20 }]} />
-          ))}
-      </ScrollView>
+      <Text style={s.content__paragraph}>{faker.lorem.paragraphs(5)}</Text>
 
       <TextInput
         style={s.content__input}
