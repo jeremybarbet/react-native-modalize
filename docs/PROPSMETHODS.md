@@ -124,6 +124,14 @@ A number that determines the momentum of the scroll required.
 | -------- | -------- | ------- |
 | number   | No       | `0.05`  |
 
+### `threshold`
+
+Number of pixels that the user must drag the modal before snapping to another position.
+
+| Type     | Required | Default |
+| -------- | -------- | ------- |
+| number   | No       | `150`   |
+
 ### `adjustToContentHeight`
 
 Shrink the modal to your content's height.

@@ -123,6 +123,12 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   dragToss: number;
 
   /**
+   * Number of pixels that the user must drag the modal before snapping to another position.
+   * @default 150
+   */
+  threshold: number;
+
+  /**
    * Shrink the modal to your content's height.
    * @default false
    */

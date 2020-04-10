@@ -38,7 +38,6 @@ const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAv
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 const GestureHandlerWrapper = GestureHandlerRootView ?? View;
-const THRESHOLD = 150;
 const ACTIVATED = 20;
 const PAN_DURATION = 150;
 
@@ -73,6 +72,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       timing: { duration: 280, easing: Easing.ease },
     },
     dragToss: 0.05,
+    threshold: 150,
   };
 
   private snaps: number[] = [];
@@ -460,6 +460,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       dragToss,
       onPositionChange,
       panGestureAnimatedValue,
+      threshold,
     } = this.props;
     const { timing } = closeAnimationConfig!;
     const { lastSnap, modalHeight, overlay } = this.state;
@@ -492,7 +493,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
           }
         });
       } else if (
-        translationY > (adjustToContentHeight ? (modalHeight || 0) / 3 : THRESHOLD) &&
+        translationY > (adjustToContentHeight ? (modalHeight || 0) / 3 : threshold) &&
         this.beginScrollYValue === 0 &&
         !alwaysOpen
       ) {
