@@ -105,19 +105,19 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
     if (props.modalHeight && props.adjustToContentHeight) {
       console.error(
-        `[react-native-modalize] You cannot use both 'modalHeight' and 'adjustToContentHeight' props at the same time. Only choose one of the two.`,
+        `[react-native-modalize] You can't use both 'modalHeight' and 'adjustToContentHeight' props at the same time. Only choose one of the two.`,
       );
     }
 
     if ((props.scrollViewProps || props.children) && props.flatListProps) {
       console.error(
-        `[react-native-modalize] 'flatListProps' You can\'t use the ScrollView and the FlatList at the 'same time. As soon as you use 'flatListProps' it will replaces the default ScrollView with 'a FlatList component. Remove the 'children' and/or 'scrollViewProps' to fix the error.`,
+        `[react-native-modalize] You have defined 'flatListProps' along with 'scrollViewProps' or 'children' props. Remove 'scrollViewProps' or 'children' or 'flatListProps' to fix the error.`,
       );
     }
 
     if ((props.scrollViewProps || props.children) && props.sectionListProps) {
       console.error(
-        `[react-native-modalize] 'sectionListProps' You can\'t use the ScrollView and the SectionList at the 'same time. As soon as you use 'sectionListProps' it will replaces the default ScrollView with 'a SectionList component. Remove the 'children' and/or 'scrollViewProps' to fix the error.`,
+        `[react-native-modalize] You have defined 'sectionListProps'  along with 'scrollViewProps' or 'children' props. Remove 'scrollViewProps' or 'children' or 'sectionListProps' to fix the error.`,
       );
     }
 
@@ -203,6 +203,22 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         : ref.getNode().getScrollResponder();
 
       scrollResponder.scrollTo(...args);
+    }
+  };
+
+  public scrollToIndex = (...args: Parameters<FlatList['scrollToIndex']>): void => {
+    const { flatListProps } = this.props;
+
+    if (!flatListProps) {
+      return console.error(
+        `[react-native-modalize] You can't use the 'scrollToIndex' method with something else than the FlatList component.`,
+      );
+    }
+
+    if (this.contentView.current) {
+      const ref = this.contentView.current as any;
+
+      ref.getNode().scrollToIndex(...args);
     }
   };
 

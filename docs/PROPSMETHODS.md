@@ -372,3 +372,13 @@ The method is used to programmatically scroll the modal content.
 | Type                                                  | Required |
 | ----------------------------------------------------- | -------- |
 | function: (options: { y: number, animated: boolean }) | No       |
+
+### `scrollToIndex()`
+
+The method is used to programmatically scroll to the index of the FlatList.
+
+?> This method only works along with `flatListProps`.
+
+| Type                                                                                                | Required |
+| --------------------------------------------------------------------------------------------------- | -------- |
+| function: (options: { index: number, viewOffset: number, viewPosition: number, animated: boolean }) | No       |
