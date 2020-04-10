@@ -1,18 +1,15 @@
-import React from 'react';
+import React, { useRef, forwardRef } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
-export class SimpleContent extends React.PureComponent {
-  modal = React.createRef();
+import { useCombinedRefs } from '../../utils/use-combined-refs';
 
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
-    }
-  };
+export const SimpleContent = forwardRef((_, ref) => {
+  const modalRef = useRef(null);
+  const combinedRef = useCombinedRefs(ref, modalRef);
 
-  renderContent = () => [
+  const renderContent = () => [
     <View style={s.content__header} key="0">
       <Text style={s.content__heading}>Article title</Text>
       <Text style={s.content__subheading}>November 11st 2018</Text>
@@ -40,20 +37,18 @@ export class SimpleContent extends React.PureComponent {
     </View>,
   ];
 
-  render() {
-    return (
-      <Modalize
-        ref={this.modal}
-        scrollViewProps={{
-          showsVerticalScrollIndicator: false,
-          stickyHeaderIndices: [0],
-        }}
-      >
-        {this.renderContent()}
-      </Modalize>
-    );
-  }
-}
+  return (
+    <Modalize
+      ref={combinedRef}
+      scrollViewProps={{
+        showsVerticalScrollIndicator: false,
+        stickyHeaderIndices: [0],
+      }}
+    >
+      {renderContent()}
+    </Modalize>
+  );
+});
 
 const s = StyleSheet.create({
   content__header: {

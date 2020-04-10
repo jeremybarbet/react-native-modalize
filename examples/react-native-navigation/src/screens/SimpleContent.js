@@ -1,23 +1,19 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
-export class SimpleContent extends React.PureComponent {
-  modal = React.createRef();
-
-  componentDidMount() {
-    this.openModal();
-  }
+export const SimpleContent = ({ componentId }) => {
+  const modalRef = useRef(null);
 
   onClosed = () => {
-    Navigation.dismissOverlay(this.props.componentId);
+    Navigation.dismissOverlay(componentId);
   };
 
   openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
+    if (modalRef.current) {
+      modalRef.current.open();
     }
   };
 
@@ -49,21 +45,23 @@ export class SimpleContent extends React.PureComponent {
     </View>,
   ];
 
-  render() {
-    return (
-      <Modalize
-        ref={this.modal}
-        onClosed={this.onClosed}
-        scrollViewProps={{
-          showsVerticalScrollIndicator: false,
-          stickyHeaderIndices: [0],
-        }}
-      >
-        {this.renderContent()}
-      </Modalize>
-    );
-  }
-}
+  useEffect(() => {
+    openModal();
+  }, []);
+
+  return (
+    <Modalize
+      ref={modalRef}
+      onClosed={onClosed}
+      scrollViewProps={{
+        showsVerticalScrollIndicator: false,
+        stickyHeaderIndices: [0],
+      }}
+    >
+      {renderContent()}
+    </Modalize>
+  );
+};
 
 const s = StyleSheet.create({
   content__header: {

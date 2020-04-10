@@ -1,24 +1,28 @@
 {
-  "name": "react-navigation-example",
+  "name": "react-navigation",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "ios": "react-native run-ios --simulator='iPhone 11'",
-    "android": "react-native run-android"
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start"
   },
   "dependencies": {
+    "@react-native-community/masked-view": "0.1.8",
+    "@react-navigation/native": "5.1.5",
     "faker": "4.1.0",
-    "react": "16.12.0",
-    "react-native": "0.59.9",
-    "react-native-gesture-handler": "1.2.1",
+    "react": "16.13.1",
+    "react-native": "0.62.2",
+    "react-native-gesture-handler": "1.6.1",
     "react-native-modalize": "file:../../src",
-    "react-navigation": "4.0.10"
+    "react-native-reanimated": "1.8.0",
+    "react-native-safe-area-context": "0.7.3",
+    "react-native-screens": "2.4.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/runtime": "^7.4.5",
-    "metro-react-native-babel-preset": "^0.57.0",
-    "react-test-renderer": "16.12.0"
+    "@babel/core": "^7.6.2",
+    "@babel/runtime": "^7.6.2",
+    "metro-react-native-babel-preset": "^0.59.0",
+    "react-test-renderer": "16.13.1"
   }
 }

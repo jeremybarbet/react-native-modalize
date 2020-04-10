@@ -1,47 +1,42 @@
-import React from 'react';
+import React, { useRef, forwardRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
-export class CustomStyle extends React.PureComponent {
-  modal = React.createRef();
+import { useCombinedRefs } from '../../utils/use-combined-refs';
 
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
-    }
-  };
+export const CustomStyle = forwardRef((_, ref) => {
+  const modalRef = useRef(null);
+  const combinedRef = useCombinedRefs(ref, modalRef);
 
-  renderContent = () => (
+  const renderContent = () => (
     <View style={s.content}>
       <Text style={s.content__heading}>Article title</Text>
       <Text style={s.content__paragraph}>{faker.lorem.paragraphs(3)}</Text>
     </View>
   );
 
-  render() {
-    return (
-      <Modalize
-        ref={this.modal}
-        modalStyle={s.modal}
-        modalHeight={350}
-        overlayStyle={s.overlay}
-        handleStyle={s.handle}
-        handlePosition="inside"
-        openAnimationConfig={{
-          timing: { duration: 400 },
-          spring: { speed: 20, bounciness: 10 },
-        }}
-        closeAnimationConfig={{
-          timing: { duration: 400 },
-          spring: { speed: 20, bounciness: 10 },
-        }}
-      >
-        {this.renderContent()}
-      </Modalize>
-    );
-  }
-}
+  return (
+    <Modalize
+      ref={combinedRef}
+      modalStyle={s.modal}
+      modalHeight={350}
+      overlayStyle={s.overlay}
+      handleStyle={s.handle}
+      handlePosition="inside"
+      openAnimationConfig={{
+        timing: { duration: 400 },
+        spring: { speed: 20, bounciness: 10 },
+      }}
+      closeAnimationConfig={{
+        timing: { duration: 400 },
+        spring: { speed: 20, bounciness: 10 },
+      }}
+    >
+      {renderContent()}
+    </Modalize>
+  );
+});
 
 const s = StyleSheet.create({
   content: {

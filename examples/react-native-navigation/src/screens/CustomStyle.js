@@ -1,15 +1,11 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
-export class CustomStyle extends React.PureComponent {
-  modal = React.createRef();
-
-  componentDidMount() {
-    this.openModal();
-  }
+export const CustomStyle = ({ componentId }) => {
+  const modalRef = useRef(null);
 
   renderContent = () => (
     <View style={s.content}>
@@ -19,39 +15,41 @@ export class CustomStyle extends React.PureComponent {
   );
 
   onClosed = () => {
-    Navigation.dismissOverlay(this.props.componentId);
+    Navigation.dismissOverlay(componentId);
   };
 
   openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
+    if (modalRef.current) {
+      modalRef.current.open();
     }
   };
 
-  render() {
-    return (
-      <Modalize
-        ref={this.modal}
-        onClosed={this.onClosed}
-        modalStyle={s.modal}
-        modalHeight={350}
-        overlayStyle={s.overlay}
-        handleStyle={s.handle}
-        handlePosition="inside"
-        openAnimationConfig={{
-          timing: { duration: 400 },
-          spring: { speed: 20, bounciness: 10 },
-        }}
-        closeAnimationConfig={{
-          timing: { duration: 400 },
-          spring: { speed: 20, bounciness: 10 },
-        }}
-      >
-        {this.renderContent()}
-      </Modalize>
-    );
-  }
-}
+  useEffect(() => {
+    openModal();
+  }, []);
+
+  return (
+    <Modalize
+      ref={modalRef}
+      onClosed={onClosed}
+      modalStyle={s.modal}
+      modalHeight={350}
+      overlayStyle={s.overlay}
+      handleStyle={s.handle}
+      handlePosition="inside"
+      openAnimationConfig={{
+        timing: { duration: 400 },
+        spring: { speed: 20, bounciness: 10 },
+      }}
+      closeAnimationConfig={{
+        timing: { duration: 400 },
+        spring: { speed: 20, bounciness: 10 },
+      }}
+    >
+      {renderContent()}
+    </Modalize>
+  );
+};
 
 const s = StyleSheet.create({
   content: {

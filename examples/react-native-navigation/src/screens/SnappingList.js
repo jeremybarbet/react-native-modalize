@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { Modalize } from 'react-native-modalize';
@@ -6,30 +6,26 @@ import faker from 'faker';
 
 import { Button } from '../components/button/Button';
 
-export class SnappingList extends React.PureComponent {
-  modal = React.createRef();
+export const SnappingList = ({ componentId }) => {
+  const modalRef = useRef(null);
 
-  componentDidMount() {
-    this.openModal();
-  }
-
-  onClosed = () => {
-    Navigation.dismissOverlay(this.props.componentId);
+  const onClosed = () => {
+    Navigation.dismissOverlay(componentId);
   };
 
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
+  const openModal = () => {
+    if (modalRef.current) {
+      modalRef.current.open();
     }
   };
 
-  renderHeader = () => (
+  const renderHeader = () => (
     <View style={s.modal__header}>
       <Text style={s.modal__headerText}>50 users online</Text>
     </View>
   );
 
-  renderContent = () => (
+  const renderContent = () => (
     <View style={s.content}>
       {Array(50)
         .fill(0)
@@ -47,33 +43,30 @@ export class SnappingList extends React.PureComponent {
         ))}
 
       <View style={s.content__button}>
-        <Button onPress={this.scrollToTop} name="Scroll to Top" />
+        <Button onPress={scrollToTop} name="Scroll to Top" />
       </View>
     </View>
   );
 
-  scrollToTop = () => {
-    if (this.modal.current) {
-      this.modal.current.scrollTo({
+  const scrollToTop = () => {
+    if (modalRef.current) {
+      modalRef.current.scrollTo({
         y: 0,
         animated: true,
       });
     }
   };
 
-  render() {
-    return (
-      <Modalize
-        ref={this.modal}
-        HeaderComponent={this.renderHeader}
-        snapPoint={350}
-        onClosed={this.onClosed}
-      >
-        {this.renderContent()}
-      </Modalize>
-    );
-  }
-}
+  useEffect(() => {
+    openModal();
+  }, []);
+
+  return (
+    <Modalize ref={modalRef} HeaderComponent={renderHeader} snapPoint={350} onClosed={onClosed}>
+      {renderContent()}
+    </Modalize>
+  );
+};
 
 const s = StyleSheet.create({
   modal__header: {

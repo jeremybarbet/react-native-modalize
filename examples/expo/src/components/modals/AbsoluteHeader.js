@@ -1,29 +1,38 @@
-import React from 'react';
+import React, { useRef, forwardRef } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
-export class AbsoluteHeader extends React.PureComponent {
-  modal = React.createRef();
+import { useCombinedRefs } from '../../utils/use-combined-refs';
 
-  renderHeader = () => (
+export const AbsoluteHeader = forwardRef((_, ref) => {
+  const modalRef = useRef(null);
+  const combinedRef = useCombinedRefs(ref, modalRef);
+
+  const closeModal = () => {
+    if (combinedRef.current) {
+      combinedRef.current.close();
+    }
+  };
+
+  const renderHeader = () => (
     <TouchableOpacity
       style={s.modal__header}
       activeOpacity={0.75}
-      onPress={this.closeModal}
+      onPress={closeModal}
       hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }}
     >
       <Image
         source={{
           uri:
-            'https://flaticons.net/gd/makefg.php?i=icons/Mobile%20Application/Close.png&r=255&g=255&b=255',
+            'https://flaticons.net/icon.php?slug_category=mobile-application&slug_icon=close&icon_size=256&icon_color=FFFFFF&icon_flip=&icon_rotate=0',
         }}
         style={{ width: '40%', height: '40%' }}
       />
     </TouchableOpacity>
   );
 
-  renderContent = () => (
+  const renderContent = () => (
     <View style={s.content}>
       <Text style={s.content__heading}>Article title</Text>
       <Text style={s.content__subheading}>November 11st 2018</Text>
@@ -31,26 +40,12 @@ export class AbsoluteHeader extends React.PureComponent {
     </View>
   );
 
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
-    }
-  };
-
-  closeModal = () => {
-    if (this.modal.current) {
-      this.modal.current.close();
-    }
-  };
-
-  render() {
-    return (
-      <Modalize ref={this.modal} HeaderComponent={this.renderHeader} withHandle={false}>
-        {this.renderContent()}
-      </Modalize>
-    );
-  }
-}
+  return (
+    <Modalize ref={combinedRef} HeaderComponent={renderHeader} withHandle={false}>
+      {renderContent()}
+    </Modalize>
+  );
+});
 
 const s = StyleSheet.create({
   modal__header: {

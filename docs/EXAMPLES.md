@@ -39,6 +39,7 @@ This example use react-navigation. Modalize is used on the screen you need to di
 ```bash
 cd examples/react-navigation
 yarn
+npx pod-install ios
 yarn start
 ```
 

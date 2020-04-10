@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 
 import { Layout } from './src/components/layout/Layout';
 import { Header } from './src/components/header/Header';
@@ -14,70 +15,38 @@ import { AlwaysOpen } from './src/components/modals/AlwaysOpen';
 import { AnimatedValue } from './src/components/modals/AnimatedValue';
 
 export const App = () => {
-  const modal = [];
+  const modals = Array.from({ length: 8 }).map(_ => useRef(null).current);
 
   const renderButtons = links => {
-    return links.map((link, i) => (
-      <Button key={i} onPress={() => modal[i].openModal()} name={link} />
-    ));
+    return links.map((link, i) => <Button key={i} onPress={() => modals[i].open()} name={link} />);
   };
 
   return (
-    <Layout>
-      <Header subheading="Run with React Navigation" />
+    <NavigationContainer>
+      <Layout>
+        <Header subheading="Run with React Navigation" />
 
-      {renderButtons([
-        'Modal with a simple content',
-        'Modal with a fixed content',
-        'Modal with a snapping list',
-        'Modal with an absolute header',
-        'Modal with custom style',
-        'Modal with a Flat List',
-        'Modal with a Section List',
-        'Modal with an Animated Value',
-      ])}
+        {renderButtons([
+          'Modal with a simple content',
+          'Modal with a fixed content',
+          'Modal with a snapping list',
+          'Modal with an absolute header',
+          'Modal with custom style',
+          'Modal with a Flat List',
+          'Modal with a Section List',
+          'Modal with an Animated Value',
+        ])}
 
-      <SimpleContent
-        ref={el => {
-          modal[0] = el;
-        }}
-      />
-      <FixedContent
-        ref={el => {
-          modal[1] = el;
-        }}
-      />
-      <SnappingList
-        ref={el => {
-          modal[2] = el;
-        }}
-      />
-      <AbsoluteHeader
-        ref={el => {
-          modal[3] = el;
-        }}
-      />
-      <CustomStyle
-        ref={el => {
-          modal[4] = el;
-        }}
-      />
-      <FlatList
-        ref={el => {
-          modal[5] = el;
-        }}
-      />
-      <SectionList
-        ref={el => {
-          modal[6] = el;
-        }}
-      />
-      <AnimatedValue
-        ref={el => {
-          modal[7] = el;
-        }}
-      />
-      <AlwaysOpen />
-    </Layout>
+        <SimpleContent ref={el => (modals[0] = el)} />
+        <FixedContent ref={el => (modals[1] = el)} />
+        <SnappingList ref={el => (modals[2] = el)} />
+        <AbsoluteHeader ref={el => (modals[3] = el)} />
+        <CustomStyle ref={el => (modals[4] = el)} />
+        <FlatList ref={el => (modals[5] = el)} />
+        <SectionList ref={el => (modals[6] = el)} />
+        <AnimatedValue ref={el => (modals[7] = el)} />
+        <AlwaysOpen />
+      </Layout>
+    </NavigationContainer>
   );
 };

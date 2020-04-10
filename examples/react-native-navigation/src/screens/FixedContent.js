@@ -1,59 +1,55 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
-export class FixedContent extends React.PureComponent {
-  modal = React.createRef();
-
-  componentDidMount() {
-    this.openModal();
-  }
+export const FixedContent = ({ componentId }) => {
+  const modalRef = useRef(null);
 
   onClosed = () => {
-    Navigation.dismissOverlay(this.props.componentId);
+    Navigation.dismissOverlay(componentId);
   };
 
   openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
+    if (modalRef.current) {
+      modalRef.current.open();
     }
   };
 
   closeModal = () => {
-    if (this.modal.current) {
-      this.modal.current.close();
+    if (modalRef.current) {
+      modalRef.current.close();
     }
   };
 
-  renderContent = () => {
-    return (
-      <View style={s.content}>
-        <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
-        <Text style={s.content__heading}>Send the message?</Text>
-        <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
-        <TextInput
-          style={s.content__input}
-          placeholder="Type your username"
-          clearButtonMode="while-editing"
-        />
+  renderContent = () => (
+    <View style={s.content}>
+      <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
+      <Text style={s.content__heading}>Send the message?</Text>
+      <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
+      <TextInput
+        style={s.content__input}
+        placeholder="Type your username"
+        clearButtonMode="while-editing"
+      />
 
-        <TouchableOpacity style={s.content__button} activeOpacity={0.75} onPress={this.closeModal}>
-          <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+      <TouchableOpacity style={s.content__button} activeOpacity={0.75} onPress={closeModal}>
+        <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
-  render() {
-    return (
-      <Modalize ref={this.modal} onClosed={this.onClosed} adjustToContentHeight>
-        {this.renderContent()}
-      </Modalize>
-    );
-  }
-}
+  useEffect(() => {
+    openModal();
+  }, []);
+
+  return (
+    <Modalize ref={modalRef} onClosed={onClosed} adjustToContentHeight>
+      {renderContent()}
+    </Modalize>
+  );
+};
 
 const s = StyleSheet.create({
   content: {

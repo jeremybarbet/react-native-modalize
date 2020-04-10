@@ -1,50 +1,43 @@
-import React from 'react';
+import React, { useRef, forwardRef } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
-export class FixedContent extends React.PureComponent {
-  modal = React.createRef();
+import { useCombinedRefs } from '../../utils/use-combined-refs';
 
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
+export const FixedContent = forwardRef((_, ref) => {
+  const modalRef = useRef(null);
+  const combinedRef = useCombinedRefs(ref, modalRef);
+
+  const closeModal = () => {
+    if (combinedRef.current) {
+      combinedRef.current.close();
     }
   };
 
-  closeModal = () => {
-    if (this.modal.current) {
-      this.modal.current.close();
-    }
-  };
+  const renderContent = () => (
+    <View style={s.content}>
+      <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
+      <Text style={s.content__heading}>Send the message?</Text>
+      <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
+      <TextInput
+        style={s.content__input}
+        placeholder="Type your username"
+        clearButtonMode="while-editing"
+      />
 
-  renderContent = () => {
-    return (
-      <View style={s.content}>
-        <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
-        <Text style={s.content__heading}>Send the message?</Text>
-        <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
-        <TextInput
-          style={s.content__input}
-          placeholder="Type your username"
-          clearButtonMode="while-editing"
-        />
+      <TouchableOpacity style={s.content__button} activeOpacity={0.75} onPress={closeModal}>
+        <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
-        <TouchableOpacity style={s.content__button} activeOpacity={0.75} onPress={this.closeModal}>
-          <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
-  render() {
-    return (
-      <Modalize ref={this.modal} adjustToContentHeight>
-        {this.renderContent()}
-      </Modalize>
-    );
-  }
-}
+  return (
+    <Modalize ref={combinedRef} adjustToContentHeight>
+      {renderContent()}
+    </Modalize>
+  );
+});
 
 const s = StyleSheet.create({
   content: {

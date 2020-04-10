@@ -1,37 +1,33 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
-export class AbsoluteHeader extends React.PureComponent {
-  modal = React.createRef();
+export const AbsoluteHeader = ({ componentId }) => {
+  const modalRef = useRef(null);
 
-  componentDidMount() {
-    this.openModal();
-  }
-
-  onClosed = () => {
-    Navigation.dismissOverlay(this.props.componentId);
+  const onClosed = () => {
+    Navigation.dismissOverlay(componentId);
   };
 
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
+  const openModal = () => {
+    if (modalRef.current) {
+      modalRef.current.open();
     }
   };
 
-  closeModal = () => {
-    if (this.modal.current) {
-      this.modal.current.close();
+  const closeModal = () => {
+    if (modalRef.current) {
+      modalRef.current.close();
     }
   };
 
-  renderHeader = () => (
+  const renderHeader = () => (
     <TouchableOpacity
       style={s.modal__header}
       activeOpacity={0.75}
-      onPress={this.closeModal}
+      onPress={closeModal}
       hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }}
     >
       <Image
@@ -52,19 +48,16 @@ export class AbsoluteHeader extends React.PureComponent {
     </View>
   );
 
-  render() {
-    return (
-      <Modalize
-        ref={this.modal}
-        HeaderComponent={this.renderHeader}
-        withHandle={false}
-        onClosed={this.onClosed}
-      >
-        {this.renderContent()}
-      </Modalize>
-    );
-  }
-}
+  useEffect(() => {
+    openModal();
+  }, []);
+
+  return (
+    <Modalize ref={modalRef} HeaderComponent={renderHeader} withHandle={false} onClosed={onClosed}>
+      {renderContent()}
+    </Modalize>
+  );
+};
 
 const s = StyleSheet.create({
   modal__header: {

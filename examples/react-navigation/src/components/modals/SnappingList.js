@@ -1,35 +1,31 @@
-import React from 'react';
+import React, { useRef, forwardRef } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
+import { useCombinedRefs } from '../../utils/use-combined-refs';
 import { Button } from '../button/Button';
 
-export class SnappingList extends React.PureComponent {
-  modal = React.createRef();
+export const SnappingList = forwardRef((_, ref) => {
+  const modalRef = useRef(null);
+  const combinedRef = useCombinedRefs(ref, modalRef);
 
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
-    }
-  };
-
-  scrollToTop = () => {
-    if (this.modal.current) {
-      this.modal.current.scrollTo({
+  const scrollToTop = () => {
+    if (combinedRef.current) {
+      combinedRef.current.scrollTo({
         y: 0,
         animated: true,
       });
     }
   };
 
-  renderHeader = () => (
+  const renderHeader = () => (
     <View style={s.modal__header}>
       <Text style={s.modal__headerText}>50 users online</Text>
     </View>
   );
 
-  renderContent = () => (
+  const renderContent = () => (
     <View style={s.content}>
       {Array(50)
         .fill(0)
@@ -47,19 +43,17 @@ export class SnappingList extends React.PureComponent {
         ))}
 
       <View style={s.content__button}>
-        <Button onPress={this.scrollToTop} name="Scroll to Top" />
+        <Button onPress={scrollToTop} name="Scroll to Top" />
       </View>
     </View>
   );
 
-  render() {
-    return (
-      <Modalize ref={this.modal} HeaderComponent={this.renderHeader} snapPoint={350}>
-        {this.renderContent()}
-      </Modalize>
-    );
-  }
-}
+  return (
+    <Modalize ref={combinedRef} HeaderComponent={renderHeader} snapPoint={350}>
+      {renderContent()}
+    </Modalize>
+  );
+});
 
 const s = StyleSheet.create({
   modal__header: {

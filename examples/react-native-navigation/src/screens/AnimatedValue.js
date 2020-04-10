@@ -1,81 +1,66 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Image, StyleSheet, Text, View, Animated } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
-export class AnimatedValue extends React.PureComponent {
-  modal = React.createRef();
-  animated = new Animated.Value(0);
+export const AnimatedValue = () => {
+  const modalRef = useRef(null);
+  const animated = useRef(new Animated.Value(0)).current;
 
-  get contentHeader() {
-    return {
-      padding: this.animated.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, 50],
-      }),
-    };
-  }
+  const getContentSquare = () => ({
+    transform: [
+      {
+        scale: animated.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0.5, 1.25],
+        }),
+      },
+      {
+        translateX: animated.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 115],
+        }),
+      },
+      {
+        translateY: animated.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 40],
+        }),
+      },
+    ],
+  });
 
-  get contentSquare() {
-    return {
-      transform: [
-        {
-          scale: this.animated.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0.5, 1.25],
-          }),
-        },
-        {
-          translateX: this.animated.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, 115],
-          }),
-        },
-        {
-          translateY: this.animated.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, 40],
-          }),
-        },
-      ],
-    };
-  }
+  const getContentHeading = () => ({
+    opacity: animated.interpolate({
+      inputRange: [0, 0.35],
+      outputRange: [1, 0],
+    }),
+  });
 
-  get contentHeading() {
-    return {
-      opacity: this.animated.interpolate({
-        inputRange: [0, 0.35],
-        outputRange: [1, 0],
-      }),
-    };
-  }
+  const getContentInner = () => ({
+    transform: [
+      {
+        translateY: animated.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 80],
+        }),
+      },
+    ],
+  });
 
-  get contentInner() {
-    return {
-      transform: [
-        {
-          translateY: this.animated.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, 80],
-          }),
-        },
-      ],
-    };
-  }
-
-  renderContent = () => (
+  const renderContent = () => (
     <>
       <View style={s.content__header}>
-        <Animated.View style={[s.content__cover, this.contentSquare]}>
+        <Animated.View style={[s.content__cover, getContentSquare()]}>
           <Image style={{ width: '100%', height: '100%' }} source={{ uri: faker.image.avatar() }} />
         </Animated.View>
 
-        <Animated.Text style={[s.content__heading, this.contentHeading]}>
+        <Animated.Text style={[s.content__heading, getContentHeading()]}>
           More about me
         </Animated.Text>
       </View>
 
-      <Animated.View style={[s.content__inner, this.contentInner]}>
+      <Animated.View style={[s.content__inner, getContentInner()]}>
         <Text style={s.content__heading}>Hey that's about me!</Text>
         <Text style={s.content__subheading}>
           You wanted to know what I was playing when I was young? Well I don't remember.
@@ -85,25 +70,27 @@ export class AnimatedValue extends React.PureComponent {
     </>
   );
 
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
+  const openModal = () => {
+    if (modalRef.current) {
+      modalRef.current.open();
     }
   };
 
-  render() {
-    return (
-      <Modalize
-        ref={this.modal}
-        panGestureAnimatedValue={this.animated}
-        snapPoint={120}
-        handlePosition="inside"
-      >
-        {this.renderContent()}
-      </Modalize>
-    );
-  }
-}
+  useEffect(() => {
+    openModal();
+  }, []);
+
+  return (
+    <Modalize
+      ref={modalRef}
+      panGestureAnimatedValue={animated}
+      snapPoint={120}
+      handlePosition="inside"
+    >
+      {renderContent()}
+    </Modalize>
+  );
+};
 
 const s = StyleSheet.create({
   content__header: {

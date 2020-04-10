@@ -1,63 +1,57 @@
-import React from 'react';
+import React, { useRef, forwardRef } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
-export class FlatList extends React.PureComponent {
-  modal = React.createRef();
+import { useCombinedRefs } from '../../utils/use-combined-refs';
 
-  get data() {
-    return Array(50)
+export const FlatList = forwardRef((_, ref) => {
+  const modalRef = useRef(null);
+  const combinedRef = useCombinedRefs(ref, modalRef);
+
+  const getData = () =>
+    Array(50)
       .fill(0)
       .map(_ => ({
         name: faker.name.findName(),
         email: faker.internet.email(),
       }));
-  }
 
-  openModal = () => {
-    if (this.modal.current) {
-      this.modal.current.open();
-    }
-  };
-
-  scrollToTop = () => {
-    if (this.modal.current) {
-      this.modal.current.scrollTo({
+  const scrollToTop = () => {
+    if (combinedRef.current) {
+      combinedRef.current.scrollTo({
         y: 0,
         animated: true,
       });
     }
   };
 
-  renderFloatingComponent = () => (
-    <TouchableOpacity style={s.floating} onPress={this.scrollToTop} activeOpacity={0.75}>
+  const renderFloatingComponent = () => (
+    <TouchableOpacity style={s.floating} onPress={scrollToTop} activeOpacity={0.75}>
       <Text style={s.floating__text}>Top</Text>
     </TouchableOpacity>
   );
 
-  renderItem = ({ item }) => (
+  const renderItem = ({ item }) => (
     <View style={s.item}>
       <Text style={s.item__name}>{item.name}</Text>
       <Text style={s.item__email}>{item.email}</Text>
     </View>
   );
 
-  render() {
-    return (
-      <Modalize
-        ref={this.modal}
-        FloatingComponent={this.renderFloatingComponent}
-        flatListProps={{
-          data: this.data,
-          renderItem: this.renderItem,
-          keyExtractor: item => item.email,
-          showsVerticalScrollIndicator: false,
-        }}
-      />
-    );
-  }
-}
+  return (
+    <Modalize
+      ref={combinedRef}
+      FloatingComponent={renderFloatingComponent}
+      flatListProps={{
+        data: getData(),
+        renderItem: renderItem,
+        keyExtractor: item => item.email,
+        showsVerticalScrollIndicator: false,
+      }}
+    />
+  );
+});
 
 const s = StyleSheet.create({
   item: {
