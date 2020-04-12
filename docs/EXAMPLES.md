@@ -1,13 +1,13 @@
 # Examples
 
-These examples are running on 3 of the most popular navigator for react-native.
+With the following examples you will be able to see Modalize running on three of the most popular navigator for react-native, using their built-ins way to show overlay.
 
 ## React Native Navigation
 
-Instead of using react-native's modal to display Modalize on top of your content all the time. `react-native-navigation` have their own way to display content on top of the rest, which is called `showOverlay`. This example show you how it works.
+Instead of using react-native's modal to display Modalize on top of your content all the time, `react-native-navigation` have its own way to do it, which is called `showOverlay`. The specific call for the `showOverlay` function is located [here](https://github.com/jeremybarbet/react-native-modalize/blob/master/examples/react-native-navigation/src/screens/App.js#L22-L27).
 
 <details>
-<summary><strong>Runing the example</strong></summary>
+<summary><strong>Running the example</strong></summary>
 <p>
 
 #### First tab
@@ -29,10 +29,10 @@ yarn watch:react-native-navigation
 
 ## React Navigation
 
-This example use react-navigation with a bottom tabs navigation. To be able to render Modalize on top of all the rest (and especially the bottom tabs) you will need to install the package [`react-native-portalize`](https://github.com/jeremybarbet/react-native-portalize). You can follow the example to see how it is used.
+This example uses react-navigation with a bottom tabs navigation. To be able to render Modalize on top of all the rest (and especially the bottom tabs) you will need to install the package [`react-native-portalize`](https://github.com/jeremybarbet/react-native-portalize). You can find out where is it defined in the [index.js](https://github.com/jeremybarbet/react-native-modalize/blob/master/examples/react-navigation/src/index.js#L8-L12) and [Examples.js](https://github.com/jeremybarbet/react-native-modalize/blob/master/examples/react-navigation/src/screens/Examples.js#L39-L49).
 
 <details>
-<summary><strong>Runing the example</strong></summary>
+<summary><strong>Running the example</strong></summary>
 <p>
 
 #### First tab
@@ -55,12 +55,12 @@ yarn watch:react-navigation
 
 ## Expo
 
-This example is runing under Expo without any navigator.
+This example is running under Expo without any navigator.
 
 ?> An Expo app is avalaible at the [following link](https://exp.host/@jeremdsgn/react-native-modalize).
 
 <details>
-<summary><strong>Runing the example</strong></summary>
+<summary><strong>Running the example</strong></summary>
 <p>
 
 #### First tab
