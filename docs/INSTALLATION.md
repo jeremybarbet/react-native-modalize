@@ -37,3 +37,5 @@ export const MyApp = () => {
 ```
 
 ?> This is a really straight-forward example. If you want to see more complex examples on how to implement it along different navigators and props, check the [examples' documentation](/EXAMPLES.md).
+
+?> If you are using `react-navigation` and you want to display `Modalize` on top of the bottom tabs, you will need to install [`react-native-portalize`](https://github.com/jeremybarbet/react-native-portalize) and follow the setup guide.

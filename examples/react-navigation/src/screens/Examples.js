@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { Portal } from 'react-native-portalize';
 
 import { Layout } from '../components/layout/Layout';
 import { Header } from '../components/header/Header';
@@ -35,15 +36,17 @@ export const ExamplesScreen = () => {
         'Modal with an Animated Value',
       ])}
 
-      <SimpleContent ref={el => (modals[0] = el)} />
-      <FixedContent ref={el => (modals[1] = el)} />
-      <SnappingList ref={el => (modals[2] = el)} />
-      <AbsoluteHeader ref={el => (modals[3] = el)} />
-      <CustomStyle ref={el => (modals[4] = el)} />
-      <FlatList ref={el => (modals[5] = el)} />
-      <SectionList ref={el => (modals[6] = el)} />
-      <AnimatedValue ref={el => (modals[7] = el)} />
-      <AlwaysOpen />
+      <Portal>
+        <SimpleContent ref={el => (modals[0] = el)} />
+        <FixedContent ref={el => (modals[1] = el)} />
+        <SnappingList ref={el => (modals[2] = el)} />
+        <AbsoluteHeader ref={el => (modals[3] = el)} />
+        <CustomStyle ref={el => (modals[4] = el)} />
+        <FlatList ref={el => (modals[5] = el)} />
+        <SectionList ref={el => (modals[6] = el)} />
+        <AnimatedValue ref={el => (modals[7] = el)} />
+        <AlwaysOpen />
+      </Portal>
     </Layout>
   );
 };
