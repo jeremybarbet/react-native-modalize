@@ -241,7 +241,9 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
   private get modalizeContent(): Animated.AnimatedProps<ViewStyle> {
     const { modalHeight } = this.state;
-    const valueY = Animated.add(this.dragY, this.reverseBeginScrollY);
+    // We diff and get the negative value only. It sometimes go above 0 (e.g. 1.5) and creates the flickering on Modalize for a ms
+    const diffClamp = Animated.diffClamp(this.reverseBeginScrollY, -screenHeight, 0);
+    const valueY = Animated.add(this.dragY, diffClamp);
 
     return {
       height: modalHeight,
@@ -482,8 +484,9 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     const { timing } = closeAnimationConfig!;
     const { lastSnap, modalHeight, overlay } = this.state;
     const { velocityY, translationY } = nativeEvent;
+    const enableBounces = this.beginScrollYValue > 0 || translationY < 0;
 
-    this.setState({ enableBounces: this.beginScrollYValue > 0 || translationY < 0 });
+    this.setState({ enableBounces });
 
     if (nativeEvent.oldState === State.ACTIVE) {
       const toValue = translationY - this.beginScrollYValue;
@@ -620,7 +623,6 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       if (panGestureAnimatedValue) {
         const diff = Math.abs(translationY / (this.initialComputedModalHeight - offset));
         const y = translationY < 0 ? diff : 1 - diff;
-
         let value: number;
 
         if (this.modalPosition === 'initial' && translationY > 0) {
