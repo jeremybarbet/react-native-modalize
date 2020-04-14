@@ -36,7 +36,7 @@ export const AbsoluteHeader = forwardRef((_, ref) => {
     <View style={s.content}>
       <Text style={s.content__heading}>Article title</Text>
       <Text style={s.content__subheading}>November 11st 2018</Text>
-      <Text style={s.content__paragraph}>{faker.lorem.paragraphs(8)}</Text>
+      <Text style={s.content__paragraph}>{faker.lorem.paragraphs(10)}</Text>
     </View>
   );
 

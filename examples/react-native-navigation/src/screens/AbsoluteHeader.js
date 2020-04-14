@@ -33,7 +33,7 @@ export const AbsoluteHeader = ({ componentId }) => {
       <Image
         source={{
           uri:
-            'https://flaticons.net/gd/makefg.php?i=icons/Mobile%20Application/Close.png&r=255&g=255&b=255',
+            'https://flaticons.net/icon.php?slug_category=mobile-application&slug_icon=close&icon_size=256&icon_color=FFFFFF&icon_flip=&icon_rotate=0',
         }}
         style={{ width: '40%', height: '40%' }}
       />
@@ -44,7 +44,7 @@ export const AbsoluteHeader = ({ componentId }) => {
     <View style={s.content}>
       <Text style={s.content__heading}>Article title</Text>
       <Text style={s.content__subheading}>November 11st 2018</Text>
-      <Text style={s.content__paragraph}>{faker.lorem.paragraphs(8)}</Text>
+      <Text style={s.content__paragraph}>{faker.lorem.paragraphs(10)}</Text>
     </View>
   );
 
