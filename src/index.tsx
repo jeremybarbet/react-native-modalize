@@ -6,7 +6,6 @@ import {
   Modal,
   Easing,
   LayoutChangeEvent,
-  StyleProp,
   BackHandler,
   KeyboardAvoidingView,
   Keyboard,
@@ -16,6 +15,8 @@ import {
   Platform,
   StatusBar,
   KeyboardAvoidingViewProps,
+  ViewStyle,
+  KeyboardEvent,
 } from 'react-native';
 import {
   PanGestureHandler,
@@ -27,7 +28,7 @@ import {
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 
-import { IProps, IState, TOpen, TClose } from './options';
+import { IProps, IState, TOpen, TClose, TStyle } from './options';
 import { getSpringConfig } from './utils/get-spring-config';
 import { isIphoneX, isIos } from './utils/devices';
 import { hasAbsoluteStyle } from './utils/has-absolute-style';
@@ -238,7 +239,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     return this.isHandleOutside ? 35 : 20;
   }
 
-  private get modalizeContent(): StyleProp<any> {
+  private get modalizeContent(): Animated.AnimatedProps<ViewStyle> {
     const { modalHeight } = this.state;
     const valueY = Animated.add(this.dragY, this.reverseBeginScrollY);
 
@@ -257,7 +258,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     };
   }
 
-  private get overlayBackground(): StyleProp<any> {
+  private get overlayBackground(): Animated.AnimatedProps<ViewStyle> {
     const { overlay } = this.state;
 
     return {
@@ -600,7 +601,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     return true;
   };
 
-  private onKeyboardShow = (event: any) => {
+  private onKeyboardShow = (event: KeyboardEvent) => {
     const { height } = event.endCoordinates;
 
     this.setState({ keyboardToggle: true, keyboardHeight: height });
@@ -646,8 +647,8 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
   private renderHandle = (): React.ReactNode => {
     const { handleStyle, withHandle, panGestureEnabled } = this.props;
-    const handleStyles: any[] = [s.handle];
-    const shapeStyles: any[] = [s.handle__shape, handleStyle];
+    const handleStyles: (TStyle | undefined)[] = [s.handle];
+    const shapeStyles: (TStyle | undefined)[] = [s.handle__shape, handleStyle];
 
     if (!withHandle) {
       return null;

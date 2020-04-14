@@ -11,6 +11,11 @@ import {
 
 export type TOpen = 'default' | 'top';
 export type TClose = 'default' | 'alwaysOpen';
+export type TStyle =
+  | ViewStyle
+  | ViewStyle[]
+  | RegisteredStyle<ViewStyle>
+  | RegisteredStyle<ViewStyle[]>;
 
 export interface ITimingProps {
   duration: number;
@@ -74,12 +79,12 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   /**
    * Define the style of the modal.
    */
-  modalStyle?: ViewStyle | ViewStyle[] | RegisteredStyle<ViewStyle> | RegisteredStyle<ViewStyle[]>;
+  modalStyle?: TStyle;
 
   /**
    * Define the style of the handle on top of the modal.
    */
-  handleStyle?: ViewStyle | ViewStyle[] | RegisteredStyle<ViewStyle> | RegisteredStyle<ViewStyle[]>;
+  handleStyle?: TStyle;
 
   /**
    * Define the style of the overlay.
