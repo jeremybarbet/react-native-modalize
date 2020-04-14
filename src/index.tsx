@@ -75,7 +75,8 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       timing: { duration: 280, easing: Easing.ease },
     },
     dragToss: 0.05,
-    threshold: 150,
+    threshold: 120,
+    velocity: 2800,
   };
 
   private snaps: number[] = [];
@@ -482,11 +483,17 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       onPositionChange,
       panGestureAnimatedValue,
       threshold,
+      velocity,
     } = this.props;
     const { timing } = closeAnimationConfig!;
     const { lastSnap, modalHeight, overlay } = this.state;
     const { velocityY, translationY } = nativeEvent;
     const enableBounces = this.beginScrollYValue > 0 || translationY < 0;
+    const thresholdProps =
+      translationY > (adjustToContentHeight ? (modalHeight || 0) / 3 : threshold);
+    const closeThreshold = velocity
+      ? this.beginScrollYValue <= 20 && velocityY >= velocity
+      : thresholdProps && this.beginScrollYValue === 0;
 
     this.setState({ enableBounces });
 
@@ -514,11 +521,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
             }
           }
         });
-      } else if (
-        translationY > (adjustToContentHeight ? (modalHeight || 0) / 3 : threshold) &&
-        this.beginScrollYValue === 0 &&
-        !alwaysOpen
-      ) {
+      } else if (closeThreshold && !alwaysOpen) {
         this.willCloseModalize = true;
         this.close();
       }
