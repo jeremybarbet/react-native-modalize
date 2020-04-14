@@ -51,17 +51,17 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   snapPoint?: number;
 
   /**
-   * A number to define the modal's total height
+   * A number to define the modal's total height.
    */
   modalHeight?: number;
 
   /**
-   * A number to define the modal's top offset
+   * A number to define the modal's top offset.
    */
   modalTopOffset?: number;
 
   /**
-   * Using this props will show the modal all the time, and the number represents how expanded the modal has to be
+   * Using this props will show the modal all the time, and the number represents how expanded the modal has to be.
    */
   alwaysOpen?: number;
 
@@ -72,7 +72,7 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   handlePosition: 'outside' | 'inside';
 
   /**
-   * A number to define the elevation of the modal on Android. Useful if you have other elements of your app using other values of elevation. (Android specific)
+   * A number to define the elevation of the modal on Android. Useful if you have other elements of your app using other values of elevation (Android specific).
    */
   modalElevation?: number;
 
@@ -89,20 +89,16 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   /**
    * Define the style of the overlay.
    */
-  overlayStyle?:
-    | ViewStyle
-    | ViewStyle[]
-    | RegisteredStyle<ViewStyle>
-    | RegisteredStyle<ViewStyle[]>;
+  overlayStyle?: TStyle;
 
   /**
-   * Use the native thread to execute the animations.
+   * Define if the Animated.Value uses the native thread to execute the animations.
    * @default true
    */
   useNativeDriver: boolean;
 
   /**
-   * Object to change the open animations
+   * Object to change the open animations.
    * @default
    * {
    * timing: { duration: 280 },
@@ -112,7 +108,7 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   openAnimationConfig?: IConfigProps;
 
   /**
-   * Object to change the close animations
+   * Object to change the close animations.
    * @default
    * {
    * timing: { duration: 280 },
@@ -158,24 +154,24 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   keyboardAvoidingBehavior?: 'height' | 'position' | 'padding';
 
   /**
-   * KeyboardAvoidingView.keyboardVerticalOffset
+   * Define an offset to the KeyboardAvoidingView component wrapping the scrollview.
    * @default 0
    */
   keyboardAvoidingOffset?: number;
 
   /**
-   * Using this prop will enable/disable pan gesture
+   * Using this prop will enable/disable pan gesture.
    * @default true
    */
   panGestureEnabled?: boolean;
 
   /**
-   * Animated.Value of the modal position between 0 and 1
+   * Animated.Value of the modal position between 0 and 1.
    */
   panGestureAnimatedValue?: Animated.Value;
 
   /**
-   * Using this prop will enable/disable overlay tap gesture
+   * Using this prop will enable/disable overlay tap gesture.
    * @default true
    */
   closeOnOverlayTap?: boolean;
@@ -258,7 +254,7 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   /**
    * Callback function which determines if the modal has reached the top
    * i.e. completely opened to modal/screen height, or is at the initial
-   * point (snapPoint or alwaysOpened height)
+   * point (snapPoint or alwaysOpened height).
    */
   onPositionChange?: (position: 'top' | 'initial') => void;
 
@@ -305,12 +301,12 @@ export interface IState {
   contentHeight: number;
 
   /**
-   * When we scroll to the bottom of the ContentView we want the bounce animation but when we reach the top again, we want it disabled. (iOS specific)
+   * When we scroll to the bottom of the ContentView we want the bounce animation but when we reach the top again, we want it disabled (iOS specific).
    */
   enableBounces: boolean;
 
   /**
-   * Disable scroll if disableScrollIfPossible is true or if we are the initial position of the snapPoint or alwaysOpen modals
+   * Disable scroll if disableScrollIfPossible is true or if we are the initial position of the snapPoint or alwaysOpen modals.
    */
   disableScroll: boolean | undefined;
 

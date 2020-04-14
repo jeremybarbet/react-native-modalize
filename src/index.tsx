@@ -39,6 +39,7 @@ const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAv
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 const GestureHandlerWrapper = GestureHandlerRootView ?? View;
+const USE_NATIVE_DRIVER = true;
 const ACTIVATED = 20;
 const PAN_DURATION = 150;
 
@@ -320,7 +321,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         toValue: alwaysOpen && dest === 'default' ? 0 : 1,
         duration: timing.duration,
         easing: Easing.ease,
-        useNativeDriver,
+        useNativeDriver: USE_NATIVE_DRIVER,
       }),
 
       panGestureAnimatedValue
@@ -335,13 +336,13 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         ? Animated.spring(this.translateY, {
             ...getSpringConfig(spring),
             toValue,
-            useNativeDriver,
+            useNativeDriver: USE_NATIVE_DRIVER,
           })
         : Animated.timing(this.translateY, {
             toValue,
             duration: timing.duration,
             easing: timing.easing,
-            useNativeDriver,
+            useNativeDriver: USE_NATIVE_DRIVER,
           }),
     ]).start(() => {
       if (onOpened) {
@@ -380,7 +381,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         toValue: 0,
         duration: timing.duration,
         easing: Easing.ease,
-        useNativeDriver,
+        useNativeDriver: USE_NATIVE_DRIVER,
       }),
 
       panGestureAnimatedValue
@@ -395,13 +396,13 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         ? Animated.spring(this.translateY, {
             ...getSpringConfig(spring),
             toValue,
-            useNativeDriver,
+            useNativeDriver: USE_NATIVE_DRIVER,
           })
         : Animated.timing(this.translateY, {
             duration: timing.duration,
             easing: Easing.out(Easing.ease),
             toValue,
-            useNativeDriver,
+            useNativeDriver: USE_NATIVE_DRIVER,
           }),
     ]).start(() => {
       if (onClosed) {
@@ -537,7 +538,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
           toValue: Number(destSnapPoint <= 0),
           duration: timing.duration,
           easing: Easing.ease,
-          useNativeDriver,
+          useNativeDriver: USE_NATIVE_DRIVER,
         }).start();
       }
 
@@ -546,7 +547,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
         friction: 12,
         velocity: velocityY,
         toValue: destSnapPoint,
-        useNativeDriver,
+        useNativeDriver: USE_NATIVE_DRIVER,
       }).start();
 
       if (this.beginScrollYValue === 0) {
@@ -616,7 +617,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private onGestureEvent = Animated.event([{ nativeEvent: { translationY: this.dragY } }], {
-    useNativeDriver: this.props.useNativeDriver,
+    useNativeDriver: USE_NATIVE_DRIVER,
     listener: ({ nativeEvent: { translationY } }: PanGestureHandlerStateChangeEvent) => {
       const { panGestureAnimatedValue } = this.props;
       const offset = 200;
@@ -711,7 +712,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       bounces: enableBounces,
       onScrollBeginDrag: Animated.event(
         [{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }],
-        { useNativeDriver: false },
+        { useNativeDriver: USE_NATIVE_DRIVER },
       ),
       scrollEventThrottle: 16,
       onLayout: this.onContentViewLayout,
@@ -874,14 +875,13 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
   };
 
   private renderReactModal = (child: React.ReactNode): React.ReactNode => {
-    const { useNativeDriver } = this.props;
     const { isVisible } = this.state;
 
     return (
       <Modal
         supportedOrientations={['landscape', 'portrait', 'portrait-upside-down']}
         onRequestClose={this.onBackPress}
-        hardwareAccelerated={useNativeDriver}
+        hardwareAccelerated={USE_NATIVE_DRIVER}
         visible={isVisible}
         transparent
       >

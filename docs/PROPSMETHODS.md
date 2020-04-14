@@ -32,7 +32,7 @@ A number to define the modal's total height.
 
 ### `modalTopOffset`
 
-A number to define the modal's top offset
+A number to define the modal's top offset.
 
 | Type     | Required |
 | -------- | -------- |
@@ -178,7 +178,7 @@ See [`react-native` documentation](https://facebook.github.io/react-native/docs/
 
 ### `panGestureEnabled`
 
-Using this prop will enable/disable pan gesture
+Using this prop will enable/disable pan gesture.
 
 | Type     | Required | Default  |
 | -------- | -------- | -------- |
@@ -186,7 +186,7 @@ Using this prop will enable/disable pan gesture
 
 ### `panGestureAnimatedValue`
 
-Animated.Value of the modal position between 0 and 1
+Animated.Value of the modal position between 0 and 1.
 
 | Type               | Required |
 | ------------------ | -------- |
@@ -194,7 +194,7 @@ Animated.Value of the modal position between 0 and 1
 
 ### `closeOnOverlayTap`
 
-Using this prop will enable/disable overlay tap gesture
+Using this prop will enable/disable overlay tap gesture.
 
 | Type     | Required | Default  |
 | -------- | -------- | -------- |
