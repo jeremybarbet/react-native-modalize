@@ -218,6 +218,14 @@ Define if the handle on top of the modal is display or not.
 | -------- | -------- | -------- |
 | bool     | No       | `true`   |
 
+### `withOverlay`
+
+Define if the overlay is display or not.
+
+| Type     | Required | Default  |
+| -------- | -------- | -------- |
+| bool     | No       | `true`   |
+
 ### `scrollViewProps`
 
 An object to pass any of the react-native ScrollView's props.

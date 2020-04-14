@@ -192,6 +192,12 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    */
   withHandle?: boolean;
 
+  /**
+   * Define if the overlay is display or not.
+   * @default true
+   */
+  withOverlay?: boolean;
+
   /*
    * An object to pass any of the react-native ScrollView's props.
    */

@@ -65,6 +65,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     closeOnOverlayTap: true,
     withReactModal: false,
     withHandle: true,
+    withOverlay: true,
     openAnimationConfig: {
       timing: { duration: 280, easing: Easing.ease },
       spring: { speed: 14, bounciness: 4 },
@@ -825,9 +826,10 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       avoidKeyboardLikeIOS,
       adjustToContentHeight,
       modalElevation: elevation,
+      withOverlay,
     } = this.props;
     const { isVisible, lastSnap, showContent } = this.state;
-    const pointerEvents = alwaysOpen ? 'box-none' : 'auto';
+    const pointerEvents = alwaysOpen || !withOverlay ? 'box-none' : 'auto';
 
     const keyboardAvoidingViewProps: Animated.AnimatedProps<KeyboardAvoidingViewProps> = {
       keyboardVerticalOffset: keyboardAvoidingOffset,
@@ -862,7 +864,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
               </AnimatedKeyboardAvoidingView>
             )}
 
-            {this.renderOverlay()}
+            {withOverlay && this.renderOverlay()}
           </View>
         </TapGestureHandler>
 
