@@ -30,7 +30,7 @@ import {
 
 import { IProps, IState, TOpen, TClose, TStyle } from './options';
 import { getSpringConfig } from './utils/get-spring-config';
-import { isIphoneX, isIos } from './utils/devices';
+import { isIphoneX, isIos, isAndroid } from './utils/devices';
 import { hasAbsoluteStyle } from './utils/has-absolute-style';
 import s from './styles';
 
@@ -488,12 +488,13 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     const { timing } = closeAnimationConfig!;
     const { lastSnap, modalHeight, overlay } = this.state;
     const { velocityY, translationY } = nativeEvent;
-    const enableBounces = this.beginScrollYValue > 0 || translationY < 0;
+    const enableBounces = isAndroid ? false : this.beginScrollYValue > 0 || translationY < 0;
     const thresholdProps =
-      translationY > (adjustToContentHeight ? (modalHeight || 0) / 3 : threshold);
+      translationY > (adjustToContentHeight ? (modalHeight || 0) / 3 : threshold) &&
+      this.beginScrollYValue === 0;
     const closeThreshold = velocity
-      ? this.beginScrollYValue <= 20 && velocityY >= velocity
-      : thresholdProps && this.beginScrollYValue === 0;
+      ? (this.beginScrollYValue <= 20 && velocityY >= velocity) || thresholdProps
+      : thresholdProps;
 
     this.setState({ enableBounces });
 

@@ -136,7 +136,7 @@ Number of pixels that the user must pass to be able to close the modal.
 
 Number of pixels the user has to pan down fast to close the modal (e.g. When the user is reaching the top of the ScrollView and is immediately panning down to dismiss Modalize. If it reaches the velocity threshold then it instantly closes the modal). The highest the number it is, the more the user will need to pan down and make an important gesture to dismiss the modal.
 
-?> If `velocity` is defined, then the `threshold` props is not used. If you want to use the `threshold` method instead of the `velocity` defines it to `velocity={undefined}`.
+?> If `velocity` is defined, then it's the first condition checked to close Modalize, then comes `threshold` used in a second time. If you want to use the `threshold` method only instead of the `velocity`, do `velocity={undefined}`.
 
 | Type               | Required | Default |
 | ------------------ | -------- | ------- |
