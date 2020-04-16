@@ -81,6 +81,7 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
   private snaps: number[] = [];
   private snapEnd: number;
+  private cancelTranslateY: Animated.Value = new Animated.Value(1); // 1 by default to have the translateY animation running
   private beginScrollYValue: number = 0;
   private beginScrollY: Animated.Value = new Animated.Value(0);
   private dragY: Animated.Value = new Animated.Value(0);
@@ -244,10 +245,18 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
 
   private get modalizeContent(): Animated.AnimatedProps<ViewStyle> {
     const { modalHeight } = this.state;
-    // We diff and get the negative value only. It sometimes go above 0 (e.g. 1.5) and creates the flickering on Modalize for a ms
+    /*
+     * When we have a scrolling happening in the scrollview, we don't want to translate the modal down.
+     * We either multiply by 0 to cancel the animation, or 1 to proceed.
+     */
+    const cancelTranslateY = (ref: Animated.Value) => Animated.multiply(ref, this.cancelTranslateY);
+    /*
+     * We diff and get the negative value only. It sometimes go above 0 (e.g. 1.5) and creates
+     * the flickering on Modalize for a ms
+     */
     const diffClamp = Animated.diffClamp(this.reverseBeginScrollY, -screenHeight, 0);
-    const dragY = Animated.add(this.dragY, diffClamp);
-    const value = Animated.add(this.translateY, dragY);
+    const dragY = Animated.add(cancelTranslateY(this.dragY), diffClamp);
+    const value = Animated.add(cancelTranslateY(this.translateY), dragY);
 
     return {
       height: modalHeight,
@@ -498,6 +507,20 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
       : thresholdProps;
 
     this.setState({ enableBounces });
+
+    /*
+     * When the pan gesture began we check the position of the scrollview "cursor".
+     * We cancel the translation animation if the scrolview is not scrolled to the top
+     */
+    if (nativeEvent.oldState === State.BEGAN) {
+      if (this.beginScrollYValue > 0) {
+        this.translateY.setValue(0);
+        this.dragY.setValue(0);
+        this.cancelTranslateY.setValue(0);
+      } else {
+        this.cancelTranslateY.setValue(1);
+      }
+    }
 
     if (nativeEvent.oldState === State.ACTIVE) {
       const toValue = translationY - this.beginScrollYValue;
