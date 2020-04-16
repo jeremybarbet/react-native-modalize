@@ -246,14 +246,15 @@ export class Modalize<FlatListItem = any, SectionListItem = any> extends React.C
     const { modalHeight } = this.state;
     // We diff and get the negative value only. It sometimes go above 0 (e.g. 1.5) and creates the flickering on Modalize for a ms
     const diffClamp = Animated.diffClamp(this.reverseBeginScrollY, -screenHeight, 0);
-    const valueY = Animated.add(this.dragY, diffClamp);
+    const dragY = Animated.add(this.dragY, diffClamp);
+    const value = Animated.add(this.translateY, dragY);
 
     return {
       height: modalHeight,
       maxHeight: this.initialComputedModalHeight,
       transform: [
         {
-          translateY: Animated.add(this.translateY, valueY).interpolate({
+          translateY: value.interpolate({
             inputRange: [-40, 0, this.snapEnd],
             outputRange: [0, 0, this.snapEnd],
             extrapolate: 'clamp',
