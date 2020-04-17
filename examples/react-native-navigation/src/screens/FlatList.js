@@ -1,11 +1,14 @@
 import React, { useRef, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Animated } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+
 export const FlatList = ({ componentId }) => {
   const modalRef = useRef(null);
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const getData = () =>
     Array(50)
@@ -35,9 +38,31 @@ export const FlatList = ({ componentId }) => {
   };
 
   const renderFloatingComponent = () => (
-    <TouchableOpacity style={s.floating} onPress={scrollToTop} activeOpacity={0.75}>
+    <AnimatedTouchableOpacity
+      style={[
+        s.floating,
+        {
+          opacity: scrollY.interpolate({
+            inputRange: [100, 200],
+            outputRange: [0, 1],
+            extrapolate: 'clamp',
+          }),
+          transform: [
+            {
+              scale: scrollY.interpolate({
+                inputRange: [100, 150],
+                outputRange: [0.6, 1],
+                extrapolate: 'clamp',
+              }),
+            },
+          ],
+        },
+      ]}
+      onPress={scrollToTop}
+      activeOpacity={0.75}
+    >
       <Text style={s.floating__text}>Top</Text>
-    </TouchableOpacity>
+    </AnimatedTouchableOpacity>
   );
 
   const renderItem = ({ item }) => (
@@ -61,6 +86,10 @@ export const FlatList = ({ componentId }) => {
         renderItem: renderItem,
         keyExtractor: item => item.email,
         showsVerticalScrollIndicator: false,
+        onScroll: Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+          useNativeDriver: true,
+        }),
+        scrollEventThrottle: 16,
       }}
     />
   );
