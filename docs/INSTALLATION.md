@@ -1,41 +1,24 @@
 # Installation
 
-1. Install `react-native-modalize`
+- Install `react-native-modalize`
 
 ```bash
-yarn add react-native-modalize react-native-gesture-handler
+yarn add react-native-modalize
 ```
 
-?> If you are using Modalize `< 1.3.7-rc.18` and not running on Expo, you will need to follow [react-native-gesture-handler's setup guide](https://software-mansion.github.io/react-native-gesture-handler/docs/getting-started.html) to complete the installation.
+- Modalize also needs `react-native-gesture-handler`
 
-2. Add Modalize in your component and use the `open` method to open it
-
-```tsx
-import React, { useRef } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { Modalize } from 'react-native-modalize';
-
-export const MyApp = () => {
-  const modalRef = useRef<Modalize>(null);
-
-  const onOpen = () => {
-    modalRef.current?.open();
-  };
-
-  return (
-    <>
-      <TouchableOpacity onPress={onOpen}>
-        <Text>Open the modal</Text>
-      </TouchableOpacity>
-
-      <Modalize ref={modalRef}>
-        ...your content
-      </Modalize>
-    </>
-  );
-}
+```bash
+yarn add react-native-gesture-handler
+npx pod-install ios
 ```
 
-?> This is a really straight-forward example. If you want to see more complex examples on how to implement it along different navigators and props, check the [examples' documentation](/EXAMPLES.md).
+No other step is required. That's it!
 
-?> If you are using `react-navigation` and you want to display `Modalize` on top of the bottom tabs, you will need to install [`react-native-portalize`](https://github.com/jeremybarbet/react-native-portalize) and follow the setup guide.
+<details>
+<summary><strong>Additional setup for Modalize `< 1.3.7-rc.18`</strong></summary>
+<p>
+If you are using Modalize <code>< 1.3.7-rc.18</code> and not running on Expo, you will need to follow <a href="https://software-mansion.github.io/react-native-gesture-handler/docs/getting-started.html">react-native-gesture-handler's setup guide</a> to complete the installation and wrap your application with the <code>GestureHandlerRootView</code>. It's automatically done in newest versions of the library.
+</p>
+</details>
+

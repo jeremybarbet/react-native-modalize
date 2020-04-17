@@ -6,7 +6,7 @@ A modal that loves scrollable content.
 
 This component has been built with `react-native-gesture-handler` to address the common issue of **scrolling**, **swipping** and handling the **keyboard** behaviors, you can face with react-native's modal.
 
-This component comes with a ScrollView, the default content renderer, a FlatList and a SectionList. They are all three built-in and make your life easier, just pass your content and Modalize will handle the rest for you.
+This component comes with a ScrollView, the default renderer, a FlatList and a SectionList. They are all three built-in and make your life easier, just pass your content and Modalize will handle the rest for you.
 
 <p align="left">
   <img src="https://user-images.githubusercontent.com/937328/59955680-22f6d200-947b-11e9-8744-991a728596df.gif" height="450" />
@@ -23,27 +23,28 @@ This component comes with a ScrollView, the default content renderer, a FlatList
 
 ```bash
 yarn add react-native-modalize react-native-gesture-handler
+npx pod-install ios
 ```
+
+That's it!
 
 <details>
 <summary><strong>Running Modalize `< 1.3.7-rc.18` ?</strong></summary>
 <p>
-
-You will need to complete the setup from `react-native-gesture-handler` available [here](https://software-mansion.github.io/react-native-gesture-handler/docs/getting-started.html). It's automatically embed within Modalize in the latest versions.
-
+If you are using Modalize `< 1.3.7-rc.18` and not running on Expo, you will need to follow react-native-gesture-handler's [setup guide](https://software-mansion.github.io/react-native-gesture-handler/docs/getting-started.html) to complete the installation and wrap your application with the `GestureHandlerRootView`. It's automatically done in newest versions of the library.
 </p>
 </details>
 
 ## Usage
 
-Here is the quick how-to example:
+Here is a quick example, using the default ScrollView renderer.
 
 ```tsx
 import React, { useRef } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 
-export const MyApp = () => {
+export const App = () => {
   const modalRef = useRef<Modalize>(null);
 
   const onOpen = () => {
@@ -64,4 +65,4 @@ export const MyApp = () => {
 
 ## Documentation
 
-The full [documentation is available here](https://jeremybarbet.github.io/react-native-modalize). There is multiple examples runing through differents navigators, with more informations [here](https://jeremybarbet.github.io/react-native-modalize/#/EXAMPLES.md).
+Please check out the full [documentation available here](https://jeremybarbet.github.io/react-native-modalize) to find all about the props, methods and examples of Modalize's usage.
