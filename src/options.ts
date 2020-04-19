@@ -7,6 +7,8 @@ import {
   SectionListProps,
   EasingFunction,
   LayoutRectangle,
+  ScrollView,
+  FlatList,
 } from 'react-native';
 
 export type TOpen = 'default' | 'top';
@@ -58,7 +60,7 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   /**
    * A number to define the modal's top offset.
    */
-  modalTopOffset?: number;
+  modalTopOffset: number;
 
   /**
    * Using this props will show the modal all the time, and the number represents how expanded the modal has to be.
@@ -105,7 +107,7 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    * spring: { speed: 14, bounciness: 5 }
    * }
    */
-  openAnimationConfig?: IConfigProps;
+  openAnimationConfig: IConfigProps;
 
   /**
    * Object to change the close animations.
@@ -115,7 +117,7 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    * spring: { speed: 14, bounciness: 5 }
    * }
    */
-  closeAnimationConfig?: IConfigProps;
+  closeAnimationConfig: IConfigProps;
 
   /**
    * A number that determines the momentum of the scroll required.
@@ -275,54 +277,24 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   onLayout?(nativeEvent: { layout: LayoutRectangle }): void;
 }
 
-export interface IState {
+export interface IInput {
   /**
-   * Define the last snap value for the modal's translation.
+   * TODO
    */
-  lastSnap: number;
+  open(dest?: TOpen): void;
 
   /**
-   * Store if the modal is open or not.
+   * TODO
    */
-  isVisible: boolean;
+  close(dest?: TClose): void;
 
   /**
-   * During the closing animation we hide the content to avoid jumping/blink issues while using `withReactModal: true`.
+   * TODO
    */
-  showContent: boolean;
+  scrollTo(...args: Parameters<ScrollView['scrollTo']>): void;
 
   /**
-   * Animated value controlling the overlay animation.
+   * TODO
    */
-  overlay: Animated.Value;
-
-  /**
-   * Store the height of the modal. Depends on the `height` props and devices' height.
-   */
-  modalHeight: number | undefined;
-
-  /**
-   * Calculate the content's height. Used when `adjustToContentHeight: true`.
-   */
-  contentHeight: number;
-
-  /**
-   * When we scroll to the bottom of the ContentView we want the bounce animation but when we reach the top again, we want it disabled (iOS specific).
-   */
-  enableBounces: boolean;
-
-  /**
-   * Disable scroll if disableScrollIfPossible is true or if we are the initial position of the snapPoint or alwaysOpen modals.
-   */
-  disableScroll: boolean | undefined;
-
-  /**
-   * Store if the keyboard is displayed. Used to change the offset on the ContentView when the keyboard is open.
-   */
-  keyboardToggle: boolean;
-
-  /**
-   * Store height of the keyboard.
-   */
-  keyboardHeight: number;
+  scrollToIndex(...args: Parameters<FlatList['scrollToIndex']>): void;
 }

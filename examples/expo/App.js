@@ -43,7 +43,7 @@ export default () => {
       <FlatList ref={el => (modals[5] = el)} />
       <SectionList ref={el => (modals[6] = el)} />
       <AnimatedValue ref={el => (modals[7] = el)} />
-      <AlwaysOpen />
+      {/* <AlwaysOpen /> */}
     </Layout>
   );
 };
