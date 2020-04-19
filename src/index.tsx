@@ -4,11 +4,9 @@ import React, {
   useRef,
   useImperativeHandle,
   useEffect,
-  Ref,
   ReactNode,
   isValidElement,
   RefForwardingComponent,
-  ReactElement,
 } from 'react';
 import {
   Animated,
@@ -54,43 +52,72 @@ const USE_NATIVE_DRIVER = true;
 const ACTIVATED = 20;
 const PAN_DURATION = 150;
 
-// https://medium.com/@jrwebdev/react-hooks-in-typescript-88fce7001d0d
-export const Modalize /*: RefForwardingComponent<IInput, IProps>*/ = forwardRef<ReactNode, IProps>(
+export type Modalize<T = any> = RefForwardingComponent<ReactNode, IProps<T>> & IInput;
+
+export const Modalize = forwardRef<ReactNode, IProps>(
   (
     {
+      // Renderers
       children,
-      snapPoint,
-      modalHeight,
-      modalTopOffset,
-      alwaysOpen,
-      handlePosition,
-      modalElevation,
-      modalStyle,
-      handleStyle,
-      overlayStyle,
-      useNativeDriver,
-      openAnimationConfig,
-      closeAnimationConfig,
-      dragToss,
-      threshold,
-      velocity,
-      adjustToContentHeight,
-      disableScrollIfPossible,
-      avoidKeyboardLikeIOS,
-      keyboardAvoidingBehavior,
-      keyboardAvoidingOffset,
-      panGestureEnabled,
-      panGestureAnimatedValue,
-      closeOnOverlayTap,
-      withReactModal,
-      withHandle,
-      withOverlay,
       scrollViewProps,
       flatListProps,
       sectionListProps,
-      FloatingComponent,
+
+      // Styles
+      modalStyle,
+      handleStyle,
+      overlayStyle,
+      modalElevation,
+
+      // Layout
+      snapPoint,
+      modalHeight,
+      modalTopOffset = Platform.select({
+        ios: 0,
+        android: StatusBar.currentHeight || 0,
+        default: 0,
+      }),
+      alwaysOpen,
+      adjustToContentHeight = false,
+
+      // Options
+      handlePosition = 'outside',
+      disableScrollIfPossible = true,
+      avoidKeyboardLikeIOS = Platform.select({
+        ios: true,
+        android: false,
+        default: true,
+      }),
+      keyboardAvoidingBehavior,
+      keyboardAvoidingOffset,
+      panGestureEnabled = true,
+      closeOnOverlayTap = true,
+
+      // Animations
+      openAnimationConfig = {
+        timing: { duration: 280, easing: Easing.ease },
+        spring: { speed: 14, bounciness: 4 },
+      },
+      closeAnimationConfig = {
+        timing: { duration: 280, easing: Easing.ease },
+      },
+      dragToss = 0.05,
+      threshold = 120,
+      velocity = 2800,
+      panGestureAnimatedValue,
+      useNativeDriver = true,
+
+      // Elements visibilities
+      withReactModal = false,
+      withHandle = true,
+      withOverlay = true,
+
+      // Additional components
       HeaderComponent,
       FooterComponent,
+      FloatingComponent,
+
+      // Callbacks
       onOpen,
       onOpened,
       onClose,
@@ -105,7 +132,6 @@ export const Modalize /*: RefForwardingComponent<IInput, IProps>*/ = forwardRef<
     const [lastSnap, setLastSnap] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
     const [showContent, setShowContent] = useState(true);
-    // const [modalHeightState, setModalHeight] = useState<number | undefined>(undefined);
     const [enableBounces, setEnableBounces] = useState(true);
     const [keyboardToggle, setKeyboardToggle] = useState(false);
     const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -131,14 +157,16 @@ export const Modalize /*: RefForwardingComponent<IInput, IProps>*/ = forwardRef<
     const contentView = useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
     const modalOverlay = useRef<PanGestureHandler>(null);
     const modalOverlayTap = useRef<TapGestureHandler>(null);
-    let modalHeightValue: number | undefined;
+    const [modalHeightState, setModalHeightState] = useState<number | undefined>(undefined); // Can it be fixed? Need state and variable
+    let modalHeightValue: number | undefined; // Can it be fixed? Need state and variable
     let willCloseModalize = false;
 
     const handleConstructor = () => {
       const fullHeight = screenHeight - modalTopOffset;
       const computedHeight = fullHeight - handleHeight() - (isIphoneX ? 34 : 0);
       const height = modalHeight || computedHeight;
-      const snapsArr = [];
+      const snapsArr: number[] = [];
+      const adjustValue = adjustToContentHeight ? undefined : height;
 
       if (snapPoint) {
         snapsArr.push(0, height - snapPoint, height);
@@ -146,13 +174,12 @@ export const Modalize /*: RefForwardingComponent<IInput, IProps>*/ = forwardRef<
         snapsArr.push(0, height);
       }
 
+      modalHeightValue = adjustValue;
       setInitialComputedModalHeight(height);
       setSnaps(snapsArr);
       setSnapEnd(snapsArr[snapsArr.length - 1]);
       setLastSnap(snapPoint ? height - snapPoint : 0);
-      // setModalHeight(adjustToContentHeight ? undefined : height);
-      modalHeightValue = adjustToContentHeight ? undefined : height;
-      console.log('-modalHeightValue', modalHeightValue);
+      setModalHeightState(adjustValue);
 
       beginScrollY.addListener(({ value }) => setBeginScrollYValue(value));
     };
@@ -185,7 +212,7 @@ export const Modalize /*: RefForwardingComponent<IInput, IProps>*/ = forwardRef<
       const value = Animated.add(cancelTranslateValue(translateY), dragValue);
 
       return {
-        height: modalHeightValue,
+        height: modalHeightState,
         maxHeight: initialComputedModalHeight,
         transform: [
           {
@@ -208,8 +235,6 @@ export const Modalize /*: RefForwardingComponent<IInput, IProps>*/ = forwardRef<
 
     const onAnimateOpen = (alwaysOpenValue: number | undefined, dest: TOpen = 'default'): void => {
       const { timing, spring } = openAnimationConfig;
-      console.log('-dest', dest);
-      console.log('-alwaysOpenValue', alwaysOpenValue);
 
       BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
@@ -221,11 +246,8 @@ export const Modalize /*: RefForwardingComponent<IInput, IProps>*/ = forwardRef<
       } else if (alwaysOpenValue) {
         toValue = (modalHeightValue || 0) - alwaysOpenValue;
       } else if (snapPoint) {
-        console.log('-modalHeightValue', modalHeightValue);
         toValue = (modalHeightValue || 0) - snapPoint;
       }
-
-      console.log('-toValue', toValue);
 
       if (panGestureAnimatedValue && (alwaysOpenValue || snapPoint)) {
         toPanValue = 0;
@@ -356,8 +378,8 @@ export const Modalize /*: RefForwardingComponent<IInput, IProps>*/ = forwardRef<
           })!,
       );
 
-      // setModalHeight(value);
       modalHeightValue = value;
+      setModalHeightState(value);
     };
 
     const onContentViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
@@ -860,8 +882,10 @@ export const Modalize /*: RefForwardingComponent<IInput, IProps>*/ = forwardRef<
     }, [scrollViewProps, children, sectionListProps]);
 
     useEffect(() => {
-      // setModalHeight(adjustToContentHeight ? undefined : initialComputedModalHeight);
-      modalHeightValue = adjustToContentHeight ? undefined : initialComputedModalHeight;
+      const value = adjustToContentHeight ? undefined : initialComputedModalHeight;
+
+      modalHeightValue = value;
+      setModalHeightState(value);
     }, [adjustToContentHeight]);
 
     useEffect(() => {
@@ -884,35 +908,3 @@ export const Modalize /*: RefForwardingComponent<IInput, IProps>*/ = forwardRef<
     return renderModalize();
   },
 );
-
-Modalize.defaultProps = {
-  handlePosition: 'outside',
-  useNativeDriver: true,
-  adjustToContentHeight: false,
-  disableScrollIfPossible: true,
-  avoidKeyboardLikeIOS: Platform.select({
-    ios: true,
-    android: false,
-    default: true,
-  }),
-  modalTopOffset: Platform.select({
-    ios: 0,
-    android: StatusBar.currentHeight || 0,
-    default: 0,
-  }),
-  panGestureEnabled: true,
-  closeOnOverlayTap: true,
-  withReactModal: false,
-  withHandle: true,
-  withOverlay: true,
-  openAnimationConfig: {
-    timing: { duration: 280, easing: Easing.ease },
-    spring: { speed: 14, bounciness: 4 },
-  },
-  closeAnimationConfig: {
-    timing: { duration: 280, easing: Easing.ease },
-  },
-  dragToss: 0.05,
-  threshold: 120,
-  velocity: 2800,
-};

@@ -66,7 +66,7 @@ export const SectionList = ({ componentId }) => {
 
   return (
     <Modalize
-      ref={modal}
+      ref={modalRef}
       onClosed={onClosed}
       sectionListProps={{
         sections: getSections(),

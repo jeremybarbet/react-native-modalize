@@ -347,7 +347,7 @@ A floating component inside the modal wrapper that will be independent of scroll
 
 ## Callbacks
 
-TODO
+Pass any callbacks to them and you will be able to get changes they are taking care of.
 
 ### `onOpen`
 

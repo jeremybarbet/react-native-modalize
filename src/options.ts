@@ -41,42 +41,26 @@ export interface IConfigProps {
   spring: ISpringProps;
 }
 
-export interface IProps<FlatListItem = any, SectionListItem = any> {
+export interface IProps<ListItem = any> {
   /**
    * A React component that will define the content of the modal.
    */
   children?: React.ReactNode;
 
   /**
-   * A number that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
+   * An object to pass any of the react-native ScrollView's props.
    */
-  snapPoint?: number;
+  scrollViewProps?: Animated.AnimatedProps<ScrollViewProps>;
 
   /**
-   * A number to define the modal's total height.
+   * An object to pass any of the react-native FlatList's props.
    */
-  modalHeight?: number;
+  flatListProps?: Animated.AnimatedProps<FlatListProps<ListItem>>;
 
   /**
-   * A number to define the modal's top offset.
+   * An object to pass any of the react-native SectionList's props.
    */
-  modalTopOffset: number;
-
-  /**
-   * Using this props will show the modal all the time, and the number represents how expanded the modal has to be.
-   */
-  alwaysOpen?: number;
-
-  /**
-   * Define where the handle on top of the modal should be positioned.
-   * @default 'outside'
-   */
-  handlePosition: 'outside' | 'inside';
-
-  /**
-   * A number to define the elevation of the modal on Android. Useful if you have other elements of your app using other values of elevation (Android specific).
-   */
-  modalElevation?: number;
+  sectionListProps?: Animated.AnimatedProps<SectionListProps<ListItem>>;
 
   /**
    * Define the style of the modal.
@@ -94,48 +78,29 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   overlayStyle?: TStyle;
 
   /**
-   * Define if the Animated.Value uses the native thread to execute the animations.
-   * @default true
+   * A number to define the elevation of the modal on Android. Useful if you have other elements of your app using other values of elevation (Android specific).
    */
-  useNativeDriver: boolean;
+  modalElevation?: number;
 
   /**
-   * Object to change the open animations.
-   * @default
-   * {
-   * timing: { duration: 280 },
-   * spring: { speed: 14, bounciness: 5 }
-   * }
+   * A number that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
    */
-  openAnimationConfig: IConfigProps;
+  snapPoint?: number;
 
   /**
-   * Object to change the close animations.
-   * @default
-   * {
-   * timing: { duration: 280 },
-   * spring: { speed: 14, bounciness: 5 }
-   * }
+   * A number to define the modal's total height.
    */
-  closeAnimationConfig: IConfigProps;
+  modalHeight?: number;
 
   /**
-   * A number that determines the momentum of the scroll required.
-   * @default 0.05
+   * A number to define the modal's top offset.
    */
-  dragToss: number;
+  modalTopOffset?: number;
 
   /**
-   * Number of pixels that the user must pass to be able to close the modal.
-   * @default 120
+   * Using this props will show the modal all the time, and the number represents how expanded the modal has to be.
    */
-  threshold: number;
-
-  /**
-   * Number of pixels the user has to pan down fast to close the modal.
-   * @default 2800
-   */
-  velocity: number | undefined;
+  alwaysOpen?: number;
 
   /**
    * Shrink the modal to your content's height.
@@ -144,10 +109,16 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   adjustToContentHeight?: boolean;
 
   /**
+   * Define where the handle on top of the modal should be positioned.
+   * @default 'outside'
+   */
+  handlePosition?: 'outside' | 'inside';
+
+  /**
    * Disable the scroll when the content is shorter than screen's height.
    * @default true
    */
-  disableScrollIfPossible: boolean;
+  disableScrollIfPossible?: boolean;
 
   /**
    * Define keyboard's Android behavior like iOS's one.
@@ -174,15 +145,59 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
   panGestureEnabled?: boolean;
 
   /**
+   * Using this prop will enable/disable overlay tap gesture.
+   * @default true
+   */
+  closeOnOverlayTap?: boolean;
+
+  /**
+   * Object to change the open animations.
+   * @default
+   * {
+   * timing: { duration: 280 },
+   * spring: { speed: 14, bounciness: 5 }
+   * }
+   */
+  openAnimationConfig?: IConfigProps;
+
+  /**
+   * Object to change the close animations.
+   * @default
+   * {
+   * timing: { duration: 280 },
+   * spring: { speed: 14, bounciness: 5 }
+   * }
+   */
+  closeAnimationConfig?: IConfigProps;
+
+  /**
+   * A number that determines the momentum of the scroll required.
+   * @default 0.05
+   */
+  dragToss?: number;
+
+  /**
+   * Number of pixels that the user must pass to be able to close the modal.
+   * @default 120
+   */
+  threshold?: number;
+
+  /**
+   * Number of pixels the user has to pan down fast to close the modal.
+   * @default 2800
+   */
+  velocity?: number | undefined;
+
+  /**
    * Animated.Value of the modal position between 0 and 1.
    */
   panGestureAnimatedValue?: Animated.Value;
 
   /**
-   * Using this prop will enable/disable overlay tap gesture.
+   * Define if the Animated.Value uses the native thread to execute the animations.
    * @default true
    */
-  closeOnOverlayTap?: boolean;
+  useNativeDriver?: boolean;
 
   /**
    * Define if Modalize has to be wrap with the Modal component from react-native.
@@ -202,26 +217,6 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    */
   withOverlay?: boolean;
 
-  /*
-   * An object to pass any of the react-native ScrollView's props.
-   */
-  scrollViewProps?: Animated.AnimatedProps<ScrollViewProps>;
-
-  /*
-   * An object to pass any of the react-native FlatList's props.
-   */
-  flatListProps?: Animated.AnimatedProps<FlatListProps<FlatListItem>>;
-
-  /*
-   * An object to pass any of the react-native SectionList's props.
-   */
-  sectionListProps?: Animated.AnimatedProps<SectionListProps<SectionListItem>>;
-
-  /*
-   * A floating component inside the modal wrapper that will be independent of scrolling. It requires `zIndex` child with absolute positioning.
-   */
-  FloatingComponent?: React.ReactNode;
-
   /**
    * A header component outside of the ScrollView, on top of the modal.
    */
@@ -231,6 +226,11 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
    * A footer component outside of the ScrollView, on top of the modal.
    */
   FooterComponent?: React.ReactNode;
+
+  /**
+   * A floating component inside the modal wrapper that will be independent of scrolling. It requires `zIndex` child with absolute positioning.
+   */
+  FloatingComponent?: React.ReactNode;
 
   /**
    * Callback function when the `open` method is triggered.
@@ -279,22 +279,32 @@ export interface IProps<FlatListItem = any, SectionListItem = any> {
 
 export interface IInput {
   /**
-   * TODO
+   * Method to open Modalize.
+   *
+   * If you are using `snapPoint` prop, you can supply a `dest` argument to the `open` method, to open it
+   * to the top directly `open('top')`. You don't have to provide anything if you want the default behavior.
    */
   open(dest?: TOpen): void;
 
   /**
-   * TODO
+   * The method to close Modalize. You don't need to call it to dismiss the modal, since you can swipe down to dismiss.
+   *
+   * If you are using `alwaysOpen` prop, you can supply a `dest` argument to the `close` method to reset it
+   * to the intial position `close('alwaysOpen')`, and avoiding to close it completely.
    */
   close(dest?: TClose): void;
 
   /**
-   * TODO
+   * Scrolls to a given y offset, either immediately or with a smooth animation.
+   *
+   * scrollTo(options: { x: number = 0; y: number = 0; animated: boolean = true })
    */
   scrollTo(...args: Parameters<ScrollView['scrollTo']>): void;
 
   /**
-   * TODO
+   * Scrolls to the item at the specified index.
+   *
+   * scrollToIndex(options: { index: number = 0; viewOffset: number = 0; viewPosition: number = 0; animated: boolean = true })
    */
   scrollToIndex(...args: Parameters<FlatList['scrollToIndex']>): void;
 }
