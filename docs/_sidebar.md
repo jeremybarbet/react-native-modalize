@@ -1,6 +1,7 @@
 - Getting started
   - [Installation](/INSTALLATION)
   - [Usage](/USAGE)
+  - [Extra](/EXTRA)
 
 - Guide
   - [Props](/PROPS)

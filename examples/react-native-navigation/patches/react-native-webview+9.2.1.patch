@@ -1,0 +1,28 @@
+--- a/node_modules/react-native-webview/lib/WebView.android.js
++++ b/node_modules/react-native-webview/lib/WebView.android.js
+@@ -59,7 +59,8 @@ var __rest = (this && this.__rest) || function (s, e) {
+     return t;
+ };
+ import React from 'react';
+-import { v4 as uuid } from 'uuid';
++// import { v4 as uuid } from 'uuid';
++import { uuid } from './uuid';
+ import { Image, requireNativeComponent, UIManager as NotTypedUIManager, View, NativeModules, findNodeHandle, } from 'react-native';
+ import BatchedBridge from 'react-native/Libraries/BatchedBridge/BatchedBridge';
+ import invariant from 'invariant';
+diff --git a/node_modules/react-native-webview/lib/uuid.js b/node_modules/react-native-webview/lib/uuid.js
+new file mode 100644
+index 0000000..b3960bf
+--- /dev/null
++++ b/node_modules/react-native-webview/lib/uuid.js
+@@ -0,0 +1,10 @@
++export function uuid() {
++	let d = new Date().getTime();
++
++	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
++		const r = (d + Math.random() * 16) % 16 | 0;
++		d = Math.floor(d / 16);
++
++		return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
++	});
++}

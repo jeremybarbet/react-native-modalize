@@ -3,22 +3,25 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "ios": "react-native run-ios --simulator='iPhone 11'",
-    "android": "cd ./android && ./gradlew app:assembleDebug && ./gradlew installDebug"
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "prepare": "patch-package"
   },
   "dependencies": {
     "faker": "4.1.0",
-    "react": "16.12.0",
-    "react-native": "0.59.9",
-    "react-native-gesture-handler": "1.2.1",
+    "react": "16.11.0",
+    "react-native": "0.62.2",
+    "react-native-gesture-handler": "1.6.1",
     "react-native-modalize": "file:../../src",
-    "react-native-navigation": "3.7.0"
+    "react-native-navigation": "6.4.0",
+    "react-native-webview": "9.2.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/runtime": "^7.4.5",
-    "metro-react-native-babel-preset": "^0.57.0",
-    "react-test-renderer": "16.12.0"
+    "@babel/core": "^7.6.2",
+    "@babel/runtime": "^7.6.2",
+    "metro-react-native-babel-preset": "^0.58.0",
+    "patch-package": "6.2.2",
+    "react-test-renderer": "16.11.0"
   }
 }

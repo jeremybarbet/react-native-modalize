@@ -15,7 +15,8 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-modalize": "file:../../src",
-    "react-native-web": "~0.12.2"
+    "react-native-web": "~0.12.2",
+    "react-native-webview": "8.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

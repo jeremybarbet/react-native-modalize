@@ -3,13 +3,13 @@ import { Navigation } from 'react-native-navigation';
 
 import {
   ABSOLUTE_HEADER,
-  CUSTOM_STYLE,
   FIXED_CONTENT,
   FLAT_LIST,
   SECTION_LIST,
   SIMPLE_CONTENT,
   SNAPPING_LIST,
   ANIMATED_VALUE,
+  FACEBOOK_WEBVIEW,
 } from '../screens';
 import { Layout } from '../components/layout/Layout';
 import { Header } from '../components/header/Header';
@@ -22,7 +22,15 @@ export const App = () => {
     Navigation.showOverlay({
       component: {
         name,
-        options: { overlay: { interceptTouchOutside: true } },
+        options: {
+          overlay: {
+            interceptTouchOutside: true,
+            handleKeyboardEvents: true,
+          },
+          layout: {
+            componentBackgroundColor: 'transparent',
+          },
+        },
       },
     });
   };
@@ -38,14 +46,14 @@ export const App = () => {
       <Header subheading="Run with React Native Navigation" />
 
       {renderButtons([
-        { name: 'Modal with a simple content', id: SIMPLE_CONTENT },
-        { name: 'Modal with a fixed content', id: FIXED_CONTENT },
-        { name: 'Modal with a snapping list', id: SNAPPING_LIST },
-        { name: 'Modal with an absolute header', id: ABSOLUTE_HEADER },
-        { name: 'Modal with custom style', id: CUSTOM_STYLE },
-        { name: 'Modal with a Flat List', id: FLAT_LIST },
-        { name: 'Modal with a Section List', id: SECTION_LIST },
-        { name: 'Modal with an Animated Value', id: ANIMATED_VALUE },
+        { name: 'Simple content', id: SIMPLE_CONTENT },
+        { name: 'Fixed content', id: FIXED_CONTENT },
+        { name: 'Snapping list', id: SNAPPING_LIST },
+        { name: 'Absolute header', id: ABSOLUTE_HEADER },
+        { name: 'Flat List', id: FLAT_LIST },
+        { name: 'Section List', id: SECTION_LIST },
+        { name: 'Animated Value', id: ANIMATED_VALUE },
+        { name: 'Facebook WebView', id: FACEBOOK_WEBVIEW },
       ])}
 
       <AlwaysOpen />
