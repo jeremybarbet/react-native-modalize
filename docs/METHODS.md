@@ -30,7 +30,7 @@ export const App = () => {
 
 ### `open()`
 
-The method to open the modal.
+The method to open Modalize.
 
 ?> If you are using `snapPoint` prop, you can supply a `dest` argument to the `open` method, to open it to the top directly `open('top')`. You don't have to provide anything if you want the default behavior.
 
@@ -40,7 +40,7 @@ The method to open the modal.
 
 ### `close()`
 
-The method to close the modal. You don't need to call it to dismiss the modal, since you can swipe down to dismiss.
+The method to close Modalize. You don't need to call it to dismiss the modal, since you can swipe down to dismiss.
 
 ?> If you are using `alwaysOpen` prop, you can supply a `dest` argument to the `close` method to reset it to the intial position `close('alwaysOpen')`, and avoiding to close it completely.
 
