@@ -69,7 +69,7 @@
     "concurrently": "5.1.0",
     "cpx": "1.5.0",
     "husky": "4.2.5",
-    "lint-staged": "10.1.3",
+    "lint-staged": "10.1.6",
     "prettier": "2.0.4",
     "react": "16.13.1",
     "react-native": "0.62.2",
