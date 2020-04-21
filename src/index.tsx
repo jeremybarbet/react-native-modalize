@@ -796,19 +796,17 @@ export const Modalize = forwardRef<ReactNode, IProps>(
       );
     };
 
-    const renderReactModal = (child: ReactNode): ReactNode => {
-      return (
-        <Modal
-          supportedOrientations={['landscape', 'portrait', 'portrait-upside-down']}
-          onRequestClose={onBackPress}
-          hardwareAccelerated={USE_NATIVE_DRIVER}
-          visible={isVisible}
-          transparent
-        >
-          {child}
-        </Modal>
-      );
-    };
+    const renderReactModal = (child: ReactNode): ReactNode => (
+      <Modal
+        supportedOrientations={['landscape', 'portrait', 'portrait-upside-down']}
+        onRequestClose={onBackPress}
+        hardwareAccelerated={USE_NATIVE_DRIVER}
+        visible={isVisible}
+        transparent
+      >
+        {child}
+      </Modal>
+    );
 
     useImperativeHandle(ref, () => ({
       open(dest?: TOpen): void {
