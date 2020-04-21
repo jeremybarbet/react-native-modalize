@@ -128,7 +128,7 @@ export const Modalize = forwardRef<ReactNode, IProps>(
       onLayout,
     },
     ref,
-  ): any => {
+  ) => {
     const [lastSnap, setLastSnap] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
     const [showContent, setShowContent] = useState(true);
@@ -583,7 +583,7 @@ export const Modalize = forwardRef<ReactNode, IProps>(
       },
     });
 
-    const renderComponent = (Tag: ReactNode): ReactNode => {
+    const renderComponent = (Tag: ReactNode) => {
       return isValidElement(Tag) ? (
         Tag
       ) : (
@@ -592,7 +592,7 @@ export const Modalize = forwardRef<ReactNode, IProps>(
       );
     };
 
-    const renderHandle = (): ReactNode => {
+    const renderHandle = () => {
       const handleStyles: (TStyle | undefined)[] = [s.handle];
       const shapeStyles: (TStyle | undefined)[] = [s.handle__shape, handleStyle];
 
@@ -620,7 +620,7 @@ export const Modalize = forwardRef<ReactNode, IProps>(
       );
     };
 
-    const renderHeader = (): ReactNode => {
+    const renderHeader = () => {
       if (!HeaderComponent) {
         return null;
       }
@@ -642,7 +642,7 @@ export const Modalize = forwardRef<ReactNode, IProps>(
       );
     };
 
-    const renderContent = (): ReactNode => {
+    const renderContent = () => {
       const keyboardDismissMode = isIos ? 'interactive' : 'on-drag';
 
       const opts = {
@@ -673,7 +673,7 @@ export const Modalize = forwardRef<ReactNode, IProps>(
       );
     };
 
-    const renderChildren = (): ReactNode => {
+    const renderChildren = () => {
       const style = adjustToContentHeight ? s.content__adjustHeight : s.content__container;
 
       return (
@@ -701,7 +701,7 @@ export const Modalize = forwardRef<ReactNode, IProps>(
       );
     };
 
-    const renderFooter = (): ReactNode => {
+    const renderFooter = () => {
       if (!FooterComponent) {
         return null;
       }
@@ -709,7 +709,7 @@ export const Modalize = forwardRef<ReactNode, IProps>(
       return renderComponent(FooterComponent);
     };
 
-    const renderFloatingComponent = (): ReactNode => {
+    const renderFloatingComponent = () => {
       if (!FloatingComponent) {
         return null;
       }
@@ -717,7 +717,7 @@ export const Modalize = forwardRef<ReactNode, IProps>(
       return renderComponent(FloatingComponent);
     };
 
-    const renderOverlay = (): ReactNode => {
+    const renderOverlay = () => {
       const pointerEvents =
         alwaysOpen && (modalPosition === 'initial' || !modalPosition) ? 'box-none' : 'auto';
 
@@ -747,66 +747,6 @@ export const Modalize = forwardRef<ReactNode, IProps>(
         </PanGestureHandler>
       );
     };
-
-    const renderModalize = (): ReactNode => {
-      const pointerEvents = alwaysOpen || !withOverlay ? 'box-none' : 'auto';
-
-      const keyboardAvoidingViewProps: Animated.AnimatedProps<KeyboardAvoidingViewProps> = {
-        keyboardVerticalOffset: keyboardAvoidingOffset,
-        behavior: keyboardAvoidingBehavior || 'padding',
-        enabled: avoidKeyboardLikeIOS,
-        style: [s.modalize__content, modalizeContent(), modalStyle],
-      };
-
-      if (!avoidKeyboardLikeIOS && !adjustToContentHeight) {
-        keyboardAvoidingViewProps.onLayout = onModalizeContentLayout;
-      }
-
-      if (!isVisible) {
-        return null;
-      }
-
-      return (
-        <GestureHandlerWrapper
-          style={[s.modalize, { elevation: modalElevation }]}
-          pointerEvents={pointerEvents}
-        >
-          <TapGestureHandler
-            ref={modal}
-            maxDurationMs={100000}
-            maxDeltaY={lastSnap}
-            enabled={panGestureEnabled}
-          >
-            <View style={s.modalize__wrapper} pointerEvents="box-none">
-              {showContent && (
-                <AnimatedKeyboardAvoidingView {...keyboardAvoidingViewProps}>
-                  {renderHandle()}
-                  {renderHeader()}
-                  {renderChildren()}
-                  {renderFooter()}
-                </AnimatedKeyboardAvoidingView>
-              )}
-
-              {withOverlay && renderOverlay()}
-            </View>
-          </TapGestureHandler>
-
-          {renderFloatingComponent()}
-        </GestureHandlerWrapper>
-      );
-    };
-
-    const renderReactModal = (child: ReactNode): ReactNode => (
-      <Modal
-        supportedOrientations={['landscape', 'portrait', 'portrait-upside-down']}
-        onRequestClose={onBackPress}
-        hardwareAccelerated={USE_NATIVE_DRIVER}
-        visible={isVisible}
-        transparent
-      >
-        {child}
-      </Modal>
-    );
 
     useImperativeHandle(ref, () => ({
       open(dest?: TOpen): void {
@@ -899,10 +839,66 @@ export const Modalize = forwardRef<ReactNode, IProps>(
       };
     }, []);
 
-    if (withReactModal) {
-      return renderReactModal(renderModalize());
+    const keyboardAvoidingViewProps: Animated.AnimatedProps<KeyboardAvoidingViewProps> = {
+      keyboardVerticalOffset: keyboardAvoidingOffset,
+      behavior: keyboardAvoidingBehavior || 'padding',
+      enabled: avoidKeyboardLikeIOS,
+      style: [s.modalize__content, modalizeContent(), modalStyle],
+    };
+
+    if (!avoidKeyboardLikeIOS && !adjustToContentHeight) {
+      keyboardAvoidingViewProps.onLayout = onModalizeContentLayout;
     }
 
-    return renderModalize();
+    const renderModalize = (
+      <GestureHandlerWrapper
+        style={[s.modalize, { elevation: modalElevation }]}
+        pointerEvents={alwaysOpen || !withOverlay ? 'box-none' : 'auto'}
+      >
+        <TapGestureHandler
+          ref={modal}
+          maxDurationMs={100000}
+          maxDeltaY={lastSnap}
+          enabled={panGestureEnabled}
+        >
+          <View style={s.modalize__wrapper} pointerEvents="box-none">
+            {showContent && (
+              <AnimatedKeyboardAvoidingView {...keyboardAvoidingViewProps}>
+                {renderHandle()}
+                {renderHeader()}
+                {renderChildren()}
+                {renderFooter()}
+              </AnimatedKeyboardAvoidingView>
+            )}
+
+            {withOverlay && renderOverlay()}
+          </View>
+        </TapGestureHandler>
+
+        {renderFloatingComponent()}
+      </GestureHandlerWrapper>
+    );
+
+    const renderReactModal = (child: ReactNode) => (
+      <Modal
+        supportedOrientations={['landscape', 'portrait', 'portrait-upside-down']}
+        onRequestClose={onBackPress}
+        hardwareAccelerated={USE_NATIVE_DRIVER}
+        visible={isVisible}
+        transparent
+      >
+        {child}
+      </Modal>
+    );
+
+    if (!isVisible) {
+      return null;
+    }
+
+    if (withReactModal) {
+      return renderReactModal(renderModalize);
+    }
+
+    return renderModalize;
   },
 );
