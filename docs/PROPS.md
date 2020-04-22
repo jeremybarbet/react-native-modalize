@@ -68,7 +68,7 @@ Multiple objects way to style the different part of Modalize.
 
 ### `modalStyle`
 
-Define the style of the modal.
+Define the style of the modal (includes handle/header/children/footer).
 
 | Type     | Required |
 | -------- | -------- |
@@ -87,6 +87,14 @@ Define the style of the handle on top of the modal.
 ### `overlayStyle`
 
 Define the style of the overlay.
+
+| Type     | Required |
+| -------- | -------- |
+| style    | No       |
+
+### `childrenStyle`
+
+Define the style of the children renderer (only the inside part).
 
 | Type     | Required |
 | -------- | -------- |

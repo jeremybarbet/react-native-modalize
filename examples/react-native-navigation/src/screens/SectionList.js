@@ -68,6 +68,7 @@ export const SectionList = ({ componentId }) => {
     <Modalize
       ref={modalRef}
       onClosed={onClosed}
+      childrenStyle={{ borderTopLeftRadius: 12, borderTopRightRadius: 12, overflow: 'hidden' }}
       sectionListProps={{
         sections: getSections(),
         renderItem: renderItem,

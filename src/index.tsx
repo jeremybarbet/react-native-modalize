@@ -64,6 +64,7 @@ const ModalizeBase = (
     modalStyle,
     handleStyle,
     overlayStyle,
+    childrenStyle,
     modalElevation,
 
     // Layout
@@ -685,7 +686,7 @@ const ModalizeBase = (
         activeOffsetX={ACTIVATED}
         onHandlerStateChange={onHandleChildren}
       >
-        <Animated.View style={style}>
+        <Animated.View style={[style, childrenStyle]}>
           <NativeViewGestureHandler
             ref={modalContentView}
             waitFor={modal}

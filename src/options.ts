@@ -63,7 +63,7 @@ export interface IProps<ListItem = any> {
   sectionListProps?: Animated.AnimatedProps<SectionListProps<ListItem>>;
 
   /**
-   * Define the style of the modal.
+   * Define the style of the modal (includes handle/header/children/footer).
    */
   modalStyle?: TStyle;
 
@@ -76,6 +76,11 @@ export interface IProps<ListItem = any> {
    * Define the style of the overlay.
    */
   overlayStyle?: TStyle;
+
+  /**
+   * Define the style of the children renderer (only the inside part).
+   */
+  childrenStyle?: TStyle;
 
   /**
    * A number to define the elevation of the modal on Android. Useful if you have other elements of your app using other values of elevation (Android specific).

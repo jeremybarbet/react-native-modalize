@@ -55,6 +55,7 @@ export const SectionList = forwardRef((_, ref) => {
   return (
     <Modalize
       ref={combinedRef}
+      childrenStyle={{ borderTopLeftRadius: 12, borderTopRightRadius: 12, overflow: 'hidden' }}
       sectionListProps={{
         sections: getSections(),
         renderItem: renderItem,
