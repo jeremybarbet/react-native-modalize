@@ -10,7 +10,7 @@ export const SnappingList = forwardRef((_, ref) => {
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
 
-  const scrollToTop = () => {
+  const handleScrollToTop = () => {
     if (combinedRef.current) {
       combinedRef.current.scrollTo({
         y: 0,
@@ -43,7 +43,7 @@ export const SnappingList = forwardRef((_, ref) => {
         ))}
 
       <View style={s.content__button}>
-        <Button onPress={scrollToTop} name="Scroll to Top" />
+        <Button onPress={handleScrollToTop} name="Scroll to Top" />
       </View>
     </View>
   );

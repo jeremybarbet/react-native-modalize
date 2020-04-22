@@ -18,17 +18,17 @@ export const FlatList = ({ componentId }) => {
         email: faker.internet.email(),
       }));
 
-  const onClosed = () => {
+  const handleClosed = () => {
     Navigation.dismissOverlay(componentId);
   };
 
-  const openModal = () => {
+  const handleOpen = () => {
     if (modalizeRef.current) {
       modalizeRef.current.open();
     }
   };
 
-  const scrollToTop = () => {
+  const handleScrollToTop = () => {
     if (modalizeRef.current) {
       modalizeRef.current.scrollTo({
         y: 0,
@@ -58,7 +58,7 @@ export const FlatList = ({ componentId }) => {
           ],
         },
       ]}
-      onPress={scrollToTop}
+      onPress={handleScrollToTop}
       activeOpacity={0.75}
     >
       <Text style={s.floating__text}>Top</Text>
@@ -73,13 +73,13 @@ export const FlatList = ({ componentId }) => {
   );
 
   useEffect(() => {
-    openModal();
+    handleOpen();
   }, []);
 
   return (
     <Modalize
       ref={modalizeRef}
-      onClosed={onClosed}
+      onClosed={handleClosed}
       FloatingComponent={renderFloatingComponent}
       flatListProps={{
         data: getData(),

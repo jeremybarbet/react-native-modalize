@@ -7,17 +7,17 @@ import faker from 'faker';
 export const AbsoluteHeader = ({ componentId }) => {
   const modalizeRef = useRef(null);
 
-  const onClosed = () => {
+  const handleClosed = () => {
     Navigation.dismissOverlay(componentId);
   };
 
-  const openModal = () => {
+  const handleOpen = () => {
     if (modalizeRef.current) {
       modalizeRef.current.open();
     }
   };
 
-  const closeModal = () => {
+  const handleClose = () => {
     if (modalizeRef.current) {
       modalizeRef.current.close();
     }
@@ -27,7 +27,7 @@ export const AbsoluteHeader = ({ componentId }) => {
     <TouchableOpacity
       style={s.modal__header}
       activeOpacity={0.75}
-      onPress={closeModal}
+      onPress={handleClose}
       hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }}
     >
       <Image
@@ -49,7 +49,7 @@ export const AbsoluteHeader = ({ componentId }) => {
   );
 
   useEffect(() => {
-    openModal();
+    handleOpen();
   }, []);
 
   return (
@@ -57,7 +57,7 @@ export const AbsoluteHeader = ({ componentId }) => {
       ref={modalizeRef}
       HeaderComponent={renderHeader}
       withHandle={false}
-      onClosed={onClosed}
+      onClosed={handleClosed}
     >
       {renderContent()}
     </Modalize>

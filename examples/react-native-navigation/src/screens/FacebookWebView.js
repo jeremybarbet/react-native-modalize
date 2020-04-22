@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import {
   Image,
   TouchableOpacity,
@@ -8,12 +8,14 @@ import {
   Dimensions,
   Animated,
   Easing,
+  Platform,
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { WebView as RNWebView } from 'react-native-webview';
 import { Navigation } from 'react-native-navigation';
 
 const { width, height: initialHeight } = Dimensions.get('window');
+const isAndroid = Platform.OS === 'android';
 
 const extractHostname = url => {
   let hostname;
@@ -30,28 +32,56 @@ const extractHostname = url => {
   return hostname;
 };
 
+const documentHeightCallbackScript = `
+  function onElementHeightChange(elm, callback) {
+    var lastHeight;
+    var newHeight;
+    (function run() {
+      newHeight = Math.max(elm.clientHeight, elm.scrollHeight);
+      if (lastHeight != newHeight) {
+        callback(newHeight);
+      }
+      lastHeight = newHeight;
+      if (elm.onElementHeightChangeTimer) {
+        clearTimeout(elm.onElementHeightChangeTimer);
+      }
+      elm.onElementHeightChangeTimer = setTimeout(run, 200);
+    })();
+  }
+  onElementHeightChange(document.body, function (height) {
+    window.ReactNativeWebView.postMessage(
+      JSON.stringify({
+        event: 'documentHeight',
+        documentHeight: height,
+      }),
+    );
+  });
+`;
+
 export const FacebookWebView = ({ componentId }) => {
   const modalizeRef = useRef(null);
-  const webviewRef = useRef(null);
+  const webViewRef = useRef(null);
   const [url, setUrl] = useState('');
   const [secured, setSecure] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [back, setBack] = useState(false);
   const [forward, setForward] = useState(false);
   const progress = useRef(new Animated.Value(0)).current;
-  const [height, setHeight] = useState(initialHeight);
+  const [layoutHeight, setLayoutHeight] = useState(initialHeight);
+  const [documentHeight, setDocumentHeight] = useState(initialHeight);
+  const height = isAndroid ? documentHeight : layoutHeight;
 
-  const onClosed = () => {
+  const handleClosed = () => {
     Navigation.dismissOverlay(componentId);
   };
 
-  const openModal = () => {
+  const handleOpen = () => {
     if (modalizeRef.current) {
       modalizeRef.current.open();
     }
   };
 
-  const closeModal = () => {
+  const handleClose = () => {
     if (modalizeRef.current) {
       modalizeRef.current.close();
     }
@@ -85,33 +115,66 @@ export const FacebookWebView = ({ componentId }) => {
     }
   };
 
-  const handleNavigationStateChange = ({ url, canGoBack, canGoForward }) => {
-    setBack(canGoBack);
-    setForward(canGoForward);
-    setSecure(url.includes('https'));
-    setUrl(extractHostname(url));
-  };
+  const handleNavigationStateChange = useCallback(
+    ({ url, canGoBack, canGoForward, loading, navigationType }) => {
+      setBack(canGoBack);
+      setForward(canGoForward);
+      setSecure(url.includes('https'));
+      setUrl(extractHostname(url));
+
+      if (!loading && !navigationType && isAndroid) {
+        if (webViewRef.current) {
+          webViewRef.current.injectJavaScript(documentHeightCallbackScript);
+        }
+      }
+    },
+    [],
+  );
+
+  const handleMessage = useCallback(event => {
+    // iOS already inherit from the whole document body height,
+    // so we don't have to manually get it with the injected script
+    if (!isAndroid) {
+      return;
+    }
+
+    const data = JSON.parse(event.nativeEvent.data);
+
+    if (!data) {
+      return;
+    }
+
+    switch (data.event) {
+      case 'documentHeight': {
+        if (data.documentHeight !== 0) {
+          setDocumentHeight(data.documentHeight);
+        }
+
+        break;
+      }
+    }
+  }, []);
 
   const handleBack = () => {
-    if (webviewRef.current) {
-      webviewRef.current.goBack();
+    if (webViewRef.current) {
+      webViewRef.current.goBack();
     }
   };
 
   const handleForward = () => {
-    if (webviewRef.current) {
-      webviewRef.current.goForward();
+    if (webViewRef.current) {
+      webViewRef.current.goForward();
     }
   };
 
   const handleLayout = ({ layout }) => {
-    setHeight(layout.height);
+    setLayoutHeight(layout.height);
   };
 
   const renderHeader = () => (
     <View style={s.header}>
       <View style={s.header__wrapper}>
-        <TouchableOpacity style={s.header__close} onPress={closeModal} activeOpacity={0.75}>
+        <TouchableOpacity style={s.header__close} onPress={handleClose} activeOpacity={0.75}>
           <Image source={require('../assets/cross.png')} />
         </TouchableOpacity>
 
@@ -173,7 +236,7 @@ export const FacebookWebView = ({ componentId }) => {
   );
 
   useEffect(() => {
-    openModal();
+    handleOpen();
   }, []);
 
   return (
@@ -181,18 +244,20 @@ export const FacebookWebView = ({ componentId }) => {
       ref={modalizeRef}
       HeaderComponent={renderHeader}
       scrollViewProps={{ showsVerticalScrollIndicator: false }}
-      onClosed={onClosed}
+      onClosed={handleClosed}
       onLayout={handleLayout}
     >
       <RNWebView
-        ref={webviewRef}
+        ref={webViewRef}
         source={{ uri: 'https://github.com/jeremybarbet/react-native-modalize' }}
         onLoadStart={() => handleLoad('start')}
         onLoadProgress={() => handleLoad('progress')}
         onLoadEnd={() => handleLoad('end')}
         onNavigationStateChange={handleNavigationStateChange}
+        onMessage={handleMessage}
         startInLoadingState={true}
         showsVerticalScrollIndicator={false}
+        scrollEnabled={!isAndroid}
         containerStyle={{ paddingBottom: 10 }}
         style={{ height }}
       />

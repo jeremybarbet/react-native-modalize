@@ -7,17 +7,17 @@ import faker from 'faker';
 export const FixedContent = ({ componentId }) => {
   const modalizeRef = useRef(null);
 
-  onClosed = () => {
+  handleClosed = () => {
     Navigation.dismissOverlay(componentId);
   };
 
-  openModal = () => {
+  handleOpen = () => {
     if (modalizeRef.current) {
       modalizeRef.current.open();
     }
   };
 
-  closeModal = () => {
+  handleClose = () => {
     if (modalizeRef.current) {
       modalizeRef.current.close();
     }
@@ -34,18 +34,18 @@ export const FixedContent = ({ componentId }) => {
         clearButtonMode="while-editing"
       />
 
-      <TouchableOpacity style={s.content__button} activeOpacity={0.75} onPress={closeModal}>
+      <TouchableOpacity style={s.content__button} activeOpacity={0.75} onPress={handleClose}>
         <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
       </TouchableOpacity>
     </View>
   );
 
   useEffect(() => {
-    openModal();
+    handleOpen();
   }, []);
 
   return (
-    <Modalize ref={modalizeRef} onClosed={onClosed} adjustToContentHeight>
+    <Modalize ref={modalizeRef} onClosed={handleClosed} adjustToContentHeight>
       {renderContent()}
     </Modalize>
   );

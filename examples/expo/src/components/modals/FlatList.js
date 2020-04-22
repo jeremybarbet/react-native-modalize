@@ -20,7 +20,7 @@ export const FlatList = forwardRef((_, ref) => {
         email: faker.internet.email(),
       }));
 
-  const scrollToTop = () => {
+  const handleScrollToTop = () => {
     if (combinedRef.current) {
       combinedRef.current.scrollTo({
         y: 0,
@@ -50,7 +50,7 @@ export const FlatList = forwardRef((_, ref) => {
           ],
         },
       ]}
-      onPress={scrollToTop}
+      onPress={handleScrollToTop}
       activeOpacity={0.75}
     >
       <Text style={s.floating__text}>Top</Text>

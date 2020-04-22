@@ -9,7 +9,7 @@ export const AbsoluteHeader = forwardRef((_, ref) => {
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
 
-  const closeModal = () => {
+  const handleClose = () => {
     if (combinedRef.current) {
       combinedRef.current.close();
     }
@@ -19,7 +19,7 @@ export const AbsoluteHeader = forwardRef((_, ref) => {
     <TouchableOpacity
       style={s.modal__header}
       activeOpacity={0.75}
-      onPress={closeModal}
+      onPress={handleClose}
       hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }}
     >
       <Image

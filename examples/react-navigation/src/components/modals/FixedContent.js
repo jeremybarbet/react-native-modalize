@@ -9,7 +9,7 @@ export const FixedContent = forwardRef((_, ref) => {
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
 
-  const closeModal = () => {
+  const handleClose = () => {
     if (combinedRef.current) {
       combinedRef.current.close();
     }
@@ -26,7 +26,7 @@ export const FixedContent = forwardRef((_, ref) => {
         clearButtonMode="while-editing"
       />
 
-      <TouchableOpacity style={s.content__button} activeOpacity={0.75} onPress={closeModal}>
+      <TouchableOpacity style={s.content__button} activeOpacity={0.75} onPress={handleClose}>
         <Text style={s.content__buttonText}>{'Send'.toUpperCase()}</Text>
       </TouchableOpacity>
     </View>

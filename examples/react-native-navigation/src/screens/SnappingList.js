@@ -9,11 +9,11 @@ import { Button } from '../components/button/Button';
 export const SnappingList = ({ componentId }) => {
   const modalizeRef = useRef(null);
 
-  const onClosed = () => {
+  const handleClosed = () => {
     Navigation.dismissOverlay(componentId);
   };
 
-  const openModal = () => {
+  const handleOpen = () => {
     if (modalizeRef.current) {
       modalizeRef.current.open();
     }
@@ -43,12 +43,12 @@ export const SnappingList = ({ componentId }) => {
         ))}
 
       <View style={s.content__button}>
-        <Button onPress={scrollToTop} name="Scroll to Top" />
+        <Button onPress={handleScrollToTop} name="Scroll to Top" />
       </View>
     </View>
   );
 
-  const scrollToTop = () => {
+  const handleScrollToTop = () => {
     if (modalizeRef.current) {
       modalizeRef.current.scrollTo({
         y: 0,
@@ -58,11 +58,16 @@ export const SnappingList = ({ componentId }) => {
   };
 
   useEffect(() => {
-    openModal();
+    handleOpen();
   }, []);
 
   return (
-    <Modalize ref={modalizeRef} HeaderComponent={renderHeader} snapPoint={350} onClosed={onClosed}>
+    <Modalize
+      ref={modalizeRef}
+      HeaderComponent={renderHeader}
+      snapPoint={350}
+      onClosed={handleClosed}
+    >
       {renderContent()}
     </Modalize>
   );

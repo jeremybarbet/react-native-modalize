@@ -8,19 +8,19 @@ import { Button } from '../button/Button';
 export const AlwaysOpen = () => {
   const modalizeRef = useRef(null);
 
-  closeModal = dest => {
+  const handleClose = dest => {
     if (modalizeRef.current) {
       modalizeRef.current.close(dest);
     }
   };
 
-  renderContent = () => (
+  const renderContent = () => (
     <View style={s.content}>
       <Text style={s.content__subheading}>{'Introduction'.toUpperCase()}</Text>
       <Text style={s.content__heading}>Always open modal!</Text>
       <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
-      <Button name="Close to initial position" onPress={() => closeModal('alwaysOpen')} />
-      <Button name="Close completely" onPress={closeModal} />
+      <Button name="Close to initial position" onPress={() => handleClose('alwaysOpen')} />
+      <Button name="Close completely" onPress={handleClose} />
     </View>
   );
 

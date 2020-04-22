@@ -37,11 +37,11 @@ export const SectionList = ({ componentId }) => {
     },
   ];
 
-  const onClosed = () => {
+  const handleClosed = () => {
     Navigation.dismissOverlay(componentId);
   };
 
-  const openModal = () => {
+  const handleOpen = () => {
     if (modalizeRef.current) {
       modalizeRef.current.open();
     }
@@ -61,14 +61,14 @@ export const SectionList = ({ componentId }) => {
   );
 
   useEffect(() => {
-    openModal();
+    handleOpen();
   }, []);
 
   return (
     <Modalize
       ref={modalizeRef}
-      onClosed={onClosed}
-      childrenStyle={{ borderTopLeftRadius: 12, borderTopRightRadius: 12, overflow: 'hidden' }}
+      onClosed={handleClosed}
+      childrenStyle={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
       sectionListProps={{
         sections: getSections(),
         renderItem: renderItem,

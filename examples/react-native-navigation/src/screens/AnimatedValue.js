@@ -70,14 +70,14 @@ export const AnimatedValue = () => {
     </>
   );
 
-  const openModal = () => {
+  const handleOpen = () => {
     if (modalizeRef.current) {
       modalizeRef.current.open();
     }
   };
 
   useEffect(() => {
-    openModal();
+    handleOpen();
   }, []);
 
   return (

@@ -7,11 +7,11 @@ import faker from 'faker';
 export const SimpleContent = ({ componentId }) => {
   const modalizeRef = useRef(null);
 
-  onClosed = () => {
+  const handleClosed = () => {
     Navigation.dismissOverlay(componentId);
   };
 
-  openModal = () => {
+  const handleOpen = () => {
     if (modalizeRef.current) {
       modalizeRef.current.open();
     }
@@ -46,13 +46,13 @@ export const SimpleContent = ({ componentId }) => {
   ];
 
   useEffect(() => {
-    openModal();
+    handleOpen();
   }, []);
 
   return (
     <Modalize
       ref={modalizeRef}
-      onClosed={onClosed}
+      onClosed={handleClosed}
       scrollViewProps={{
         showsVerticalScrollIndicator: false,
         stickyHeaderIndices: [0],
