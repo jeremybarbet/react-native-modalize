@@ -47,9 +47,9 @@ const useCombinedRefs = (...refs) =>
   );
 
 export const FacebookWebView = forwardRef((_, ref) => {
-  const modalRef = useRef(null);
+  const modalizeRef = useRef(null);
   const webviewRef = useRef(null);
-  const combinedRef = useCombinedRefs(ref, modalRef);
+  const combinedRef = useCombinedRefs(ref, modalizeRef);
   const [url, setUrl] = useState('');
   const [secured, setSecure] = useState(true);
   const [mounted, setMounted] = useState(false);
@@ -59,8 +59,8 @@ export const FacebookWebView = forwardRef((_, ref) => {
   const [height, setHeight] = useState(initialHeight);
 
   const handleClose = () => {
-    if (modalRef.current) {
-      modalRef.current.close();
+    if (modalizeRef.current) {
+      modalizeRef.current.close();
     }
   };
 

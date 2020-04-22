@@ -5,15 +5,15 @@ import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
 export const SimpleContent = ({ componentId }) => {
-  const modalRef = useRef(null);
+  const modalizeRef = useRef(null);
 
   onClosed = () => {
     Navigation.dismissOverlay(componentId);
   };
 
   openModal = () => {
-    if (modalRef.current) {
-      modalRef.current.open();
+    if (modalizeRef.current) {
+      modalizeRef.current.open();
     }
   };
 
@@ -51,7 +51,7 @@ export const SimpleContent = ({ componentId }) => {
 
   return (
     <Modalize
-      ref={modalRef}
+      ref={modalizeRef}
       onClosed={onClosed}
       scrollViewProps={{
         showsVerticalScrollIndicator: false,

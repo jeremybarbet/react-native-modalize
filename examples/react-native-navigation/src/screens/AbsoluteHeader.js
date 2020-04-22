@@ -5,21 +5,21 @@ import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
 export const AbsoluteHeader = ({ componentId }) => {
-  const modalRef = useRef(null);
+  const modalizeRef = useRef(null);
 
   const onClosed = () => {
     Navigation.dismissOverlay(componentId);
   };
 
   const openModal = () => {
-    if (modalRef.current) {
-      modalRef.current.open();
+    if (modalizeRef.current) {
+      modalizeRef.current.open();
     }
   };
 
   const closeModal = () => {
-    if (modalRef.current) {
-      modalRef.current.close();
+    if (modalizeRef.current) {
+      modalizeRef.current.close();
     }
   };
 
@@ -53,7 +53,12 @@ export const AbsoluteHeader = ({ componentId }) => {
   }, []);
 
   return (
-    <Modalize ref={modalRef} HeaderComponent={renderHeader} withHandle={false} onClosed={onClosed}>
+    <Modalize
+      ref={modalizeRef}
+      HeaderComponent={renderHeader}
+      withHandle={false}
+      onClosed={onClosed}
+    >
       {renderContent()}
     </Modalize>
   );

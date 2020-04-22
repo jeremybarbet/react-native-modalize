@@ -5,21 +5,21 @@ import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
 export const FixedContent = ({ componentId }) => {
-  const modalRef = useRef(null);
+  const modalizeRef = useRef(null);
 
   onClosed = () => {
     Navigation.dismissOverlay(componentId);
   };
 
   openModal = () => {
-    if (modalRef.current) {
-      modalRef.current.open();
+    if (modalizeRef.current) {
+      modalizeRef.current.open();
     }
   };
 
   closeModal = () => {
-    if (modalRef.current) {
-      modalRef.current.close();
+    if (modalizeRef.current) {
+      modalizeRef.current.close();
     }
   };
 
@@ -45,7 +45,7 @@ export const FixedContent = ({ componentId }) => {
   }, []);
 
   return (
-    <Modalize ref={modalRef} onClosed={onClosed} adjustToContentHeight>
+    <Modalize ref={modalizeRef} onClosed={onClosed} adjustToContentHeight>
       {renderContent()}
     </Modalize>
   );

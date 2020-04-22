@@ -8,8 +8,8 @@ import { useCombinedRefs } from '../../utils/use-combined-refs';
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
 export const FlatList = forwardRef((_, ref) => {
-  const modalRef = useRef(null);
-  const combinedRef = useCombinedRefs(ref, modalRef);
+  const modalizeRef = useRef(null);
+  const combinedRef = useCombinedRefs(ref, modalizeRef);
   const scrollY = useRef(new Animated.Value(0)).current;
 
   const getData = () =>

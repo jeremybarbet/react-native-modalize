@@ -9,7 +9,7 @@ import { Modalize } from 'react-native-modalize';
 
 export const App = () => (
   <Modalize
-    ref={modalRef}
+    ref={modalizeRef}
     scrollViewProps={{ showsVerticalScrollIndicator: false }}
     snapPoint={300}
     HeaderComponent={<View><Text>Header</Text></View>}

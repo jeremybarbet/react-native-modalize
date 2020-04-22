@@ -7,15 +7,15 @@ import faker from 'faker';
 import { Button } from '../components/button/Button';
 
 export const SnappingList = ({ componentId }) => {
-  const modalRef = useRef(null);
+  const modalizeRef = useRef(null);
 
   const onClosed = () => {
     Navigation.dismissOverlay(componentId);
   };
 
   const openModal = () => {
-    if (modalRef.current) {
-      modalRef.current.open();
+    if (modalizeRef.current) {
+      modalizeRef.current.open();
     }
   };
 
@@ -49,8 +49,8 @@ export const SnappingList = ({ componentId }) => {
   );
 
   const scrollToTop = () => {
-    if (modalRef.current) {
-      modalRef.current.scrollTo({
+    if (modalizeRef.current) {
+      modalizeRef.current.scrollTo({
         y: 0,
         animated: true,
       });
@@ -62,7 +62,7 @@ export const SnappingList = ({ componentId }) => {
   }, []);
 
   return (
-    <Modalize ref={modalRef} HeaderComponent={renderHeader} snapPoint={350} onClosed={onClosed}>
+    <Modalize ref={modalizeRef} HeaderComponent={renderHeader} snapPoint={350} onClosed={onClosed}>
       {renderContent()}
     </Modalize>
   );

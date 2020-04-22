@@ -6,8 +6,8 @@ import faker from 'faker';
 import { useCombinedRefs } from '../../utils/use-combined-refs';
 
 export const AnimatedValue = forwardRef((_, ref) => {
-  const modalRef = useRef(null);
-  const combinedRef = useCombinedRefs(ref, modalRef);
+  const modalizeRef = useRef(null);
+  const combinedRef = useCombinedRefs(ref, modalizeRef);
   const animated = useRef(new Animated.Value(0)).current;
 
   const getContentSquare = () => ({

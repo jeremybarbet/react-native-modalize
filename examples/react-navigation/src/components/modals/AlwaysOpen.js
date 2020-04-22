@@ -6,11 +6,11 @@ import faker from 'faker';
 import { Button } from '../button/Button';
 
 export const AlwaysOpen = () => {
-  const modalRef = useRef(null);
+  const modalizeRef = useRef(null);
 
   closeModal = dest => {
-    if (modalRef.current) {
-      modalRef.current.close(dest);
+    if (modalizeRef.current) {
+      modalizeRef.current.close(dest);
     }
   };
 
@@ -25,7 +25,12 @@ export const AlwaysOpen = () => {
   );
 
   return (
-    <Modalize ref={modalRef} modalStyle={s.content__modal} alwaysOpen={85} handlePosition="inside">
+    <Modalize
+      ref={modalizeRef}
+      modalStyle={s.content__modal}
+      alwaysOpen={85}
+      handlePosition="inside"
+    >
       {renderContent()}
     </Modalize>
   );

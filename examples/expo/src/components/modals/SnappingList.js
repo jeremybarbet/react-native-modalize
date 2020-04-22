@@ -7,8 +7,8 @@ import { useCombinedRefs } from '../../utils/use-combined-refs';
 import { Button } from '../button/Button';
 
 export const SnappingList = forwardRef((_, ref) => {
-  const modalRef = useRef(null);
-  const combinedRef = useCombinedRefs(ref, modalRef);
+  const modalizeRef = useRef(null);
+  const combinedRef = useCombinedRefs(ref, modalizeRef);
 
   const scrollToTop = () => {
     if (combinedRef.current) {

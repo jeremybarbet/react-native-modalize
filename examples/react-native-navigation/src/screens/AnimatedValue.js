@@ -4,7 +4,7 @@ import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
 export const AnimatedValue = () => {
-  const modalRef = useRef(null);
+  const modalizeRef = useRef(null);
   const animated = useRef(new Animated.Value(0)).current;
 
   const getContentSquare = () => ({
@@ -71,8 +71,8 @@ export const AnimatedValue = () => {
   );
 
   const openModal = () => {
-    if (modalRef.current) {
-      modalRef.current.open();
+    if (modalizeRef.current) {
+      modalizeRef.current.open();
     }
   };
 
@@ -82,7 +82,7 @@ export const AnimatedValue = () => {
 
   return (
     <Modalize
-      ref={modalRef}
+      ref={modalizeRef}
       panGestureAnimatedValue={animated}
       snapPoint={120}
       handlePosition="inside"

@@ -5,7 +5,7 @@ import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
 export const SectionList = ({ componentId }) => {
-  const modalRef = useRef(null);
+  const modalizeRef = useRef(null);
 
   const getSections = () => [
     {
@@ -42,8 +42,8 @@ export const SectionList = ({ componentId }) => {
   };
 
   const openModal = () => {
-    if (modalRef.current) {
-      modalRef.current.open();
+    if (modalizeRef.current) {
+      modalizeRef.current.open();
     }
   };
 
@@ -66,7 +66,7 @@ export const SectionList = ({ componentId }) => {
 
   return (
     <Modalize
-      ref={modalRef}
+      ref={modalizeRef}
       onClosed={onClosed}
       childrenStyle={{ borderTopLeftRadius: 12, borderTopRightRadius: 12, overflow: 'hidden' }}
       sectionListProps={{

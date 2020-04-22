@@ -31,7 +31,7 @@ const extractHostname = url => {
 };
 
 export const FacebookWebView = ({ componentId }) => {
-  const modalRef = useRef(null);
+  const modalizeRef = useRef(null);
   const webviewRef = useRef(null);
   const [url, setUrl] = useState('');
   const [secured, setSecure] = useState(true);
@@ -46,14 +46,14 @@ export const FacebookWebView = ({ componentId }) => {
   };
 
   const openModal = () => {
-    if (modalRef.current) {
-      modalRef.current.open();
+    if (modalizeRef.current) {
+      modalizeRef.current.open();
     }
   };
 
   const closeModal = () => {
-    if (modalRef.current) {
-      modalRef.current.close();
+    if (modalizeRef.current) {
+      modalizeRef.current.close();
     }
   };
 
@@ -178,7 +178,7 @@ export const FacebookWebView = ({ componentId }) => {
 
   return (
     <Modalize
-      ref={modalRef}
+      ref={modalizeRef}
       HeaderComponent={renderHeader}
       scrollViewProps={{ showsVerticalScrollIndicator: false }}
       onClosed={onClosed}

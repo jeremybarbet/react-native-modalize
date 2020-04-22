@@ -7,7 +7,7 @@ import faker from 'faker';
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
 export const FlatList = ({ componentId }) => {
-  const modalRef = useRef(null);
+  const modalizeRef = useRef(null);
   const scrollY = useRef(new Animated.Value(0)).current;
 
   const getData = () =>
@@ -23,14 +23,14 @@ export const FlatList = ({ componentId }) => {
   };
 
   const openModal = () => {
-    if (modalRef.current) {
-      modalRef.current.open();
+    if (modalizeRef.current) {
+      modalizeRef.current.open();
     }
   };
 
   const scrollToTop = () => {
-    if (modalRef.current) {
-      modalRef.current.scrollTo({
+    if (modalizeRef.current) {
+      modalizeRef.current.scrollTo({
         y: 0,
         animated: true,
       });
@@ -78,7 +78,7 @@ export const FlatList = ({ componentId }) => {
 
   return (
     <Modalize
-      ref={modalRef}
+      ref={modalizeRef}
       onClosed={onClosed}
       FloatingComponent={renderFloatingComponent}
       flatListProps={{
