@@ -38,7 +38,7 @@ export interface ISpringProps {
 
 export interface IConfigProps {
   timing: ITimingProps;
-  spring: ISpringProps;
+  spring?: ISpringProps;
 }
 
 export interface IProps<ListItem = any> {
@@ -277,7 +277,7 @@ export interface IProps<ListItem = any> {
   onLayout?(nativeEvent: { layout: LayoutRectangle }): void;
 }
 
-export interface IInput {
+export interface IHandles {
   /**
    * Method to open Modalize.
    *
