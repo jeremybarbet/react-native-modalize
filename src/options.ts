@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import {
   Animated,
   ViewStyle,
@@ -43,9 +44,9 @@ export interface IConfigProps {
 
 export interface IProps<ListItem = any> {
   /**
-   * A React component that will define the content of the modal.
+   * A React node that will define the content of the modal.
    */
-  children?: React.ReactNode;
+  children?: ReactNode;
 
   /**
    * An object to pass any of the react-native ScrollView's props.
@@ -61,6 +62,11 @@ export interface IProps<ListItem = any> {
    * An object to pass any of the react-native SectionList's props.
    */
   sectionListProps?: Animated.AnimatedProps<SectionListProps<ListItem>>;
+
+  /**
+   * A custom JSX Element that will inherits of the onScroll/gesture events
+   */
+  customRenderer?: JSX.Element;
 
   /**
    * Define the style of the modal (includes handle/header/children/footer).
@@ -225,17 +231,17 @@ export interface IProps<ListItem = any> {
   /**
    * A header component outside of the ScrollView, on top of the modal.
    */
-  HeaderComponent?: React.ReactNode;
+  HeaderComponent?: ReactNode;
 
   /**
    * A footer component outside of the ScrollView, on top of the modal.
    */
-  FooterComponent?: React.ReactNode;
+  FooterComponent?: ReactNode;
 
   /**
    * A floating component inside the modal wrapper that will be independent of scrolling. It requires `zIndex` child with absolute positioning.
    */
-  FloatingComponent?: React.ReactNode;
+  FloatingComponent?: ReactNode;
 
   /**
    * Callback function when the `open` method is triggered.

@@ -26,7 +26,7 @@ Modalize is shipped by default with three different renderers. The default one i
 
 ### `children`
 
-A React component that will define the content of the modal. By passing a children props it will use the default `ScrollView` component.
+A React node that will define the content of the modal. By passing a children props it will use the default `ScrollView` component.
 
 | Type     | Required |
 | -------- | -------- |
@@ -61,6 +61,14 @@ Refer to the [`react-native` SectionList documentation](https://reactnative.dev/
 | Type     | Required |
 | -------- | -------- |
 | object   | No       |
+
+### `customRenderer`
+
+A custom React node that will inherit of the onScroll/gesture events
+
+| Type     | Required |
+| -------- | -------- |
+| node     | No       |
 
 ## Styles
 

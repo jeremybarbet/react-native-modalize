@@ -7,6 +7,7 @@ import React, {
   ReactNode,
   isValidElement,
   Ref,
+  cloneElement,
 } from 'react';
 import {
   Animated,
@@ -59,6 +60,7 @@ const ModalizeBase = (
     scrollViewProps,
     flatListProps,
     sectionListProps,
+    customRenderer,
 
     // Styles
     modalStyle,
@@ -662,6 +664,10 @@ const ModalizeBase = (
 
     if (sectionListProps) {
       return <AnimatedSectionList {...opts} {...sectionListProps} />;
+    }
+
+    if (customRenderer) {
+      return cloneElement(customRenderer, { ...opts });
     }
 
     return (
