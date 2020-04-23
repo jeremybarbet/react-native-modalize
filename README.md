@@ -26,14 +26,7 @@ yarn add react-native-modalize react-native-gesture-handler
 npx pod-install ios
 ```
 
-That's it!
-
-<details>
-<summary><strong>Running Modalize `< 1.3.7-rc.18` ?</strong></summary>
-<p>
-If you are using Modalize `< 1.3.7-rc.18` and not running on Expo, you will need to follow react-native-gesture-handler's [setup guide](https://software-mansion.github.io/react-native-gesture-handler/docs/getting-started.html) to complete the installation and wrap your application with the `GestureHandlerRootView`. It's automatically done in newest versions of the library.
-</p>
-</details>
+Check out the [guide](https://jeremybarbet.github.io/react-native-modalize/#/INSTALLATION) to complete the Android installation.
 
 ## Usage
 

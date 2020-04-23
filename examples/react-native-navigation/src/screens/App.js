@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { Animated, View } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 
 import {
@@ -18,6 +19,8 @@ import { Button } from '../components/button/Button';
 import { AlwaysOpen } from './AlwaysOpen';
 
 export const App = () => {
+  const animated = useRef(new Animated.Value(0)).current;
+
   const handleOverlay = name => {
     Navigation.showOverlay({
       component: {
@@ -31,6 +34,9 @@ export const App = () => {
             componentBackgroundColor: 'transparent',
           },
         },
+        passProps: {
+          animated,
+        },
       },
     });
   };
@@ -42,21 +48,33 @@ export const App = () => {
   };
 
   return (
-    <Layout>
-      <Header subheading="Run with React Native Navigation" />
+    <View style={{ flex: 1, backgroundColor: '#000' }}>
+      <Layout
+        style={{
+          borderRadius: animated.interpolate({ inputRange: [0, 1], outputRange: [0, 12] }),
+          transform: [
+            {
+              scale: animated.interpolate({ inputRange: [0, 1], outputRange: [1, 0.92] }),
+            },
+          ],
+          opacity: animated.interpolate({ inputRange: [0, 1], outputRange: [1, 0.75] }),
+        }}
+      >
+        <Header subheading="Run with React Native Navigation" />
 
-      {renderButtons([
-        { name: 'Simple content', id: SIMPLE_CONTENT },
-        { name: 'Fixed content', id: FIXED_CONTENT },
-        { name: 'Snapping list', id: SNAPPING_LIST },
-        { name: 'Absolute header', id: ABSOLUTE_HEADER },
-        { name: 'Flat List', id: FLAT_LIST },
-        { name: 'Section List', id: SECTION_LIST },
-        { name: 'Animated Value', id: ANIMATED_VALUE },
-        { name: 'Facebook WebView', id: FACEBOOK_WEBVIEW },
-      ])}
+        {renderButtons([
+          { name: 'Simple content', id: SIMPLE_CONTENT },
+          { name: 'Fixed content', id: FIXED_CONTENT },
+          { name: 'Snapping list', id: SNAPPING_LIST },
+          { name: 'Absolute header', id: ABSOLUTE_HEADER },
+          { name: 'Flat List', id: FLAT_LIST },
+          { name: 'Section List', id: SECTION_LIST },
+          { name: 'Animated Value', id: ANIMATED_VALUE },
+          { name: 'Facebook WebView', id: FACEBOOK_WEBVIEW },
+        ])}
 
-      <AlwaysOpen />
-    </Layout>
+        <AlwaysOpen />
+      </Layout>
+    </View>
   );
 };

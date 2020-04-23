@@ -4,9 +4,8 @@ import { Navigation } from 'react-native-navigation';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
-export const AnimatedValue = ({ componentId }) => {
+export const AnimatedValue = ({ componentId, animated }) => {
   const modalizeRef = useRef(null);
-  const animated = useRef(new Animated.Value(0)).current;
 
   const getContentSquare = () => ({
     transform: [

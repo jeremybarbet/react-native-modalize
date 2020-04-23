@@ -33,7 +33,6 @@ import {
   TapGestureHandler,
   PanGestureHandlerStateChangeEvent,
   TapGestureHandlerStateChangeEvent,
-  GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 
 import { IProps, TOpen, TClose, TStyle, IHandles } from './options';
@@ -46,7 +45,6 @@ const { height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
-const GestureHandlerWrapper = GestureHandlerRootView ?? View;
 const USE_NATIVE_DRIVER = true;
 const ACTIVATED = 20;
 const PAN_DURATION = 150;
@@ -134,6 +132,7 @@ const ModalizeBase = (
   const endHeight = modalHeight || computedHeight;
   const adjustValue = adjustToContentHeight ? undefined : endHeight;
   const snaps = snapPoint ? [0, endHeight - snapPoint, endHeight] : [0, endHeight];
+
   const [lastSnap, setLastSnap] = useState(snapPoint ? endHeight - snapPoint : 0);
   const [isVisible, setIsVisible] = useState(false);
   const [showContent, setShowContent] = useState(true);
@@ -247,6 +246,7 @@ const ModalizeBase = (
         ? Animated.timing(panGestureAnimatedValue, {
             toValue: toPanValue,
             duration: PAN_DURATION,
+            easing: Easing.ease,
             useNativeDriver,
           })
         : Animated.delay(0),
@@ -299,6 +299,7 @@ const ModalizeBase = (
         ? Animated.timing(panGestureAnimatedValue, {
             toValue: 0,
             duration: PAN_DURATION,
+            easing: Easing.ease,
             useNativeDriver,
           })
         : Animated.delay(0),
@@ -464,6 +465,7 @@ const ModalizeBase = (
           Animated.timing(panGestureAnimatedValue, {
             toValue: Number(modalPositionValue === 'top'),
             duration: PAN_DURATION,
+            easing: Easing.ease,
             useNativeDriver,
           }).start();
         }
@@ -506,9 +508,8 @@ const ModalizeBase = (
   const handleGestureEvent = Animated.event([{ nativeEvent: { translationY: dragY } }], {
     useNativeDriver: USE_NATIVE_DRIVER,
     listener: ({ nativeEvent: { translationY } }: PanGestureHandlerStateChangeEvent) => {
-      const offset = 200;
-
       if (panGestureAnimatedValue) {
+        const offset = alwaysOpen ?? snapPoint ?? 0;
         const diff = Math.abs(translationY / (endHeight - offset));
         const y = translationY <= 0 ? diff : 1 - diff;
         let value: number;
@@ -788,7 +789,7 @@ const ModalizeBase = (
   }, []);
 
   const renderModalize = (
-    <GestureHandlerWrapper
+    <View
       style={[s.modalize, { elevation: modalElevation }]}
       pointerEvents={alwaysOpen || !withOverlay ? 'box-none' : 'auto'}
     >
@@ -839,7 +840,7 @@ const ModalizeBase = (
       </TapGestureHandler>
 
       {renderFloatingComponent()}
-    </GestureHandlerWrapper>
+    </View>
   );
 
   const renderReactModal = (child: JSX.Element): JSX.Element => (
