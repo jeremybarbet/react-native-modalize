@@ -334,6 +334,7 @@ const ModalizeBase = (
 
     BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
 
+    cancelTranslateY.setValue(1);
     setBeginScrollYValue(0);
     beginScrollY.setValue(0);
 
