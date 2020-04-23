@@ -30,4 +30,5 @@ module.exports = {
       version: 'detect',
     },
   },
+  ignorePatterns: ['node_modules/**/*', 'docs/**/*', 'examples/**/*', 'lib/**/*'],
 };
