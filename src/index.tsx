@@ -510,7 +510,7 @@ const ModalizeBase = (
 
       if (panGestureAnimatedValue) {
         const diff = Math.abs(translationY / (endHeight - offset));
-        const y = translationY < 0 ? diff : 1 - diff;
+        const y = translationY <= 0 ? diff : 1 - diff;
         let value: number;
 
         if (modalPosition === 'initial' && translationY > 0) {
