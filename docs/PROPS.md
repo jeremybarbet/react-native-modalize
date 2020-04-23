@@ -148,7 +148,7 @@ A number to define the modal's top offset.
 
 ### `alwaysOpen`
 
-A number that will make the modal visible all the time. You can still [open](/PROPSMETHODS.md?id=open) and [close](/PROPSMETHODS.md?id=close) it, using the build-in methods.
+A number that will make the modal visible all the time. You can still [open](/METHODS.md?id=open) and [close](/METHODS.md?id=close) it, using the build-in methods.
 
 The value you pass is the height of the visible part of the modal on top of the screen.
 
