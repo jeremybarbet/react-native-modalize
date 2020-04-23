@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Image, StyleSheet, Text, View, Animated } from 'react-native';
+import { Navigation } from 'react-native-navigation';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
@@ -48,6 +49,10 @@ export const AnimatedValue = () => {
     ],
   });
 
+  const handleClosed = () => {
+    Navigation.dismissOverlay(componentId);
+  };
+
   const renderContent = () => (
     <>
       <View style={s.content__header}>
@@ -86,6 +91,7 @@ export const AnimatedValue = () => {
       panGestureAnimatedValue={animated}
       snapPoint={120}
       handlePosition="inside"
+      onClosed={handleClosed}
     >
       {renderContent()}
     </Modalize>
