@@ -22,6 +22,7 @@ export const AnimatedValue = forwardRef((_, ref) => {
         translateX: animated.interpolate({
           inputRange: [0, 1],
           outputRange: [0, 115],
+          extrapolate: 'clamp',
         }),
       },
       {

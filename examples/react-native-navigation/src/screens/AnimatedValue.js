@@ -4,7 +4,7 @@ import { Navigation } from 'react-native-navigation';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
 
-export const AnimatedValue = () => {
+export const AnimatedValue = ({ componentId }) => {
   const modalizeRef = useRef(null);
   const animated = useRef(new Animated.Value(0)).current;
 
@@ -20,6 +20,7 @@ export const AnimatedValue = () => {
         translateX: animated.interpolate({
           inputRange: [0, 1],
           outputRange: [0, 115],
+          extrapolate: 'clamp',
         }),
       },
       {
