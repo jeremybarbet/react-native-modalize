@@ -64,7 +64,9 @@ Refer to the [`react-native` SectionList documentation](https://reactnative.dev/
 
 ### `customRenderer`
 
-A custom React node that will inherit of the onScroll/gesture events
+An animated custom React node that will inherit of the onScroll/gesture events
+
+!> You must pass an animated component, either by doing e.g. `<Animated.View ...>` or `const AnimatedCustomComponent = Animated.createAnimatedComponent(CustomComponent);`.
 
 | Type     | Required |
 | -------- | -------- |

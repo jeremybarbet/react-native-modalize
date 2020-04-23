@@ -64,7 +64,7 @@ export interface IProps<ListItem = any> {
   sectionListProps?: Animated.AnimatedProps<SectionListProps<ListItem>>;
 
   /**
-   * A custom JSX Element that will inherits of the onScroll/gesture events
+   * An animated custom JSX Element that will inherits of the onScroll/gesture events
    */
   customRenderer?: JSX.Element;
 
