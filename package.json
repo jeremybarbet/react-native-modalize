@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rm -rf ./lib/* && yarn lint && tsc",
     "prepare": "yarn build",
-    "lint": "tslint 'src/**/*.ts?(x)' && prettier --list-different \"**/*.{json,md,js,jsx,ts,tsx}\"",
+    "lint": "eslint 'src/**/*.ts?(x)' && prettier --list-different \"**/*.{json,md,js,jsx,ts,tsx}\"",
     "prettier": "prettier --write \"{docs,examples,src}/**/*.{json,md,js,jsx,ts,tsx}\"",
     "postversion": "sh ./post-version.sh",
     "watch:modalize": "yarn tsc --watch",
@@ -41,7 +41,7 @@
       "prettier --write"
     ],
     "*.{ts,tsx}": [
-      "tslint --fix"
+      "eslint --fix"
     ]
   },
   "prettier": {
@@ -66,17 +66,20 @@
     "@commitlint/config-conventional": "8.3.4",
     "@types/react": "16.9.34",
     "@types/react-native": "0.62.2",
+    "@typescript-eslint/eslint-plugin": "2.29.0",
+    "@typescript-eslint/parser": "2.29.0",
     "concurrently": "5.1.0",
     "cpx": "1.5.0",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.11.0",
+    "eslint-plugin-react": "7.19.0",
+    "eslint-plugin-react-native": "3.8.1",
     "husky": "4.2.5",
     "lint-staged": "10.1.6",
     "prettier": "2.0.4",
     "react": "16.13.1",
     "react-native": "0.62.2",
     "react-native-gesture-handler": "1.6.1",
-    "tslint": "6.1.1",
-    "tslint-config-airbnb": "5.11.2",
-    "tslint-config-prettier": "1.18.0",
     "typescript": "3.8.3"
   },
   "peerDependencies": {

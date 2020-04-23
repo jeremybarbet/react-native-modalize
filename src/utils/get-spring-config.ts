@@ -1,6 +1,6 @@
 import { ISpringProps } from '../options';
 
-export const getSpringConfig = (config: ISpringProps) => {
+export const getSpringConfig = (config: ISpringProps): { [key: string]: number | undefined } => {
   const { friction, tension, speed, bounciness, stiffness, damping, mass } = config;
 
   if (stiffness || damping || mass) {
