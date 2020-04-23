@@ -24,7 +24,6 @@ import {
   SectionList,
   Platform,
   StatusBar,
-  ViewStyle,
   KeyboardEvent,
 } from 'react-native';
 import {
@@ -128,99 +127,49 @@ const ModalizeBase = (
   }: IProps,
   ref: Ref<ReactNode>,
 ): JSX.Element | null => {
-  const [lastSnap, setLastSnap] = useState(0);
+  const isHandleOutside = handlePosition === 'outside';
+  const handleHeight = withHandle ? 20 : isHandleOutside ? 35 : 20;
+  const fullHeight = screenHeight - modalTopOffset;
+  const computedHeight = fullHeight - handleHeight - (isIphoneX ? 34 : 0);
+  const endHeight = modalHeight || computedHeight;
+  const adjustValue = adjustToContentHeight ? undefined : endHeight;
+  const snaps = snapPoint ? [0, endHeight - snapPoint, endHeight] : [0, endHeight];
+  const [lastSnap, setLastSnap] = useState(snapPoint ? endHeight - snapPoint : 0);
   const [isVisible, setIsVisible] = useState(false);
   const [showContent, setShowContent] = useState(true);
   const [enableBounces, setEnableBounces] = useState(true);
   const [keyboardToggle, setKeyboardToggle] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const [disableScroll, setDisableScroll] = useState<boolean | undefined>(
-    alwaysOpen ? true : undefined,
-  );
+  const [disableScroll, setDisableScroll] = useState(alwaysOpen ? true : undefined);
   const [beginScrollYValue, setBeginScrollYValue] = useState(0);
-  const [initialComputedModalHeight, setInitialComputedModalHeight] = useState(0);
   const [modalPosition, setModalPosition] = useState<'top' | 'initial'>('initial');
-  const [snaps, setSnaps] = useState<number[]>([]);
-  const [snapEnd, setSnapEnd] = useState<number>(modalHeight ?? 0);
-  const [modalHeightState, setModalHeightState] = useState<number | undefined>(undefined); // Can it be fixed? Need state and variable
-  const cancelTranslateY = useRef<Animated.Value>(new Animated.Value(1)).current; // 1 by default to have the translateY animation running
+
+  const cancelTranslateY = useRef(new Animated.Value(1)).current; // 1 by default to have the translateY animation running
   const overlay = useRef(new Animated.Value(0)).current;
-  const beginScrollY = useRef<Animated.Value>(new Animated.Value(0)).current;
-  const dragY = useRef<Animated.Value>(new Animated.Value(0)).current;
-  const translateY = useRef<Animated.Value>(new Animated.Value(screenHeight)).current;
-  const reverseBeginScrollY = useRef<Animated.AnimatedMultiplication>(
-    Animated.multiply(new Animated.Value(-1), beginScrollY),
-  ).current;
+  const beginScrollY = useRef(new Animated.Value(0)).current;
+  const dragY = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(screenHeight)).current;
+  const reverseBeginScrollY = useRef(Animated.multiply(new Animated.Value(-1), beginScrollY)).current; // prettier-ignore
+
   const modal = useRef<TapGestureHandler>(null);
   const modalChildren = useRef<PanGestureHandler>(null);
   const modalContentView = useRef<NativeViewGestureHandler>(null);
   const contentView = useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
   const modalOverlay = useRef<PanGestureHandler>(null);
   const modalOverlayTap = useRef<TapGestureHandler>(null);
-  const isHandleOutside = handlePosition === 'outside';
-  const handleHeight = withHandle ? 20 : isHandleOutside ? 35 : 20;
-  let modalHeightValue: number | undefined; // Can it be fixed? Need state and variable
+
+  // We diff and get the negative value only. It sometimes go above 0
+  // (e.g. 1.5) and creates the flickering on Modalize for a ms
+  const diffClamp = Animated.diffClamp(reverseBeginScrollY, -screenHeight, 0);
+  // When we have a scrolling happening in the scrollview, we don't want to translate
+  // the modal down. We either multiply by 0 to cancel the animation, or 1 to proceed.
+  const dragValue = Animated.add(Animated.multiply(dragY, cancelTranslateY), diffClamp);
+  const value = Animated.add(Animated.multiply(translateY, cancelTranslateY), dragValue);
+
+  let modalHeightValue: number | undefined = adjustValue;
   let willCloseModalize = false;
 
-  const getModalizeContent = (): Animated.AnimatedProps<ViewStyle> => {
-    /*
-     * When we have a scrolling happening in the scrollview, we don't want to translate the modal down.
-     * We either multiply by 0 to cancel the animation, or 1 to proceed.
-     */
-    const cancelTranslateValue = (animatedValue: Animated.Value): Animated.AnimatedMultiplication =>
-      Animated.multiply(animatedValue, cancelTranslateY);
-    /*
-     * We diff and get the negative value only. It sometimes go above 0 (e.g. 1.5) and creates
-     * the flickering on Modalize for a ms
-     */
-    const diffClamp = Animated.diffClamp(reverseBeginScrollY, -screenHeight, 0);
-    const dragValue = Animated.add(cancelTranslateValue(dragY), diffClamp);
-    const value = Animated.add(cancelTranslateValue(translateY), dragValue);
-
-    return {
-      height: modalHeightState,
-      maxHeight: initialComputedModalHeight,
-      transform: [
-        {
-          translateY: value.interpolate({
-            inputRange: [-40, 0, snapEnd],
-            outputRange: [0, 0, snapEnd],
-            extrapolate: 'clamp',
-          }),
-        },
-      ],
-    };
-  };
-
-  const getOverlayBackground = (): Animated.AnimatedProps<ViewStyle> => ({
-    opacity: overlay.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0, 1],
-    }),
-  });
-
-  const handleConstructor = (): void => {
-    const fullHeight = screenHeight - modalTopOffset;
-    const computedHeight = fullHeight - handleHeight - (isIphoneX ? 34 : 0);
-    const height = modalHeight || computedHeight;
-    const snapsArr: number[] = [];
-    const adjustValue = adjustToContentHeight ? undefined : height;
-
-    if (snapPoint) {
-      snapsArr.push(0, height - snapPoint, height);
-    } else {
-      snapsArr.push(0, height);
-    }
-
-    modalHeightValue = adjustValue;
-    setInitialComputedModalHeight(height);
-    setSnaps(snapsArr);
-    setSnapEnd(snapsArr[snapsArr.length - 1]);
-    setLastSnap(snapPoint ? height - snapPoint : 0);
-    setModalHeightState(adjustValue);
-
-    beginScrollY.addListener(({ value }) => setBeginScrollYValue(value));
-  };
+  beginScrollY.addListener(({ value }) => setBeginScrollYValue(value));
 
   const handleBackPress = (): boolean => {
     if (alwaysOpen) {
@@ -391,7 +340,7 @@ const ModalizeBase = (
   const handleModalizeContentLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent): void => {
     const value = Math.min(
       layout.height + (!adjustToContentHeight || keyboardHeight ? layout.y : 0),
-      initialComputedModalHeight -
+      endHeight -
         Platform.select({
           ios: 0,
           android: keyboardHeight,
@@ -400,7 +349,6 @@ const ModalizeBase = (
     );
 
     modalHeightValue = value;
-    setModalHeightState(value);
   };
 
   const handleContentViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
@@ -413,7 +361,7 @@ const ModalizeBase = (
     }
 
     const { height } = nativeEvent.layout;
-    const shorterHeight = height < initialComputedModalHeight;
+    const shorterHeight = height < endHeight;
 
     setDisableScroll(shorterHeight && disableScrollIfPossible);
   };
@@ -471,7 +419,7 @@ const ModalizeBase = (
               destSnapPoint = (modalHeightValue || 0) - alwaysOpen;
             }
 
-            if (snap === snapEnd && !alwaysOpen) {
+            if (snap === endHeight && !alwaysOpen) {
               willCloseModalize = true;
               handleClose();
             }
@@ -561,7 +509,7 @@ const ModalizeBase = (
       const offset = 200;
 
       if (panGestureAnimatedValue) {
-        const diff = Math.abs(translationY / (initialComputedModalHeight - offset));
+        const diff = Math.abs(translationY / (endHeight - offset));
         const y = translationY < 0 ? diff : 1 - diff;
         let value: number;
 
@@ -732,7 +680,16 @@ const ModalizeBase = (
               onHandlerStateChange={handleOverlay}
             >
               <Animated.View
-                style={[s.overlay__background, overlayStyle, getOverlayBackground()]}
+                style={[
+                  s.overlay__background,
+                  overlayStyle,
+                  {
+                    opacity: overlay.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0, 1],
+                    }),
+                  },
+                ]}
                 pointerEvents={pointerEvents}
               />
             </TapGestureHandler>
@@ -814,15 +771,12 @@ const ModalizeBase = (
   }, [scrollViewProps, children, sectionListProps]);
 
   useEffect(() => {
-    const value = adjustToContentHeight ? undefined : initialComputedModalHeight;
+    const value = adjustToContentHeight ? undefined : endHeight;
 
     modalHeightValue = value;
-    setModalHeightState(value);
   }, [adjustToContentHeight]);
 
   useEffect(() => {
-    handleConstructor();
-
     Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
     Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
 
@@ -850,7 +804,23 @@ const ModalizeBase = (
               keyboardVerticalOffset={keyboardAvoidingOffset}
               behavior={keyboardAvoidingBehavior || 'padding'}
               enabled={avoidKeyboardLikeIOS}
-              style={[s.modalize__content, getModalizeContent(), modalStyle]}
+              style={[
+                s.modalize__content,
+                modalStyle,
+                {
+                  height: modalHeightValue,
+                  maxHeight: endHeight,
+                  transform: [
+                    {
+                      translateY: value.interpolate({
+                        inputRange: [-40, 0, endHeight],
+                        outputRange: [0, 0, endHeight],
+                        extrapolate: 'clamp',
+                      }),
+                    },
+                  ],
+                },
+              ]}
               onLayout={
                 !avoidKeyboardLikeIOS && !adjustToContentHeight
                   ? handleModalizeContentLayout
