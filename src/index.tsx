@@ -25,6 +25,7 @@ import {
   Platform,
   StatusBar,
   KeyboardEvent,
+  ScrollViewProps,
 } from 'react-native';
 import {
   PanGestureHandler,
@@ -585,11 +586,29 @@ const ModalizeBase = (
   const renderContent = (): JSX.Element => {
     const keyboardDismissMode = isIos ? 'interactive' : 'on-drag';
 
+    let passedOnScrollBeginDrag:
+      | Animated.WithAnimatedValue<ScrollViewProps['onScrollBeginDrag']>
+      | undefined = undefined;
+
+    if (flatListProps) {
+      passedOnScrollBeginDrag = flatListProps.onScrollBeginDrag;
+    } else if (sectionListProps) {
+      passedOnScrollBeginDrag = sectionListProps.onScrollBeginDrag;
+    } else if (scrollViewProps) {
+      passedOnScrollBeginDrag = scrollViewProps.onScrollBeginDrag;
+    }
+
     const opts = {
       ref: contentView,
       bounces: enableBounces,
       onScrollBeginDrag: Animated.event([{ nativeEvent: { contentOffset: { y: beginScrollY } } }], {
         useNativeDriver: USE_NATIVE_DRIVER,
+        listener: passedOnScrollBeginDrag
+          ? (e): void => {
+              // @ts-ignore
+              passedOnScrollBeginDrag(e);
+            }
+          : undefined,
       }),
       scrollEventThrottle: 16,
       onLayout: handleContentViewLayout,
@@ -598,11 +617,11 @@ const ModalizeBase = (
     };
 
     if (flatListProps) {
-      return <AnimatedFlatList {...opts} {...flatListProps} />;
+      return <AnimatedFlatList {...flatListProps} {...opts} />;
     }
 
     if (sectionListProps) {
-      return <AnimatedSectionList {...opts} {...sectionListProps} />;
+      return <AnimatedSectionList {...sectionListProps} {...opts} />;
     }
 
     if (customRenderer) {
@@ -610,7 +629,7 @@ const ModalizeBase = (
     }
 
     return (
-      <Animated.ScrollView {...opts} {...scrollViewProps}>
+      <Animated.ScrollView {...scrollViewProps} {...opts}>
         {children}
       </Animated.ScrollView>
     );
