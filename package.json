@@ -48,7 +48,8 @@
     "singleQuote": true,
     "trailingComma": "all",
     "printWidth": 100,
-    "arrowParens": "avoid"
+    "arrowParens": "avoid",
+    "semi": true
   },
   "commitlint": {
     "extends": [
