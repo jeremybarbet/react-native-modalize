@@ -6,6 +6,6 @@ lib
 node_modules
 android
 ios
-tsconfig.json
-tslint.json
 package.json
+renovate.json
+tsconfig.json

@@ -16,7 +16,10 @@ yarn.lock
 docs/
 examples/
 src/
-post-version.sh
+.eslintrc.js
+.prettierignore
 .watchmanconfig
+CHANGELOG.md
+post-version.sh
+renovate.json
 tsconfig.json
-tslint.json
