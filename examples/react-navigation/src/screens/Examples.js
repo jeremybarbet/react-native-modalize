@@ -14,6 +14,7 @@ import { SectionList } from '../components/modals/SectionList';
 import { AlwaysOpen } from '../components/modals/AlwaysOpen';
 import { AnimatedValue } from '../components/modals/AnimatedValue';
 import { FacebookWebView } from '../components/modals/FacebookWebView';
+import { SlackTabView } from '../components/modals/SlackTabView';
 
 export const ExamplesScreen = () => {
   const modals = Array.from({ length: 8 }).map(_ => useRef(null).current);
@@ -47,6 +48,7 @@ export const ExamplesScreen = () => {
           'Section List',
           'Animated Value',
           'Facebook WebView',
+          'Slack TabView',
         ])}
 
         <Portal>
@@ -58,6 +60,7 @@ export const ExamplesScreen = () => {
           <SectionList ref={el => (modals[5] = el)} />
           <AnimatedValue ref={el => (modals[6] = el)} animated={animated} />
           <FacebookWebView ref={el => (modals[7] = el)} />
+          <SlackTabView ref={el => (modals[8] = el)} />
           <AlwaysOpen />
         </Portal>
       </Layout>

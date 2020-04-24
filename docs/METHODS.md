@@ -20,12 +20,10 @@ export const App = () => {
         <Text>Open the modal</Text>
       </TouchableOpacity>
 
-      <Modalize ref={modalizeRef}>
-        ...your content
-      </Modalize>
+      <Modalize ref={modalizeRef}>...your content</Modalize>
     </>
   );
-}
+};
 ```
 
 ### `open()`
@@ -34,9 +32,9 @@ The method to open Modalize.
 
 ?> If you are using `snapPoint` prop, you can supply a `dest` argument to the `open` method, to open it to the top directly `open('top')`. You don't have to provide anything if you want the default behavior.
 
-| Type                                  | Required  |
-| ------------------------------------- | --------- |
-| function: (dest?: 'default' \| 'top') | Yes       |
+| Type                                  | Required |
+| ------------------------------------- | -------- |
+| function: (dest?: 'default' \| 'top') | Yes      |
 
 ### `close()`
 

@@ -8,15 +8,17 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "expo": "~37.0.3",
-    "faker": "^4.1.0",
-    "react": "~16.13.1",
-    "react-dom": "~16.13.1",
+    "expo": "37.0.3",
+    "faker": "4.1.0",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
-    "react-native-gesture-handler": "~1.6.0",
+    "react-native-gesture-handler": "1.6.1",
     "react-native-modalize": "file:../../src",
     "react-native-portalize": "1.0.1",
-    "react-native-web": "~0.12.2",
+    "react-native-reanimated": "1.8.0",
+    "react-native-tab-view": "2.14.0",
+    "react-native-web": "0.12.2",
     "react-native-webview": "8.1.1"
   },
   "devDependencies": {

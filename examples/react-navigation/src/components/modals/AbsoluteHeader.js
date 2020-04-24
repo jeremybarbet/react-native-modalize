@@ -22,13 +22,7 @@ export const AbsoluteHeader = forwardRef((_, ref) => {
       onPress={handleClose}
       hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }}
     >
-      <Image
-        source={{
-          uri:
-            'https://flaticons.net/icon.php?slug_category=mobile-application&slug_icon=close&icon_size=256&icon_color=FFFFFF&icon_flip=&icon_rotate=0',
-        }}
-        style={{ width: '40%', height: '40%' }}
-      />
+      <Image source={require('../../assets/cross.png')} style={{ width: '40%', height: '40%' }} />
     </TouchableOpacity>
   );
 

@@ -1,13 +1,14 @@
 - Getting started
+
   - [Installation](/INSTALLATION)
   - [Usage](/USAGE)
-  - [Extra](/EXTRA)
+  - [Examples](/EXAMPLES)
 
 - Guide
+
   - [Props](/PROPS)
   - [Methods](/METHODS)
   - [Development](/DEVELOPMENT)
-  - [Examples](/EXAMPLES)
   - [FAQ](/FAQ)
 
 - **Links**

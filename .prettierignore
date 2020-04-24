@@ -1,7 +1,6 @@
 .expo
 .github
 .vscode
-docs
 lib
 node_modules
 android

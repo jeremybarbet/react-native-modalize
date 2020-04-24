@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* reactNativeNavigationExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* reactNativeNavigationExampleTests.m */; };
-		0ED095D6EEF558920092C04E /* libPods-reactNativeNavigationExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8399112B731422A63A463837 /* libPods-reactNativeNavigationExample.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -20,6 +19,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* reactNativeNavigationExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* reactNativeNavigationExampleTests.m */; };
 		A3A366D250F35EB284B06358 /* libPods-reactNativeNavigationExample-reactNativeNavigationExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BA80BD22E569819C66D421 /* libPods-reactNativeNavigationExample-reactNativeNavigationExampleTests.a */; };
 		AE306E6DE4CEF285EE3E2C8A /* libPods-reactNativeNavigationExample-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74EE6471FF0A071726330CF4 /* libPods-reactNativeNavigationExample-tvOSTests.a */; };
+		C9FE2343050D5534E543FC4F /* libPods-reactNativeNavigationExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8399112B731422A63A463837 /* libPods-reactNativeNavigationExample.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,20 +36,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "reactNativeNavigationExample-tvOS";
-		};
-		3F26A04C244DE645003B3BBD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3F26A047244DE645003B3BBD /* ReactNativeNavigation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D8AFADBD1BEE6F3F00A4592D;
-			remoteInfo = ReactNativeNavigation;
-		};
-		3F26A04E244DE645003B3BBD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3F26A047244DE645003B3BBD /* ReactNativeNavigation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 7B49FEBB1E95090800DEB3EA;
-			remoteInfo = ReactNativeNavigationTests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -73,7 +59,6 @@
 		2D02E4901E0B4A5D006451C7 /* reactNativeNavigationExample-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "reactNativeNavigationExample-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		35BED69F0FFEA91F59002B52 /* Pods-reactNativeNavigationExample-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-reactNativeNavigationExample-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-reactNativeNavigationExample-tvOSTests/Pods-reactNativeNavigationExample-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		3AC8AAA80692D2BDFD813B96 /* Pods-reactNativeNavigationExample-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-reactNativeNavigationExample-tvOS.release.xcconfig"; path = "Target Support Files/Pods-reactNativeNavigationExample-tvOS/Pods-reactNativeNavigationExample-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		3F26A047244DE645003B3BBD /* ReactNativeNavigation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeNavigation.xcodeproj; path = "../../../node_modules/react-native-navigation/lib/ios/ReactNativeNavigation.xcodeproj"; sourceTree = "<group>"; };
 		3F26A051244DE88D003B3BBD /* libReactNativeNavigation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReactNativeNavigation.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B28D92FEE6EA0E537775C79 /* Pods-reactNativeNavigationExample-reactNativeNavigationExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-reactNativeNavigationExample-reactNativeNavigationExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-reactNativeNavigationExample-reactNativeNavigationExampleTests/Pods-reactNativeNavigationExample-reactNativeNavigationExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		74EE6471FF0A071726330CF4 /* libPods-reactNativeNavigationExample-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-reactNativeNavigationExample-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,7 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0ED095D6EEF558920092C04E /* libPods-reactNativeNavigationExample.a in Frameworks */,
+				C9FE2343050D5534E543FC4F /* libPods-reactNativeNavigationExample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,19 +166,9 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3F26A048244DE645003B3BBD /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3F26A04D244DE645003B3BBD /* libReactNativeNavigation.a */,
-				3F26A04F244DE645003B3BBD /* ReactNativeNavigationTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				3F26A047244DE645003B3BBD /* ReactNativeNavigation.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -342,12 +317,6 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 3F26A048244DE645003B3BBD /* Products */;
-					ProjectRef = 3F26A047244DE645003B3BBD /* ReactNativeNavigation.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* reactNativeNavigationExample */,
@@ -357,23 +326,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		3F26A04D244DE645003B3BBD /* libReactNativeNavigation.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libReactNativeNavigation.a;
-			remoteRef = 3F26A04C244DE645003B3BBD /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		3F26A04F244DE645003B3BBD /* ReactNativeNavigationTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = ReactNativeNavigationTests.xctest;
-			remoteRef = 3F26A04E244DE645003B3BBD /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		00E356EC1AD99517003FC87E /* Resources */ = {
@@ -716,7 +668,6 @@
 					"\"${PODS_ROOT}/Headers/Public/glog\"",
 					"\"${PODS_ROOT}/Headers/Public/react-native-webview\"",
 					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
-					"$(SRCROOT)/../node_modules/react-native-navigation/lib/ios\n$(SRCROOT)/../node_modules/react-native-navigation/lib/ios\n$(SRCROOT)/../node_modules/react-native-navigation/lib/ios\n$(SRCROOT)/../node_modules/react-native-navigation/lib/ios\n",
 				);
 				INFOPLIST_FILE = reactNativeNavigationExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -772,7 +723,6 @@
 					"\"${PODS_ROOT}/Headers/Public/glog\"",
 					"\"${PODS_ROOT}/Headers/Public/react-native-webview\"",
 					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
-					"$(SRCROOT)/../node_modules/react-native-navigation/lib/ios\n$(SRCROOT)/../node_modules/react-native-navigation/lib/ios\n$(SRCROOT)/../node_modules/react-native-navigation/lib/ios\n$(SRCROOT)/../node_modules/react-native-navigation/lib/ios\n",
 				);
 				INFOPLIST_FILE = reactNativeNavigationExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

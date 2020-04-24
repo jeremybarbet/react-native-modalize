@@ -11,6 +11,7 @@ import {
   SNAPPING_LIST,
   ANIMATED_VALUE,
   FACEBOOK_WEBVIEW,
+  SLACK_TABVIEW,
 } from '../screens';
 import { Layout } from '../components/layout/Layout';
 import { Header } from '../components/header/Header';
@@ -71,6 +72,7 @@ export const App = () => {
           { name: 'Section List', id: SECTION_LIST },
           { name: 'Animated Value', id: ANIMATED_VALUE },
           { name: 'Facebook WebView', id: FACEBOOK_WEBVIEW },
+          { name: 'Slack TabView', id: SLACK_TABVIEW },
         ])}
 
         <AlwaysOpen />

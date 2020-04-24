@@ -9,6 +9,7 @@ import { SimpleContent } from './SimpleContent';
 import { SnappingList } from './SnappingList';
 import { AnimatedValue } from './AnimatedValue';
 import { FacebookWebView } from './FacebookWebView';
+import { SlackTabView } from './SlackTabView';
 
 export const Screens = new Map();
 
@@ -21,6 +22,7 @@ export const SIMPLE_CONTENT = 'reactNativeNavigationExample.SimpleContent';
 export const SNAPPING_LIST = 'reactNativeNavigationExample.SnappingList';
 export const ANIMATED_VALUE = 'reactNativeNavigationExample.AnimatedValue';
 export const FACEBOOK_WEBVIEW = 'reactNativeNavigationExample.FacebookWebView';
+export const SLACK_TABVIEW = 'reactNativeNavigationExample.SlackTabView';
 
 Screens.set(APP, App);
 Screens.set(ABSOLUTE_HEADER, AbsoluteHeader);
@@ -31,6 +33,7 @@ Screens.set(SIMPLE_CONTENT, SimpleContent);
 Screens.set(SNAPPING_LIST, SnappingList);
 Screens.set(ANIMATED_VALUE, AnimatedValue);
 Screens.set(FACEBOOK_WEBVIEW, FacebookWebView);
+Screens.set(SLACK_TABVIEW, SlackTabView);
 
 export const defaultOptions = () =>
   Navigation.setDefaultOptions({

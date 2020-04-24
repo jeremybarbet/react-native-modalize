@@ -13,7 +13,7 @@ yarn add react-native-gesture-handler
 npx pod-install ios
 ```
 
-****
+---
 
 - Expo
 
