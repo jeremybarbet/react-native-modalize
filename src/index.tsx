@@ -25,7 +25,8 @@ import {
   Platform,
   StatusBar,
   KeyboardEvent,
-  ScrollViewProps,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
 } from 'react-native';
 import {
   PanGestureHandler,
@@ -586,30 +587,20 @@ const ModalizeBase = (
   const renderContent = (): JSX.Element => {
     const keyboardDismissMode = isIos ? 'interactive' : 'on-drag';
 
-    let passedOnScrollBeginDrag:
-      | Animated.WithAnimatedValue<ScrollViewProps['onScrollBeginDrag']>
-      | undefined = undefined;
-
-    if (flatListProps) {
-      passedOnScrollBeginDrag = flatListProps.onScrollBeginDrag;
-    } else if (sectionListProps) {
-      passedOnScrollBeginDrag = sectionListProps.onScrollBeginDrag;
-    } else if (scrollViewProps) {
-      passedOnScrollBeginDrag = scrollViewProps.onScrollBeginDrag;
-    }
+    const passedOnScrollBeginDrag = (flatListProps ?? sectionListProps ?? scrollViewProps)
+      ?.onScrollBeginDrag;
 
     const opts = {
       ref: contentView,
       bounces: enableBounces,
-      onScrollBeginDrag: Animated.event([{ nativeEvent: { contentOffset: { y: beginScrollY } } }], {
-        useNativeDriver: USE_NATIVE_DRIVER,
-        listener: passedOnScrollBeginDrag
-          ? (e): void => {
-              // @ts-ignore
-              passedOnScrollBeginDrag(e);
-            }
-          : undefined,
-      }),
+      onScrollBeginDrag: (e: NativeSyntheticEvent<NativeScrollEvent>): void => {
+        beginScrollY.setValue(e.nativeEvent.contentOffset.y);
+
+        if (passedOnScrollBeginDrag) {
+          // @ts-ignore
+          passedOnScrollBeginDrag(e);
+        }
+      },
       scrollEventThrottle: 16,
       onLayout: handleContentViewLayout,
       scrollEnabled: keyboardToggle || !disableScroll,
