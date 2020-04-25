@@ -2,11 +2,11 @@
 
 [![npm version](https://badge.fury.io/js/react-native-modalize.svg)](https://badge.fury.io/js/react-native-modalize)
 
-A modal that loves scrollable content.
+A highly customizable modal that loves scrolling content.
 
-This component has been built with `react-native-gesture-handler` to address the common issue of **scrolling**, **swipping** and handling the **keyboard** behaviors, you can face with react-native's modal.
+This component has been built with `react-native-gesture-handler` to address the common issue of **scrolling**, **swiping** and handling the **keyboard** behaviors, you can face with react-native's modal.
 
-This component comes with a ScrollView, the default renderer, a FlatList and a SectionList. They are all three built-in and make your life easier, just pass your content and Modalize will handle the rest for you.
+This component comes with a ScrollView, the default renderer, a FlatList or a SectionList. They are all three built-in and make your life easier, just pass your content and Modalize will handle the rest for you. You can also have the possibility to pass your own custom renderer.
 
 <p align="left">
   <img src="https://user-images.githubusercontent.com/937328/59955680-22f6d200-947b-11e9-8744-991a728596df.gif" height="450" />

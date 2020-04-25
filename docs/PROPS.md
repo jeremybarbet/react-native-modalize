@@ -40,7 +40,7 @@ A React node that will define the content of the modal. By passing a children pr
 
 An object to pass any of the react-native ScrollView's props.
 
-Refer to the [`react-native` ScrollView documentation](https://reactnative.dev/docs/scrollview#props) to find out all the avaibles props.
+Refer to the [`react-native` ScrollView documentation](https://reactnative.dev/docs/scrollview#props) to find out all the available props.
 
 | Type   | Required |
 | ------ | -------- |
@@ -50,7 +50,7 @@ Refer to the [`react-native` ScrollView documentation](https://reactnative.dev/d
 
 An object to pass any of the react-native FlatList's props. Using this props will replace the default `ScrollView` with the `FlatList` component.
 
-Refer to the [`react-native` FlatList documentation](https://reactnative.dev/docs/flatlist#props) to find out all the avaibles props.
+Refer to the [`react-native` FlatList documentation](https://reactnative.dev/docs/flatlist#props) to find out all the available props.
 
 | Type   | Required |
 | ------ | -------- |
@@ -60,7 +60,7 @@ Refer to the [`react-native` FlatList documentation](https://reactnative.dev/doc
 
 An object to pass any of the react-native SectionList's props. Using this props will replace the default `ScrollView` with the `SectionList` component.
 
-Refer to the [`react-native` SectionList documentation](https://reactnative.dev/docs/sectionlist#props) to find out all the avaibles props.
+Refer to the [`react-native` SectionList documentation](https://reactnative.dev/docs/sectionlist#props) to find out all the available props.
 
 | Type   | Required |
 | ------ | -------- |
@@ -307,7 +307,7 @@ Animated.Value of the modal opening position between 0 and 1.
 
 Wether or not you want to use the native driver with the `panGestureAnimatedValue`.
 
-!> It's not really recommanded to set it to `false`, but sometimes you don't have choice, so this option is here for that.
+!> It's not really recommended to set it to `false`, but sometimes you don't have choice, so this option is here for that.
 
 | Type | Required | Default |
 | ---- | -------- | ------- |

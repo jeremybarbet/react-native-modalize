@@ -29,7 +29,7 @@ Expo SDK v32 is using an old version of `react-native-gesture-handler` which has
 
 **Can I make a vertical ScrollView inside the modal?**
 
-First, this is an anti-pattern behavior. You shouldn't have two verticals scrollview wrapped together. But yes, it's possible. You will have to import the one from `react-native-gesture-handler`.
+First, this is an anti-pattern behavior. You shouldn't have two verticals ScrollView wrapped together. But yes, it's possible. You will have to import the one from `react-native-gesture-handler`.
 
 ```tsx
 import { ScrollView } from 'react-native-gesture-handler';

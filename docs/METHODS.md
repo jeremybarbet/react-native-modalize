@@ -40,7 +40,7 @@ The method to open Modalize.
 
 The method to close Modalize. You don't need to call it to dismiss the modal, since you can swipe down to dismiss.
 
-?> If you are using `alwaysOpen` prop, you can supply a `dest` argument to the `close` method to reset it to the intial position `close('alwaysOpen')`, and avoiding to close it completely.
+?> If you are using `alwaysOpen` prop, you can supply a `dest` argument to the `close` method to reset it to the initial position `close('alwaysOpen')`, and avoiding to close it completely.
 
 | Type                                         | Required |
 | -------------------------------------------- | -------- |

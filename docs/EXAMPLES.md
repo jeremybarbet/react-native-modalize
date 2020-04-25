@@ -1,6 +1,6 @@
 # Examples
 
-All the examples are running under 3 differents navigators. Check out the [development section](/DEVELOPMENT.md) to find out how to run these examples.
+All the examples are running under 3 different navigators. Check out the [development section](/DEVELOPMENT.md) to find out how to run these examples.
 
 <div style="display: flex; justify-content: space-between; flex-direction: row;">
   <div style="
@@ -39,17 +39,17 @@ All the examples are running under 3 differents navigators. Check out the [devel
     ">
     <h5 style="margin-top: -5px; margin-bottom: 10px;">Expo</h5>
     <p style="font-size: 16px">This example is running under Expo without any navigator.</p>
-    <p style="font-size: 16px; margin-bottom: 0;">An Expo app is avalaible at the <a href="https://exp.host/@jeremdsgn/react-native-modalize">following link</a>.</p>
+    <p style="font-size: 16px; margin-bottom: 0;">An Expo app is available at the <a href="https://exp.host/@jeremdsgn/react-native-modalize">following link</a>.</p>
   </div>
 </div>
 
-?> All references to each file are going to the Expo folder but it's also available in the React Native Navigation and React Navigation folders and can be slighty different for the usage of each navigators.
+?> All references to each file are going to the Expo folder but it's also available in the React Native Navigation and React Navigation folders and can be slightly different for the usage of each navigators.
 
 ---
 
 #### Example with a FlatList
 
-If you want to use anothe renderer than the default ScrollView, you can pass an object props for either the [FlatList](http://localhost:3000/#/PROPS?id=flatlistprops) or the [SectionList](http://localhost:3000/#/PROPS?id=sectionlistprops).
+If you want to use another renderer than the default ScrollView, you can pass an object props for either the [FlatList](http://localhost:3000/#/PROPS?id=flatlistprops) or the [SectionList](http://localhost:3000/#/PROPS?id=sectionlistprops).
 
 ?> There is two complete examples called [Flat List](https://github.com/jeremybarbet/react-native-modalize/blob/master/examples/expo/src/components/modals/FlatList.js) and [Section List](https://github.com/jeremybarbet/react-native-modalize/blob/master/examples/expo/src/components/modals/SectionList.js) available in the examples.
 
