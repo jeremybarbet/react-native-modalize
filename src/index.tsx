@@ -586,7 +586,6 @@ const ModalizeBase = (
 
   const renderContent = (): JSX.Element => {
     const keyboardDismissMode = isIos ? 'interactive' : 'on-drag';
-
     const passedOnScrollBeginDrag = (flatListProps ?? sectionListProps ?? scrollViewProps)
       ?.onScrollBeginDrag;
 
@@ -596,7 +595,7 @@ const ModalizeBase = (
       onScrollBeginDrag: Animated.event([{ nativeEvent: { contentOffset: { y: beginScrollY } } }], {
         useNativeDriver: USE_NATIVE_DRIVER,
         // @ts-ignore
-        listener: (e) => passedOnScrollBeginDrag?.(e),
+        listener: e => passedOnScrollBeginDrag?.(e),
       }),
       scrollEventThrottle: 16,
       onLayout: handleContentViewLayout,
