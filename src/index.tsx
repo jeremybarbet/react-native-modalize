@@ -595,12 +595,8 @@ const ModalizeBase = (
       bounces: enableBounces,
       onScrollBeginDrag: Animated.event([{ nativeEvent: { contentOffset: { y: beginScrollY } } }], {
         useNativeDriver: USE_NATIVE_DRIVER,
-        listener: passedOnScrollBeginDrag
-          ? (e): void => {
-              // @ts-ignore
-              passedOnScrollBeginDrag(e);
-            }
-          : undefined,
+        // @ts-ignore
+        listener: (e) => passedOnScrollBeginDrag?.(e),
       }),
       scrollEventThrottle: 16,
       onLayout: handleContentViewLayout,
