@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { Modalize } from 'react-native-modalize';
@@ -6,6 +6,7 @@ import faker from 'faker';
 
 export const FixedContent = ({ componentId }) => {
   const modalizeRef = useRef(null);
+  const [toggle, setToggle] = useState(true);
 
   handleClosed = () => {
     Navigation.dismissOverlay(componentId);
@@ -28,6 +29,15 @@ export const FixedContent = ({ componentId }) => {
       <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
       <Text style={s.content__heading}>Send the message?</Text>
       <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
+
+      <TouchableOpacity
+        style={s.content__description}
+        activeOpacity={0.75}
+        onPress={() => setToggle(!toggle)}
+      >
+        <Text>adjustToContentHeight {JSON.stringify(toggle)}</Text>
+      </TouchableOpacity>
+
       <TextInput
         style={s.content__input}
         placeholder="Type your username"
@@ -45,7 +55,7 @@ export const FixedContent = ({ componentId }) => {
   }, []);
 
   return (
-    <Modalize ref={modalizeRef} onClosed={handleClosed} adjustToContentHeight>
+    <Modalize ref={modalizeRef} onClosed={handleClosed} adjustToContentHeight={toggle}>
       {renderContent()}
     </Modalize>
   );

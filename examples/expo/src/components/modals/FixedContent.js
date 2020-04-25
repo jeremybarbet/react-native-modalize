@@ -1,4 +1,4 @@
-import React, { useRef, forwardRef } from 'react';
+import React, { useRef, forwardRef, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import faker from 'faker';
@@ -8,6 +8,7 @@ import { useCombinedRefs } from '../../utils/use-combined-refs';
 export const FixedContent = forwardRef((_, ref) => {
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
+  const [toggle, setToggle] = useState(true);
 
   const handleClose = () => {
     if (combinedRef.current) {
@@ -20,6 +21,15 @@ export const FixedContent = forwardRef((_, ref) => {
       <Text style={s.content__subheading}>{'Last step'.toUpperCase()}</Text>
       <Text style={s.content__heading}>Send the message?</Text>
       <Text style={s.content__description}>{faker.lorem.paragraph()}</Text>
+
+      <TouchableOpacity
+        style={s.content__description}
+        activeOpacity={0.75}
+        onPress={() => setToggle(!toggle)}
+      >
+        <Text>adjustToContentHeight {JSON.stringify(toggle)}</Text>
+      </TouchableOpacity>
+
       <TextInput
         style={s.content__input}
         placeholder="Type your username"
@@ -33,7 +43,7 @@ export const FixedContent = forwardRef((_, ref) => {
   );
 
   return (
-    <Modalize ref={combinedRef} adjustToContentHeight>
+    <Modalize ref={combinedRef} adjustToContentHeight={toggle}>
       {renderContent()}
     </Modalize>
   );

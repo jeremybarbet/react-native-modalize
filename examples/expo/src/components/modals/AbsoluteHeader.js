@@ -24,7 +24,7 @@ export const AbsoluteHeader = forwardRef((_, ref) => {
     >
       <Image
         source={require('../../../assets/cross.png')}
-        style={{ width: '40%', height: '40%' }}
+        style={{ tintColor: '#fff', width: '40%', height: '40%' }}
       />
     </TouchableOpacity>
   );

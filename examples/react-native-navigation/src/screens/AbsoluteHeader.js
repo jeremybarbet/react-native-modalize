@@ -30,7 +30,10 @@ export const AbsoluteHeader = ({ componentId }) => {
       onPress={handleClose}
       hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }}
     >
-      <Image source={require('../assets/cross.png')} style={{ width: '40%', height: '40%' }} />
+      <Image
+        source={require('../assets/cross.png')}
+        style={{ tintColor: '#fff', width: '40%', height: '40%' }}
+      />
     </TouchableOpacity>
   );
 
