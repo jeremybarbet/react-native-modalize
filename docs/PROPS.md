@@ -24,6 +24,8 @@ export const App = () => (
 );
 ```
 
+!> Modalize uses internally `onScrollBeginDrag` method to be able to handle the swipe gestures. If you decide to use `onScrollBeginDrag` on the scrollViewProps/flatListProps/sectionListProps object, you will have access to the listener of the `onScrollBeginDrag` method as you can see [here](https://github.com/jeremybarbet/react-native-modalize/blob/master/src/index.tsx#L597).
+
 ## Renderers
 
 Modalize is shipped by default with three different renderers. The default one is a ScrollView and you just have to pass your content without specifying it directly. If you want to use a FlatList or a SectionList, then you don't have to pass the `children` props, but the `data`/`renderItem` that you can normally find with both of them.
