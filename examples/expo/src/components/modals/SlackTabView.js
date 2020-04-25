@@ -109,8 +109,6 @@ const Route = ({ route }) => {
 };
 
 const Tabs = memo(({ active, onIndexChange }) => {
-  const [routes] = useState(ROUTES);
-
   const renderScene = SceneMap({
     first: Route,
     second: Route,
@@ -123,7 +121,7 @@ const Tabs = memo(({ active, onIndexChange }) => {
 
   return (
     <TabView
-      navigationState={{ index: active, routes }}
+      navigationState={{ index: active, routes: ROUTES }}
       renderTabBar={() => null}
       renderScene={renderScene}
       onIndexChange={onIndexChange}

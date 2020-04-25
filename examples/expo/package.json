@@ -16,7 +16,7 @@
     "react-native-gesture-handler": "1.6.1",
     "react-native-modalize": "file:../../src",
     "react-native-portalize": "1.0.1",
-    "react-native-reanimated": "1.8.0",
+    "react-native-reanimated": "1.7.0",
     "react-native-tab-view": "2.14.0",
     "react-native-web": "0.12.2",
     "react-native-webview": "8.1.1"

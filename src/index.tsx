@@ -162,7 +162,7 @@ const ModalizeBase = (
   // We diff and get the negative value only. It sometimes go above 0
   // (e.g. 1.5) and creates the flickering on Modalize for a ms
   const diffClamp = Animated.diffClamp(reverseBeginScrollY, -screenHeight, 0);
-  // When we have a scrolling happening in the scrollview, we don't want to translate
+  // When we have a scrolling happening in the ScrollView, we don't want to translate
   // the modal down. We either multiply by 0 to cancel the animation, or 1 to proceed.
   const dragValue = Animated.add(Animated.multiply(dragY, cancelTranslateY), diffClamp);
   const value = Animated.add(Animated.multiply(translateY, cancelTranslateY), dragValue);
@@ -391,8 +391,8 @@ const ModalizeBase = (
     setEnableBounces(enableBouncesValue);
 
     /*
-     * When the pan gesture began we check the position of the scrollview "cursor".
-     * We cancel the translation animation if the scrolview is not scrolled to the top
+     * When the pan gesture began we check the position of the ScrollView "cursor".
+     * We cancel the translation animation if the ScrollView is not scrolled to the top
      */
     if (nativeEvent.oldState === State.BEGAN) {
       if (beginScrollYValue > 0) {
@@ -587,15 +587,14 @@ const ModalizeBase = (
   const renderContent = (): JSX.Element => {
     const keyboardDismissMode = isIos ? 'interactive' : 'on-drag';
     const passedOnScrollBeginDrag = (flatListProps ?? sectionListProps ?? scrollViewProps)
-      ?.onScrollBeginDrag;
+      ?.onScrollBeginDrag as (event: NativeSyntheticEvent<NativeScrollEvent>) => void | undefined;
 
     const opts = {
       ref: contentView,
       bounces: enableBounces,
       onScrollBeginDrag: Animated.event([{ nativeEvent: { contentOffset: { y: beginScrollY } } }], {
         useNativeDriver: USE_NATIVE_DRIVER,
-        // @ts-ignore
-        listener: e => passedOnScrollBeginDrag?.(e),
+        listener: passedOnScrollBeginDrag,
       }),
       scrollEventThrottle: 16,
       onLayout: handleContentViewLayout,

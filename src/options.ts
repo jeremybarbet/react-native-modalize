@@ -144,7 +144,7 @@ export interface IProps<ListItem = any> {
   keyboardAvoidingBehavior?: 'height' | 'position' | 'padding';
 
   /**
-   * Define an offset to the KeyboardAvoidingView component wrapping the scrollview.
+   * Define an offset to the KeyboardAvoidingView component wrapping the ScrollView.
    * @default 0
    */
   keyboardAvoidingOffset?: number;
@@ -301,7 +301,7 @@ export interface IHandles {
    * The method to close Modalize. You don't need to call it to dismiss the modal, since you can swipe down to dismiss.
    *
    * If you are using `alwaysOpen` prop, you can supply a `dest` argument to the `close` method to reset it
-   * to the intial position `close('alwaysOpen')`, and avoiding to close it completely.
+   * to the initial position `close('alwaysOpen')`, and avoiding to close it completely.
    */
   close(dest?: TClose): void;
 
