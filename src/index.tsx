@@ -135,6 +135,7 @@ const ModalizeBase = (
   const adjustValue = adjustToContentHeight ? undefined : endHeight;
   const snaps = snapPoint ? [0, endHeight - snapPoint, endHeight] : [0, endHeight];
 
+  const [modalHeightValue, setModalHeightValue] = useState(adjustValue);
   const [lastSnap, setLastSnap] = useState(snapPoint ? endHeight - snapPoint : 0);
   const [isVisible, setIsVisible] = useState(false);
   const [showContent, setShowContent] = useState(true);
@@ -150,7 +151,8 @@ const ModalizeBase = (
   const beginScrollY = useRef(new Animated.Value(0)).current;
   const dragY = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(screenHeight)).current;
-  const reverseBeginScrollY = useRef(Animated.multiply(new Animated.Value(-1), beginScrollY)).current; // prettier-ignore
+  const reverseBeginScrollY = useRef(Animated.multiply(new Animated.Value(-1), beginScrollY))
+    .current;
 
   const modal = useRef<TapGestureHandler>(null);
   const modalChildren = useRef<PanGestureHandler>(null);
@@ -167,7 +169,6 @@ const ModalizeBase = (
   const dragValue = Animated.add(Animated.multiply(dragY, cancelTranslateY), diffClamp);
   const value = Animated.add(Animated.multiply(translateY, cancelTranslateY), dragValue);
 
-  let modalHeightValue: number | undefined = adjustValue;
   let willCloseModalize = false;
 
   beginScrollY.addListener(({ value }) => setBeginScrollYValue(value));
@@ -351,12 +352,18 @@ const ModalizeBase = (
         }),
     );
 
-    modalHeightValue = value;
+    setModalHeightValue(value);
   };
 
   const handleContentViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
     if (onLayout) {
       onLayout(nativeEvent);
+    }
+
+    if (alwaysOpen && adjustToContentHeight) {
+      const { height } = nativeEvent.layout;
+
+      return setModalHeightValue(height);
     }
 
     if (!adjustToContentHeight) {
@@ -747,7 +754,7 @@ const ModalizeBase = (
   }));
 
   useEffect(() => {
-    if (alwaysOpen && modalHeightValue) {
+    if (alwaysOpen && (modalHeightValue || adjustToContentHeight)) {
       handleAnimateOpen(alwaysOpen);
     }
   }, [alwaysOpen, modalHeightValue]);
@@ -779,7 +786,7 @@ const ModalizeBase = (
   useEffect(() => {
     const value = adjustToContentHeight ? undefined : endHeight;
 
-    modalHeightValue = value;
+    setModalHeightValue(value);
   }, [adjustToContentHeight]);
 
   useEffect(() => {
