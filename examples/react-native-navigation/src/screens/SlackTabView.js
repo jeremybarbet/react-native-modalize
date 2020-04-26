@@ -39,49 +39,6 @@ const Item = memo(({ active, emoji, number, onPress }) => (
   </TouchableOpacity>
 ));
 
-const TabBar = memo(({ innerRef, active, scrollY, onIndexChange }) => (
-  <View style={s.tabbar}>
-    <Animated.View
-      style={[
-        s.tabbar__wrapper,
-        {
-          transform: [
-            {
-              translateY: scrollY.interpolate({
-                inputRange: [0, 100],
-                outputRange: [0, -HEADER_COLLAPSE],
-                extrapolate: 'clamp',
-              }),
-            },
-          ],
-        },
-      ]}
-    >
-      <View style={s.tabbar__heading}>
-        <Text style={s.tabbar__headingText}>List of reactions</Text>
-      </View>
-
-      <ScrollView
-        ref={innerRef}
-        style={s.tabbar__list}
-        contentContainerStyle={s.tabbar__listContent}
-        showsHorizontalScrollIndicator={false}
-        horizontal={true}
-      >
-        {ROUTES.map(({ emoji, number }, index) => (
-          <Item
-            key={index}
-            active={active === index}
-            emoji={emoji}
-            number={number}
-            onPress={() => onIndexChange(index)}
-          />
-        ))}
-      </ScrollView>
-    </Animated.View>
-  </View>
-));
-
 const Row = memo(() => (
   <View style={s.row}>
     <Image style={s.row__avatar} source={{ uri: faker.image.avatar() }} />
@@ -162,6 +119,49 @@ export const SlackTabView = ({ componentId }) => {
     }
   };
 
+  const renderTabBar = (
+    <View style={s.tabbar}>
+      <Animated.View
+        style={[
+          s.tabbar__wrapper,
+          {
+            transform: [
+              {
+                translateY: scrollY.interpolate({
+                  inputRange: [0, 100],
+                  outputRange: [0, -HEADER_COLLAPSE],
+                  extrapolate: 'clamp',
+                }),
+              },
+            ],
+          },
+        ]}
+      >
+        <View style={s.tabbar__heading}>
+          <Text style={s.tabbar__headingText}>List of reactions</Text>
+        </View>
+
+        <ScrollView
+          ref={scrollViewRef}
+          style={s.tabbar__list}
+          contentContainerStyle={s.tabbar__listContent}
+          showsHorizontalScrollIndicator={false}
+          horizontal={true}
+        >
+          {ROUTES.map(({ emoji, number }, i) => (
+            <Item
+              key={i}
+              active={index === i}
+              emoji={emoji}
+              number={number}
+              onPress={() => handleIndexChange(i)}
+            />
+          ))}
+        </ScrollView>
+      </Animated.View>
+    </View>
+  );
+
   useEffect(() => {
     handleOpen();
   }, []);
@@ -170,14 +170,7 @@ export const SlackTabView = ({ componentId }) => {
     <Modalize
       ref={modalizeRef}
       onClosed={handleClosed}
-      HeaderComponent={
-        <TabBar
-          active={index}
-          onIndexChange={handleIndexChange}
-          scrollY={scrollY}
-          innerRef={scrollViewRef}
-        />
-      }
+      HeaderComponent={renderTabBar}
       modalStyle={{ backgroundColor: '#1a1d21' }}
       handleStyle={{ width: 35, backgroundColor: '#75777a' }}
       childrenStyle={{ borderTopLeftRadius: 12, borderTopRightRadius: 12, overflow: 'hidden' }}
@@ -199,6 +192,7 @@ const s = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
+    zIndex: 9000,
 
     height: HEADER_HEIGHT,
 
