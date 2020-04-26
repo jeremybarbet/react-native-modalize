@@ -508,7 +508,7 @@ const ModalizeBase = (
         onOverlayPress();
       }
 
-      const dest = !alwaysOpen ? 'alwaysOpen' : 'default';
+      const dest = !!alwaysOpen ? 'alwaysOpen' : 'default';
 
       handleClose(dest);
     }
