@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/react-native-modalize.svg)](https://badge.fury.io/js/react-native-modalize)
 
-A highly customizable modal that loves scrolling content.
+A highly customizable modal/bottom sheet that loves scrolling content.
 
 This component has been built with `react-native-gesture-handler` to address the common issue of **scrolling**, **swiping** and handling the **keyboard** behaviors, you can face with react-native's modal.
 
