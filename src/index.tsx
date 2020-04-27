@@ -83,6 +83,7 @@ const ModalizeBase = (
     keyboardAvoidingBehavior,
     keyboardAvoidingOffset,
     panGestureEnabled = true,
+    tapGestureEnabled = true,
     closeOnOverlayTap = true,
 
     // Animations
@@ -136,7 +137,9 @@ const ModalizeBase = (
   const [enableBounces, setEnableBounces] = React.useState(true);
   const [keyboardToggle, setKeyboardToggle] = React.useState(false);
   const [keyboardHeight, setKeyboardHeight] = React.useState(0);
-  const [disableScroll, setDisableScroll] = React.useState(alwaysOpen ? true : undefined);
+  const [disableScroll, setDisableScroll] = React.useState(
+    alwaysOpen || snapPoint ? true : undefined,
+  );
   const [beginScrollYValue, setBeginScrollYValue] = React.useState(0);
   const [modalPosition, setModalPosition] = React.useState<'top' | 'initial'>('initial');
 
@@ -148,12 +151,11 @@ const ModalizeBase = (
   const reverseBeginScrollY = React.useRef(Animated.multiply(new Animated.Value(-1), beginScrollY))
     .current;
 
-  const modal = React.useRef<TapGestureHandler>(null);
-  const modalChildren = React.useRef<PanGestureHandler>(null);
-  const modalContentView = React.useRef<NativeViewGestureHandler>(null);
-  const contentView = React.useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
-  const modalOverlay = React.useRef<PanGestureHandler>(null);
-  const modalOverlayTap = React.useRef<TapGestureHandler>(null);
+  const tapGestureModalizeRef = React.useRef<TapGestureHandler>(null);
+  const panGestureChildrenRef = React.useRef<PanGestureHandler>(null);
+  const nativeViewChildrenRef = React.useRef<NativeViewGestureHandler>(null);
+  const contentRef = React.useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
+  const tapGestureOverlayRef = React.useRef<TapGestureHandler>(null);
 
   // We diff and get the negative value only. It sometimes go above 0
   // (e.g. 1.5) and creates the flickering on Modalize for a ms
@@ -349,7 +351,7 @@ const ModalizeBase = (
     setModalHeightValue(value);
   };
 
-  const handleContentViewLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
+  const handleContentLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
     if (onLayout) {
       onLayout(nativeEvent);
     }
@@ -402,6 +404,12 @@ const ModalizeBase = (
         cancelTranslateY.setValue(0);
       } else {
         cancelTranslateY.setValue(1);
+
+        if (!tapGestureEnabled) {
+          setDisableScroll(
+            (Boolean(snapPoint) || Boolean(alwaysOpen)) && modalPosition === 'initial',
+          );
+        }
       }
     }
 
@@ -461,7 +469,7 @@ const ModalizeBase = (
         useNativeDriver: USE_NATIVE_DRIVER,
       }).start();
 
-      if (beginScrollYValue === 0) {
+      if (beginScrollYValue <= 0) {
         const modalPositionValue = destSnapPoint <= 0 ? 'top' : 'initial';
 
         if (panGestureAnimatedValue) {
@@ -546,7 +554,7 @@ const ModalizeBase = (
     return (
       <PanGestureHandler
         enabled={panGestureEnabled}
-        simultaneousHandlers={modal}
+        simultaneousHandlers={tapGestureModalizeRef}
         shouldCancelWhenOutside={false}
         onGestureEvent={handleGestureEvent}
         onHandlerStateChange={handleComponent}
@@ -596,14 +604,14 @@ const ModalizeBase = (
       ?.onScrollBeginDrag as (event: NativeSyntheticEvent<NativeScrollEvent>) => void | undefined;
 
     const opts = {
-      ref: contentView,
+      ref: contentRef,
       bounces: enableBounces,
       onScrollBeginDrag: Animated.event([{ nativeEvent: { contentOffset: { y: beginScrollY } } }], {
         useNativeDriver: USE_NATIVE_DRIVER,
         listener: passedOnScrollBeginDrag,
       }),
       scrollEventThrottle: 16,
-      onLayout: handleContentViewLayout,
+      onLayout: handleContentLayout,
       scrollEnabled: keyboardToggle || !disableScroll,
       keyboardDismissMode,
     };
@@ -632,9 +640,9 @@ const ModalizeBase = (
 
     return (
       <PanGestureHandler
-        ref={modalChildren}
+        ref={panGestureChildrenRef}
         enabled={panGestureEnabled}
-        simultaneousHandlers={[modalContentView, modal]}
+        simultaneousHandlers={[nativeViewChildrenRef, tapGestureModalizeRef]}
         shouldCancelWhenOutside={false}
         onGestureEvent={handleGestureEvent}
         minDist={ACTIVATED}
@@ -644,9 +652,9 @@ const ModalizeBase = (
       >
         <Animated.View style={[style, childrenStyle]}>
           <NativeViewGestureHandler
-            ref={modalContentView}
-            waitFor={modal}
-            simultaneousHandlers={modalChildren}
+            ref={nativeViewChildrenRef}
+            waitFor={tapGestureModalizeRef}
+            simultaneousHandlers={panGestureChildrenRef}
           >
             {renderContent()}
           </NativeViewGestureHandler>
@@ -661,9 +669,8 @@ const ModalizeBase = (
 
     return (
       <PanGestureHandler
-        ref={modalOverlay}
         enabled={panGestureEnabled}
-        simultaneousHandlers={[modal]}
+        simultaneousHandlers={tapGestureModalizeRef}
         shouldCancelWhenOutside={false}
         onGestureEvent={handleGestureEvent}
         onHandlerStateChange={handleChildren}
@@ -671,7 +678,7 @@ const ModalizeBase = (
         <Animated.View style={s.overlay} pointerEvents={pointerEvents}>
           {showContent && (
             <TapGestureHandler
-              ref={modalOverlayTap}
+              ref={tapGestureOverlayRef}
               enabled={panGestureEnabled || closeOnOverlayTap}
               onHandlerStateChange={handleOverlay}
             >
@@ -709,13 +716,13 @@ const ModalizeBase = (
     },
 
     scrollTo(...args: Parameters<ScrollView['scrollTo']>): void {
-      if (contentView.current) {
-        const contentRef = contentView.current as any;
+      if (contentRef.current) {
+        const ref = contentRef.current as any;
 
         // since RN 0.62 the getNode call has been deprecated
-        const scrollResponder = contentRef.getScrollResponder
-          ? contentRef.getScrollResponder()
-          : contentRef.getNode().getScrollResponder();
+        const scrollResponder = ref.getScrollResponder
+          ? ref.getScrollResponder()
+          : ref.getNode().getScrollResponder();
 
         scrollResponder.scrollTo(...args);
       }
@@ -728,10 +735,10 @@ const ModalizeBase = (
         );
       }
 
-      if (contentView.current) {
-        const contentRef = contentView.current as any;
+      if (contentRef.current) {
+        const ref = contentRef.current as any;
 
-        contentRef.getNode().scrollToIndex(...args);
+        ref.getNode().scrollToIndex(...args);
       }
     },
   }));
@@ -789,8 +796,8 @@ const ModalizeBase = (
       pointerEvents={alwaysOpen || !withOverlay ? 'box-none' : 'auto'}
     >
       <TapGestureHandler
-        ref={modal}
-        maxDurationMs={100000}
+        ref={tapGestureModalizeRef}
+        maxDurationMs={tapGestureEnabled ? 100000 : 50}
         maxDeltaY={lastSnap}
         enabled={panGestureEnabled}
       >

@@ -156,6 +156,12 @@ export interface IProps<ListItem = any> {
   panGestureEnabled?: boolean;
 
   /**
+   * Define if the `TapGestureHandler` wrapping Modalize's core should be enable or not.
+   * @default true
+   */
+  tapGestureEnabled?: boolean;
+
+  /**
    * Using this prop will enable/disable overlay tap gesture.
    * @default true
    */
