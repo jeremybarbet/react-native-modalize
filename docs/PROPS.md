@@ -24,7 +24,9 @@ export const App = () => (
 );
 ```
 
-!> Modalize uses internally `onScrollBeginDrag` method to be able to handle the swipe gestures. If you decide to use `onScrollBeginDrag` on the scrollViewProps/flatListProps/sectionListProps object, you will have access to the listener of the `onScrollBeginDrag` method as you can see [here](https://github.com/jeremybarbet/react-native-modalize/blob/master/src/index.tsx#L597).
+!> Modalize uses internally `onScrollBeginDrag` method to be able to handle the swipe gestures. If you decide to use `onScrollBeginDrag` on the scrollViewProps/flatListProps/sectionListProps object, you will only have access to the listener of the `onScrollBeginDrag` method as you can see [here](https://github.com/jeremybarbet/react-native-modalize/blob/master/src/index.tsx#L597) and not the whole event like default.
+
+!> Because of a limitation/issue of `react-native-gesture-handler`, HeaderComponent/FooterComponent/FloatingComponent are not wrapped with a `PanGestureHandler` on Android only, which mean the swipe gestures are not working on these three components. If enabled, the inner events you can have (TouchableOpacity/ScrollView) are cancels and don't work. Opposed to iOS that works just fine. Will revisit this when update has been made on RNGH side.
 
 ## Renderers
 

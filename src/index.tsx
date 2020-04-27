@@ -21,6 +21,7 @@ import {
   KeyboardEvent,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  StyleSheet,
 } from 'react-native';
 import {
   PanGestureHandler,
@@ -34,7 +35,6 @@ import {
 import { IProps, TOpen, TClose, TStyle, IHandles } from './options';
 import { getSpringConfig } from './utils/get-spring-config';
 import { isIphoneX, isIos, isAndroid } from './utils/devices';
-import { hasAbsoluteStyle } from './utils/has-absolute-style';
 import s from './styles';
 
 const { height: screenHeight } = Dimensions.get('window');
@@ -530,11 +530,6 @@ const ModalizeBase = (
     },
   });
 
-  const renderComponent = (Tag: React.ReactNode): JSX.Element => {
-    // @ts-ignore
-    return React.isValidElement(Tag) ? Tag : <Tag />;
-  };
-
   const renderHandle = (): JSX.Element | null => {
     const handleStyles: (TStyle | undefined)[] = [s.handle];
     const shapeStyles: (TStyle | undefined)[] = [s.handle__shape, handleStyle];
@@ -563,24 +558,34 @@ const ModalizeBase = (
     );
   };
 
-  const renderHeader = (): JSX.Element | null => {
-    if (!HeaderComponent) {
+  const renderComponent = (component: React.ReactNode): JSX.Element | null => {
+    if (!component) {
       return null;
     }
 
-    if (hasAbsoluteStyle(HeaderComponent)) {
-      return renderComponent(HeaderComponent);
+    const renderElement = (Element: React.ReactNode): JSX.Element =>
+      typeof Element === 'function' ? Element() : Element;
+    const tag = renderElement(component);
+
+    /**
+     * Nesting Touchable/ScrollView components with RNGH PanGestureHandler cancels the inner events.
+     * Until a better solution lands in RNGH, I will disable the PanGestureHandler for Android only,
+     * so inner touchable/gestures are working from the custom components you can pass in.
+     */
+    if (isAndroid) {
+      return tag;
     }
+
+    const zIndex: number | undefined = StyleSheet.flatten(tag?.props?.style)?.zIndex;
 
     return (
       <PanGestureHandler
         enabled={panGestureEnabled}
-        simultaneousHandlers={modal}
         shouldCancelWhenOutside={false}
         onGestureEvent={handleGestureEvent}
         onHandlerStateChange={handleComponent}
       >
-        <Animated.View style={s.component}>{renderComponent(HeaderComponent)}</Animated.View>
+        <Animated.View style={{ zIndex }}>{tag}</Animated.View>
       </PanGestureHandler>
     );
   };
@@ -648,22 +653,6 @@ const ModalizeBase = (
         </Animated.View>
       </PanGestureHandler>
     );
-  };
-
-  const renderFooter = (): JSX.Element | null => {
-    if (!FooterComponent) {
-      return null;
-    }
-
-    return renderComponent(FooterComponent);
-  };
-
-  const renderFloatingComponent = (): JSX.Element | null => {
-    if (!FloatingComponent) {
-      return null;
-    }
-
-    return renderComponent(FloatingComponent);
   };
 
   const renderOverlay = (): JSX.Element => {
@@ -835,9 +824,9 @@ const ModalizeBase = (
               }
             >
               {renderHandle()}
-              {renderHeader()}
+              {renderComponent(HeaderComponent)}
               {renderChildren()}
-              {renderFooter()}
+              {renderComponent(FooterComponent)}
             </AnimatedKeyboardAvoidingView>
           )}
 
@@ -845,7 +834,7 @@ const ModalizeBase = (
         </View>
       </TapGestureHandler>
 
-      {renderFloatingComponent()}
+      {renderComponent(FloatingComponent)}
     </View>
   );
 
