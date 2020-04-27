@@ -1,8 +1,7 @@
-import React from 'react';
-import { ReactNode } from 'react';
+import * as React from 'react';
 import { StyleSheet, ViewStyle } from 'react-native';
 
-export const hasAbsoluteStyle = (Component: ReactNode): boolean => {
+export const hasAbsoluteStyle = (Component: React.ReactNode): boolean => {
   if (!React.isValidElement(Component)) {
     return false;
   }

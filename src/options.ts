@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import * as React from 'react';
 import {
   Animated,
   ViewStyle,
@@ -46,7 +46,7 @@ export interface IProps<ListItem = any> {
   /**
    * A React node that will define the content of the modal.
    */
-  children?: ReactNode;
+  children?: React.ReactNode;
 
   /**
    * An object to pass any of the react-native ScrollView's props.
@@ -231,17 +231,17 @@ export interface IProps<ListItem = any> {
   /**
    * A header component outside of the ScrollView, on top of the modal.
    */
-  HeaderComponent?: ReactNode;
+  HeaderComponent?: React.ReactNode;
 
   /**
    * A footer component outside of the ScrollView, on top of the modal.
    */
-  FooterComponent?: ReactNode;
+  FooterComponent?: React.ReactNode;
 
   /**
    * A floating component inside the modal wrapper that will be independent of scrolling. It requires `zIndex` child with absolute positioning.
    */
-  FloatingComponent?: ReactNode;
+  FloatingComponent?: React.ReactNode;
 
   /**
    * Callback function when the `open` method is triggered.

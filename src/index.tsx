@@ -1,15 +1,8 @@
-import React from 'react';
-import {
-  forwardRef,
-  useState,
-  useRef,
-  useImperativeHandle,
-  useEffect,
-  ReactNode,
-  isValidElement,
-  Ref,
-  cloneElement,
-} from 'react';
+/**
+ * esModuleInterop: true looks to work everywhere except
+ * on snack.expo for some reason. Will revisit this later.
+ */
+import * as React from 'react';
 import {
   Animated,
   View,
@@ -126,7 +119,7 @@ const ModalizeBase = (
     onOverlayPress,
     onLayout,
   }: IProps,
-  ref: Ref<ReactNode>,
+  ref: React.Ref<React.ReactNode>,
 ): JSX.Element | null => {
   const isHandleOutside = handlePosition === 'outside';
   const handleHeight = withHandle ? 20 : isHandleOutside ? 35 : 20;
@@ -136,31 +129,31 @@ const ModalizeBase = (
   const adjustValue = adjustToContentHeight ? undefined : endHeight;
   const snaps = snapPoint ? [0, endHeight - snapPoint, endHeight] : [0, endHeight];
 
-  const [modalHeightValue, setModalHeightValue] = useState(adjustValue);
-  const [lastSnap, setLastSnap] = useState(snapPoint ? endHeight - snapPoint : 0);
-  const [isVisible, setIsVisible] = useState(false);
-  const [showContent, setShowContent] = useState(true);
-  const [enableBounces, setEnableBounces] = useState(true);
-  const [keyboardToggle, setKeyboardToggle] = useState(false);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const [disableScroll, setDisableScroll] = useState(alwaysOpen ? true : undefined);
-  const [beginScrollYValue, setBeginScrollYValue] = useState(0);
-  const [modalPosition, setModalPosition] = useState<'top' | 'initial'>('initial');
+  const [modalHeightValue, setModalHeightValue] = React.useState(adjustValue);
+  const [lastSnap, setLastSnap] = React.useState(snapPoint ? endHeight - snapPoint : 0);
+  const [isVisible, setIsVisible] = React.useState(false);
+  const [showContent, setShowContent] = React.useState(true);
+  const [enableBounces, setEnableBounces] = React.useState(true);
+  const [keyboardToggle, setKeyboardToggle] = React.useState(false);
+  const [keyboardHeight, setKeyboardHeight] = React.useState(0);
+  const [disableScroll, setDisableScroll] = React.useState(alwaysOpen ? true : undefined);
+  const [beginScrollYValue, setBeginScrollYValue] = React.useState(0);
+  const [modalPosition, setModalPosition] = React.useState<'top' | 'initial'>('initial');
 
-  const cancelTranslateY = useRef(new Animated.Value(1)).current; // 1 by default to have the translateY animation running
-  const overlay = useRef(new Animated.Value(0)).current;
-  const beginScrollY = useRef(new Animated.Value(0)).current;
-  const dragY = useRef(new Animated.Value(0)).current;
-  const translateY = useRef(new Animated.Value(screenHeight)).current;
-  const reverseBeginScrollY = useRef(Animated.multiply(new Animated.Value(-1), beginScrollY))
+  const cancelTranslateY = React.useRef(new Animated.Value(1)).current; // 1 by default to have the translateY animation running
+  const overlay = React.useRef(new Animated.Value(0)).current;
+  const beginScrollY = React.useRef(new Animated.Value(0)).current;
+  const dragY = React.useRef(new Animated.Value(0)).current;
+  const translateY = React.useRef(new Animated.Value(screenHeight)).current;
+  const reverseBeginScrollY = React.useRef(Animated.multiply(new Animated.Value(-1), beginScrollY))
     .current;
 
-  const modal = useRef<TapGestureHandler>(null);
-  const modalChildren = useRef<PanGestureHandler>(null);
-  const modalContentView = useRef<NativeViewGestureHandler>(null);
-  const contentView = useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
-  const modalOverlay = useRef<PanGestureHandler>(null);
-  const modalOverlayTap = useRef<TapGestureHandler>(null);
+  const modal = React.useRef<TapGestureHandler>(null);
+  const modalChildren = React.useRef<PanGestureHandler>(null);
+  const modalContentView = React.useRef<NativeViewGestureHandler>(null);
+  const contentView = React.useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
+  const modalOverlay = React.useRef<PanGestureHandler>(null);
+  const modalOverlayTap = React.useRef<TapGestureHandler>(null);
 
   // We diff and get the negative value only. It sometimes go above 0
   // (e.g. 1.5) and creates the flickering on Modalize for a ms
@@ -537,9 +530,9 @@ const ModalizeBase = (
     },
   });
 
-  const renderComponent = (Tag: ReactNode): JSX.Element => {
+  const renderComponent = (Tag: React.ReactNode): JSX.Element => {
     // @ts-ignore
-    return isValidElement(Tag) ? Tag : <Tag />;
+    return React.isValidElement(Tag) ? Tag : <Tag />;
   };
 
   const renderHandle = (): JSX.Element | null => {
@@ -619,7 +612,7 @@ const ModalizeBase = (
     }
 
     if (customRenderer) {
-      return cloneElement(customRenderer, { ...opts });
+      return React.cloneElement(customRenderer, { ...opts });
     }
 
     return (
@@ -713,7 +706,7 @@ const ModalizeBase = (
     );
   };
 
-  useImperativeHandle(ref, () => ({
+  React.useImperativeHandle(ref, () => ({
     open(dest?: TOpen): void {
       if (onOpen) {
         onOpen();
@@ -754,13 +747,13 @@ const ModalizeBase = (
     },
   }));
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (alwaysOpen && (modalHeightValue || adjustToContentHeight)) {
       handleAnimateOpen(alwaysOpen);
     }
   }, [alwaysOpen, modalHeightValue]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (modalHeight && adjustToContentHeight) {
       console.error(
         `[react-native-modalize] You can't use both 'modalHeight' and 'adjustToContentHeight' props at the same time. Only choose one of the two.`,
@@ -768,7 +761,7 @@ const ModalizeBase = (
     }
   }, [modalHeight, adjustToContentHeight]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if ((scrollViewProps || children) && flatListProps) {
       console.error(
         `[react-native-modalize] You have defined 'flatListProps' along with 'scrollViewProps' or 'children' props. Remove 'scrollViewProps' or 'children' or 'flatListProps' to fix the error.`,
@@ -776,7 +769,7 @@ const ModalizeBase = (
     }
   }, [scrollViewProps, children, flatListProps]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if ((scrollViewProps || children) && sectionListProps) {
       console.error(
         `[react-native-modalize] You have defined 'sectionListProps'  along with 'scrollViewProps' or 'children' props. Remove 'scrollViewProps' or 'children' or 'sectionListProps' to fix the error.`,
@@ -784,13 +777,13 @@ const ModalizeBase = (
     }
   }, [scrollViewProps, children, sectionListProps]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const value = adjustToContentHeight ? undefined : endHeight;
 
     setModalHeightValue(value);
   }, [adjustToContentHeight]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
     Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
 
@@ -880,4 +873,4 @@ const ModalizeBase = (
 };
 
 export type Modalize = IHandles;
-export const Modalize = forwardRef(ModalizeBase);
+export const Modalize = React.forwardRef(ModalizeBase);
