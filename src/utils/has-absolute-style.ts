@@ -1,4 +1,5 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
+import { ReactNode } from 'react';
 import { StyleSheet, ViewStyle } from 'react-native';
 
 export const hasAbsoluteStyle = (Component: ReactNode): boolean => {
