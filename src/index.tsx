@@ -124,6 +124,9 @@ const ModalizeBase = (
     onPositionChange,
     onOverlayPress,
     onLayout,
+
+    // Refs
+    scrollViewRef,
   }: IProps,
   ref: Ref<ReactNode>,
 ): JSX.Element | null => {
@@ -160,6 +163,11 @@ const ModalizeBase = (
   const contentView = useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
   const modalOverlay = useRef<PanGestureHandler>(null);
   const modalOverlayTap = useRef<TapGestureHandler>(null);
+
+  if (scrollViewRef) {
+    // @ts-ignore
+    scrollViewRef.current = contentView.current;
+  }
 
   // We diff and get the negative value only. It sometimes go above 0
   // (e.g. 1.5) and creates the flickering on Modalize for a ms

@@ -10,6 +10,7 @@ import {
   LayoutRectangle,
   ScrollView,
   FlatList,
+  SectionList,
 } from 'react-native';
 
 export type TOpen = 'default' | 'top';
@@ -62,6 +63,11 @@ export interface IProps<ListItem = any> {
    * An object to pass any of the react-native SectionList's props.
    */
   sectionListProps?: Animated.AnimatedProps<SectionListProps<ListItem>>;
+
+  /**
+   * A reference to a view which provides scroll behaviour
+   */
+  scrollViewRef?: React.RefObject<ScrollView | FlatList | SectionList>
 
   /**
    * An animated custom JSX Element that will inherits of the onScroll/gesture events
