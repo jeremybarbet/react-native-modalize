@@ -35,6 +35,7 @@ import {
 import { IProps, TOpen, TClose, TStyle, IHandles } from './options';
 import { getSpringConfig } from './utils/get-spring-config';
 import { isIphoneX, isIos, isAndroid } from './utils/devices';
+import { invariant } from './utils/invariant';
 import s from './styles';
 
 const { height: screenHeight } = Dimensions.get('window');
@@ -729,11 +730,10 @@ const ModalizeBase = (
     },
 
     scrollToIndex(...args: Parameters<FlatList['scrollToIndex']>): void {
-      if (!flatListProps) {
-        return console.error(
-          `[react-native-modalize] You can't use the 'scrollToIndex' method with something else than the FlatList component.`,
-        );
-      }
+      invariant(
+        !flatListProps,
+        `You can't use the 'scrollToIndex' method with something else than the FlatList component.`,
+      );
 
       if (contentRef.current) {
         const ref = contentRef.current as any;
@@ -750,28 +750,26 @@ const ModalizeBase = (
   }, [alwaysOpen, modalHeightValue]);
 
   React.useEffect(() => {
-    if (modalHeight && adjustToContentHeight) {
-      console.error(
-        `[react-native-modalize] You can't use both 'modalHeight' and 'adjustToContentHeight' props at the same time. Only choose one of the two.`,
-      );
-    }
-  }, [modalHeight, adjustToContentHeight]);
-
-  React.useEffect(() => {
-    if ((scrollViewProps || children) && flatListProps) {
-      console.error(
-        `[react-native-modalize] You have defined 'flatListProps' along with 'scrollViewProps' or 'children' props. Remove 'scrollViewProps' or 'children' or 'flatListProps' to fix the error.`,
-      );
-    }
-  }, [scrollViewProps, children, flatListProps]);
-
-  React.useEffect(() => {
-    if ((scrollViewProps || children) && sectionListProps) {
-      console.error(
-        `[react-native-modalize] You have defined 'sectionListProps'  along with 'scrollViewProps' or 'children' props. Remove 'scrollViewProps' or 'children' or 'sectionListProps' to fix the error.`,
-      );
-    }
-  }, [scrollViewProps, children, sectionListProps]);
+    invariant(
+      modalHeight && adjustToContentHeight,
+      `You can't use both 'modalHeight' and 'adjustToContentHeight' props at the same time. Only choose one of the two.`,
+    );
+    invariant(
+      (scrollViewProps || children) && flatListProps,
+      `You have defined 'flatListProps' along with 'scrollViewProps' or 'children' props. Remove 'scrollViewProps' or 'children' or 'flatListProps' to fix the error.`,
+    );
+    invariant(
+      (scrollViewProps || children) && sectionListProps,
+      `You have defined 'sectionListProps'  along with 'scrollViewProps' or 'children' props. Remove 'scrollViewProps' or 'children' or 'sectionListProps' to fix the error.`,
+    );
+  }, [
+    modalHeight,
+    adjustToContentHeight,
+    scrollViewProps,
+    children,
+    flatListProps,
+    sectionListProps,
+  ]);
 
   React.useEffect(() => {
     const value = adjustToContentHeight ? undefined : endHeight;
