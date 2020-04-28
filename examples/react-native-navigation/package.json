@@ -14,7 +14,6 @@
     "react-native": "0.62.2",
     "react-native-gesture-handler": "1.6.1",
     "react-native-modalize": "file:../../src",
-    "react-native-modalize-webview": "1.0.0",
     "react-native-navigation": "6.4.0",
     "react-native-reanimated": "1.8.0",
     "react-native-tab-view": "2.14.0",

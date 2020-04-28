@@ -67,10 +67,6 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
   },
 
-  component: {
-    zIndex: 9999,
-  },
-
   overlay: {
     position: 'absolute',
     top: 0,

@@ -9,7 +9,6 @@ import { Modalize } from 'react-native-modalize';
 
 export const App = () => (
   <Modalize
-    ref={modalizeRef}
     scrollViewProps={{ showsVerticalScrollIndicator: false }}
     snapPoint={300}
     HeaderComponent={
@@ -24,11 +23,21 @@ export const App = () => (
 );
 ```
 
-!> Modalize uses internally `onScrollBeginDrag` method to be able to handle the swipe gestures. If you decide to use `onScrollBeginDrag` on the scrollViewProps/flatListProps/sectionListProps object, you will have access to the listener of the `onScrollBeginDrag` method as you can see [here](https://github.com/jeremybarbet/react-native-modalize/blob/master/src/index.tsx#L597).
+---
+
+#### Known limitations:
+
+- Modalize uses internally `onScrollBeginDrag` method to be able to handle the swipe gestures. If you decide to use it on your side with `scrollViewProps`, `flatListProps` or `sectionListProps` object, you will only have access to the listener of the `onScrollBeginDrag` method as you can see [here](https://github.com/jeremybarbet/react-native-modalize/blob/master/src/index.tsx#L611) and not the whole event like default.
+
+- Because of a limitation with react-native-gesture-handler, `HeaderComponent`, `FooterComponent` and `FloatingComponent` are not wrapped with a PanGestureHandler on Android, which mean you cannot dismiss Modalize by swiping down on these three components. If enabled, the inner events you could have in your components (e.g. TouchableOpacity, ScrollView) are cancels and don't work. Opposed to iOS that works just fine.
+
+- When using some third-party library (e.g. expo-av/react-native-video), it's impossible to press any of the native controls. This is a limitation created by the `TapGestureHandler` wrapping the whole Modalize's core component. In short, we need it to make sure we don't scroll and swipe at the same time. As a workaround, we now have a props `tapGestureEnabled` to be able to disable it and press in your third-party library. The only downside that can appear when using `tapGestureEnabled: false` is when you use it along with `snapPoint` props. The ScrollView could be triggered, for a few pixels, at the same time as the swipe gesture.
+
+- If you are using a `TextInput` component inside your Modalize, it seems to be intercepting all touch events. You can follow this issue on both [#123](https://github.com/jeremybarbet/react-native-modalize/issues/123) and [#668](https://github.com/software-mansion/react-native-gesture-handler/issues/668).
 
 ## Renderers
 
-Modalize is shipped by default with three different renderers. The default one is a ScrollView and you just have to pass your content without specifying it directly. If you want to use a FlatList or a SectionList, then you don't have to pass the `children` props, but the `data`/`renderItem` that you can normally find with both of them.
+Modalize is shipped by default with four different renderers. The default one is a ScrollView and you just have to pass your content without specifying it directly. If you want to use a FlatList or a SectionList, then you don't have to pass the `children` props, but the `data`/`renderItem` that you can normally find with both of them. You also have the possibility to pass your `customRenderer` with this props.
 
 ### `children`
 
@@ -219,6 +228,20 @@ See [`react-native` documentation](https://reactnative.dev/docs/keyboardavoiding
 ### `panGestureEnabled`
 
 Using this prop will enable/disable pan gesture.
+
+| Type | Required | Default |
+| ---- | -------- | ------- |
+| bool | No       | `true`  |
+
+### `tapGestureEnabled`
+
+Define if the `TapGestureHandler` wrapping Modalize's core should be enable or not.
+
+This wrapper is used to disable/enable the ScrollView when swiping and scrolling to not trigger both at the same time.
+
+?> If you are using a third-library and the touch events are not working, you will most likely want to pass this props to `false` to able to propagate the events down.
+
+!> If you are using `snapPoint` props and have to use to pass this props to `false`, it may, when in initial position, swipe and scroll both Modalize and the ScrollView inside at the same time.
 
 | Type | Required | Default |
 | ---- | -------- | ------- |
