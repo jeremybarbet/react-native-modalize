@@ -1,5 +1,4 @@
 import { ISpringProps } from '../options';
-
 import { invariant } from './invariant';
 
 export const getSpringConfig = (config: ISpringProps): { [key: string]: number | undefined } => {

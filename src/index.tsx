@@ -37,7 +37,7 @@ import { IProps, TOpen, TClose, TStyle, IHandles } from './options';
 import { getSpringConfig } from './utils/get-spring-config';
 import { isIphoneX, isIos, isAndroid } from './utils/devices';
 import { invariant } from './utils/invariant';
-import composeRefs from './utils/compose-refs';
+import { composeRefs } from './utils/compose-refs';
 import s from './styles';
 
 const { height: screenHeight } = Dimensions.get('window');

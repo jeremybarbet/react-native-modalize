@@ -1,12 +1,14 @@
-// https://github.com/seznam/compose-react-refs
+/**
+ * Extracted from https://github.com/seznam/compose-react-refs
+ * and moved here to avoid to install an extra-dependency
+ */
+import * as React from 'react';
 
-import { MutableRefObject, Ref } from 'react';
+type OptionalRef<T> = React.Ref<T> | undefined;
 
-type OptionalRef<T> = Ref<T> | undefined;
-
-export default function composeRefs<T>(
+export const composeRefs = <T>(
   ...refs: [OptionalRef<T>, OptionalRef<T>, ...Array<OptionalRef<T>>]
-): Ref<T> {
+): React.Ref<T> => {
   if (refs.length === 2) {
     // micro-optimize the hot path
     return composeTwoRefs(refs[0], refs[1]) || null;
@@ -20,15 +22,15 @@ export default function composeRefs<T>(
       refs[0],
     );
   return composedRef || null;
-}
+};
 
-type NonNullRef<T> = NonNullable<Ref<T>>;
+type NonNullRef<T> = NonNullable<React.Ref<T>>;
 const composedRefCache = new WeakMap<
   NonNullRef<unknown>,
   WeakMap<NonNullRef<unknown>, NonNullRef<unknown>>
 >();
 
-function composeTwoRefs<T>(ref1: OptionalRef<T>, ref2: OptionalRef<T>): OptionalRef<T> {
+const composeTwoRefs = <T>(ref1: OptionalRef<T>, ref2: OptionalRef<T>): OptionalRef<T> => {
   if (ref1 && ref2) {
     const ref1Cache =
       composedRefCache.get(ref1) || new WeakMap<NonNullRef<unknown>, NonNullRef<unknown>>();
@@ -50,12 +52,12 @@ function composeTwoRefs<T>(ref1: OptionalRef<T>, ref2: OptionalRef<T>): Optional
   } else {
     return ref1;
   }
-}
+};
 
-function updateRef<T>(ref: NonNullRef<T>, instance: null | T): void {
+const updateRef = <T>(ref: NonNullRef<T>, instance: null | T): void => {
   if (typeof ref === 'function') {
     ref(instance);
   } else {
-    (ref as MutableRefObject<T | null>).current = instance;
+    (ref as React.MutableRefObject<T | null>).current = instance;
   }
-}
+};
