@@ -245,7 +245,7 @@ export interface IProps<ListItem = any> {
   FloatingComponent?: ReactNode;
 
   /**
-   * A reference to a view which provides scroll behaviour
+   * A reference to the view that provides the scroll behavior.
    */
   contentRef?: React.RefObject<ScrollView | FlatList | SectionList>
 

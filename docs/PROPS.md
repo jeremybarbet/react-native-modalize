@@ -373,7 +373,7 @@ A floating component inside the modal wrapper that will be independent of scroll
 
 ### `contentRef`
 
-A reference to a view which provides scroll behaviour
+A reference to the view that provides the scroll behavior.
 
 | Type            | Required |
 | --------------- | -------- |
