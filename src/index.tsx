@@ -41,6 +41,7 @@ import { IProps, TOpen, TClose, TStyle, IHandles } from './options';
 import { getSpringConfig } from './utils/get-spring-config';
 import { isIphoneX, isIos, isAndroid } from './utils/devices';
 import { hasAbsoluteStyle } from './utils/has-absolute-style';
+import composeRefs from './utils/compose-refs';
 import s from './styles';
 
 const { height: screenHeight } = Dimensions.get('window');
@@ -115,6 +116,9 @@ const ModalizeBase = (
     FooterComponent,
     FloatingComponent,
 
+    // Refs
+    contentRef,
+
     // Callbacks
     onOpen,
     onOpened,
@@ -124,9 +128,6 @@ const ModalizeBase = (
     onPositionChange,
     onOverlayPress,
     onLayout,
-
-    // Refs
-    scrollViewRef,
   }: IProps,
   ref: Ref<ReactNode>,
 ): JSX.Element | null => {
@@ -163,11 +164,6 @@ const ModalizeBase = (
   const contentView = useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
   const modalOverlay = useRef<PanGestureHandler>(null);
   const modalOverlayTap = useRef<TapGestureHandler>(null);
-
-  if (scrollViewRef) {
-    // @ts-ignore
-    scrollViewRef.current = contentView.current;
-  }
 
   // We diff and get the negative value only. It sometimes go above 0
   // (e.g. 1.5) and creates the flickering on Modalize for a ms
@@ -605,7 +601,7 @@ const ModalizeBase = (
       ?.onScrollBeginDrag as (event: NativeSyntheticEvent<NativeScrollEvent>) => void | undefined;
 
     const opts = {
-      ref: contentView,
+      ref: composeRefs(contentRef, contentView),
       bounces: enableBounces,
       onScrollBeginDrag: Animated.event([{ nativeEvent: { contentOffset: { y: beginScrollY } } }], {
         useNativeDriver: USE_NATIVE_DRIVER,
