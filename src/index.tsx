@@ -37,6 +37,7 @@ import { IProps, TOpen, TClose, TStyle, IHandles } from './options';
 import { getSpringConfig } from './utils/get-spring-config';
 import { isIphoneX, isIos, isAndroid } from './utils/devices';
 import { invariant } from './utils/invariant';
+import composeRefs from './utils/compose-refs';
 import s from './styles';
 
 const { height: screenHeight } = Dimensions.get('window');
@@ -112,6 +113,9 @@ const ModalizeBase = (
     FooterComponent,
     FloatingComponent,
 
+    // Refs
+    contentRef,
+
     // Callbacks
     onOpen,
     onOpened,
@@ -156,7 +160,7 @@ const ModalizeBase = (
   const tapGestureModalizeRef = React.useRef<TapGestureHandler>(null);
   const panGestureChildrenRef = React.useRef<PanGestureHandler>(null);
   const nativeViewChildrenRef = React.useRef<NativeViewGestureHandler>(null);
-  const contentRef = React.useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
+  const contentViewRef = React.useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
   const tapGestureOverlayRef = React.useRef<TapGestureHandler>(null);
 
   // We diff and get the negative value only. It sometimes go above 0
@@ -606,7 +610,7 @@ const ModalizeBase = (
       ?.onScrollBeginDrag as (event: NativeSyntheticEvent<NativeScrollEvent>) => void | undefined;
 
     const opts = {
-      ref: contentRef,
+      ref: composeRefs(contentRef, contentViewRef),
       bounces: enableBounces,
       onScrollBeginDrag: Animated.event([{ nativeEvent: { contentOffset: { y: beginScrollY } } }], {
         useNativeDriver: USE_NATIVE_DRIVER,
@@ -718,8 +722,8 @@ const ModalizeBase = (
     },
 
     scrollTo(...args: Parameters<ScrollView['scrollTo']>): void {
-      if (contentRef.current) {
-        const ref = contentRef.current as any;
+      if (contentViewRef.current) {
+        const ref = contentViewRef.current as any;
 
         // since RN 0.62 the getNode call has been deprecated
         const scrollResponder = ref.getScrollResponder
@@ -736,8 +740,8 @@ const ModalizeBase = (
         `You can't use the 'scrollToIndex' method with something else than the FlatList component.`,
       );
 
-      if (contentRef.current) {
-        const ref = contentRef.current as any;
+      if (contentViewRef.current) {
+        const ref = contentViewRef.current as any;
 
         ref.getNode().scrollToIndex(...args);
       }

@@ -392,6 +392,16 @@ A floating component inside the modal wrapper that will be independent of scroll
 | ---- | -------- |
 | node | No       |
 
+## Refs
+
+### `contentRef`
+
+A reference to the view that provides the scroll behavior.
+
+| Type            | Required |
+| --------------- | -------- |
+| React.RefObject | No       |
+
 ## Callbacks
 
 Pass any callbacks to them and you will be able to get changes they are taking care of.

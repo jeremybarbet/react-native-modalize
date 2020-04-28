@@ -10,6 +10,7 @@ import {
   LayoutRectangle,
   ScrollView,
   FlatList,
+  SectionList,
 } from 'react-native';
 
 export type TOpen = 'default' | 'top';
@@ -248,6 +249,11 @@ export interface IProps<ListItem = any> {
    * A floating component inside the modal wrapper that will be independent of scrolling. It requires `zIndex` child with absolute positioning.
    */
   FloatingComponent?: React.ReactNode;
+
+  /**
+   * A reference to the view that provides the scroll behavior.
+   */
+  contentRef?: React.RefObject<ScrollView | FlatList | SectionList>;
 
   /**
    * Callback function when the `open` method is triggered.
