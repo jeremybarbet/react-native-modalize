@@ -65,11 +65,6 @@ export interface IProps<ListItem = any> {
   sectionListProps?: Animated.AnimatedProps<SectionListProps<ListItem>>;
 
   /**
-   * A reference to a view which provides scroll behaviour
-   */
-  scrollViewRef?: React.RefObject<ScrollView | FlatList | SectionList>
-
-  /**
    * An animated custom JSX Element that will inherits of the onScroll/gesture events
    */
   customRenderer?: JSX.Element;
@@ -248,6 +243,11 @@ export interface IProps<ListItem = any> {
    * A floating component inside the modal wrapper that will be independent of scrolling. It requires `zIndex` child with absolute positioning.
    */
   FloatingComponent?: ReactNode;
+
+  /**
+   * A reference to a view which provides scroll behaviour
+   */
+  contentRef?: React.RefObject<ScrollView | FlatList | SectionList>
 
   /**
    * Callback function when the `open` method is triggered.
