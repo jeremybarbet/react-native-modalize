@@ -22,6 +22,7 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
   StyleSheet,
+  KeyboardAvoidingViewProps,
 } from 'react-native';
 import {
   PanGestureHandler,
@@ -81,7 +82,7 @@ const ModalizeBase = (
       android: false,
       default: true,
     }),
-    keyboardAvoidingBehavior,
+    keyboardAvoidingBehavior = 'padding',
     keyboardAvoidingOffset,
     panGestureEnabled = true,
     tapGestureEnabled = true,
@@ -788,6 +789,33 @@ const ModalizeBase = (
     };
   }, []);
 
+  const keyboardAvoidingViewProps: Animated.AnimatedProps<KeyboardAvoidingViewProps> = {
+    keyboardVerticalOffset: keyboardAvoidingOffset,
+    behavior: keyboardAvoidingBehavior,
+    enabled: avoidKeyboardLikeIOS,
+    style: [
+      s.modalize__content,
+      modalStyle,
+      {
+        height: modalHeightValue,
+        maxHeight: endHeight,
+        transform: [
+          {
+            translateY: value.interpolate({
+              inputRange: [-40, 0, endHeight],
+              outputRange: [0, 0, endHeight],
+              extrapolate: 'clamp',
+            }),
+          },
+        ],
+      },
+    ],
+  };
+
+  if (!avoidKeyboardLikeIOS && !adjustToContentHeight) {
+    keyboardAvoidingViewProps.onLayout = handleModalizeContentLayout;
+  }
+
   const renderModalize = (
     <View
       style={[s.modalize, { elevation: modalElevation }]}
@@ -801,33 +829,7 @@ const ModalizeBase = (
       >
         <View style={s.modalize__wrapper} pointerEvents="box-none">
           {showContent && (
-            <AnimatedKeyboardAvoidingView
-              keyboardVerticalOffset={keyboardAvoidingOffset}
-              behavior={keyboardAvoidingBehavior || 'padding'}
-              enabled={avoidKeyboardLikeIOS}
-              style={[
-                s.modalize__content,
-                modalStyle,
-                {
-                  height: modalHeightValue,
-                  maxHeight: endHeight,
-                  transform: [
-                    {
-                      translateY: value.interpolate({
-                        inputRange: [-40, 0, endHeight],
-                        outputRange: [0, 0, endHeight],
-                        extrapolate: 'clamp',
-                      }),
-                    },
-                  ],
-                },
-              ]}
-              onLayout={
-                !avoidKeyboardLikeIOS && !adjustToContentHeight
-                  ? handleModalizeContentLayout
-                  : undefined
-              }
-            >
+            <AnimatedKeyboardAvoidingView {...keyboardAvoidingViewProps}>
               {renderHandle()}
               {renderComponent(HeaderComponent)}
               {renderChildren()}
