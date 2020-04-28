@@ -32,6 +32,10 @@ pre > code,
   font-size: 0.9rem;
 }
 
+.markdown-section p {
+  margin: 0.4em 0;
+}
+
 .sidebar-nav li img {
   margin-right: 5px;
 
@@ -95,4 +99,15 @@ pre > code,
 .markdown-section table th,
 .markdown-section table td {
   padding: 15px;
+}
+
+@media (min-width: 860px) {
+  .grid {
+    flex-direction: row !important;
+  }
+
+  .item {
+    width: 32% !important;
+    margin-bottom: 0 !important;
+  }
 }

@@ -2,9 +2,10 @@
 
 All the examples are running under 3 different navigators. Check out the [development section](/DEVELOPMENT.md) to find out how to run these examples.
 
-<div style="display: flex; justify-content: space-between; flex-direction: row;">
-  <div style="
-    width: 32%;
+<div class="grid" style="display: flex; justify-content: space-between; flex-direction: column; margin: 20px 0 30px;">
+  <div class="item" style="
+    width: 100%;
+    margin-bottom: 20px;
     background-color: rgb(246, 251, 254);
     border-radius: 6px;
     border: 1px solid rgb(80, 188, 239);
@@ -16,8 +17,9 @@ All the examples are running under 3 different navigators. Check out the [develo
     <p style="font-size: 16px; margin-bottom: 0;">The function is called <a href="https://github.com/jeremybarbet/react-native-modalize/blob/master/examples/react-native-navigation/src/screens/App.js#L22-L27">here</a>.</p>
   </div>
 
-  <div style="
-    width: 32%;
+  <div class="item" style="
+    width: 100%;
+    margin-bottom: 20px;
     background-color: rgb(246, 251, 254);
     border-radius: 6px;
     border: 1px solid rgb(80, 188, 239);
@@ -29,8 +31,8 @@ All the examples are running under 3 different navigators. Check out the [develo
     <p style="font-size: 16px; margin-bottom: 0;">Used in <a href="https://github.com/jeremybarbet/react-native-modalize/blob/master/examples/react-navigation/src/index.js#L8-L12">index.js</a> and <a href="https://github.com/jeremybarbet/react-native-modalize/blob/master/examples/react-navigation/src/screens/Examples.js#L39-L49">Examples.js</a>.</p>
   </div>
 
-  <div style="
-    width: 32%;
+  <div class="item" style="
+    width: 100%;
     background-color: rgb(246, 251, 254);
     border-radius: 6px;
     border: 1px solid rgb(80, 188, 239);
