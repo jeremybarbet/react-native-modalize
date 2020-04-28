@@ -247,7 +247,7 @@ export interface IProps<ListItem = any> {
   /**
    * A reference to the view that provides the scroll behavior.
    */
-  contentRef?: React.RefObject<ScrollView | FlatList | SectionList>
+  contentRef?: React.RefObject<ScrollView | FlatList | SectionList>;
 
   /**
    * Callback function when the `open` method is triggered.
