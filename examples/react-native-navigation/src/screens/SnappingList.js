@@ -8,6 +8,7 @@ import { Button } from '../components/button/Button';
 
 export const SnappingList = ({ componentId }) => {
   const modalizeRef = useRef(null);
+  const contentRef = useRef(null);
 
   const handleClosed = () => {
     Navigation.dismissOverlay(componentId);
@@ -49,8 +50,8 @@ export const SnappingList = ({ componentId }) => {
   );
 
   const handleScrollToTop = () => {
-    if (modalizeRef.current) {
-      modalizeRef.current.scrollTo({
+    if (contentRef.current) {
+      contentRef.current.getScrollResponder().scrollTo({
         y: 0,
         animated: true,
       });
@@ -64,6 +65,7 @@ export const SnappingList = ({ componentId }) => {
   return (
     <Modalize
       ref={modalizeRef}
+      contentRef={contentRef}
       HeaderComponent={renderHeader}
       snapPoint={350}
       onClosed={handleClosed}

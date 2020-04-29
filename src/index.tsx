@@ -50,6 +50,9 @@ const PAN_DURATION = 150;
 
 const ModalizeBase = (
   {
+    // Refs
+    contentRef,
+
     // Renderers
     children,
     scrollViewProps,
@@ -113,9 +116,6 @@ const ModalizeBase = (
     FooterComponent,
     FloatingComponent,
 
-    // Refs
-    contentRef,
-
     // Callbacks
     onOpen,
     onOpened,
@@ -160,7 +160,9 @@ const ModalizeBase = (
   const tapGestureModalizeRef = React.useRef<TapGestureHandler>(null);
   const panGestureChildrenRef = React.useRef<PanGestureHandler>(null);
   const nativeViewChildrenRef = React.useRef<NativeViewGestureHandler>(null);
-  const contentViewRef = React.useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
+  const contentViewRef = React.useRef<
+    Animated.AnimatedComponent<ScrollView | FlatList<any> | SectionList<any>>
+  >(null);
   const tapGestureOverlayRef = React.useRef<TapGestureHandler>(null);
 
   // We diff and get the negative value only. It sometimes go above 0
@@ -719,32 +721,6 @@ const ModalizeBase = (
 
     close(dest?: TClose): void {
       handleClose(dest);
-    },
-
-    scrollTo(...args: Parameters<ScrollView['scrollTo']>): void {
-      if (contentViewRef.current) {
-        const ref = contentViewRef.current as any;
-
-        // since RN 0.62 the getNode call has been deprecated
-        const scrollResponder = ref.getScrollResponder
-          ? ref.getScrollResponder()
-          : ref.getNode().getScrollResponder();
-
-        scrollResponder.scrollTo(...args);
-      }
-    },
-
-    scrollToIndex(...args: Parameters<FlatList['scrollToIndex']>): void {
-      invariant(
-        !flatListProps,
-        `You can't use the 'scrollToIndex' method with something else than the FlatList component.`,
-      );
-
-      if (contentViewRef.current) {
-        const ref = contentViewRef.current as any;
-
-        ref.getNode().scrollToIndex(...args);
-      }
     },
   }));
 

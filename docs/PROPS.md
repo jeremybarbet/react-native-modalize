@@ -35,6 +35,59 @@ export const App = () => (
 
 - If you are using a `TextInput` component inside your Modalize, it seems to be intercepting all touch events. You can follow this issue on both [#123](https://github.com/jeremybarbet/react-native-modalize/issues/123) and [#668](https://github.com/software-mansion/react-native-gesture-handler/issues/668).
 
+## Refs
+
+### `ref`
+
+A ref on Modalize component to be able to use the internal methods [`open()`](/METHODS.md?id=open) and [`close()`](/METHODS.md?id=close).
+
+```tsx
+import { Modalize } from 'react-native-modalize';
+
+const App = () => {
+  const modalizeRef = useRef<Modalize>(null);
+
+  // e.g. modalizeRef.current?.open() or modalizeRef.current?.close()
+
+  return <Modalize ref={modalizeRef} />;
+};
+```
+
+| Type            | Required |
+| --------------- | -------- |
+| React.RefObject | Yes      |
+
+### `contentRef`
+
+A reference to the view (ScrollView, FlatList, SectionList) that provides the scroll behavior, where you will be able to access their owns methods.
+
+The reference will change depending of the props you are using:
+
+- `children`/`scrollViewProps` -> ScrollView [methods](https://reactnative.dev/docs/scrollview#methods), [types](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react-native/index.d.ts#L6520-L6560)
+- `flatListProps` -> FlatList [methods](https://reactnative.dev/docs/flatlist#methods), [types](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react-native/index.d.ts#L4084-L4139)
+- `sectionListProps` -> SectionList [methods](https://reactnative.dev/docs/sectionlist#methods), [types](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react-native/index.d.ts#L4322-L4353)
+
+```tsx
+import { Modalize } from 'react-native-modalize';
+import { ScrollView, Animated } from 'react-native';
+
+const App = () => {
+  const contentRef = useRef<Animated.AnimatedComponent<ScrollView>>(null);
+
+  // e.g. contentRef.current?.getScrollResponder().scrollTo(...);
+
+  return <Modalize contentRef={contentRef} />;
+};
+```
+
+To get the types from TypeScript, you will need to do like below. Since the content renderer is wrapped with an Animated component you need to extends it with the AnimatedComponent type.
+
+To find the path to each of the function it will depend what content renderer you are using and which version of `react-native` you are running. On latest `react-native`, it should be like in the example above: `contentRef.getScrollResponder().scrollTo(...)` or `contentRef.getScrollResponder().scrollToIndex(...)`, etc.. On older version, most likely something like `contentRef.getNode().getScrollResponder().scrollTo(...)`.
+
+| Type            | Required |
+| --------------- | -------- |
+| React.RefObject | No       |
+
 ## Renderers
 
 Modalize is shipped by default with four different renderers. The default one is a ScrollView and you just have to pass your content without specifying it directly. If you want to use a FlatList or a SectionList, then you don't have to pass the `children` props, but the `data`/`renderItem` that you can normally find with both of them. You also have the possibility to pass your `customRenderer` with this props.
@@ -163,7 +216,7 @@ A number to define the modal's top offset.
 
 ### `alwaysOpen`
 
-A number that will make the modal visible all the time. You can still [open](/METHODS.md?id=open) and [close](/METHODS.md?id=close) it, using the build-in methods.
+A number that will make the modal visible all the time. You can still [`open()`](/METHODS.md?id=open) and [`close()`](/METHODS.md?id=close) it, using the build-in methods.
 
 The value you pass is the height of the visible part of the modal on top of the screen.
 
@@ -391,16 +444,6 @@ A floating component inside the modal wrapper that will be independent of scroll
 | Type | Required |
 | ---- | -------- |
 | node | No       |
-
-## Refs
-
-### `contentRef`
-
-A reference to the view that provides the scroll behavior.
-
-| Type            | Required |
-| --------------- | -------- |
-| React.RefObject | No       |
 
 ## Callbacks
 

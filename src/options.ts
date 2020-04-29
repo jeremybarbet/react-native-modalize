@@ -45,6 +45,11 @@ export interface IConfigProps {
 
 export interface IProps<ListItem = any> {
   /**
+   * A reference to the view (ScrollView, FlatList, SectionList) that provides the scroll behavior, where you will be able to access their owns methods.
+   */
+  contentRef?: React.RefObject<Animated.AnimatedComponent<ScrollView | FlatList | SectionList>>;
+
+  /**
    * A React node that will define the content of the modal.
    */
   children?: React.ReactNode;
@@ -251,11 +256,6 @@ export interface IProps<ListItem = any> {
   FloatingComponent?: React.ReactNode;
 
   /**
-   * A reference to the view that provides the scroll behavior.
-   */
-  contentRef?: React.RefObject<ScrollView | FlatList | SectionList>;
-
-  /**
    * Callback function when the `open` method is triggered.
    */
   onOpen?(): void;
@@ -316,18 +316,4 @@ export interface IHandles {
    * to the initial position `close('alwaysOpen')`, and avoiding to close it completely.
    */
   close(dest?: TClose): void;
-
-  /**
-   * Scrolls to a given y offset, either immediately or with a smooth animation.
-   *
-   * scrollTo(options: { x: number = 0; y: number = 0; animated: boolean = true })
-   */
-  scrollTo(...args: Parameters<ScrollView['scrollTo']>): void;
-
-  /**
-   * Scrolls to the item at the specified index.
-   *
-   * scrollToIndex(options: { index: number = 0; viewOffset: number = 0; viewPosition: number = 0; animated: boolean = true })
-   */
-  scrollToIndex(...args: Parameters<FlatList['scrollToIndex']>): void;
 }

@@ -8,6 +8,7 @@ const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpaci
 
 export const FlatList = ({ componentId }) => {
   const modalizeRef = useRef(null);
+  const contentRef = useRef(null);
   const scrollY = useRef(new Animated.Value(0)).current;
 
   const getData = () =>
@@ -29,8 +30,8 @@ export const FlatList = ({ componentId }) => {
   };
 
   const handleScrollToTop = () => {
-    if (modalizeRef.current) {
-      modalizeRef.current.scrollTo({
+    if (contentRef.current) {
+      contentRef.current.getScrollResponder().scrollTo({
         y: 0,
         animated: true,
       });
@@ -79,6 +80,7 @@ export const FlatList = ({ componentId }) => {
   return (
     <Modalize
       ref={modalizeRef}
+      contentRef={contentRef}
       onClosed={handleClosed}
       FloatingComponent={renderFloatingComponent}
       flatListProps={{

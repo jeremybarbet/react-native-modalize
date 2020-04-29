@@ -9,6 +9,7 @@ const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpaci
 
 export const FlatList = forwardRef((_, ref) => {
   const modalizeRef = useRef(null);
+  const contentRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
   const scrollY = useRef(new Animated.Value(0)).current;
 
@@ -21,8 +22,9 @@ export const FlatList = forwardRef((_, ref) => {
       }));
 
   const handleScrollToTop = () => {
-    if (combinedRef.current) {
-      combinedRef.current.scrollTo({
+    if (contentRef.current) {
+      // Old version of react-native, we need to use getNode()
+      contentRef.current.getNode().scrollTo({
         y: 0,
         animated: true,
       });
@@ -67,6 +69,7 @@ export const FlatList = forwardRef((_, ref) => {
   return (
     <Modalize
       ref={combinedRef}
+      contentRef={contentRef}
       FloatingComponent={renderFloatingComponent}
       flatListProps={{
         data: getData(),

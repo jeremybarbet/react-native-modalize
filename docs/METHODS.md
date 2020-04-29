@@ -1,6 +1,6 @@
 # Available methods
 
-All these methods are accessible after adding a reference to Modalize.
+These two methods are accessible after adding a reference to Modalize and are used to control its visibility.
 
 ```tsx
 import React, { useRef } from 'react';
@@ -17,7 +17,7 @@ export const App = () => {
 
 ---
 
-## Global
+## Core
 
 ### `open()`
 
@@ -39,20 +39,8 @@ The method to close Modalize. You don't need to call it to dismiss the modal, si
 | -------------------------------------------- | -------- |
 | function: (dest?: 'default' \| 'alwaysOpen') | No       |
 
-### `scrollTo()`
+## Externals
 
-The method is used to programmatically scroll the modal content.
+If you want to use `scrollTo()` from the ScrollView, or `scrollToIndex()` from the FlatList (when using `flatListProps`), you will need to add a `contentRef`.
 
-| Type                                                  | Required |
-| ----------------------------------------------------- | -------- |
-| function: (options: { y: number, animated: boolean }) | No       |
-
-### `scrollToIndex()`
-
-The method is used to programmatically scroll to the index of the FlatList.
-
-!> This method only works along with `flatListProps`.
-
-| Type                                                                                                | Required |
-| --------------------------------------------------------------------------------------------------- | -------- |
-| function: (options: { index: number, viewOffset: number, viewPosition: number, animated: boolean }) | No       |
+Visit this [section](/PROPS.md?id=contentRef) to find more information about this usage.

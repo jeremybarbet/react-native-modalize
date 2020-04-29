@@ -89,6 +89,7 @@ const Tabs = memo(({ active, onIndexChange }) => {
 
 export const SlackTabView = ({ componentId }) => {
   const modalizeRef = useRef(null);
+  const contentRef = useRef(null);
   const scrollViewRef = useRef(null);
   const [index, setIndex] = useState(0);
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -110,8 +111,8 @@ export const SlackTabView = ({ componentId }) => {
 
     setIndex(i);
 
-    if (modalizeRef.current) {
-      modalizeRef.current.scrollTo({ y: 0, animated: true });
+    if (contentRef.current) {
+      contentRef.current.getScrollResponder().scrollTo({ y: 0, animated: true });
     }
 
     if (scrollViewRef.current) {
@@ -169,6 +170,7 @@ export const SlackTabView = ({ componentId }) => {
   return (
     <Modalize
       ref={modalizeRef}
+      contentRef={contentRef}
       onClosed={handleClosed}
       HeaderComponent={renderTabBar}
       modalStyle={{ backgroundColor: '#1a1d21' }}
