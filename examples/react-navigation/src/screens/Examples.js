@@ -12,7 +12,7 @@ import { SnappingList } from '../components/modals/SnappingList';
 import { FlatList } from '../components/modals/FlatList';
 import { SectionList } from '../components/modals/SectionList';
 import { AlwaysOpen } from '../components/modals/AlwaysOpen';
-import { AnimatedValue } from '../components/modals/AnimatedValue';
+import { AppleMusicPlayer } from '../components/modals/AppleMusicPlayer';
 import { FacebookWebView } from '../components/modals/FacebookWebView';
 import { SlackTabView } from '../components/modals/SlackTabView';
 
@@ -27,6 +27,7 @@ export const ExamplesScreen = () => {
   return (
     <View style={{ flex: 1, backgroundColor: '#000' }}>
       <Layout
+        // Style here is used to create the iOS 13 modal presentation style for the AppleMusicPlayer example
         style={{
           borderRadius: animated.interpolate({ inputRange: [0, 1], outputRange: [0, 12] }),
           transform: [
@@ -46,7 +47,7 @@ export const ExamplesScreen = () => {
           'Absolute header',
           'Flat List',
           'Section List',
-          'Animated Value',
+          'Apple Music Player',
           'Facebook WebView',
           'Slack TabView',
         ])}
@@ -58,7 +59,7 @@ export const ExamplesScreen = () => {
           <AbsoluteHeader ref={el => (modals[3] = el)} />
           <FlatList ref={el => (modals[4] = el)} />
           <SectionList ref={el => (modals[5] = el)} />
-          <AnimatedValue ref={el => (modals[6] = el)} animated={animated} />
+          <AppleMusicPlayer ref={el => (modals[6] = el)} animated={animated} />
           <FacebookWebView ref={el => (modals[7] = el)} />
           <SlackTabView ref={el => (modals[8] = el)} />
           <AlwaysOpen />

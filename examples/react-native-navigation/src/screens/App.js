@@ -9,7 +9,7 @@ import {
   SECTION_LIST,
   SIMPLE_CONTENT,
   SNAPPING_LIST,
-  ANIMATED_VALUE,
+  APPLE_MUSIC_PLAYER,
   FACEBOOK_WEBVIEW,
   SLACK_TABVIEW,
 } from '../screens';
@@ -51,6 +51,7 @@ export const App = () => {
   return (
     <View style={{ flex: 1, backgroundColor: '#000' }}>
       <Layout
+        // Style here is used to create the iOS 13 modal presentation style for the AppleMusicPlayer example
         style={{
           borderRadius: animated.interpolate({ inputRange: [0, 1], outputRange: [0, 12] }),
           transform: [
@@ -70,7 +71,7 @@ export const App = () => {
           { name: 'Absolute header', id: ABSOLUTE_HEADER },
           { name: 'Flat List', id: FLAT_LIST },
           { name: 'Section List', id: SECTION_LIST },
-          { name: 'Animated Value', id: ANIMATED_VALUE },
+          { name: 'Apple Music Player', id: APPLE_MUSIC_PLAYER },
           { name: 'Facebook WebView', id: FACEBOOK_WEBVIEW },
           { name: 'Slack TabView', id: SLACK_TABVIEW },
         ])}

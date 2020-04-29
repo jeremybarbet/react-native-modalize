@@ -14,8 +14,8 @@ This component comes with a ScrollView, the default renderer, a FlatList or a Se
   <img src="https://user-images.githubusercontent.com/937328/80501699-432ad380-895f-11ea-9dad-22505038234e.gif" height="582" alt="Snapping" />
   <img src="https://user-images.githubusercontent.com/937328/80501647-35754e00-895f-11ea-8ce0-cb53d2985787.gif" height="582" alt="Absolute" />
   <img src="https://user-images.githubusercontent.com/937328/80501682-3efeb600-895f-11ea-9c04-64154cf77012.gif" height="582" alt="FlatList" />
-  <img src="https://user-images.githubusercontent.com/937328/80501685-3efeb600-895f-11ea-836f-8b4cc56ccfb7.gif" height="582" alt="Animated" />
+  <img src="https://user-images.githubusercontent.com/937328/80501668-3a3a0200-895f-11ea-92b6-a7bc9b301a1a.gif" height="582" alt="Open" />
+  <img src="https://user-images.githubusercontent.com/937328/80615701-881e3b00-8a2f-11ea-94f5-a4cbf6d13d97.gif" height="582" alt="Apple" />
   <img src="https://user-images.githubusercontent.com/937328/80501688-40c87980-895f-11ea-97db-63b9b029eab4.gif" height="582" alt="Facebook" />
   <img src="https://user-images.githubusercontent.com/937328/80501707-4625c400-895f-11ea-8436-8e89de3b437e.gif" height="582" alt="Slack" />
-  <img src="https://user-images.githubusercontent.com/937328/80501668-3a3a0200-895f-11ea-92b6-a7bc9b301a1a.gif" height="582" alt="Open" />
 </p>
