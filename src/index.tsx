@@ -403,9 +403,7 @@ const ModalizeBase = (
     const { timing } = closeAnimationConfig;
     const { velocityY, translationY } = nativeEvent;
     const enableBouncesValue = isAndroid ? false : beginScrollYValue > 0 || translationY < 0;
-    const thresholdProps =
-      translationY > (adjustToContentHeight ? (modalHeightValue || 0) / 3 : threshold) &&
-      beginScrollYValue === 0;
+    const thresholdProps = translationY > threshold && beginScrollYValue === 0;
     const closeThreshold = velocity
       ? (beginScrollYValue <= 20 && velocityY >= velocity) || thresholdProps
       : thresholdProps;
