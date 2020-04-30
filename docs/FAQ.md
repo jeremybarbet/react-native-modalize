@@ -17,7 +17,7 @@ For a long time, using Modalize along with `react-native`'s `Modal` component wa
 
 **Swipe gestures are not working on Android, what did I miss?**
 
-If you are running an old version of Modalize `< 1.3.7-rc.18`, you might need to follow [`react-native-gesture-handler's guide`](https://software-mansion.github.io/react-native-gesture-handler/docs/getting-started.html) to complete the native setup on Android. In the latest versions of Modalize, the library is wrapped with `GestureHandlerRootView`, so you don't have to do it manually on your own.
+You might have forgot to complete [`react-native-gesture-handler`](https://software-mansion.github.io/react-native-gesture-handler/docs/getting-started.html)'s setup steps for Android.
 
 ---
 
