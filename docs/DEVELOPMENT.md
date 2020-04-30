@@ -51,3 +51,5 @@ yarn start
 ```bash
 yarn watch:expo
 ```
+
+?> This example is also running in the browser thanks to `react-native-web` and you can try it by doing `yarn web` instead of `yarn start`.

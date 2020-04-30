@@ -45,13 +45,15 @@ All the examples are running under 3 different navigators. Check out the [develo
   </div>
 </div>
 
+?> Thanks to `react-native-web`, Expo's example in also available in the browser. Visit the [development section](DEVELOPMENT) to see how to run it.
+
 ?> All references to each file are going to the Expo folder but it's also available in the React Native Navigation and React Navigation folders and can be slightly different for the usage of each navigators.
 
 ---
 
 #### Example with a FlatList
 
-If you want to use another renderer than the default ScrollView, you can pass an object props for either the [FlatList](http://localhost:3000/#/PROPS?id=flatlistprops) or the [SectionList](http://localhost:3000/#/PROPS?id=sectionlistprops).
+If you want to use another renderer than the default ScrollView, you can pass an object props for either the [FlatList](PROPS?id=flatlistprops) or the [SectionList](PROPS?id=sectionlistprops).
 
 ?> There is two complete examples called [Flat List](https://github.com/jeremybarbet/react-native-modalize/blob/master/examples/expo/src/components/modals/FlatList.js) and [Section List](https://github.com/jeremybarbet/react-native-modalize/blob/master/examples/expo/src/components/modals/SectionList.js) available in the examples.
 

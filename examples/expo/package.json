@@ -19,10 +19,12 @@
     "react-native-reanimated": "1.7.0",
     "react-native-tab-view": "2.14.0",
     "react-native-web": "0.12.2",
+    "react-native-web-webview": "1.0.1",
     "react-native-webview": "8.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
+    "@expo/webpack-config": "^0.12.3",
     "babel-preset-expo": "~8.1.0"
   },
   "private": true

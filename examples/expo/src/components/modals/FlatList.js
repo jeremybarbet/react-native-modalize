@@ -24,7 +24,7 @@ export const FlatList = forwardRef((_, ref) => {
   const handleScrollToTop = () => {
     if (contentRef.current) {
       // Old version of react-native, we need to use getNode()
-      contentRef.current.getNode().scrollTo({
+      contentRef.current.getNode().getScrollResponder().scrollTo({
         y: 0,
         animated: true,
       });

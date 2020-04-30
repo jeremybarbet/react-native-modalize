@@ -95,8 +95,8 @@ export default StyleSheet.create({
   },
 
   content__adjustHeight: {
-    flex: 0,
-    flexGrow: 0,
-    flexShrink: 1,
+    flex: isWeb ? 1 : 0,
+    flexGrow: isWeb ? undefined : 0,
+    flexShrink: isWeb ? undefined : 1,
   },
 });
