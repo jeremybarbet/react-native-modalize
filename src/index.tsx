@@ -94,13 +94,13 @@ const ModalizeBase = (
 
     // Animations
     openAnimationConfig = {
-      timing: { duration: 280, easing: Easing.ease },
+      timing: { duration: 240, easing: Easing.ease },
       spring: { speed: 14, bounciness: 4 },
     },
     closeAnimationConfig = {
-      timing: { duration: 280, easing: Easing.ease },
+      timing: { duration: 240, easing: Easing.ease },
     },
-    dragToss = 0.05,
+    dragToss = 0.15,
     threshold = 120,
     velocity = 2800,
     panGestureAnimatedValue,
@@ -150,6 +150,7 @@ const ModalizeBase = (
   const [modalPosition, setModalPosition] = React.useState<'top' | 'initial'>('initial');
 
   const cancelTranslateY = React.useRef(new Animated.Value(1)).current; // 1 by default to have the translateY animation running
+  const componentTranslateY = React.useRef(new Animated.Value(0)).current;
   const overlay = React.useRef(new Animated.Value(0)).current;
   const beginScrollY = React.useRef(new Animated.Value(0)).current;
   const dragY = React.useRef(new Animated.Value(0)).current;
@@ -168,10 +169,17 @@ const ModalizeBase = (
   // We diff and get the negative value only. It sometimes go above 0
   // (e.g. 1.5) and creates the flickering on Modalize for a ms
   const diffClamp = Animated.diffClamp(reverseBeginScrollY, -screenHeight, 0);
+  const componentDragEnabled = (componentTranslateY as any)._value === 1;
   // When we have a scrolling happening in the ScrollView, we don't want to translate
   // the modal down. We either multiply by 0 to cancel the animation, or 1 to proceed.
-  const dragValue = Animated.add(Animated.multiply(dragY, cancelTranslateY), diffClamp);
-  const value = Animated.add(Animated.multiply(translateY, cancelTranslateY), dragValue);
+  const dragValue = Animated.add(
+    Animated.multiply(dragY, componentDragEnabled ? 1 : cancelTranslateY),
+    diffClamp,
+  );
+  const value = Animated.add(
+    Animated.multiply(translateY, componentDragEnabled ? 1 : cancelTranslateY),
+    dragValue,
+  );
 
   let willCloseModalize = false;
 
@@ -388,7 +396,10 @@ const ModalizeBase = (
     handleAnimateClose(dest);
   };
 
-  const handleChildren = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
+  const handleChildren = (
+    { nativeEvent }: PanGestureHandlerStateChangeEvent,
+    type?: 'component' | 'children',
+  ): void => {
     const { timing } = closeAnimationConfig;
     const { velocityY, translationY } = nativeEvent;
     const enableBouncesValue = isAndroid ? false : beginScrollYValue > 0 || translationY < 0;
@@ -400,6 +411,11 @@ const ModalizeBase = (
       : thresholdProps;
 
     setEnableBounces(enableBouncesValue);
+
+    // We make sure to reset the value if we are dragging from the children
+    if (type !== 'component' && (cancelTranslateY as any)._value === 0) {
+      componentTranslateY.setValue(0);
+    }
 
     /*
      * When the pan gesture began we check the position of the ScrollView "cursor".
@@ -505,11 +521,13 @@ const ModalizeBase = (
   };
 
   const handleComponent = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
+    // If we drag from the HeaderComponent/FooterComponent/FloatingComponent we allow the translation animation
     if (nativeEvent.oldState === State.BEGAN) {
+      componentTranslateY.setValue(1);
       beginScrollY.setValue(0);
     }
 
-    handleChildren({ nativeEvent });
+    handleChildren({ nativeEvent }, 'component');
   };
 
   const handleOverlay = ({ nativeEvent }: TapGestureHandlerStateChangeEvent): void => {
