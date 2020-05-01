@@ -147,7 +147,10 @@ const ModalizeBase = (
     alwaysOpen || snapPoint ? true : undefined,
   );
   const [beginScrollYValue, setBeginScrollYValue] = React.useState(0);
+  const [scrollY, setScrollY] = React.useState(0);
+  const [endScrollY, setEndScrollY] = React.useState(0);
   const [modalPosition, setModalPosition] = React.useState<'top' | 'initial'>('initial');
+  const [cancelClose, setCancelClose] = React.useState(false);
 
   const cancelTranslateY = React.useRef(new Animated.Value(1)).current; // 1 by default to have the translateY animation running
   const componentTranslateY = React.useRef(new Animated.Value(0)).current;
@@ -402,11 +405,29 @@ const ModalizeBase = (
   ): void => {
     const { timing } = closeAnimationConfig;
     const { velocityY, translationY } = nativeEvent;
+
+    console.log('\n');
+    console.log('-scrollY', scrollY);
+    console.log('-endScrollY', endScrollY);
+    console.log('-translationY', translationY);
+    // console.log('-beginScrollYValue', beginScrollYValue);
+    const negativeReverseScroll = modalPosition === 'top' && scrollY >= 0 && translationY < 0;
+
+    // TODO: bounce still broken
     const enableBouncesValue = isAndroid ? false : beginScrollYValue > 0 || translationY < 0;
+    // const enableBouncesValue = isAndroid ? false : scrollY <= 15 && endScrollY >= 0 && translationY < 0;
+    // const enableBouncesValue = isAndroid
+    //   ? false
+    //   : beginScrollYValue > 0 || (translationY !== 0 && scrollY !== 0) || translationY < 0;
+
+    // TODO it sometimes dragging down if velocity high??
+
     const thresholdProps = translationY > threshold && beginScrollYValue === 0;
     const closeThreshold = velocity
       ? (beginScrollYValue <= 20 && velocityY >= velocity) || thresholdProps
       : thresholdProps;
+
+    // let cancelClose = false;
 
     setEnableBounces(enableBouncesValue);
 
@@ -420,7 +441,9 @@ const ModalizeBase = (
      * We cancel the translation animation if the ScrollView is not scrolled to the top
      */
     if (nativeEvent.oldState === State.BEGAN) {
-      if (beginScrollYValue > 0) {
+      setCancelClose(false);
+
+      if (beginScrollYValue > 0 || negativeReverseScroll) {
         translateY.setValue(0);
         dragY.setValue(0);
         cancelTranslateY.setValue(0);
@@ -434,6 +457,14 @@ const ModalizeBase = (
         }
       }
     }
+
+    if (negativeReverseScroll) {
+      // cancelClose = true;
+      setCancelClose(true);
+    }
+    console.log('-coucou', cancelClose);
+
+    // console.log('-cancelClose', cancelClose);
 
     if (nativeEvent.oldState === State.ACTIVE) {
       const toValue = translationY - beginScrollYValue;
@@ -460,8 +491,11 @@ const ModalizeBase = (
           }
         });
       } else if (closeThreshold && !alwaysOpen) {
-        willCloseModalize = true;
-        handleClose();
+
+        if (!cancelClose) {
+          willCloseModalize = true;
+          handleClose();
+        }
       }
 
       if (willCloseModalize) {
@@ -634,6 +668,10 @@ const ModalizeBase = (
         useNativeDriver: USE_NATIVE_DRIVER,
         listener: passedOnScrollBeginDrag,
       }),
+      onScroll: ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>): void =>
+        setScrollY(nativeEvent.contentOffset.y),
+      onScrollEndDrag: ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>): void =>
+        setEndScrollY(nativeEvent.contentOffset.y),
       scrollEventThrottle: 16,
       onLayout: handleContentLayout,
       scrollEnabled: keyboardToggle || !disableScroll,

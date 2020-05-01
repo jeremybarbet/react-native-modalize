@@ -62,7 +62,7 @@ export const ExamplesScreen = () => {
           <AppleMusicPlayer ref={el => (modals[6] = el)} animated={animated} />
           <FacebookWebView ref={el => (modals[7] = el)} />
           <SlackTabView ref={el => (modals[8] = el)} />
-          <AlwaysOpen />
+          {/* <AlwaysOpen /> */}
         </Portal>
       </Layout>
     </View>
