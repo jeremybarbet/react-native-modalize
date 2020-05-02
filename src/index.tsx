@@ -66,6 +66,7 @@ const ModalizeBase = (
     overlayStyle,
     childrenStyle,
     modalElevation,
+    zIndex = 9998,
 
     // Layout
     snapPoint,
@@ -814,7 +815,7 @@ const ModalizeBase = (
 
   const renderModalize = (
     <View
-      style={[s.modalize, { elevation: modalElevation }]}
+      style={[s.modalize, { elevation: modalElevation, zIndex }]}
       pointerEvents={alwaysOpen || !withOverlay ? 'box-none' : 'auto'}
     >
       <TapGestureHandler

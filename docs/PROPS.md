@@ -186,6 +186,16 @@ A number to define the elevation of the modal on Android. Useful if you have oth
 | ------ | -------- | -------- |
 | number | No       | Android  |
 
+### `zIndex`
+
+The zIndex will allow the modal to appear on the top.
+
+See https://reactnative.dev/docs/layout-props#zindex for more details.
+
+| Type   | Required |
+| ------ | -------- |
+| number | No       |
+
 ## Layout
 
 ### `snapPoint`
