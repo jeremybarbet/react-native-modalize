@@ -147,8 +147,6 @@ const ModalizeBase = (
     alwaysOpen || snapPoint ? true : undefined,
   );
   const [beginScrollYValue, setBeginScrollYValue] = React.useState(0);
-  const [scrollY, setScrollY] = React.useState(0);
-  const [endScrollY, setEndScrollY] = React.useState(0);
   const [modalPosition, setModalPosition] = React.useState<'top' | 'initial'>('initial');
   const [cancelClose, setCancelClose] = React.useState(false);
 
@@ -405,31 +403,13 @@ const ModalizeBase = (
   ): void => {
     const { timing } = closeAnimationConfig;
     const { velocityY, translationY } = nativeEvent;
-
-    console.log('\n');
-    console.log('-scrollY', scrollY);
-    console.log('-endScrollY', endScrollY);
-    console.log('-translationY', translationY);
-    // console.log('-beginScrollYValue', beginScrollYValue);
-    const negativeReverseScroll = modalPosition === 'top' && scrollY >= 0 && translationY < 0;
-
-    // TODO: bounce still broken
-    const enableBouncesValue = isAndroid ? false : beginScrollYValue > 0 || translationY < 0;
-    // const enableBouncesValue = isAndroid ? false : scrollY <= 15 && endScrollY >= 0 && translationY < 0;
-    // const enableBouncesValue = isAndroid
-    //   ? false
-    //   : beginScrollYValue > 0 || (translationY !== 0 && scrollY !== 0) || translationY < 0;
-
-    // TODO it sometimes dragging down if velocity high??
-
+    const negativeReverseScroll =
+      modalPosition === 'top' && beginScrollYValue >= 0 && translationY < 0;
     const thresholdProps = translationY > threshold && beginScrollYValue === 0;
     const closeThreshold = velocity
       ? (beginScrollYValue <= 20 && velocityY >= velocity) || thresholdProps
       : thresholdProps;
-
-    // let cancelClose = false;
-
-    setEnableBounces(enableBouncesValue);
+    let enableBouncesValue = true;
 
     // We make sure to reset the value if we are dragging from the children
     if (type !== 'component' && (cancelTranslateY as any)._value === 0) {
@@ -447,8 +427,10 @@ const ModalizeBase = (
         translateY.setValue(0);
         dragY.setValue(0);
         cancelTranslateY.setValue(0);
+        enableBouncesValue = true;
       } else {
         cancelTranslateY.setValue(1);
+        enableBouncesValue = false;
 
         if (!tapGestureEnabled) {
           setDisableScroll(
@@ -458,13 +440,11 @@ const ModalizeBase = (
       }
     }
 
+    setEnableBounces(isAndroid ? false : enableBouncesValue);
+
     if (negativeReverseScroll) {
-      // cancelClose = true;
       setCancelClose(true);
     }
-    console.log('-coucou', cancelClose);
-
-    // console.log('-cancelClose', cancelClose);
 
     if (nativeEvent.oldState === State.ACTIVE) {
       const toValue = translationY - beginScrollYValue;
@@ -477,11 +457,14 @@ const ModalizeBase = (
           const distFromSnap = Math.abs(snap - endOffsetY);
 
           if (distFromSnap < Math.abs(destSnapPoint - endOffsetY)) {
-            destSnapPoint = snap;
-            willCloseModalize = false;
+            if (negativeReverseScroll) {
+              destSnapPoint = snap;
+              willCloseModalize = false;
+            }
 
             if (alwaysOpen) {
               destSnapPoint = (modalHeightValue || 0) - alwaysOpen;
+              willCloseModalize = false;
             }
 
             if (snap === endHeight && !alwaysOpen) {
@@ -491,7 +474,6 @@ const ModalizeBase = (
           }
         });
       } else if (closeThreshold && !alwaysOpen) {
-
         if (!cancelClose) {
           willCloseModalize = true;
           handleClose();
@@ -668,10 +650,6 @@ const ModalizeBase = (
         useNativeDriver: USE_NATIVE_DRIVER,
         listener: passedOnScrollBeginDrag,
       }),
-      onScroll: ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>): void =>
-        setScrollY(nativeEvent.contentOffset.y),
-      onScrollEndDrag: ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>): void =>
-        setEndScrollY(nativeEvent.contentOffset.y),
       scrollEventThrottle: 16,
       onLayout: handleContentLayout,
       scrollEnabled: keyboardToggle || !disableScroll,
