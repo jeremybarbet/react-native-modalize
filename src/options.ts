@@ -105,12 +105,6 @@ export interface IProps<ListItem = any> {
   modalElevation?: number;
 
   /**
-   * The zIndex will allow the modal to appear on the top.
-   * @default 9998
-   */
-  zIndex?: number;
-
-  /**
    * A number that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
    */
   snapPoint?: number;
