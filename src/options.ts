@@ -75,6 +75,11 @@ export interface IProps<ListItem = any> {
   customRenderer?: JSX.Element;
 
   /**
+   * Define the style of the root modal component.
+   */
+  rootStyle?: TStyle;
+
+  /**
    * Define the style of the modal (includes handle/header/children/footer).
    */
   modalStyle?: TStyle;

@@ -144,6 +144,14 @@ An animated custom React node that will inherit of the onScroll/gesture events
 
 Multiple objects way to style the different part of Modalize.
 
+### `rootStyle`
+
+Define the style of the root modal component.
+
+| Type  | Required |
+| ----- | -------- |
+| style | No       |
+
 ### `modalStyle`
 
 Define the style of the modal (includes handle/header/children/footer).
@@ -185,16 +193,6 @@ A number to define the elevation of the modal on Android. Useful if you have oth
 | Type   | Required | Platform |
 | ------ | -------- | -------- |
 | number | No       | Android  |
-
-### `zIndex`
-
-The zIndex will allow the modal to appear on the top.
-
-See https://reactnative.dev/docs/layout-props#zindex for more details.
-
-| Type   | Required |
-| ------ | -------- |
-| number | No       |
 
 ## Layout
 
