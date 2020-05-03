@@ -186,14 +186,6 @@ Define the style of the children renderer (only the inside part).
 | ----- | -------- |
 | style | No       |
 
-### `modalElevation`
-
-A number to define the elevation of the modal on Android. Useful if you have other elements of your app using other values of elevation.
-
-| Type   | Required | Platform |
-| ------ | -------- | -------- |
-| number | No       | Android  |
-
 ## Layout
 
 ### `snapPoint`

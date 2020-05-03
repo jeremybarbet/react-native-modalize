@@ -100,11 +100,6 @@ export interface IProps<ListItem = any> {
   childrenStyle?: TStyle;
 
   /**
-   * A number to define the elevation of the modal on Android. Useful if you have other elements of your app using other values of elevation (Android specific).
-   */
-  modalElevation?: number;
-
-  /**
    * A number that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
    */
   snapPoint?: number;
