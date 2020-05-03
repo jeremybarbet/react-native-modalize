@@ -89,7 +89,9 @@ const ModalizeBase = (
     keyboardAvoidingBehavior = 'padding',
     keyboardAvoidingOffset,
     panGestureEnabled = true,
+    panGestureComponentEnabled = false,
     tapGestureEnabled = true,
+    closeSnapPointStraightEnabled = true,
     closeOnOverlayTap = true,
 
     // Animations
@@ -100,7 +102,7 @@ const ModalizeBase = (
     closeAnimationConfig = {
       timing: { duration: 240, easing: Easing.ease },
     },
-    dragToss = 0.15,
+    dragToss = 0.18,
     threshold = 120,
     velocity = 2800,
     panGestureAnimatedValue,
@@ -423,7 +425,12 @@ const ModalizeBase = (
     if (nativeEvent.oldState === State.BEGAN) {
       setCancelClose(false);
 
-      if (beginScrollYValue > 0 || negativeReverseScroll) {
+      if (
+        !closeSnapPointStraightEnabled && snapPoint
+          ? beginScrollYValue > 0
+          : beginScrollYValue > 0 || negativeReverseScroll
+      ) {
+        setCancelClose(true);
         translateY.setValue(0);
         dragY.setValue(0);
         cancelTranslateY.setValue(0);
@@ -440,11 +447,13 @@ const ModalizeBase = (
       }
     }
 
-    setEnableBounces(isAndroid ? false : enableBouncesValue);
-
-    if (negativeReverseScroll) {
-      setCancelClose(true);
-    }
+    setEnableBounces(
+      isAndroid
+        ? false
+        : alwaysOpen
+        ? beginScrollYValue > 0 || translationY < 0
+        : enableBouncesValue,
+    );
 
     if (nativeEvent.oldState === State.ACTIVE) {
       const toValue = translationY - beginScrollYValue;
@@ -453,31 +462,46 @@ const ModalizeBase = (
       if (snapPoint || alwaysOpen) {
         const endOffsetY = lastSnap + toValue + dragToss * velocityY;
 
+        /**
+         * snapPoint and alwaysOpen use both an array of points to define the first open state and the final state.
+         */
         snaps.forEach((snap: number) => {
           const distFromSnap = Math.abs(snap - endOffsetY);
+          const diffPoint = Math.abs(destSnapPoint - endOffsetY);
 
-          if (distFromSnap < Math.abs(destSnapPoint - endOffsetY)) {
-            if (negativeReverseScroll) {
+          // For snapPoint
+          if (distFromSnap < diffPoint && !alwaysOpen) {
+            if (closeSnapPointStraightEnabled) {
+              if (modalPosition === 'initial' && negativeReverseScroll) {
+                destSnapPoint = snap;
+                willCloseModalize = false;
+              }
+
+              if (snap === endHeight) {
+                destSnapPoint = snap;
+                willCloseModalize = true;
+                handleClose();
+              }
+            } else {
               destSnapPoint = snap;
               willCloseModalize = false;
-            }
 
-            if (alwaysOpen) {
-              destSnapPoint = (modalHeightValue || 0) - alwaysOpen;
-              willCloseModalize = false;
-            }
-
-            if (snap === endHeight && !alwaysOpen) {
-              willCloseModalize = true;
-              handleClose();
+              if (snap === endHeight) {
+                willCloseModalize = true;
+                handleClose();
+              }
             }
           }
+
+          // For alwaysOpen props
+          if (distFromSnap < diffPoint && alwaysOpen) {
+            destSnapPoint = (modalHeightValue || 0) - alwaysOpen;
+            willCloseModalize = false;
+          }
         });
-      } else if (closeThreshold && !alwaysOpen) {
-        if (!cancelClose) {
-          willCloseModalize = true;
-          handleClose();
-        }
+      } else if (closeThreshold && !alwaysOpen && !cancelClose) {
+        willCloseModalize = true;
+        handleClose();
       }
 
       if (willCloseModalize) {
@@ -620,7 +644,7 @@ const ModalizeBase = (
      * Until a better solution lands in RNGH, I will disable the PanGestureHandler for Android only,
      * so inner touchable/gestures are working from the custom components you can pass in.
      */
-    if (isAndroid) {
+    if (isAndroid && !panGestureComponentEnabled) {
       return tag;
     }
 
