@@ -412,7 +412,9 @@ const ModalizeBase = (
     const { timing } = closeAnimationConfig;
     const { velocityY, translationY } = nativeEvent;
     const negativeReverseScroll =
-      modalPosition === 'top' && beginScrollYValue >= SCROLL_THRESHOLD && translationY < 0;
+      modalPosition === 'top' &&
+      beginScrollYValue >= (snapPoint ? 0 : SCROLL_THRESHOLD) &&
+      translationY < 0;
     const thresholdProps = translationY > threshold && beginScrollYValue === 0;
     const closeThreshold = velocity
       ? (beginScrollYValue <= 20 && velocityY >= velocity) || thresholdProps
