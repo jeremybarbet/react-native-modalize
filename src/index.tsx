@@ -44,6 +44,12 @@ const { height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
+/**
+ * When scrolling, it happens than beginScrollYValue is not always equal to 0 (top of the ScrollView).
+ * Since we use this to trigger the swipe down gesture animation, we allow a small threshold to
+ * not dismiss Modalize when we are using the ScrollView and we don't want to dismiss.
+ */
+const SCROLL_THRESHOLD = -4;
 const USE_NATIVE_DRIVER = true;
 const ACTIVATED = 20;
 const PAN_DURATION = 150;
@@ -406,7 +412,7 @@ const ModalizeBase = (
     const { timing } = closeAnimationConfig;
     const { velocityY, translationY } = nativeEvent;
     const negativeReverseScroll =
-      modalPosition === 'top' && beginScrollYValue >= 0 && translationY < 0;
+      modalPosition === 'top' && beginScrollYValue >= SCROLL_THRESHOLD && translationY < 0;
     const thresholdProps = translationY > threshold && beginScrollYValue === 0;
     const closeThreshold = velocity
       ? (beginScrollYValue <= 20 && velocityY >= velocity) || thresholdProps
