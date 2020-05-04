@@ -144,6 +144,14 @@ An animated custom React node that will inherit of the onScroll/gesture events
 
 Multiple objects way to style the different part of Modalize.
 
+### `rootStyle`
+
+Define the style of the root modal component.
+
+| Type  | Required |
+| ----- | -------- |
+| style | No       |
+
 ### `modalStyle`
 
 Define the style of the modal (includes handle/header/children/footer).
@@ -177,14 +185,6 @@ Define the style of the children renderer (only the inside part).
 | Type  | Required |
 | ----- | -------- |
 | style | No       |
-
-### `modalElevation`
-
-A number to define the elevation of the modal on Android. Useful if you have other elements of your app using other values of elevation.
-
-| Type   | Required | Platform |
-| ------ | -------- | -------- |
-| number | No       | Android  |
 
 ## Layout
 

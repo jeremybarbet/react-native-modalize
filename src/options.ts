@@ -75,6 +75,11 @@ export interface IProps<ListItem = any> {
   customRenderer?: JSX.Element;
 
   /**
+   * Define the style of the root modal component.
+   */
+  rootStyle?: TStyle;
+
+  /**
    * Define the style of the modal (includes handle/header/children/footer).
    */
   modalStyle?: TStyle;
@@ -93,11 +98,6 @@ export interface IProps<ListItem = any> {
    * Define the style of the children renderer (only the inside part).
    */
   childrenStyle?: TStyle;
-
-  /**
-   * A number to define the elevation of the modal on Android. Useful if you have other elements of your app using other values of elevation (Android specific).
-   */
-  modalElevation?: number;
 
   /**
    * A number that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
