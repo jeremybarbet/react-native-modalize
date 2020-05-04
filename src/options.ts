@@ -162,6 +162,12 @@ export interface IProps<ListItem = any> {
   panGestureEnabled?: boolean;
 
   /**
+   * Define if HeaderComponent/FooterComponent/FloatingComponent should have pan gesture enable (Android specific). When enable it might break touchable inside the view.
+   * @default false
+   */
+  panGestureComponentEnabled?: boolean;
+
+  /**
    * Define if the `TapGestureHandler` wrapping Modalize's core should be enable or not.
    * @default true
    */
@@ -172,6 +178,12 @@ export interface IProps<ListItem = any> {
    * @default true
    */
   closeOnOverlayTap?: boolean;
+
+  /**
+   * Define if `snapPoint` props should close straight when swiping down or come back to initial position.
+   * @default true
+   */
+  closeSnapPointStraightEnabled?: boolean;
 
   /**
    * Object to change the open animations.

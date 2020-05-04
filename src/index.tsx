@@ -44,6 +44,12 @@ const { height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
+/**
+ * When scrolling, it happens than beginScrollYValue is not always equal to 0 (top of the ScrollView).
+ * Since we use this to trigger the swipe down gesture animation, we allow a small threshold to
+ * not dismiss Modalize when we are using the ScrollView and we don't want to dismiss.
+ */
+const SCROLL_THRESHOLD = -4;
 const USE_NATIVE_DRIVER = true;
 const ACTIVATED = 20;
 const PAN_DURATION = 150;
@@ -89,8 +95,10 @@ const ModalizeBase = (
     keyboardAvoidingBehavior = 'padding',
     keyboardAvoidingOffset,
     panGestureEnabled = true,
+    panGestureComponentEnabled = false,
     tapGestureEnabled = true,
     closeOnOverlayTap = true,
+    closeSnapPointStraightEnabled = true,
 
     // Animations
     openAnimationConfig = {
@@ -100,7 +108,7 @@ const ModalizeBase = (
     closeAnimationConfig = {
       timing: { duration: 240, easing: Easing.ease },
     },
-    dragToss = 0.15,
+    dragToss = 0.18,
     threshold = 120,
     velocity = 2800,
     panGestureAnimatedValue,
@@ -148,6 +156,7 @@ const ModalizeBase = (
   );
   const [beginScrollYValue, setBeginScrollYValue] = React.useState(0);
   const [modalPosition, setModalPosition] = React.useState<'top' | 'initial'>('initial');
+  const [cancelClose, setCancelClose] = React.useState(false);
 
   const cancelTranslateY = React.useRef(new Animated.Value(1)).current; // 1 by default to have the translateY animation running
   const componentTranslateY = React.useRef(new Animated.Value(0)).current;
@@ -402,13 +411,15 @@ const ModalizeBase = (
   ): void => {
     const { timing } = closeAnimationConfig;
     const { velocityY, translationY } = nativeEvent;
-    const enableBouncesValue = isAndroid ? false : beginScrollYValue > 0 || translationY < 0;
+    const negativeReverseScroll =
+      modalPosition === 'top' &&
+      beginScrollYValue >= (snapPoint ? 0 : SCROLL_THRESHOLD) &&
+      translationY < 0;
     const thresholdProps = translationY > threshold && beginScrollYValue === 0;
     const closeThreshold = velocity
       ? (beginScrollYValue <= 20 && velocityY >= velocity) || thresholdProps
       : thresholdProps;
-
-    setEnableBounces(enableBouncesValue);
+    let enableBouncesValue = true;
 
     // We make sure to reset the value if we are dragging from the children
     if (type !== 'component' && (cancelTranslateY as any)._value === 0) {
@@ -420,12 +431,21 @@ const ModalizeBase = (
      * We cancel the translation animation if the ScrollView is not scrolled to the top
      */
     if (nativeEvent.oldState === State.BEGAN) {
-      if (beginScrollYValue > 0) {
+      setCancelClose(false);
+
+      if (
+        !closeSnapPointStraightEnabled && snapPoint
+          ? beginScrollYValue > 0
+          : beginScrollYValue > 0 || negativeReverseScroll
+      ) {
+        setCancelClose(true);
         translateY.setValue(0);
         dragY.setValue(0);
         cancelTranslateY.setValue(0);
+        enableBouncesValue = true;
       } else {
         cancelTranslateY.setValue(1);
+        enableBouncesValue = false;
 
         if (!tapGestureEnabled) {
           setDisableScroll(
@@ -435,6 +455,14 @@ const ModalizeBase = (
       }
     }
 
+    setEnableBounces(
+      isAndroid
+        ? false
+        : alwaysOpen
+        ? beginScrollYValue > 0 || translationY < 0
+        : enableBouncesValue,
+    );
+
     if (nativeEvent.oldState === State.ACTIVE) {
       const toValue = translationY - beginScrollYValue;
       let destSnapPoint = 0;
@@ -442,24 +470,44 @@ const ModalizeBase = (
       if (snapPoint || alwaysOpen) {
         const endOffsetY = lastSnap + toValue + dragToss * velocityY;
 
+        /**
+         * snapPoint and alwaysOpen use both an array of points to define the first open state and the final state.
+         */
         snaps.forEach((snap: number) => {
           const distFromSnap = Math.abs(snap - endOffsetY);
+          const diffPoint = Math.abs(destSnapPoint - endOffsetY);
 
-          if (distFromSnap < Math.abs(destSnapPoint - endOffsetY)) {
-            destSnapPoint = snap;
-            willCloseModalize = false;
+          // For snapPoint
+          if (distFromSnap < diffPoint && !alwaysOpen) {
+            if (closeSnapPointStraightEnabled) {
+              if (modalPosition === 'initial' && negativeReverseScroll) {
+                destSnapPoint = snap;
+                willCloseModalize = false;
+              }
 
-            if (alwaysOpen) {
-              destSnapPoint = (modalHeightValue || 0) - alwaysOpen;
-            }
+              if (snap === endHeight) {
+                destSnapPoint = snap;
+                willCloseModalize = true;
+                handleClose();
+              }
+            } else {
+              destSnapPoint = snap;
+              willCloseModalize = false;
 
-            if (snap === endHeight && !alwaysOpen) {
-              willCloseModalize = true;
-              handleClose();
+              if (snap === endHeight) {
+                willCloseModalize = true;
+                handleClose();
+              }
             }
           }
+
+          // For alwaysOpen props
+          if (distFromSnap < diffPoint && alwaysOpen && beginScrollYValue <= 0) {
+            destSnapPoint = (modalHeightValue || 0) - alwaysOpen;
+            willCloseModalize = false;
+          }
         });
-      } else if (closeThreshold && !alwaysOpen) {
+      } else if (closeThreshold && !alwaysOpen && !cancelClose) {
         willCloseModalize = true;
         handleClose();
       }
@@ -604,7 +652,7 @@ const ModalizeBase = (
      * Until a better solution lands in RNGH, I will disable the PanGestureHandler for Android only,
      * so inner touchable/gestures are working from the custom components you can pass in.
      */
-    if (isAndroid) {
+    if (isAndroid && !panGestureComponentEnabled) {
       return tag;
     }
 
