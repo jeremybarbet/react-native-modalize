@@ -91,8 +91,8 @@ const ModalizeBase = (
     panGestureEnabled = true,
     panGestureComponentEnabled = false,
     tapGestureEnabled = true,
-    closeSnapPointStraightEnabled = true,
     closeOnOverlayTap = true,
+    closeSnapPointStraightEnabled = true,
 
     // Animations
     openAnimationConfig = {
@@ -494,7 +494,7 @@ const ModalizeBase = (
           }
 
           // For alwaysOpen props
-          if (distFromSnap < diffPoint && alwaysOpen) {
+          if (distFromSnap < diffPoint && alwaysOpen && beginScrollYValue <= 0) {
             destSnapPoint = (modalHeightValue || 0) - alwaysOpen;
             willCloseModalize = false;
           }

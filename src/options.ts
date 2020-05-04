@@ -174,16 +174,16 @@ export interface IProps<ListItem = any> {
   tapGestureEnabled?: boolean;
 
   /**
-   * Define is snapPoint props should close straight when swiping down or come back to initial position (however, if the velocity value is reached it will close Modalize straight).
-   * @default true
-   */
-  closeSnapPointStraightEnabled?: boolean;
-
-  /**
    * Using this prop will enable/disable overlay tap gesture.
    * @default true
    */
   closeOnOverlayTap?: boolean;
+
+  /**
+   * Define if `snapPoint` props should close straight when swiping down or come back to initial position.
+   * @default true
+   */
+  closeSnapPointStraightEnabled?: boolean;
 
   /**
    * Object to change the open animations.
