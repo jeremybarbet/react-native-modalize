@@ -168,9 +168,7 @@ const ModalizeBase = (
   const tapGestureModalizeRef = React.useRef<TapGestureHandler>(null);
   const panGestureChildrenRef = React.useRef<PanGestureHandler>(null);
   const nativeViewChildrenRef = React.useRef<NativeViewGestureHandler>(null);
-  const contentViewRef = React.useRef<
-    Animated.AnimatedComponent<ScrollView | FlatList<any> | SectionList<any>>
-  >(null);
+  const contentViewRef = React.useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
   const tapGestureOverlayRef = React.useRef<TapGestureHandler>(null);
 
   // We diff and get the negative value only. It sometimes go above 0
@@ -674,7 +672,7 @@ const ModalizeBase = (
       ?.onScrollBeginDrag as (event: NativeSyntheticEvent<NativeScrollEvent>) => void | undefined;
 
     const opts = {
-      ref: composeRefs(contentViewRef, contentRef),
+      ref: composeRefs(contentViewRef, contentRef) as React.RefObject<any>,
       bounces: enableBounces,
       onScrollBeginDrag: Animated.event([{ nativeEvent: { contentOffset: { y: beginScrollY } } }], {
         useNativeDriver: USE_NATIVE_DRIVER,

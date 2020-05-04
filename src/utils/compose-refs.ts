@@ -10,7 +10,10 @@ const composedRefCache = new WeakMap<
   WeakMap<NonNullRef<unknown>, NonNullRef<unknown>>
 >();
 
-export const composeRefs = <T>(ref1: React.Ref<T>, ref2: React.Ref<T> | undefined): React.Ref<T> => {
+export const composeRefs = <T>(
+  ref1: React.Ref<T>,
+  ref2: React.Ref<T> | undefined,
+): React.Ref<T> => {
   if (ref1 && ref2) {
     const ref1Cache =
       composedRefCache.get(ref1) || new WeakMap<NonNullRef<unknown>, NonNullRef<unknown>>();

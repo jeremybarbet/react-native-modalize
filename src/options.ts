@@ -47,7 +47,7 @@ export interface IProps<ListItem = any> {
   /**
    * A reference to the view (ScrollView, FlatList, SectionList) that provides the scroll behavior, where you will be able to access their owns methods.
    */
-  contentRef?: React.RefObject<Animated.AnimatedComponent<ScrollView | FlatList | SectionList>>;
+  contentRef?: React.RefObject<ScrollView | FlatList<ListItem> | SectionList<ListItem>>;
 
   /**
    * A React node that will define the content of the modal.
