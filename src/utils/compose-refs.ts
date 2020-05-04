@@ -4,33 +4,13 @@
  */
 import * as React from 'react';
 
-type OptionalRef<T> = React.Ref<T> | undefined;
-
-export const composeRefs = <T>(
-  ...refs: [OptionalRef<T>, OptionalRef<T>, ...Array<OptionalRef<T>>]
-): React.Ref<T> => {
-  if (refs.length === 2) {
-    // micro-optimize the hot path
-    return composeTwoRefs(refs[0], refs[1]) || null;
-  }
-
-  const composedRef = refs
-    .slice(1)
-    .reduce(
-      (semiCombinedRef: OptionalRef<T>, refToInclude: OptionalRef<T>) =>
-        composeTwoRefs(semiCombinedRef, refToInclude),
-      refs[0],
-    );
-  return composedRef || null;
-};
-
 type NonNullRef<T> = NonNullable<React.Ref<T>>;
 const composedRefCache = new WeakMap<
   NonNullRef<unknown>,
   WeakMap<NonNullRef<unknown>, NonNullRef<unknown>>
 >();
 
-const composeTwoRefs = <T>(ref1: OptionalRef<T>, ref2: OptionalRef<T>): OptionalRef<T> => {
+export const composeRefs = <T>(ref1: React.Ref<T>, ref2: React.Ref<T> | undefined): React.Ref<T> => {
   if (ref1 && ref2) {
     const ref1Cache =
       composedRefCache.get(ref1) || new WeakMap<NonNullRef<unknown>, NonNullRef<unknown>>();
@@ -47,11 +27,7 @@ const composeTwoRefs = <T>(ref1: OptionalRef<T>, ref2: OptionalRef<T>): Optional
     return composedRef as NonNullRef<T>;
   }
 
-  if (!ref1) {
-    return ref2;
-  } else {
-    return ref1;
-  }
+  return ref1;
 };
 
 const updateRef = <T>(ref: NonNullRef<T>, instance: null | T): void => {

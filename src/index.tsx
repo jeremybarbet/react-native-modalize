@@ -42,8 +42,6 @@ import s from './styles';
 
 const { height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
-const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 /**
  * When scrolling, it happens than beginScrollYValue is not always equal to 0 (top of the ScrollView).
  * Since we use this to trigger the swipe down gesture animation, we allow a small threshold to
@@ -676,7 +674,7 @@ const ModalizeBase = (
       ?.onScrollBeginDrag as (event: NativeSyntheticEvent<NativeScrollEvent>) => void | undefined;
 
     const opts = {
-      ref: composeRefs(contentRef, contentViewRef),
+      ref: composeRefs(contentViewRef, contentRef),
       bounces: enableBounces,
       onScrollBeginDrag: Animated.event([{ nativeEvent: { contentOffset: { y: beginScrollY } } }], {
         useNativeDriver: USE_NATIVE_DRIVER,
@@ -689,11 +687,11 @@ const ModalizeBase = (
     };
 
     if (flatListProps) {
-      return <AnimatedFlatList {...flatListProps} {...opts} />;
+      return <Animated.FlatList {...flatListProps} {...opts} />;
     }
 
     if (sectionListProps) {
-      return <AnimatedSectionList {...sectionListProps} {...opts} />;
+      return <Animated.SectionList {...sectionListProps} {...opts} />;
     }
 
     if (customRenderer) {
