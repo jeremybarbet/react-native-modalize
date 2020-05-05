@@ -23,6 +23,7 @@ import {
   NativeScrollEvent,
   StyleSheet,
   KeyboardAvoidingViewProps,
+  ViewStyle,
 } from 'react-native';
 import {
   PanGestureHandler,
@@ -155,6 +156,7 @@ const ModalizeBase = (
   const [beginScrollYValue, setBeginScrollYValue] = React.useState(0);
   const [modalPosition, setModalPosition] = React.useState<'top' | 'initial'>('initial');
   const [cancelClose, setCancelClose] = React.useState(false);
+  const [layouts, setLayouts] = React.useState<Map<string, number>>(new Map());
 
   const cancelTranslateY = React.useRef(new Animated.Value(1)).current; // 1 by default to have the translateY animation running
   const componentTranslateY = React.useRef(new Animated.Value(0)).current;
@@ -372,6 +374,18 @@ const ModalizeBase = (
     setModalHeightValue(value);
   };
 
+  const handleBaseLayout = (
+    component: 'content' | 'header' | 'footer' | 'floating',
+    height: number,
+  ): void => {
+    setLayouts(new Map(layouts.set(component, height)));
+
+    const max = Array.from(layouts).reduce((acc, cur) => acc + cur?.[1], 0);
+    const shorterHeight = max < endHeight;
+
+    setDisableScroll(shorterHeight && disableScrollIfPossible);
+  };
+
   const handleContentLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
     if (onLayout) {
       onLayout(nativeEvent);
@@ -383,14 +397,29 @@ const ModalizeBase = (
       return setModalHeightValue(height);
     }
 
+    // We don't want to disable the scroll if we are not using adjustToContentHeight props
     if (!adjustToContentHeight) {
       return;
     }
 
-    const { height } = nativeEvent.layout;
-    const shorterHeight = height < endHeight;
+    handleBaseLayout('content', nativeEvent.layout.height);
+  };
 
-    setDisableScroll(shorterHeight && disableScrollIfPossible);
+  const handleComponentLayout = (
+    { nativeEvent }: LayoutChangeEvent,
+    name: 'header' | 'footer' | 'floating',
+    absolute: boolean,
+  ): void => {
+    /**
+     * We don't want to disable the scroll if we are not using adjustToContentHeight props.
+     * Also, if the component is in absolute positioning we don't want to take in
+     * account its dimensions, so we just skip.
+     */
+    if (!adjustToContentHeight || absolute) {
+      return;
+    }
+
+    handleBaseLayout(name, nativeEvent.layout.height);
   };
 
   const handleClose = (dest?: TClose): void => {
@@ -634,7 +663,10 @@ const ModalizeBase = (
     );
   };
 
-  const renderComponent = (component: React.ReactNode): JSX.Element | null => {
+  const renderComponent = (
+    component: React.ReactNode,
+    name: 'header' | 'footer' | 'floating',
+  ): JSX.Element | null => {
     if (!component) {
       return null;
     }
@@ -652,7 +684,9 @@ const ModalizeBase = (
       return tag;
     }
 
-    const zIndex: number | undefined = StyleSheet.flatten(tag?.props?.style)?.zIndex;
+    const obj: ViewStyle = StyleSheet.flatten(tag?.props?.style);
+    const absolute: boolean = obj?.position === 'absolute';
+    const zIndex: number | undefined = obj?.zIndex;
 
     return (
       <PanGestureHandler
@@ -661,7 +695,12 @@ const ModalizeBase = (
         onGestureEvent={handleGestureEvent}
         onHandlerStateChange={handleComponent}
       >
-        <Animated.View style={{ zIndex }}>{tag}</Animated.View>
+        <Animated.View
+          style={{ zIndex }}
+          onLayout={(e: LayoutChangeEvent): void => handleComponentLayout(e, name, absolute)}
+        >
+          {tag}
+        </Animated.View>
       </PanGestureHandler>
     );
   };
@@ -871,9 +910,9 @@ const ModalizeBase = (
           {showContent && (
             <AnimatedKeyboardAvoidingView {...keyboardAvoidingViewProps}>
               {renderHandle()}
-              {renderComponent(HeaderComponent)}
+              {renderComponent(HeaderComponent, 'header')}
               {renderChildren()}
-              {renderComponent(FooterComponent)}
+              {renderComponent(FooterComponent, 'footer')}
             </AnimatedKeyboardAvoidingView>
           )}
 
@@ -881,7 +920,7 @@ const ModalizeBase = (
         </View>
       </TapGestureHandler>
 
-      {renderComponent(FloatingComponent)}
+      {renderComponent(FloatingComponent, 'floating')}
     </View>
   );
 
