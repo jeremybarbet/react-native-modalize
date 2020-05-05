@@ -148,6 +148,10 @@ Multiple objects way to style the different part of Modalize.
 
 Define the style of the root modal component.
 
+?> Useful if you want to change zIndex or the elevation to display Modalize.
+
+!> This object overwrites the [default styles](https://github.com/jeremybarbet/react-native-modalize/blob/master/src/styles.ts#L8-L15), which uses `StyleSheet.absoluteFill`, if you change it, it might renders in a weird way.
+
 | Type  | Required |
 | ----- | -------- |
 | style | No       |
@@ -155,6 +159,8 @@ Define the style of the root modal component.
 ### `modalStyle`
 
 Define the style of the modal (includes handle/header/children/footer).
+
+!> This object overwrites the [default styles](https://github.com/jeremybarbet/react-native-modalize/blob/master/src/styles.ts#L21-L36).
 
 | Type  | Required |
 | ----- | -------- |
@@ -164,7 +170,9 @@ Define the style of the modal (includes handle/header/children/footer).
 
 Define the style of the handle on top of the modal.
 
-!> Be aware that if you change the height of the handle, the modal height won't change. It's not dynamic yet, feel free to open a PR to fix that.
+!> Be aware that if you change the height of the handle, the modal height won't change.
+
+!> This object overwrites the [default styles](https://github.com/jeremybarbet/react-native-modalize/blob/master/src/styles.ts#L54-L64).
 
 | Type  | Required |
 | ----- | -------- |
@@ -174,6 +182,8 @@ Define the style of the handle on top of the modal.
 
 Define the style of the overlay.
 
+!> This object overwrites the [default styles](https://github.com/jeremybarbet/react-native-modalize/blob/master/src/styles.ts#L81-L89).
+
 | Type  | Required |
 | ----- | -------- |
 | style | No       |
@@ -181,6 +191,8 @@ Define the style of the overlay.
 ### `childrenStyle`
 
 Define the style of the children renderer (only the inside part).
+
+!> This object overwrites the [default styles](https://github.com/jeremybarbet/react-native-modalize/blob/master/src/styles.ts#L91-L101).
 
 | Type  | Required |
 | ----- | -------- |
