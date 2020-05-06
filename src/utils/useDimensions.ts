@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import * as React from 'react';
 import { Dimensions, ScaledSize } from 'react-native';
 
 export function useDimensions(): { window: ScaledSize; screen: ScaledSize } {
