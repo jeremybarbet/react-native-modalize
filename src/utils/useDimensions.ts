@@ -1,21 +1,18 @@
 import * as React from 'react';
 import { Dimensions, ScaledSize } from 'react-native';
 
-export const useDimensions = (): { window: ScaledSize; screen: ScaledSize } => {
-  const [dimensions, setDimensions] = useState({
-    window: Dimensions.get('window'),
-    screen: Dimensions.get('screen'),
-  });
+export const useDimensions = (): ScaledSize => {
+  const [dimensions, setDimensions] = React.useState(Dimensions.get('window'));
 
-  const onChange = ({ window, screen }: { window: ScaledSize; screen: ScaledSize }): void => {
-    setDimensions({ window, screen });
+  const onChange = ({ window }: { window: ScaledSize }): void => {
+    setDimensions(window);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     Dimensions.addEventListener('change', onChange);
 
     return (): void => Dimensions.removeEventListener('change', onChange);
   }, []);
 
   return dimensions;
-}
+};
