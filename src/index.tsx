@@ -34,7 +34,7 @@ import {
 } from 'react-native-gesture-handler';
 
 import { IProps, TOpen, TClose, TStyle, IHandles } from './options';
-import { useDimensions } from './utils/useDimensions';
+import { useDimensions } from './utils/use-dimensions';
 import { getSpringConfig } from './utils/get-spring-config';
 import { isIphoneX, isIos, isAndroid } from './utils/devices';
 import { invariant } from './utils/invariant';
