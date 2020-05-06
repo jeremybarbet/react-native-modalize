@@ -6,7 +6,6 @@ import * as React from 'react';
 import {
   Animated,
   View,
-  Dimensions,
   Modal,
   Easing,
   LayoutChangeEvent,
@@ -35,13 +34,13 @@ import {
 } from 'react-native-gesture-handler';
 
 import { IProps, TOpen, TClose, TStyle, IHandles } from './options';
+import { useDimensions } from './utils/use-dimensions';
 import { getSpringConfig } from './utils/get-spring-config';
 import { isIphoneX, isIos, isAndroid } from './utils/devices';
 import { invariant } from './utils/invariant';
 import { composeRefs } from './utils/compose-refs';
 import s from './styles';
 
-const { height: screenHeight } = Dimensions.get('window');
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
 /**
  * When scrolling, it happens than beginScrollYValue is not always equal to 0 (top of the ScrollView).
@@ -135,6 +134,7 @@ const ModalizeBase = (
   }: IProps,
   ref: React.Ref<React.ReactNode>,
 ): JSX.Element | null => {
+  const { height: screenHeight } = useDimensions();
   const isHandleOutside = handlePosition === 'outside';
   const handleHeight = withHandle ? 20 : isHandleOutside ? 35 : 20;
   const fullHeight = screenHeight - modalTopOffset;
