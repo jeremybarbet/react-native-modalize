@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Dimensions, ScaledSize } from 'react-native';
 
-export function useDimensions(): { window: ScaledSize; screen: ScaledSize } {
+export const useDimensions = (): { window: ScaledSize; screen: ScaledSize } => {
   const [dimensions, setDimensions] = useState({
     window: Dimensions.get('window'),
     screen: Dimensions.get('screen'),
