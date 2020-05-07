@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.1] - 2020-05-07
+
+### 👀 Bug Fixes
+
+- Allow overwrites on content's core props [#194](https://github.com/jeremybarbet/react-native-modalize/issues/194) ([825fa2](https://github.com/jeremybarbet/react-native-modalize/commit/825fa2b35fa9ccdd606f9b4b3e7941388c77bf05))
+- Add listener for height on orientation change by [@LucidNinja](https://github.com/LucidNinja) [#195](https://github.com/jeremybarbet/react-native-modalize/issues/195) ([0bbdae](https://github.com/jeremybarbet/react-native-modalize/commit/0bbdae645e671f5e38a45cd0766e28ba635397d2))
+
 ## [2.0.0] - 2020-05-05
 
 ### Really happy to release this brand new major version for react-native-modalize.
