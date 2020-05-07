@@ -709,10 +709,14 @@ const ModalizeBase = (
     const keyboardDismissMode = isIos ? 'interactive' : 'on-drag';
     const passedOnProps = flatListProps ?? sectionListProps ?? scrollViewProps;
     // We allow overwrites when the props (bounces, scrollEnabled) are set to false, when true we use Modalize's core behavior
-    const bounces = !passedOnProps?.bounces ? passedOnProps?.bounces : enableBounces;
-    const scrollEnabled = !passedOnProps?.scrollEnabled
-      ? passedOnProps?.scrollEnabled
-      : keyboardToggle || !disableScroll;
+    const bounces =
+      passedOnProps?.bounces !== undefined && !passedOnProps?.bounces
+        ? passedOnProps?.bounces
+        : enableBounces;
+    const scrollEnabled =
+      passedOnProps?.scrollEnabled !== undefined && !passedOnProps?.scrollEnabled
+        ? passedOnProps?.scrollEnabled
+        : keyboardToggle || !disableScroll;
     const scrollEventThrottle = passedOnProps?.scrollEventThrottle || 16;
     const onScrollBeginDrag = passedOnProps?.onScrollBeginDrag as (
       event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -864,6 +868,10 @@ const ModalizeBase = (
 
     setModalHeightValue(value);
   }, [adjustToContentHeight]);
+
+  React.useEffect(() => {
+    setModalHeightValue(adjustValue);
+  }, [screenHeight]);
 
   React.useEffect(() => {
     Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
