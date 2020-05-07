@@ -707,19 +707,27 @@ const ModalizeBase = (
 
   const renderContent = (): JSX.Element => {
     const keyboardDismissMode = isIos ? 'interactive' : 'on-drag';
-    const passedOnScrollBeginDrag = (flatListProps ?? sectionListProps ?? scrollViewProps)
-      ?.onScrollBeginDrag as (event: NativeSyntheticEvent<NativeScrollEvent>) => void | undefined;
+    const passedOnProps = flatListProps ?? sectionListProps ?? scrollViewProps;
+    // We allow overwrites when the props (bounces, scrollEnabled) are set to false, when true we use Modalize's core behavior
+    const bounces = !passedOnProps?.bounces ? passedOnProps?.bounces : enableBounces;
+    const scrollEnabled = !passedOnProps?.scrollEnabled
+      ? passedOnProps?.scrollEnabled
+      : keyboardToggle || !disableScroll;
+    const scrollEventThrottle = passedOnProps?.scrollEventThrottle || 16;
+    const onScrollBeginDrag = passedOnProps?.onScrollBeginDrag as (
+      event: NativeSyntheticEvent<NativeScrollEvent>,
+    ) => void | undefined;
 
     const opts = {
       ref: composeRefs(contentViewRef, contentRef) as React.RefObject<any>,
-      bounces: enableBounces,
+      bounces,
       onScrollBeginDrag: Animated.event([{ nativeEvent: { contentOffset: { y: beginScrollY } } }], {
         useNativeDriver: USE_NATIVE_DRIVER,
-        listener: passedOnScrollBeginDrag,
+        listener: onScrollBeginDrag,
       }),
-      scrollEventThrottle: 16,
+      scrollEventThrottle,
       onLayout: handleContentLayout,
-      scrollEnabled: keyboardToggle || !disableScroll,
+      scrollEnabled,
       keyboardDismissMode,
     };
 
