@@ -864,14 +864,8 @@ const ModalizeBase = (
   ]);
 
   React.useEffect(() => {
-    const value = adjustToContentHeight ? undefined : endHeight;
-
-    setModalHeightValue(value);
-  }, [adjustToContentHeight]);
-
-  React.useEffect(() => {
     setModalHeightValue(adjustValue);
-  }, [screenHeight]);
+  }, [adjustToContentHeight, modalHeight, screenHeight]);
 
   React.useEffect(() => {
     Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
