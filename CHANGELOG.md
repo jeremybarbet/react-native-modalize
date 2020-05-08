@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.0.2] - 2020-05-07
+## [2.0.3] - 2020-05-08
 
 ### 👀 Bug Fixes
 
