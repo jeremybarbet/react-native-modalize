@@ -75,7 +75,7 @@
     "@typescript-eslint/parser": "2.30.0",
     "concurrently": "5.2.0",
     "cpx": "1.5.0",
-    "eslint": "6.8.0",
+    "eslint": "7.0.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-react": "7.19.0",
     "eslint-plugin-react-native": "3.8.1",
