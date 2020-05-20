@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.4] - 2020-05-20
+
+### 👀 Bug Fixes
+
+- onPositionChange not correct [#209](https://github.com/jeremybarbet/react-native-modalize/issues/209) ([d9d5aae](https://github.com/jeremybarbet/react-native-modalize/commit/d9d5aaec385131583046fd3dc2334e5cedd21386))
+
 ## [2.0.3] - 2020-05-08
 
 ### 👀 Bug Fixes
