@@ -15,6 +15,7 @@ import {
 
 export type TOpen = 'default' | 'top';
 export type TClose = 'default' | 'alwaysOpen';
+export type TPosition = 'initial' | 'top';
 export type TStyle =
   | ViewStyle
   | ViewStyle[]

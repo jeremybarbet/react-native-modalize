@@ -33,7 +33,7 @@ import {
   TapGestureHandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
 
-import { IProps, TOpen, TClose, TStyle, IHandles } from './options';
+import { IProps, TOpen, TClose, TStyle, IHandles, TPosition } from './options';
 import { useDimensions } from './utils/use-dimensions';
 import { getSpringConfig } from './utils/get-spring-config';
 import { isIphoneX, isIos, isAndroid } from './utils/devices';
@@ -154,7 +154,7 @@ const ModalizeBase = (
     alwaysOpen || snapPoint ? true : undefined,
   );
   const [beginScrollYValue, setBeginScrollYValue] = React.useState(0);
-  const [modalPosition, setModalPosition] = React.useState<'top' | 'initial'>('initial');
+  const [modalPosition, setModalPosition] = React.useState<TPosition>('initial');
   const [cancelClose, setCancelClose] = React.useState(false);
   const [layouts, setLayouts] = React.useState<Map<string, number>>(new Map());
 
@@ -228,7 +228,7 @@ const ModalizeBase = (
 
     let toValue = 0;
     let toPanValue = 0;
-    let newPosition;
+    let newPosition: TPosition;
 
     if (dest === 'top') {
       toValue = 0;
