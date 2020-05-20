@@ -9,6 +9,7 @@
   - [Props](/PROPS)
   - [Methods](/METHODS)
   - [Development](/DEVELOPMENT)
+  - [Showcase](/SHOWCASE)
   - [FAQ](/FAQ)
 
 - **Links**
