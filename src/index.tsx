@@ -228,6 +228,7 @@ const ModalizeBase = (
 
     let toValue = 0;
     let toPanValue = 0;
+    let newPosition;
 
     if (dest === 'top') {
       toValue = 0;
@@ -251,9 +252,9 @@ const ModalizeBase = (
     setShowContent(true);
 
     if ((alwaysOpenValue && dest !== 'top') || (snapPoint && dest === 'default')) {
-      setModalPosition('initial');
+      newPosition = 'initial';
     } else {
-      setModalPosition('top');
+      newPosition = 'top';
     }
 
     Animated.parallel([
@@ -290,8 +291,10 @@ const ModalizeBase = (
         onOpened();
       }
 
+      setModalPosition(newPosition);
+
       if (onPositionChange) {
-        onPositionChange(modalPosition);
+        onPositionChange(newPosition);
       }
     });
   };
