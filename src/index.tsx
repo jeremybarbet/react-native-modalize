@@ -131,6 +131,9 @@ const ModalizeBase = (
     onPositionChange,
     onOverlayPress,
     onLayout,
+      
+    // Base Modal Props
+    statusBarTranslucent
   }: IProps,
   ref: React.Ref<React.ReactNode>,
 ): JSX.Element | null => {
@@ -944,6 +947,7 @@ const ModalizeBase = (
       hardwareAccelerated={USE_NATIVE_DRIVER}
       visible={isVisible}
       transparent
+      statusBarTranslucent={statusBarTranslucent}
     >
       {child}
     </Modal>
