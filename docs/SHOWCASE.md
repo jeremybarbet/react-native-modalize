@@ -1,6 +1,8 @@
 # Who's using Modalize?
 
-Hundreds of [open source](https://github.com/jeremybarbet/react-native-modalize/network/dependents) projects are using Modalize, but also many customer apps as you can see under. If you have an application that could be featured here, feel free to add it [here](#).
+Hundreds of [open source](https://github.com/jeremybarbet/react-native-modalize/network/dependents) projects are using Modalize, but also some cool customer apps.
+
+If you have an app that could be featured, feel free to reach to me [@jeremybarbet](https://twitter.com/jeremybarbet).
 
 <ul class="app-store-list">
   <li class="app-store-item">
@@ -13,18 +15,6 @@ Hundreds of [open source](https://github.com/jeremybarbet/react-native-modalize/
     <img class="app-store-logo" src="https://is5-ssl.mzstatic.com/image/thumb/Purple123/v4/a6/10/83/a610833b-dc07-e2ce-40f3-a62109328add/AppIcon-0-0-1x_U007emarketing-0-0-0-5-85-220.png/434x0w.png" />
     <h3 class="app-store-name">Nova</h3>
     <p class="app-store-links"><a href="https://apps.apple.com/is/app/nova-iceland/id544945754">iOS</a> — <a href="https://play.google.com/store/apps/details?id=is.nova.app">Android</a></p>
-  </li>
-
-  <li class="app-store-item">
-    <img class="app-store-logo" src="" />
-    <h3 class="app-store-name">LA</h3>
-    <p class="app-store-links"><a href="#">iOS</a> — <a href="">Android</a></p>
-  </li>
-
-  <li class="app-store-item">
-    <img class="app-store-logo" src="" />
-    <h3 class="app-store-name">HO</h3>
-    <p class="app-store-links"><a href="#">iOS</a> — <a href="">Android</a></p>
   </li>
 
   <li class="app-store-item">
