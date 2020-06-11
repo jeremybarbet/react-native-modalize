@@ -111,3 +111,45 @@ pre > code,
     margin-bottom: 0 !important;
   }
 }
+
+/* Showcase */
+
+.app-store-list {
+  display: flex;
+  flex-wrap: wrap;
+
+  margin: 80px 0 0;
+  padding: 0;
+}
+
+.app-store-item {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  margin-bottom: 60px;
+
+  width: 30%;
+
+  list-style: none;
+}
+
+.app-store-name {
+  margin: 20px 0 0 !important;
+
+  font-size: 20px !important;
+  font-weight: 600;
+}
+
+.app-store-links {
+  font-size: 16px;
+
+  margin-top: 5px !important;
+}
+
+.app-store-logo {
+  width: 120px;
+  height: 120px;
+
+  border-radius: 20px;
+}
