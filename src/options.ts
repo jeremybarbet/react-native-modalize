@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   Animated,
   ViewStyle,
-  RegisteredStyle,
   ScrollViewProps,
   FlatListProps,
   SectionListProps,
@@ -11,16 +10,13 @@ import {
   ScrollView,
   FlatList,
   SectionList,
+  StyleProp,
 } from 'react-native';
 
 export type TOpen = 'default' | 'top';
 export type TClose = 'default' | 'alwaysOpen';
 export type TPosition = 'initial' | 'top';
-export type TStyle =
-  | ViewStyle
-  | ViewStyle[]
-  | RegisteredStyle<ViewStyle>
-  | RegisteredStyle<ViewStyle[]>;
+export type TStyle = StyleProp<ViewStyle>;
 
 export interface ITimingProps {
   duration: number;
