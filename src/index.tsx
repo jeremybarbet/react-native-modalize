@@ -960,5 +960,6 @@ const ModalizeBase = (
   return renderModalize;
 };
 
+export type ModalizeProps = IProps;
 export type Modalize = IHandles;
 export const Modalize = React.forwardRef(ModalizeBase);
