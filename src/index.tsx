@@ -23,6 +23,7 @@ import {
   StyleSheet,
   KeyboardAvoidingViewProps,
   ViewStyle,
+  NativeEventSubscription,
 } from 'react-native';
 import {
   PanGestureHandler,
@@ -172,6 +173,7 @@ const ModalizeBase = (
   const nativeViewChildrenRef = React.useRef<NativeViewGestureHandler>(null);
   const contentViewRef = React.useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
   const tapGestureOverlayRef = React.useRef<TapGestureHandler>(null);
+  const backButtonListenerRef = React.useRef<NativeEventSubscription>(null);
 
   // We diff and get the negative value only. It sometimes go above 0
   // (e.g. 1.5) and creates the flickering on Modalize for a ms
@@ -224,7 +226,7 @@ const ModalizeBase = (
   ): void => {
     const { timing, spring } = openAnimationConfig;
 
-    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+    backButtonListenerRef.current = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
 
     let toValue = 0;
     let toPanValue = 0;
@@ -306,7 +308,7 @@ const ModalizeBase = (
     const toValue =
       toInitialAlwaysOpen && alwaysOpen ? (modalHeightValue || 0) - alwaysOpen : screenHeight;
 
-    BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+    backButtonListenerRef.current.remove();
 
     cancelTranslateY.setValue(1);
     setBeginScrollYValue(0);
@@ -875,7 +877,7 @@ const ModalizeBase = (
     Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
 
     return (): void => {
-      BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+      backButtonListenerRef.current.remove();
       Keyboard.removeListener('keyboardDidShow', handleKeyboardShow);
       Keyboard.removeListener('keyboardDidHide', handleKeyboardHide);
     };
