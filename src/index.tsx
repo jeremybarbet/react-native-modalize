@@ -226,7 +226,10 @@ const ModalizeBase = (
   ): void => {
     const { timing, spring } = openAnimationConfig;
 
-    backButtonListenerRef.current = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+    (backButtonListenerRef as any).current = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress,
+    );
 
     let toValue = 0;
     let toPanValue = 0;
@@ -308,7 +311,7 @@ const ModalizeBase = (
     const toValue =
       toInitialAlwaysOpen && alwaysOpen ? (modalHeightValue || 0) - alwaysOpen : screenHeight;
 
-    backButtonListenerRef.current.remove();
+    backButtonListenerRef.current?.remove();
 
     cancelTranslateY.setValue(1);
     setBeginScrollYValue(0);
@@ -877,7 +880,7 @@ const ModalizeBase = (
     Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
 
     return (): void => {
-      backButtonListenerRef.current.remove();
+      backButtonListenerRef.current?.remove();
       Keyboard.removeListener('keyboardDidShow', handleKeyboardShow);
       Keyboard.removeListener('keyboardDidHide', handleKeyboardHide);
     };
