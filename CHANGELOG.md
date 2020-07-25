@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.5] - 2020-07-25
+
+### 👀 Bug Fixes
+
+- Use ref for back button listener by [@archansel](https://github.com/archansel) ([#189](https://github.com/jeremybarbet/react-native-modalize/issues/189)) ([491dfe](https://github.com/jeremybarbet/react-native-modalize/commit/491dfe5f12586dd3bacfa3163c7f863f9c7e6ccb))
+
+### ✨ Improvements
+
+- Exposed IProps as ModalizeProps by [@archansel](https://github.com/archansel) ([#233](https://github.com/jeremybarbet/react-native-modalize/issues/233)) ([b84388](https://github.com/jeremybarbet/react-native-modalize/commit/b843882e2f98d8cb9c95c01b7c6619d7aa0ebbac))
+
 ## [2.0.4] - 2020-05-20
 
 ### 👀 Bug Fixes
