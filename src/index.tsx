@@ -806,7 +806,7 @@ const ModalizeBase = (
           {showContent && (
             <TapGestureHandler
               ref={tapGestureOverlayRef}
-              enabled={panGestureEnabled || closeOnOverlayTap}
+              enabled={closeOnOverlayTap !== undefined ? closeOnOverlayTap : panGestureEnabled}
               onHandlerStateChange={handleOverlay}
             >
               <Animated.View
