@@ -388,7 +388,9 @@ const ModalizeBase = (
     setLayouts(new Map(layouts.set(component, height)));
 
     const max = Array.from(layouts).reduce((acc, cur) => acc + cur?.[1], 0);
-    const shorterHeight = max < endHeight;
+    const maxFixed = +max.toFixed(3);
+    const endHeightFixed = +endHeight.toFixed(3);
+    const shorterHeight = maxFixed < endHeightFixed;
 
     setDisableScroll(shorterHeight && disableScrollIfPossible);
   };
