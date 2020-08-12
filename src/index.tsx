@@ -312,7 +312,6 @@ const ModalizeBase = (
       toInitialAlwaysOpen && alwaysOpen ? (modalHeightValue || 0) - alwaysOpen : screenHeight;
 
     backButtonListenerRef.current?.remove();
-
     cancelTranslateY.setValue(1);
     setBeginScrollYValue(0);
     beginScrollY.setValue(0);
