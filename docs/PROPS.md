@@ -80,9 +80,16 @@ const App = () => {
 };
 ```
 
-To get the types from TypeScript, you will need to do like below. Since the content renderer is wrapped with an Animated component you need to extends it with the AnimatedComponent type.
+To get the types from TypeScript, you will need as above. Since the content renderer is wrapped with an Animated component you need to extends it with the AnimatedComponent type.
+To find the path to each of the function it will depend what content renderer (ScrollView, FlatList, SectionList) you are using and which version of `react-native` you are running.
 
-To find the path to each of the function it will depend what content renderer you are using and which version of `react-native` you are running. On latest `react-native`, it should be like in the example above: `contentRef.getScrollResponder().scrollTo(...)` or `contentRef.getScrollResponder().scrollToIndex(...)`, etc.. On older version, most likely something like `contentRef.getNode().getScrollResponder().scrollTo(...)`.
+On latest `react-native`, it should:
+
+- For the ScrollView: `contentRef.getScrollResponder().scrollTo(...)` or `contentRef.getScrollResponder().scrollToIndex(...)`, etc...
+- For the FlatList: `contentRef.current.getNode().scrollToOffset({ animated: true, offset: 0 });`, etc...
+- For the SectionList: `contentRef.current.getNode().scrollToLocation(...)`, etc...
+
+On older version of react-native, most likely something like `contentRef.getNode().getScrollResponder().scrollTo(...)` for the ScrollView and following the same pattern for the FlatList and SectionList.
 
 | Type            | Required |
 | --------------- | -------- |
