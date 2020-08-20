@@ -98,6 +98,7 @@ const ModalizeBase = (
     tapGestureEnabled = true,
     closeOnOverlayTap = true,
     closeSnapPointStraightEnabled = true,
+    disablePanGestureForChildren = false,
 
     // Animations
     openAnimationConfig = {
@@ -743,21 +744,25 @@ const ModalizeBase = (
       scrollEnabled,
       keyboardDismissMode,
     };
-
+    const optsWithOutPanGesture = {
+      ref: composeRefs(contentViewRef, contentRef) as React.RefObject<any>,
+      bounces,
+      scrollEventThrottle,
+    };
+    const options = !disablePanGestureForChildren ? opts : optsWithOutPanGesture;
     if (flatListProps) {
-      return <Animated.FlatList {...flatListProps} {...opts} />;
+      return <Animated.FlatList {...flatListProps} {...options} />;
     }
 
     if (sectionListProps) {
-      return <Animated.SectionList {...sectionListProps} {...opts} />;
+      return <Animated.SectionList {...sectionListProps} {...options} />;
     }
 
     if (customRenderer) {
-      return React.cloneElement(customRenderer, { ...opts });
+      return React.cloneElement(customRenderer, { ...options });
     }
-
     return (
-      <Animated.ScrollView {...scrollViewProps} {...opts}>
+      <Animated.ScrollView {...scrollViewProps} {...options}>
         {children}
       </Animated.ScrollView>
     );
@@ -769,7 +774,7 @@ const ModalizeBase = (
     return (
       <PanGestureHandler
         ref={panGestureChildrenRef}
-        enabled={panGestureEnabled}
+        enabled={panGestureEnabled && !disablePanGestureForChildren}
         simultaneousHandlers={[nativeViewChildrenRef, tapGestureModalizeRef]}
         shouldCancelWhenOutside={false}
         onGestureEvent={handleGestureEvent}
@@ -783,6 +788,7 @@ const ModalizeBase = (
             ref={nativeViewChildrenRef}
             waitFor={tapGestureModalizeRef}
             simultaneousHandlers={panGestureChildrenRef}
+            enabled={panGestureEnabled && !disablePanGestureForChildren}
           >
             {renderContent()}
           </NativeViewGestureHandler>
@@ -923,7 +929,7 @@ const ModalizeBase = (
         ref={tapGestureModalizeRef}
         maxDurationMs={tapGestureEnabled ? 100000 : 50}
         maxDeltaY={lastSnap}
-        enabled={panGestureEnabled}
+        enabled={panGestureEnabled && !disablePanGestureForChildren}
       >
         <View style={s.modalize__wrapper} pointerEvents="box-none">
           {showContent && (

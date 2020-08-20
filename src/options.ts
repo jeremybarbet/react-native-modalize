@@ -250,6 +250,12 @@ export interface IProps<ListItem = any> {
   withOverlay?: boolean;
 
   /**
+   * Define if disable the pan gesture of child component.
+   * @default false
+   */
+  disablePanGestureForChildren?: boolean;
+
+  /**
    * A header component outside of the ScrollView, on top of the modal.
    */
   HeaderComponent?: React.ReactNode;
