@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.6] - 2020-08-27
+
+### 👀 Bug Fixes
+
+- Fix adjustToContentHeight on Android ([#219](https://github.com/jeremybarbet/react-native-modalize/issues/219)) ([bebd6e](https://github.com/jeremybarbet/react-native-modalize/commit/bebd6ec2621980b11290ec55cc23f988a264dfdd))
+
+### ✨ Improvements
+
+- Update documentation about installation steps by [@helderburato](https://github.com/helderburato) ([4fcb51](https://github.com/jeremybarbet/react-native-modalize/commit/4fcb51e2df2c4c070852ae6048aa4cc317b1e9f7))
+- More documentation about `contentRef` props ([9dd339](https://github.com/jeremybarbet/react-native-modalize/commit/9dd33966dd9b858b3580ded0cb5e21543704a16d))
+
 ## [2.0.5] - 2020-07-25
 
 ### 👀 Bug Fixes

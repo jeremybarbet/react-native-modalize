@@ -715,7 +715,11 @@ const ModalizeBase = (
   };
 
   const renderContent = (): JSX.Element => {
-    const keyboardDismissMode = isIos ? 'interactive' : 'on-drag';
+    const keyboardDismissMode:
+      | Animated.Value
+      | Animated.AnimatedInterpolation
+      | 'interactive'
+      | 'on-drag' = isIos ? 'interactive' : 'on-drag';
     const passedOnProps = flatListProps ?? sectionListProps ?? scrollViewProps;
     // We allow overwrites when the props (bounces, scrollEnabled) are set to false, when true we use Modalize's core behavior
     const bounces =
