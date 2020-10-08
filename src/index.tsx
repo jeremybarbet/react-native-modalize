@@ -848,9 +848,14 @@ const ModalizeBase = (
     },
   }));
 
+  const lastSnapRef = React.useRef(lastSnap);
   React.useEffect(() => {
-    if (alwaysOpen && (modalHeightValue || adjustToContentHeight)) {
-      handleAnimateOpen(alwaysOpen);
+    lastSnapRef.current = lastSnap;
+  }, [lastSnap]);
+
+  React.useEffect(() => {
+    if (lastSnapRef.current || (alwaysOpen && (modalHeightValue || adjustToContentHeight))) {
+      handleAnimateOpen(alwaysOpen, lastSnapRef.current ? 'default' : undefined);
     }
   }, [alwaysOpen, modalHeightValue]);
 
