@@ -524,7 +524,7 @@ Callback function when the modal is closed.
 
 ### `onBackButtonPress`
 
-onBackButtonPress is called when the user taps the hardware back button on Android or the menu button on Apple TV. You can any function you want, but you will have to close the modal by yourself.
+onBackButtonPress is called when the user taps the hardware back button on Android or the menu button on Apple TV. You can pass any function you want, but you will have to close the modal by yourself.
 
 | Type     | Required |
 | -------- | -------- |
