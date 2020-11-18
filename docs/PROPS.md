@@ -267,9 +267,9 @@ Define where the handle on top of the modal should be positioned.
 
 Disable the scroll when the content is shorter than screen's height.
 
-| Type   | Required | Default |
-| ------ | -------- | ------- |
-| number | No       | `true`  |
+| Type | Required | Default |
+| ---- | -------- | ------- |
+| bool | No       | `true`  |
 
 ### `avoidKeyboardLikeIOS`
 
