@@ -672,6 +672,9 @@ const ModalizeBase = (
     );
   };
 
+  const renderElement = (Element: React.ReactNode): JSX.Element =>
+    typeof Element === 'function' ? Element() : Element;
+
   const renderComponent = (
     component: React.ReactNode,
     name: 'header' | 'footer' | 'floating',
@@ -680,8 +683,6 @@ const ModalizeBase = (
       return null;
     }
 
-    const renderElement = (Element: React.ReactNode): JSX.Element =>
-      typeof Element === 'function' ? Element() : Element;
     const tag = renderElement(component);
 
     /**
@@ -757,7 +758,8 @@ const ModalizeBase = (
     }
 
     if (customRenderer) {
-      return React.cloneElement(customRenderer, { ...opts });
+      const tag = renderElement(customRenderer);
+      return React.cloneElement(tag, { ...opts });
     }
 
     return (
