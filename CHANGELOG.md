@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.7] - 2020-12-03
+
+### 👀 Bug Fixes
+
+- Fix disableScrollIfPossible type ([#283](https://github.com/jeremybarbet/react-native-modalize/pull/283)) ([9b8563](https://github.com/jeremybarbet/react-native-modalize/commit/9b8563187b9b6451f5f5bf0adef7676d43017f4d))
+- Add missing word at callbacks section ([#272](https://github.com/jeremybarbet/react-native-modalize/commit/5880efc45384bccf254b755915c3d332754755bf)) ([5880ef](https://github.com/jeremybarbet/react-native-modalize/commit/5880efc45384bccf254b755915c3d332754755bf))
+- Added devices support for iPhone 12 devices ([#294](https://github.com/jeremybarbet/react-native-modalize/pull/294)) ([e80029](https://github.com/jeremybarbet/react-native-modalize/commit/e80029412931123c8d328261671b94ca055b52c9))
+- Position on orientation change ([#274](https://github.com/jeremybarbet/react-native-modalize/pull/274)) ([f0d75a](https://github.com/jeremybarbet/react-native-modalize/commit/f0d75abeafbb1c53842ebc69744d43b993091d89))
+
+### ✨ Improvements
+
+- Allow custom renderer to receive function or react node ([#291](https://github.com/jeremybarbet/react-native-modalize/pull/291)) ([26a4c1](https://github.com/jeremybarbet/react-native-modalize/commit/26a4c141fc729043c9e8b435223afb1ff4012dc1))
+- If color scheme is "dark", setting modal backgroundColor to black ([#278](https://github.com/jeremybarbet/react-native-modalize/pull/278)) ([d5ccbb](https://github.com/jeremybarbet/react-native-modalize/commit/d5ccbb1076527b4272b2a64ec42c15b10176d53b))
+
 ## [2.0.6] - 2020-08-27
 
 ### 👀 Bug Fixes
