@@ -408,9 +408,9 @@ The highest the number is, the faster the user will need to pan down and make an
 
 ?> If the `velocity` is defined, then it's the first condition checked to close Modalize, then comes `threshold` used in a second time. If you want to use the `threshold` method only, just define `velocity={undefined}`.
 
-| Type   | Required  | Default |
-| ------ | --------- | ------- |
-| number | undefined | No      | `2800` |
+| Type   | Required | Default |
+| ------ | -------- | ------- |
+| number | No       | `2800`  |
 
 ### `panGestureAnimatedValue`
 
