@@ -20,7 +20,7 @@
     "react-native-tab-view": "2.14.0",
     "react-native-web": "0.12.2",
     "react-native-web-webview": "1.0.1",
-    "react-native-webview": "8.1.1"
+    "react-native-webview": "11.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
