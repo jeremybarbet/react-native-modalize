@@ -1,8 +1,10 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Appearance } from 'react-native';
 
 import { isWeb } from './utils/devices';
 
 const { height } = Dimensions.get('window');
+
+const colorScheme = Appearance.getColorScheme();
 
 export default StyleSheet.create({
   modalize: {
@@ -23,7 +25,7 @@ export default StyleSheet.create({
 
     marginTop: 'auto',
 
-    backgroundColor: '#fff',
+    backgroundColor: colorScheme === 'dark' ? '#000' : '#fff',
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
 
