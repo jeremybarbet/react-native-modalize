@@ -159,7 +159,6 @@ const ModalizeBase = (
   const [cancelClose, setCancelClose] = React.useState(false);
   const [layouts, setLayouts] = React.useState<Map<string, number>>(new Map());
 
-  const lastSnapRef = React.useRef(lastSnap);
   const cancelTranslateY = React.useRef(new Animated.Value(1)).current; // 1 by default to have the translateY animation running
   const componentTranslateY = React.useRef(new Animated.Value(0)).current;
   const overlay = React.useRef(new Animated.Value(0)).current;
@@ -852,12 +851,8 @@ const ModalizeBase = (
   }));
 
   React.useEffect(() => {
-    lastSnapRef.current = lastSnap;
-  }, [lastSnap]);
-
-  React.useEffect(() => {
-    if (lastSnapRef.current || (alwaysOpen && (modalHeightValue || adjustToContentHeight))) {
-      handleAnimateOpen(alwaysOpen, lastSnapRef.current ? 'default' : undefined);
+    if (alwaysOpen && (modalHeightValue || adjustToContentHeight)) {
+      handleAnimateOpen(alwaysOpen);
     }
   }, [alwaysOpen, modalHeightValue]);
 
