@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.8] - 2020-12-04
+
+### 👀 Bug Fixes
+
+- Revert: Position on orientation change
+- Revert: If color scheme is "dark", setting modal backgroundColor to black
+
 ## [2.0.7] - 2020-12-03
 
 ### 👀 Bug Fixes
