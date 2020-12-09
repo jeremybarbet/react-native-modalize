@@ -304,7 +304,7 @@ const ModalizeBase = (
     });
   };
 
-  const handleAnimateClose = (dest: TClose = 'default'): void => {
+  const handleAnimateClose = (dest: TClose = 'default', callback: Function =() => {}): void => {
     const { timing, spring } = closeAnimationConfig;
     const lastSnapValue = snapPoint ? snaps[1] : 80;
     const toInitialAlwaysOpen = dest === 'alwaysOpen' && Boolean(alwaysOpen);
@@ -348,6 +348,10 @@ const ModalizeBase = (
     ]).start(() => {
       if (onClosed) {
         onClosed();
+      }
+
+      if (callback) {
+        callback();
       }
 
       if (alwaysOpen && dest === 'alwaysOpen' && onPositionChange) {
@@ -431,12 +435,12 @@ const ModalizeBase = (
     handleBaseLayout(name, nativeEvent.layout.height);
   };
 
-  const handleClose = (dest?: TClose): void => {
+  const handleClose = (dest?: TClose, callback?: Function): void => {
     if (onClose) {
       onClose();
     }
 
-    handleAnimateClose(dest);
+    handleAnimateClose(dest, callback);
   };
 
   const handleChildren = (
@@ -845,8 +849,8 @@ const ModalizeBase = (
       handleAnimateOpen(alwaysOpen, dest);
     },
 
-    close(dest?: TClose): void {
-      handleClose(dest);
+    close(dest?: TClose, callback?: Function): void {
+      handleClose(dest, callback);
     },
   }));
 
