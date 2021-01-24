@@ -67,25 +67,25 @@
     }
   },
   "devDependencies": {
-    "@commitlint/cli": "9.1.2",
-    "@commitlint/config-conventional": "9.1.2",
-    "@types/react": "16.14.2",
+    "@commitlint/cli": "11.0.0",
+    "@commitlint/config-conventional": "11.0.0",
+    "@types/react": "17.0.0",
     "@types/react-native": "0.63.37",
-    "@typescript-eslint/eslint-plugin": "3.10.1",
-    "@typescript-eslint/parser": "3.10.1",
+    "@typescript-eslint/eslint-plugin": "4.14.0",
+    "@typescript-eslint/parser": "4.14.0",
     "concurrently": "5.3.0",
     "cpx": "1.5.0",
     "eslint": "7.14.0",
-    "eslint-config-prettier": "6.15.0",
+    "eslint-config-prettier": "7.2.0",
     "eslint-plugin-react": "7.21.5",
     "eslint-plugin-react-native": "3.10.0",
     "husky": "4.3.0",
     "lint-staged": "10.5.2",
     "prettier": "2.2.1",
-    "react": "16.14.0",
+    "react": "17.0.1",
     "react-native": "0.63.4",
     "react-native-gesture-handler": "1.9.0",
-    "typescript": "3.9.7"
+    "typescript": "4.1.3"
   },
   "peerDependencies": {
     "react": "> 15.0.0",
