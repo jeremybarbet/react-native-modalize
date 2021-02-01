@@ -9,7 +9,9 @@ export const useModalize = () => {
     ref.current?.close(dest);
   }, []);
 
-  const open = useCallback((dest?: TOpen) => ref.current?.open(dest), []);
+  const open = useCallback((dest?: TOpen) => {
+    ref.current?.open(dest);
+  }, []);
 
   return { ref, open, close };
 };
