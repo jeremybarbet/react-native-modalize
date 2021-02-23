@@ -192,8 +192,6 @@ const ModalizeBase = (
 
   let willCloseModalize = false;
 
-  beginScrollY.addListener(({ value }) => setBeginScrollYValue(value));
-
   const handleBackPress = (): boolean => {
     if (alwaysOpen) {
       return false;
@@ -206,18 +204,6 @@ const ModalizeBase = (
     }
 
     return true;
-  };
-
-  const handleKeyboardShow = (event: KeyboardEvent): void => {
-    const { height } = event.endCoordinates;
-
-    setKeyboardToggle(true);
-    setKeyboardHeight(height);
-  };
-
-  const handleKeyboardHide = (): void => {
-    setKeyboardToggle(false);
-    setKeyboardHeight(0);
   };
 
   const handleAnimateOpen = (
@@ -883,6 +869,25 @@ const ModalizeBase = (
   }, [adjustToContentHeight, modalHeight, screenHeight]);
 
   React.useEffect(() => {
+    const listenerId = beginScrollY.addListener(({ value }) => setBeginScrollYValue(value));
+    return () => {
+      beginScrollY.removeListener(listenerId);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    const handleKeyboardShow = (event: KeyboardEvent): void => {
+      const { height } = event.endCoordinates;
+
+      setKeyboardToggle(true);
+      setKeyboardHeight(height);
+    };
+
+    const handleKeyboardHide = (): void => {
+      setKeyboardToggle(false);
+      setKeyboardHeight(0);
+    };
+
     Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
     Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
 
