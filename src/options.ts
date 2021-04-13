@@ -165,6 +165,12 @@ export interface IProps<ListItem = any> {
   panGestureComponentEnabled?: boolean;
 
   /**
+   * Using this prop will enable/disable pan gesture for the children.
+   * @default true
+   */
+  panGestureChildrenEnabled?: boolean;
+
+  /**
    * Define if the `TapGestureHandler` wrapping Modalize's core should be enable or not.
    * @default true
    */
