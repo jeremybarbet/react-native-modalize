@@ -194,19 +194,34 @@ const ModalizeBase = (
 
   beginScrollY.addListener(({ value }) => setBeginScrollYValue(value));
 
-  const handleBackPress = (): boolean => {
+  const handleClose = (dest?: TClose): void => {
+    if (onClose) {
+      onClose();
+    }
+
+    handleAnimateClose(dest);
+  };
+
+  const handleBackPress = React.useCallback(() => {
     if (alwaysOpen) {
       return false;
     }
-
     if (onBackButtonPress) {
       return onBackButtonPress();
-    } else {
+    }
+    else {
       handleClose();
     }
-
     return true;
-  };
+  }, [handleClose, onBackButtonPress]);
+
+  React.useEffect(() => {
+    if (backButtonListenerRef.current) {
+      backButtonListenerRef.current = BackHandler.addEventListener('hardwareBackPress', handleBackPress)
+
+      return BackHandler.removeEventListener('hardwareBackPress')
+    }
+  }, [handleBackPress]);
 
   const handleKeyboardShow = (event: KeyboardEvent): void => {
     const { height } = event.endCoordinates;
@@ -225,7 +240,8 @@ const ModalizeBase = (
     dest: TOpen = 'default',
   ): void => {
     const { timing, spring } = openAnimationConfig;
-
+    // it can not be destroy, because BackHandler have a feature that 
+    // if one subscription returns true, then subscriptions registered earlier will not be called 
     (backButtonListenerRef as any).current = BackHandler.addEventListener(
       'hardwareBackPress',
       handleBackPress,
@@ -429,14 +445,6 @@ const ModalizeBase = (
     }
 
     handleBaseLayout(name, nativeEvent.layout.height);
-  };
-
-  const handleClose = (dest?: TClose): void => {
-    if (onClose) {
-      onClose();
-    }
-
-    handleAnimateClose(dest);
   };
 
   const handleChildren = (
