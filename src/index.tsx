@@ -224,6 +224,8 @@ const ModalizeBase = (
     alwaysOpenValue: number | undefined,
     dest: TOpen = 'default',
   ): void => {
+    if (isVisible) return;
+
     const { timing, spring } = openAnimationConfig;
 
     (backButtonListenerRef as any).current = BackHandler.addEventListener(
@@ -305,6 +307,8 @@ const ModalizeBase = (
   };
 
   const handleAnimateClose = (dest: TClose = 'default'): void => {
+    if (!isVisible) return;
+
     const { timing, spring } = closeAnimationConfig;
     const lastSnapValue = snapPoint ? snaps[1] : 80;
     const toInitialAlwaysOpen = dest === 'alwaysOpen' && Boolean(alwaysOpen);
