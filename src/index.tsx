@@ -115,6 +115,7 @@ const ModalizeBase = (
 
     // Elements visibilities
     withReactModal = false,
+    reactModalProps,
     withHandle = true,
     withOverlay = true,
 
@@ -838,6 +839,7 @@ const ModalizeBase = (
 
   React.useImperativeHandle(ref, () => ({
     open(dest?: TOpen): void {
+      console.log('OPEN!');
       if (onOpen) {
         onOpen();
       }
@@ -951,6 +953,7 @@ const ModalizeBase = (
 
   const renderReactModal = (child: JSX.Element): JSX.Element => (
     <Modal
+      {...reactModalProps}
       supportedOrientations={['landscape', 'portrait', 'portrait-upside-down']}
       onRequestClose={handleBackPress}
       hardwareAccelerated={USE_NATIVE_DRIVER}
