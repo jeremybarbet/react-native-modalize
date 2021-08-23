@@ -839,7 +839,6 @@ const ModalizeBase = (
 
   React.useImperativeHandle(ref, () => ({
     open(dest?: TOpen): void {
-      console.log('OPEN!');
       if (onOpen) {
         onOpen();
       }
