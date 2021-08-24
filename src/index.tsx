@@ -893,7 +893,7 @@ const ModalizeBase = (
         Keyboard.removeListener('keyboardDidShow', handleKeyboardShow);
         Keyboard.removeListener('keyboardDidHide', handleKeyboardHide);
       } else {
-        for (const subscription in subscriptions) {
+        for (const subscription of subscriptions) {
           subscription.remove();
         }
       }
