@@ -444,6 +444,14 @@ Define if `Modalize` has to be wrap with the Modal component from react-native.
 | ---- | -------- | ------- |
 | bool | No       | `false` |
 
+### `reactModalProps`
+
+Props for the react-native `Modal` wrapping `Modalize`.
+
+| Type       | Required |
+| ---------- | -------- |
+| ModalProps | No       |
+
 ### `withHandle`
 
 Define if the handle on top of the modal is display or not.

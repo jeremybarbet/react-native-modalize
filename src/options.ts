@@ -11,6 +11,7 @@ import {
   FlatList,
   SectionList,
   StyleProp,
+  ModalProps,
 } from 'react-native';
 
 export type TOpen = 'default' | 'top';
@@ -236,6 +237,11 @@ export interface IProps<ListItem = any> {
    * @default false
    */
   withReactModal?: boolean;
+
+  /**
+   * Props for the react-native Modal wrapping Modalize
+   */
+  reactModalProps: ModalProps;
 
   /**
    * Define if the handle on top of the modal is display or not.
