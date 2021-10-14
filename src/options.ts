@@ -241,7 +241,7 @@ export interface IProps<ListItem = any> {
   /**
    * Props for the react-native Modal wrapping Modalize
    */
-  reactModalProps: ModalProps;
+  reactModalProps?: ModalProps;
 
   /**
    * Define if the handle on top of the modal is display or not.
