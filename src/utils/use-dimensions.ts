@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Dimensions, ScaledSize } from 'react-native';
+import { Dimensions, EmitterSubscription, ScaledSize } from 'react-native';
+
+import { isBelowRN65 } from './devices';
 
 export const useDimensions = (): ScaledSize => {
   const [dimensions, setDimensions] = React.useState(Dimensions.get('window'));
@@ -9,9 +11,21 @@ export const useDimensions = (): ScaledSize => {
   };
 
   React.useEffect(() => {
-    Dimensions.addEventListener('change', onChange);
+    let dimensionChangeListener: EmitterSubscription | null = null;
 
-    return (): void => Dimensions.removeEventListener('change', onChange);
+    if (isBelowRN65) {
+      Dimensions.addEventListener('change', onChange);
+    } else {
+      dimensionChangeListener = Dimensions.addEventListener('change', onChange);
+    }
+
+    return () => {
+      if (isBelowRN65) {
+        Dimensions.removeEventListener('change', onChange);
+      } else {
+        dimensionChangeListener?.remove();
+      }
+    };
   }, []);
 
   return dimensions;

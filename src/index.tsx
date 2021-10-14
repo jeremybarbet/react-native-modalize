@@ -24,6 +24,7 @@ import {
   KeyboardAvoidingViewProps,
   ViewStyle,
   NativeEventSubscription,
+  EmitterSubscription,
 } from 'react-native';
 import {
   PanGestureHandler,
@@ -37,7 +38,7 @@ import {
 import { IProps, TOpen, TClose, TStyle, IHandles, TPosition } from './options';
 import { useDimensions } from './utils/use-dimensions';
 import { getSpringConfig } from './utils/get-spring-config';
-import { isIphoneX, isIos, isAndroid } from './utils/devices';
+import { isIphoneX, isIos, isAndroid, isBelowRN65 } from './utils/devices';
 import { invariant } from './utils/invariant';
 import { composeRefs } from './utils/compose-refs';
 import s from './styles';
@@ -883,13 +884,27 @@ const ModalizeBase = (
   }, [adjustToContentHeight, modalHeight, screenHeight]);
 
   React.useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
-    Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
+    let keyboardShowListener: EmitterSubscription | null = null;
+    let keyboardHideListener: EmitterSubscription | null = null;
+
+    if (isBelowRN65) {
+      Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
+      Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
+    } else {
+      keyboardShowListener = Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
+      keyboardHideListener = Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
+    }
 
     return (): void => {
       backButtonListenerRef.current?.remove();
-      Keyboard.removeListener('keyboardDidShow', handleKeyboardShow);
-      Keyboard.removeListener('keyboardDidHide', handleKeyboardHide);
+
+      if (isBelowRN65) {
+        Keyboard.removeListener('keyboardDidShow', handleKeyboardShow);
+        Keyboard.removeListener('keyboardDidHide', handleKeyboardHide);
+      } else {
+        keyboardShowListener?.remove();
+        keyboardHideListener?.remove();
+      }
     };
   }, []);
 
