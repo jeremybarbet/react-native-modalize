@@ -8,6 +8,7 @@
 
   - [Props](/PROPS)
   - [Methods](/METHODS)
+  - [Hooks](/HOOKS)
   - [Development](/DEVELOPMENT)
   - [Showcase](/SHOWCASE)
   - [FAQ](/FAQ)

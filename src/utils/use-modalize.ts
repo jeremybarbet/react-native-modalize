@@ -1,15 +1,16 @@
-import { useCallback, useRef } from 'react';
+import * as React from 'react';
+
 import { Modalize } from '../index';
 import { TClose, TOpen } from '../options';
 
 export const useModalize = () => {
-  const ref = useRef<Modalize>(null);
+  const ref = React.useRef<Modalize>(null);
 
-  const close = useCallback((dest?: TClose) => {
+  const close = React.useCallback((dest?: TClose) => {
     ref.current?.close(dest);
   }, []);
 
-  const open = useCallback((dest?: TOpen) => {
+  const open = React.useCallback((dest?: TOpen) => {
     ref.current?.open(dest);
   }, []);
 
