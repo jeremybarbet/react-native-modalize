@@ -35,9 +35,9 @@ The method to close Modalize. You don't need to call it to dismiss the modal, si
 
 ?> If you are using `alwaysOpen` prop, you can supply a `dest` argument to the `close` method to reset it to the initial position `close('alwaysOpen')`, and avoiding to close it completely.
 
-| Type                                         | Required |
-| -------------------------------------------- | -------- |
-| function: (dest?: 'default' \| 'alwaysOpen') | No       |
+| Type                                                            | Required |
+| --------------------------------------------------------------- | -------- |
+| function: (dest?: 'default' \| 'alwaysOpen', callback?(): void) | No       |
 
 ## Externals
 
