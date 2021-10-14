@@ -194,8 +194,6 @@ const ModalizeBase = (
 
   let willCloseModalize = false;
 
-  beginScrollY.addListener(({ value }) => setBeginScrollYValue(value));
-
   const handleBackPress = (): boolean => {
     if (alwaysOpen) {
       return false;
@@ -892,6 +890,10 @@ const ModalizeBase = (
     let keyboardShowListener: EmitterSubscription | null = null;
     let keyboardHideListener: EmitterSubscription | null = null;
 
+    const beginScrollYListener = beginScrollY.addListener(({ value }) =>
+      setBeginScrollYValue(value),
+    );
+
     if (isBelowRN65) {
       Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
       Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
@@ -902,6 +904,7 @@ const ModalizeBase = (
 
     return (): void => {
       backButtonListenerRef.current?.remove();
+      beginScrollY.removeListener(beginScrollYListener);
 
       if (isBelowRN65) {
         Keyboard.removeListener('keyboardDidShow', handleKeyboardShow);
