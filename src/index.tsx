@@ -256,10 +256,16 @@ const ModalizeBase = (
     setIsVisible(true);
     setShowContent(true);
 
+    
+
     if ((alwaysOpenValue && dest !== 'top') || (snapPoint && dest === 'default')) {
       newPosition = 'initial';
     } else {
       newPosition = 'top';
+    }
+
+    if (onPositionChange) {
+      onPositionChange(newPosition);
     }
 
     Animated.parallel([
