@@ -783,7 +783,6 @@ const ModalizeBase = (
         simultaneousHandlers={[nativeViewChildrenRef, tapGestureModalizeRef]}
         shouldCancelWhenOutside={false}
         onGestureEvent={handleGestureEvent}
-        minDist={ACTIVATED}
         activeOffsetY={ACTIVATED}
         activeOffsetX={ACTIVATED}
         onHandlerStateChange={handleChildren}
