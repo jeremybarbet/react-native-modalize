@@ -38,7 +38,8 @@ import {
 import { IProps, TOpen, TClose, TStyle, IHandles, TPosition } from './options';
 import { useDimensions } from './utils/use-dimensions';
 import { getSpringConfig } from './utils/get-spring-config';
-import { isIphoneX, isIos, isAndroid, isBelowRN65, isRNGHVersion2 } from './utils/devices';
+import { isIphoneX, isIos, isAndroid } from './utils/devices';
+import { isBelowRN65, isRNGH2 } from './utils/libraries';
 import { invariant } from './utils/invariant';
 import { composeRefs } from './utils/compose-refs';
 import s from './styles';
@@ -775,7 +776,8 @@ const ModalizeBase = (
 
   const renderChildren = (): JSX.Element => {
     const style = adjustToContentHeight ? s.content__adjustHeight : s.content__container;
-    const minDistValue = isRNGHVersion2() ? undefined : ACTIVATED;
+    const minDist = isRNGH2() ? undefined : ACTIVATED;
+
     return (
       <PanGestureHandler
         ref={panGestureChildrenRef}
@@ -783,7 +785,7 @@ const ModalizeBase = (
         simultaneousHandlers={[nativeViewChildrenRef, tapGestureModalizeRef]}
         shouldCancelWhenOutside={false}
         onGestureEvent={handleGestureEvent}
-        minDist={minDistValue}
+        minDist={minDist}
         activeOffsetY={ACTIVATED}
         activeOffsetX={ACTIVATED}
         onHandlerStateChange={handleChildren}
