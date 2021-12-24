@@ -15,6 +15,6 @@ export const isIphoneX =
     width === 896 ||
     height === 926 ||
     width === 926);
+
 export const isAndroid = Platform.OS === 'android';
 export const isWeb = Platform.OS === 'web';
-export const isBelowRN65 = Platform.constants?.reactNativeVersion?.minor < 65;

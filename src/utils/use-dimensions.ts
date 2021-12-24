@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Dimensions, EmitterSubscription, ScaledSize } from 'react-native';
 
-import { isBelowRN65 } from './devices';
+import { isBelowRN65 } from './libraries';
 
 export const useDimensions = (): ScaledSize => {
   const [dimensions, setDimensions] = React.useState(Dimensions.get('window'));
