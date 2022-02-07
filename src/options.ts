@@ -1,32 +1,33 @@
 import * as React from 'react';
 import {
   Animated,
-  ViewStyle,
-  ScrollViewProps,
-  FlatListProps,
-  SectionListProps,
   EasingFunction,
-  LayoutRectangle,
-  ScrollView,
   FlatList,
-  SectionList,
-  StyleProp,
+  FlatListProps,
+  LayoutRectangle,
   ModalProps,
+  ScrollView,
+  ScrollViewProps,
+  SectionList,
+  SectionListProps,
+  StyleProp,
+  ViewStyle,
 } from 'react-native';
+import RAnimated from 'react-native-reanimated';
 
-export type TOpen = 'default' | 'top';
-export type TClose = 'default' | 'alwaysOpen';
-export type TPosition = 'initial' | 'top';
-export type TStyle = StyleProp<ViewStyle>;
+export type Open = 'default' | 'top';
+export type Close = 'default' | 'alwaysOpen';
+export type Position = 'initial' | 'top';
+export type Style = StyleProp<ViewStyle>;
 
-export interface ITimingProps {
+export interface TimingProps {
   duration: number;
   easing?: EasingFunction;
   delay?: number;
   isInteraction?: boolean;
 }
 
-export interface ISpringProps {
+export interface SpringProps {
   friction?: number;
   tension?: number;
   speed?: number;
@@ -36,12 +37,12 @@ export interface ISpringProps {
   mass?: number;
 }
 
-export interface IConfigProps {
-  timing: ITimingProps;
-  spring?: ISpringProps;
+export interface ConfigProps {
+  timing: TimingProps;
+  spring?: SpringProps;
 }
 
-export interface IProps<ListItem = any> {
+export interface ModalizeProps<ListItem = any> {
   /**
    * A reference to the view (ScrollView, FlatList, SectionList) that provides the scroll behavior, where you will be able to access their owns methods.
    */
@@ -75,27 +76,27 @@ export interface IProps<ListItem = any> {
   /**
    * Define the style of the root modal component.
    */
-  rootStyle?: TStyle;
+  rootStyle?: Style;
 
   /**
    * Define the style of the modal (includes handle/header/children/footer).
    */
-  modalStyle?: TStyle;
+  modalStyle?: Style;
 
   /**
    * Define the style of the handle on top of the modal.
    */
-  handleStyle?: TStyle;
+  handleStyle?: Style;
 
   /**
    * Define the style of the overlay.
    */
-  overlayStyle?: TStyle;
+  overlayStyle?: Style;
 
   /**
    * Define the style of the children renderer (only the inside part).
    */
-  childrenStyle?: TStyle;
+  childrenStyle?: Style;
 
   /**
    * A number that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
@@ -191,7 +192,7 @@ export interface IProps<ListItem = any> {
    * spring: { speed: 14, bounciness: 5 }
    * }
    */
-  openAnimationConfig?: IConfigProps;
+  openAnimationConfig?: ConfigProps;
 
   /**
    * Object to change the close animations.
@@ -201,7 +202,7 @@ export interface IProps<ListItem = any> {
    * spring: { speed: 14, bounciness: 5 }
    * }
    */
-  closeAnimationConfig?: IConfigProps;
+  closeAnimationConfig?: ConfigProps;
 
   /**
    * A number that determines the momentum of the scroll required.
@@ -225,6 +226,11 @@ export interface IProps<ListItem = any> {
    * Animated.Value of the modal position between 0 and 1.
    */
   panGestureAnimatedValue?: Animated.Value;
+
+  /**
+   * Animated.Value of the modal position between 0 and 1.
+   */
+  newPanGestureAnimatedValue?: RAnimated.SharedValue<number>;
 
   /**
    * Define if the Animated.Value uses the native thread to execute the animations.
@@ -315,14 +321,14 @@ export interface IProps<ListItem = any> {
   onLayout?(nativeEvent: { layout: LayoutRectangle }): void;
 }
 
-export interface IHandles {
+export interface Handles {
   /**
    * Method to open Modalize.
    *
    * If you are using `snapPoint` prop, you can supply a `dest` argument to the `open` method, to open it
    * to the top directly `open('top')`. You don't have to provide anything if you want the default behavior.
    */
-  open(dest?: TOpen): void;
+  open(dest?: Open): void;
 
   /**
    * The method to close Modalize. You don't need to call it to dismiss the modal, since you can swipe down to dismiss.
@@ -330,5 +336,5 @@ export interface IHandles {
    * If you are using `alwaysOpen` prop, you can supply a `dest` argument to the `close` method to reset it
    * to the initial position `close('alwaysOpen')`, and avoiding to close it completely.
    */
-  close(dest?: TClose): void;
+  close(dest?: Close): void;
 }
