@@ -40,33 +40,8 @@
     "type": "git",
     "url": "https://github.com/jeremybarbet/react-native-modalize"
   },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx,json,md}": [
-      "prettier --write"
-    ],
-    "*.{ts,tsx}": [
-      "eslint --fix"
-    ]
-  },
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "all",
-    "printWidth": 100,
-    "arrowParens": "avoid",
-    "semi": true
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged"
-    }
-  },
   "devDependencies": {
+    "@actions/core": "1.6.0",
     "@commitlint/cli": "16.1.0",
     "@commitlint/config-conventional": "16.0.0",
     "@types/react": "17.0.39",
@@ -80,8 +55,6 @@
     "eslint-plugin-react": "7.28.0",
     "eslint-plugin-react-native": "4.0.0",
     "eslint-plugin-simple-import-sort": "7.0.0",
-    "husky": "7.0.4",
-    "lint-staged": "12.3.3",
     "prettier": "2.5.1",
     "react": "17.0.2",
     "react-native": "0.67.2",

@@ -3,7 +3,6 @@ import {
   FlatList,
   FlatListProps,
   LayoutRectangle,
-  ModalProps,
   ScrollView,
   ScrollViewProps,
   SectionList,

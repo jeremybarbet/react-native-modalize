@@ -12,13 +12,11 @@ import React, {
 import {
   BackHandler,
   Easing,
-  EmitterSubscription,
   FlatList,
   Keyboard,
   KeyboardAvoidingView,
   KeyboardEvent,
   LayoutChangeEvent,
-  Modal,
   NativeEventSubscription,
   Platform,
   ScrollView,
@@ -29,6 +27,8 @@ import {
   ViewStyle,
 } from 'react-native';
 import {
+  Gesture,
+  GestureDetector,
   NativeViewGestureHandler,
   PanGestureHandler,
   PanGestureHandlerStateChangeEvent,
@@ -59,13 +59,17 @@ import { Close, Handles, ModalizeProps, Open, Position, Style } from './options'
 import s from './styles';
 
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
+
+const AnimatedSectionList = Animated.createAnimatedComponent(
+  SectionList as new () => SectionList<unknown>,
+);
+
 /**
  * When scrolling, it happens than beginScrollYValue is not always equal to 0 (top of the ScrollView).
  * Since we use this to trigger the swipe down gesture animation, we allow a small threshold to
  * not dismiss Modalize when we are using the ScrollView and we don't want to dismiss.
  */
 const SCROLL_THRESHOLD = -4;
-const USE_NATIVE_DRIVER = true;
 const ACTIVATED = 20;
 const PAN_DURATION = 150;
 
@@ -214,10 +218,10 @@ const ModalizeBase = (
 
   // We diff and get the negative value only. It sometimes go above 0
   // (e.g. 1.5) and creates the flickering on Modalize for a ms
-  const diffClamp = useDerivedValue(() => clamp(reverseBeginScrollY.value, -screenHeight, 0), [
-    reverseBeginScrollY,
-    screenHeight,
-  ]);
+  const diffClamp = useDerivedValue(
+    () => clamp(reverseBeginScrollY.value, -screenHeight, 0),
+    [reverseBeginScrollY, screenHeight],
+  );
 
   // We diff and get the negative value only. It sometimes go above 0
   // (e.g. 1.5) and creates the flickering on Modalize for a ms
@@ -227,14 +231,18 @@ const ModalizeBase = (
   // When we have a scrolling happening in the ScrollView, we don't want to translate
   // the modal down. We either multiply by 0 to cancel the animation, or 1 to proceed.
   const dragValue = useDerivedValue(
-    () => dragY.value * (componentDragEnabled ? 1 : cancelTranslateY.value),
+    () => dragY.value * (componentDragEnabled ? 1 : cancelTranslateY.value) + diffClamp.value,
     [dragY, componentDragEnabled, cancelTranslateY, diffClamp],
   );
 
   const computedTranslateY = useDerivedValue(
-    () => translateY.value * (componentDragEnabled ? 1 : cancelTranslateY.value),
+    () => translateY.value * (componentDragEnabled ? 1 : cancelTranslateY.value) + dragValue.value,
     [translateY, componentDragEnabled, cancelTranslateY, dragValue],
   );
+
+  const handlePanGesture = Gesture.Pan().onUpdate(({ translationY }) => {
+    dragY.value = translationY;
+  });
 
   const animatedOverlayStyle = useAnimatedStyle(() => ({
     opacity: overlay.value,
@@ -734,6 +742,15 @@ const ModalizeBase = (
     }
 
     return (
+      <GestureDetector gesture={handlePanGesture}>
+        <Animated.View style={handleStyles}>
+          <View style={shapeStyles} />
+        </Animated.View>
+      </GestureDetector>
+    );
+
+    /*
+    return (
       <PanGestureHandler
         enabled={panGestureEnabled}
         simultaneousHandlers={tapGestureModalizeRef}
@@ -746,6 +763,7 @@ const ModalizeBase = (
         </Animated.View>
       </PanGestureHandler>
     );
+    */
   };
 
   const renderElement = (Element: ReactNode): JSX.Element =>
@@ -828,7 +846,7 @@ const ModalizeBase = (
     }
 
     if (sectionListProps) {
-      return <Animated.SectionList {...sectionListProps} {...opts} />;
+      return <AnimatedSectionList {...sectionListProps} {...opts} />;
     }
 
     if (customRenderer) {

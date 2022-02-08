@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Get cache key for node_modules
+        id: node-modules-cache-key
+        run: |
+          PACKAGE_JSON_HASH=$(cat package.json | jq '{dependencies,devDependencies}' | sha1sum -t | cut -f1 -d" ")
+          export NODE_MODULES_HASH=${{ runner.os }}-${{ hashFiles('package.json', 'yarn.lock') }}-$PACKAGE_JSON_HASH
+          echo "::set-output name=node-modules-hash::$NODE_MODULES_HASH"
+
+      - name: Cache for node_modules
+        id: node-modules-cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ steps.node-modules-cache-key.outputs.node-modules-hash }}-yarn
+
+      - name: Install dependencies
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+
+      - name: Check files format
+        run: yarn github
