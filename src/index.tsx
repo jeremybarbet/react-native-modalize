@@ -11,7 +11,6 @@ import React, {
 } from 'react';
 import {
   BackHandler,
-  Easing,
   FlatList,
   Keyboard,
   KeyboardAvoidingView,
@@ -29,6 +28,7 @@ import {
 import {
   Gesture,
   GestureDetector,
+  NativeGesture,
   NativeViewGestureHandler,
   PanGestureHandler,
   PanGestureHandlerStateChangeEvent,
@@ -37,7 +37,7 @@ import {
   TapGestureHandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
 import Animated, {
-  Easing as RNREasing,
+  Easing,
   Extrapolate,
   interpolate,
   runOnJS,
@@ -50,6 +50,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
+import { Handle } from './components/Handle';
+import { Overlay } from './components/Overlay';
 import { clamp } from './utils/clamp';
 import { composeRefs } from './utils/compose-refs';
 import { isAndroid, isIos, isIphoneX } from './utils/devices';
@@ -188,7 +190,7 @@ const ModalizeBase = (
 
   const tapGestureModalizeRef = useRef<TapGestureHandler | null>(null);
   const panGestureChildrenRef = useRef<PanGestureHandler | null>(null);
-  const nativeViewChildrenRef = useRef<NativeViewGestureHandler | null>(null);
+  const nativeGestureChildrenRef = useRef<NativeGesture>();
   const contentViewRef = useRef<(ScrollView | FlatList<any> | SectionList<any>) | null>(null);
   const tapGestureOverlayRef = useRef<TapGestureHandler | null>(null);
   const backButtonListenerRef = useRef<NativeEventSubscription | null>(null);
@@ -218,10 +220,10 @@ const ModalizeBase = (
 
   // We diff and get the negative value only. It sometimes go above 0
   // (e.g. 1.5) and creates the flickering on Modalize for a ms
-  const diffClamp = useDerivedValue(
-    () => clamp(reverseBeginScrollY.value, -screenHeight, 0),
-    [reverseBeginScrollY, screenHeight],
-  );
+  const diffClamp = useDerivedValue(() => clamp(reverseBeginScrollY.value, -screenHeight, 0), [
+    reverseBeginScrollY,
+    screenHeight,
+  ]);
 
   // We diff and get the negative value only. It sometimes go above 0
   // (e.g. 1.5) and creates the flickering on Modalize for a ms
@@ -240,9 +242,64 @@ const ModalizeBase = (
     [translateY, componentDragEnabled, cancelTranslateY, dragValue],
   );
 
-  const handlePanGesture = Gesture.Pan().onUpdate(({ translationY }) => {
-    dragY.value = translationY;
-  });
+  const childrenPanGesture = Gesture.Pan()
+    .enabled(panGestureEnabled)
+    .simultaneousWithExternalGesture(nativeGestureChildrenRef, tapGestureModalizeRef)
+    .shouldCancelWhenOutside(false)
+    .activeOffsetX(ACTIVATED)
+    .activeOffsetY(ACTIVATED)
+    .onBegin(nativeEvent => {
+      handleChildren({ nativeEvent }, 'children');
+    })
+    .onStart(({ translationY }) => {
+      dragY.value = translationY;
+
+      /*
+      if (panGestureAnimatedValue) {
+        const offset = alwaysOpen ?? snapPoint ?? 0;
+        const diff = Math.abs(translationY / (endHeight - offset));
+        const y = translationY <= 0 ? diff : 1 - diff;
+        let value: number;
+
+        if (modalPosition === 'initial' && translationY > 0) {
+          value = 0;
+        } else if (modalPosition === 'top' && translationY <= 0) {
+          value = 1;
+        } else {
+          value = y;
+        }
+
+        panGestureAnimatedValue.value = value;
+      }
+      */
+    });
+
+  const childrenNativeGesture = Gesture.Native()
+    .withRef(nativeGestureChildrenRef)
+    .simultaneousWithExternalGesture(panGestureChildrenRef);
+
+  const overlayTapGesture = Gesture.Tap()
+    .enabled(closeOnOverlayTap !== undefined ? closeOnOverlayTap : panGestureEnabled)
+    .onStart(() => {
+      /*
+      if (!willCloseModalize) {
+        // onOverlayPress?.();
+        // handleClose(!!alwaysOpen ? 'alwaysOpen' : 'default');
+        runOnJS(handleClose)(!!alwaysOpen ? 'alwaysOpen' : 'default');
+      }
+      */
+    });
+
+  const panGesture = Gesture.Pan()
+    .enabled(panGestureEnabled)
+    .shouldCancelWhenOutside(false)
+    .simultaneousWithExternalGesture(tapGestureModalizeRef)
+    .onUpdate(({ translationY }) => {
+      dragY.value = translationY;
+    })
+    .onEnd(() => {
+      dragY.value = 0;
+    });
 
   const animatedOverlayStyle = useAnimatedStyle(() => ({
     opacity: overlay.value,
@@ -370,13 +427,13 @@ const ModalizeBase = (
 
     overlay.value = withTiming(alwaysOpenValue && dest === 'default' ? 0 : 1, {
       duration: timing.duration,
-      easing: RNREasing.ease,
+      easing: Easing.ease,
     });
 
     if (panGestureAnimatedValue) {
       panGestureAnimatedValue.value = withTiming(toPanValue, {
         duration: PAN_DURATION,
-        easing: RNREasing.ease,
+        easing: Easing.ease,
       });
     }
 
@@ -391,7 +448,7 @@ const ModalizeBase = (
         toValue,
         {
           duration: timing.duration,
-          easing: RNREasing.ease,
+          easing: Easing.ease,
         },
         isFinished => {
           if (isFinished) {
@@ -415,13 +472,13 @@ const ModalizeBase = (
 
     overlay.value = withTiming(0, {
       duration: timing.duration,
-      easing: RNREasing.ease,
+      easing: Easing.ease,
     });
 
     if (panGestureAnimatedValue) {
       panGestureAnimatedValue.value = withTiming(0, {
         duration: PAN_DURATION,
-        easing: RNREasing.ease,
+        easing: Easing.ease,
       });
     }
 
@@ -442,7 +499,7 @@ const ModalizeBase = (
         toValue,
         {
           duration: timing.duration,
-          easing: RNREasing.ease,
+          easing: Easing.ease,
         },
         isFinished => {
           if (isFinished) {
@@ -649,7 +706,7 @@ const ModalizeBase = (
       if (alwaysOpen) {
         overlay.value = withTiming(Number(destSnapPoint <= 0), {
           duration: timing.duration,
-          easing: RNREasing.ease,
+          easing: Easing.ease,
         });
       }
 
@@ -663,7 +720,7 @@ const ModalizeBase = (
         if (panGestureAnimatedValue) {
           panGestureAnimatedValue.value = withTiming(Number(modalPositionValue === 'top'), {
             duration: PAN_DURATION,
-            easing: RNREasing.ease,
+            easing: Easing.ease,
           });
         }
 
@@ -742,7 +799,7 @@ const ModalizeBase = (
     }
 
     return (
-      <GestureDetector gesture={handlePanGesture}>
+      <GestureDetector gesture={panGesture}>
         <Animated.View style={handleStyles}>
           <View style={shapeStyles} />
         </Animated.View>
@@ -793,6 +850,18 @@ const ModalizeBase = (
     const zIndex: number | undefined = obj?.zIndex;
 
     return (
+      <GestureDetector gesture={panGesture}>
+        <Animated.View
+          style={{ zIndex }}
+          onLayout={(e: LayoutChangeEvent): void => handleComponentLayout(e, name, absolute)}
+        >
+          {tag}
+        </Animated.View>
+      </GestureDetector>
+    );
+
+    /*
+    return (
       <PanGestureHandler
         enabled={panGestureEnabled}
         shouldCancelWhenOutside={false}
@@ -807,6 +876,7 @@ const ModalizeBase = (
         </Animated.View>
       </PanGestureHandler>
     );
+    */
   };
 
   const useContentScroll = useAnimatedScrollHandler({
@@ -866,10 +936,26 @@ const ModalizeBase = (
     const style = adjustToContentHeight ? s.content__adjustHeight : s.content__container;
 
     return (
+      <GestureDetector gesture={childrenPanGesture}>
+        <Animated.View style={[style, childrenStyle]}>
+          <GestureDetector
+            // ref={nativeGestureChildrenRef}
+            // waitFor={tapGestureModalizeRef}
+            // simultaneousHandlers={panGestureChildrenRef}
+            gesture={childrenNativeGesture}
+          >
+            {renderContent()}
+          </GestureDetector>
+        </Animated.View>
+      </GestureDetector>
+    );
+
+    /*
+    return (
       <PanGestureHandler
         ref={panGestureChildrenRef}
         enabled={panGestureEnabled}
-        simultaneousHandlers={[nativeViewChildrenRef, tapGestureModalizeRef]}
+        simultaneousHandlers={[nativeGestureChildrenRef, tapGestureModalizeRef]}
         shouldCancelWhenOutside={false}
         onGestureEvent={handleGestureEvent}
         // minDist={minDist}
@@ -879,7 +965,7 @@ const ModalizeBase = (
       >
         <Animated.View style={[style, childrenStyle]}>
           <NativeViewGestureHandler
-            ref={nativeViewChildrenRef}
+            ref={nativeGestureChildrenRef}
             waitFor={tapGestureModalizeRef}
             simultaneousHandlers={panGestureChildrenRef}
           >
@@ -888,6 +974,7 @@ const ModalizeBase = (
         </Animated.View>
       </PanGestureHandler>
     );
+    */
   };
 
   const renderOverlay = (): JSX.Element => {
@@ -903,7 +990,7 @@ const ModalizeBase = (
         onHandlerStateChange={handleChildren}
       >
         <Animated.View style={s.overlay} pointerEvents={pointerEvents}>
-          {showContent && (
+          {/* {showContent && (
             <TapGestureHandler
               ref={tapGestureOverlayRef}
               enabled={closeOnOverlayTap !== undefined ? closeOnOverlayTap : panGestureEnabled}
@@ -914,6 +1001,15 @@ const ModalizeBase = (
                 pointerEvents={pointerEvents}
               />
             </TapGestureHandler>
+          )} */}
+
+          {showContent && (
+            <GestureDetector gesture={overlayTapGesture}>
+              <Animated.View
+                style={[s.overlay__background, overlayStyle, animatedOverlayStyle]}
+                pointerEvents={pointerEvents}
+              />
+            </GestureDetector>
           )}
         </Animated.View>
       </PanGestureHandler>
@@ -1005,14 +1101,35 @@ const ModalizeBase = (
               }
               style={[s.modalize__content, modalStyle, animatedKeyboardAvoidingViewStyle]}
             >
-              {renderHandle()}
+              {/* {renderHandle()} */}
+
+              <Handle
+                dragY={dragY}
+                panGestureEnabled={panGestureEnabled}
+                handlePosition={handlePosition}
+                handleStyle={handleStyle}
+                withHandle={withHandle}
+              />
+
               {renderComponent(HeaderComponent, 'header')}
               {renderChildren()}
               {renderComponent(FooterComponent, 'footer')}
             </AnimatedKeyboardAvoidingView>
           )}
 
-          {withOverlay && renderOverlay()}
+          {/* {withOverlay && renderOverlay()} */}
+          <Overlay
+            dragY={dragY}
+            overlay={overlay}
+            panGestureEnabled={panGestureEnabled}
+            overlayStyle={overlayStyle}
+            alwaysOpen={alwaysOpen}
+            closeOnOverlayTap={closeOnOverlayTap}
+            withOverlay={withOverlay}
+            showContent={showContent}
+            modalPosition={modalPosition}
+            onClose={handleAnimateClose}
+          />
         </View>
       </TapGestureHandler>
 

@@ -17,7 +17,7 @@
     "removeComments": false,
     "sourceMap": false,
     "strictPropertyInitialization": false,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedParameters": true,
     "resolveJsonModule": true
