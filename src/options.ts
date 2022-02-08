@@ -1,7 +1,5 @@
-import * as React from 'react';
+import { ReactNode, RefObject } from 'react';
 import {
-  Animated,
-  EasingFunction,
   FlatList,
   FlatListProps,
   LayoutRectangle,
@@ -13,60 +11,43 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native';
-import RAnimated from 'react-native-reanimated';
+import Animated, { WithSpringConfig, WithTimingConfig } from 'react-native-reanimated';
 
 export type Open = 'default' | 'top';
 export type Close = 'default' | 'alwaysOpen';
 export type Position = 'initial' | 'top';
 export type Style = StyleProp<ViewStyle>;
 
-export interface TimingProps {
-  duration: number;
-  easing?: EasingFunction;
-  delay?: number;
-  isInteraction?: boolean;
-}
-
-export interface SpringProps {
-  friction?: number;
-  tension?: number;
-  speed?: number;
-  bounciness?: number;
-  stiffness?: number;
-  damping?: number;
-  mass?: number;
-}
-
 export interface ConfigProps {
-  timing: TimingProps;
-  spring?: SpringProps;
+  timing: WithTimingConfig;
+  spring?: WithSpringConfig;
 }
 
 export interface ModalizeProps<ListItem = any> {
   /**
    * A reference to the view (ScrollView, FlatList, SectionList) that provides the scroll behavior, where you will be able to access their owns methods.
    */
-  contentRef?: React.RefObject<ScrollView | FlatList<ListItem> | SectionList<ListItem>>;
+  contentRef?: RefObject<ScrollView | FlatList<ListItem> | SectionList<ListItem>>;
 
   /**
    * A React node that will define the content of the modal.
    */
-  children?: React.ReactNode;
+  children?: ReactNode;
 
   /**
    * An object to pass any of the react-native ScrollView's props.
    */
-  scrollViewProps?: Animated.AnimatedProps<ScrollViewProps>;
+  scrollViewProps?: ScrollViewProps;
 
   /**
    * An object to pass any of the react-native FlatList's props.
    */
-  flatListProps?: Animated.AnimatedProps<FlatListProps<ListItem>>;
+  flatListProps?: FlatListProps<ListItem>;
 
   /**
    * An object to pass any of the react-native SectionList's props.
    */
-  sectionListProps?: Animated.AnimatedProps<SectionListProps<ListItem>>;
+  sectionListProps?: SectionListProps<ListItem>;
 
   /**
    * An animated custom JSX Element that will inherits of the onScroll/gesture events
@@ -225,29 +206,13 @@ export interface ModalizeProps<ListItem = any> {
   /**
    * Animated.Value of the modal position between 0 and 1.
    */
-  panGestureAnimatedValue?: Animated.Value;
-
-  /**
-   * Animated.Value of the modal position between 0 and 1.
-   */
-  newPanGestureAnimatedValue?: RAnimated.SharedValue<number>;
+  panGestureAnimatedValue?: Animated.SharedValue<number>;
 
   /**
    * Define if the Animated.Value uses the native thread to execute the animations.
    * @default true
    */
   useNativeDriver?: boolean;
-
-  /**
-   * Define if Modalize has to be wrap with the Modal component from react-native.
-   * @default false
-   */
-  withReactModal?: boolean;
-
-  /**
-   * Props for the react-native Modal wrapping Modalize
-   */
-  reactModalProps?: ModalProps;
 
   /**
    * Define if the handle on top of the modal is display or not.
@@ -264,17 +229,17 @@ export interface ModalizeProps<ListItem = any> {
   /**
    * A header component outside of the ScrollView, on top of the modal.
    */
-  HeaderComponent?: React.ReactNode;
+  HeaderComponent?: ReactNode;
 
   /**
    * A footer component outside of the ScrollView, on top of the modal.
    */
-  FooterComponent?: React.ReactNode;
+  FooterComponent?: ReactNode;
 
   /**
    * A floating component inside the modal wrapper that will be independent of scrolling. It requires `zIndex` child with absolute positioning.
    */
-  FloatingComponent?: React.ReactNode;
+  FloatingComponent?: ReactNode;
 
   /**
    * Callback function when the `open` method is triggered.

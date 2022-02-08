@@ -2,16 +2,7 @@
 
 **I'm using a bottom tabs navigation and Modalize is shown behind it?**
 
-In this context you have two solutions:
-
-- **Recommended**: Install the package [`react-native-portalize`](https://github.com/jeremybarbet/react-native-portalize) to be able to render Modalize on top of everything (it also works for anything else you want)
-- Either you use `withReactModal` props (see below for more details)
-
----
-
-**Can I use `withReactModal` props?**
-
-For a long time, using Modalize along with `react-native`'s `Modal` component wasn't working on Android because of an issue. In a recent release of [`react-native-gesture-handler`](https://github.com/software-mansion/react-native-gesture-handler/pull/937) it has now been fixed. You will need at least `react-native-gesture-handler >= 1.6.0` in order to work.
+- Install the package [`react-native-portalize`](https://github.com/jeremybarbet/react-native-portalize) to be able to render Modalize on top of everything (it also works for anything else you want)
 
 ---
 

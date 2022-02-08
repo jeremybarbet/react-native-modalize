@@ -1,5 +1,7 @@
 # Modalize
 
+BREAKING CHANGES: ONLY SUPPORT REACT NATIVE >= 65, REANIMATED 2, RNGH 2
+
 [![npm version](https://badge.fury.io/js/react-native-modalize.svg)](https://badge.fury.io/js/react-native-modalize)
 
 A highly customizable modal/bottom sheet that loves scrolling content.

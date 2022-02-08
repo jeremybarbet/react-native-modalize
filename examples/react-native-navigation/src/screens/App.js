@@ -76,7 +76,7 @@ export const App = () => {
           { name: 'Slack TabView', id: SLACK_TABVIEW },
         ])}
 
-        <AlwaysOpen />
+        {/* <AlwaysOpen /> */}
       </Layout>
     </View>
   );
