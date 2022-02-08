@@ -13,7 +13,7 @@ const lint = async (sha: string, isPullRequest: boolean) => {
   core.info(`List of files changed ${filesChanged.join(', ')}`);
 
   core.info('⚡️ Running tsc...');
-  await exec('yarn lint:tsc');
+  await exec('tsc -p tsconfig.json --noEmit --skipLibCheck');
 
   const eslintFiles = filesChanged.filter(
     file => file.indexOf(TS) !== -1 || file.indexOf(TSX) !== -1,

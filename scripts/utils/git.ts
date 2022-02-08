@@ -3,7 +3,7 @@ import * as core from '@actions/core';
 import { RunCmd, runCmd } from './run';
 
 const BASE = 'master';
-const IGNORE_LIST = [];
+const IGNORE_LIST: string[] = [];
 
 const getLines = (res: RunCmd) => res.stdout.split('\n');
 
