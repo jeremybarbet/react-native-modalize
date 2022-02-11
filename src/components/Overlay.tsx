@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
+  interpolate,
   runOnJS,
   SharedValue,
   useAnimatedStyle,
-  useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
 
 import { Close, ModalizeProps, Position } from '../options';
 import s from '../styles';
+import { constants } from '../utils/constants';
 
 interface OverlayProps {
   dragY: SharedValue<number>;
@@ -22,6 +23,7 @@ interface OverlayProps {
   showContent: boolean;
   modalPosition: Position;
   onClose(dest?: Close, callback?: () => void): void;
+  onOverlayPress: ModalizeProps['onOverlayPress'];
 }
 
 export const Overlay = ({
@@ -35,22 +37,25 @@ export const Overlay = ({
   showContent,
   modalPosition,
   onClose,
+  onOverlayPress,
 }: OverlayProps): JSX.Element | null => {
   const panGesture = Gesture.Pan()
     .enabled(panGestureEnabled)
-    // TODO ref props
-    .simultaneousWithExternalGesture()
     .shouldCancelWhenOutside(false)
     .onUpdate(({ translationY }) => {
       dragY.value = translationY;
+      overlay.value = interpolate(translationY, [0, 1000], [1, 0]);
     })
     .onEnd(({ translationY }) => {
+      // TODO: dynamic threshold
       if (translationY < 120) {
         dragY.value = withSpring(0, {
           damping: 50,
           mass: 0.3,
           stiffness: 120,
         });
+
+        overlay.value = withSpring(1, constants.springConfig);
       } else {
         runOnJS(onClose)();
       }
@@ -59,13 +64,12 @@ export const Overlay = ({
   const tapGesture = Gesture.Tap()
     .enabled(closeOnOverlayTap !== undefined ? closeOnOverlayTap : panGestureEnabled)
     .onStart(() => {
-      /*
-      if (!willCloseModalize) {
-        // onOverlayPress?.();
-        // handleClose(!!alwaysOpen ? 'alwaysOpen' : 'default');
-        runOnJS(handleClose)(!!alwaysOpen ? 'alwaysOpen' : 'default');
+      // split functions from native thread and js thread
+      runOnJS(onClose)(!!alwaysOpen ? 'alwaysOpen' : 'default');
+
+      if (onOverlayPress) {
+        runOnJS(onOverlayPress)();
       }
-      */
     });
 
   const animatedOverlayStyle = useAnimatedStyle(() => ({

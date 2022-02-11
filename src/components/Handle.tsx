@@ -1,10 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { SharedValue } from 'react-native-reanimated';
+import Animated, { runOnJS, SharedValue, withSpring } from 'react-native-reanimated';
 
+import { useInternal } from '../context/Internal-provider';
 import { ModalizeProps } from '../options';
 import s from '../styles';
+import { constants } from '../utils/constants';
 
 interface HandleProps {
   dragY: SharedValue<number>;
@@ -12,47 +14,31 @@ interface HandleProps {
   handlePosition: ModalizeProps['handlePosition'];
   handleStyle: ModalizeProps['handleStyle'];
   withHandle: ModalizeProps['withHandle'];
+  onClose(): void;
 }
 
 export const Handle = ({
-  dragY,
   panGestureEnabled = true,
   handlePosition,
   handleStyle,
   withHandle,
+  onClose,
 }: HandleProps): JSX.Element | null => {
+  const { dragY } = useInternal();
   const isHandleOutside = handlePosition === 'outside';
 
   const panGesture = Gesture.Pan()
     .enabled(panGestureEnabled)
     .shouldCancelWhenOutside(false)
-    // TODO pass down props
-    // .simultaneousWithExternalGesture(tapGestureModalizeRef)
     .onUpdate(({ translationY }) => {
       dragY.value = translationY;
-
-      /* TODO
-      if (panGestureAnimatedValue) {
-        const offset = alwaysOpen ?? snapPoint ?? 0;
-        const diff = Math.abs(translationY / (endHeight - offset));
-        const y = translationY <= 0 ? diff : 1 - diff;
-        let value: number;
-
-        if (modalPosition === 'initial' && translationY > 0) {
-          value = 0;
-        } else if (modalPosition === 'top' && translationY <= 0) {
-          value = 1;
-        } else {
-          value = y;
-        }
-
-        panGestureAnimatedValue.value = value;
-      }
-       */
     })
-    .onEnd(() => {
-      // TODO: either close or reset to initial position
-      dragY.value = 0;
+    .onEnd(({ translationY }) => {
+      if (translationY < 120) {
+        dragY.value = withSpring(0, constants.springConfig);
+      } else {
+        runOnJS(onClose)();
+      }
     });
 
   if (!withHandle) {

@@ -8,9 +8,6 @@ const {
 } = Object;
 
 class InvariantError extends Error {
-  framesToPop = 1;
-  name = genericMessage;
-
   constructor(message: string | number = genericMessage) {
     super(`${message}`);
 

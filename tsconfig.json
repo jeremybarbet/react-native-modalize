@@ -19,7 +19,7 @@
     "strictPropertyInitialization": false,
     "noUnusedLocals": false,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "resolveJsonModule": true
   },
   "include": ["src", "scripts"]
