@@ -1,9 +1,7 @@
 import React, {
-  cloneElement,
   forwardRef,
   ReactNode,
   Ref,
-  RefObject,
   useEffect,
   useImperativeHandle,
   useRef,
@@ -21,28 +19,20 @@ import {
   ScrollView,
   SectionList,
   StatusBar,
-  StyleSheet,
   View,
-  ViewStyle,
 } from 'react-native';
 import {
   Gesture,
   GestureDetector,
   NativeGesture,
-  NativeViewGestureHandler,
   PanGestureHandler,
-  PanGestureHandlerStateChangeEvent,
-  State,
   TapGestureHandler,
-  TapGestureHandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
 import Animated, {
   Easing,
   Extrapolate,
   interpolate,
   runOnJS,
-  useAnimatedGestureHandler,
-  useAnimatedScrollHandler,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
@@ -50,18 +40,21 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { Child } from './components/Child';
-import { Element } from './components/Element';
-import { Handle } from './components/Handle';
-import { Overlay } from './components/Overlay';
-import { useDimensions } from './hooks/use-dimensions';
-import { clamp } from './utils/clamp';
-import { composeRefs } from './utils/compose-refs';
-import { isAndroid, isIos, isIphoneX } from './utils/devices';
-import { invariant } from './utils/invariant';
-import { renderElement } from './utils/render-element';
-import { Close, Handles, ModalizeProps, Open, Position, Style } from './options';
-import s from './styles';
+import { Child } from '../components/Child';
+import { Element, ElementType } from '../components/Element';
+import { Handle } from '../components/Handle';
+import { Overlay } from '../components/Overlay';
+import { useInternal } from '../context/InternalProvider';
+import { useProps } from '../context/PropsProvider';
+import { useDimensions } from '../hooks/use-dimensions';
+import { Close, ModalizeMethods, ModalizeProps, Open, Position, Style } from '../options';
+import s from '../styles';
+import { clamp } from '../utils/clamp';
+import { composeRefs } from '../utils/compose-refs';
+import { constants } from '../utils/constants';
+import { isAndroid, isIos, isIphoneX } from '../utils/devices';
+import { invariant } from '../utils/invariant';
+import { renderElement } from '../utils/render-element';
 
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
 
@@ -69,17 +62,8 @@ const AnimatedSectionList = Animated.createAnimatedComponent(
   SectionList as new () => SectionList<unknown>,
 );
 
-/**
- * When scrolling, it happens than beginScrollYValue is not always equal to 0 (top of the ScrollView).
- * Since we use this to trigger the swipe down gesture animation, we allow a small threshold to
- * not dismiss Modalize when we are using the ScrollView and we don't want to dismiss.
- */
-const SCROLL_THRESHOLD = -4;
-const ACTIVATED = 20;
-const PAN_DURATION = 150;
-
-export const Root = (
-  {
+export const Root = forwardRef<ModalizeMethods, unknown>((_, ref) => {
+  const {
     // Refs
     contentRef,
 
@@ -159,24 +143,8 @@ export const Root = (
     onPositionChange,
     onOverlayPress,
     onLayout,
-  }: ModalizeProps,
-  ref: Ref<ReactNode>,
-): JSX.Element | null => {
-  invariant(
-    modalHeight && adjustToContentHeight,
-    `You can't use both 'modalHeight' and 'adjustToContentHeight' props at the same time. Only choose one of the two.`,
-  );
-
-  invariant(
-    (scrollViewProps || children) && flatListProps,
-    `You have defined 'flatListProps' along with 'scrollViewProps' or 'children' props. Remove 'scrollViewProps' or 'children' or 'flatListProps' to fix the error.`,
-  );
-
-  invariant(
-    (scrollViewProps || children) && sectionListProps,
-    `You have defined 'sectionListProps' along with 'scrollViewProps' or 'children' props. Remove 'scrollViewProps' or 'children' or 'sectionListProps' to fix the error.`,
-  );
-
+  } = useProps();
+  const { dragY, translateY, overlay } = useInternal();
   const { height: screenHeight } = useDimensions();
   const isHandleOutside = handlePosition === 'outside';
   const handleHeight = withHandle ? 20 : isHandleOutside ? 35 : 20;
@@ -200,10 +168,10 @@ export const Root = (
 
   const cancelTranslateY = useSharedValue(1); // 1 by default to have the translateY animation running
   const componentTranslateY = useSharedValue(0);
-  const overlay = useSharedValue(0);
+  // const overlay = useSharedValue(0);
   const beginScrollY = useSharedValue(0);
-  const dragY = useSharedValue(0);
-  const translateY = useSharedValue(screenHeight);
+  // const dragY = useSharedValue(0);
+  // const translateY = useSharedValue(screenHeight);
   const reverseBeginScrollY = useSharedValue(-1 * beginScrollY.value);
 
   const tapGestureModalizeRef = useRef<TapGestureHandler | null>(null);
@@ -236,6 +204,11 @@ export const Root = (
     () => translateY.value * (componentDragEnabled ? 1 : cancelTranslateY.value) + dragValue.value,
     [translateY, componentDragEnabled, cancelTranslateY, dragValue],
   );
+
+  const tapGesture = Gesture.Tap()
+    .maxDuration(tapGestureEnabled ? 100000 : 50)
+    .maxDeltaY(lastSnap)
+    .enabled(panGestureEnabled);
 
   const animatedKeyboardAvoidingViewStyle = useAnimatedStyle(() => ({
     height: modalHeightValue,
@@ -280,13 +253,13 @@ export const Root = (
     setKeyboardHeight(0);
   };
 
-  const openFinished = (newPosition: Position) => {
+  const onOpenFinished = (newPosition: Position) => {
     onOpened?.();
     // setModalPosition(newPosition);
     onPositionChange?.(newPosition);
   };
 
-  const closeFinished = ({
+  const onCloseFinished = ({
     callback,
     dest,
     toInitialAlwaysOpen,
@@ -318,7 +291,7 @@ export const Root = (
     setIsVisible(toInitialAlwaysOpen);
   };
 
-  const handleAnimateOpen = (alwaysOpenValue: number | undefined, dest: Open = 'default'): void => {
+  const handleOpen = (alwaysOpenValue: number | undefined, dest: Open = 'default'): void => {
     const { timing, spring } = openAnimationConfig;
 
     backButtonListenerRef.current = BackHandler.addEventListener(
@@ -364,7 +337,7 @@ export const Root = (
 
     if (panGestureAnimatedValue) {
       panGestureAnimatedValue.value = withTiming(toPanValue, {
-        duration: PAN_DURATION,
+        duration: constants.panDuration,
         easing: Easing.ease,
       });
     }
@@ -372,7 +345,7 @@ export const Root = (
     if (spring) {
       translateY.value = withSpring(toValue, spring, isFinished => {
         if (isFinished) {
-          runOnJS(openFinished)(newPosition);
+          runOnJS(onOpenFinished)(newPosition);
         }
       });
     } else {
@@ -384,20 +357,21 @@ export const Root = (
         },
         isFinished => {
           if (isFinished) {
-            runOnJS(openFinished)(newPosition);
+            runOnJS(onOpenFinished)(newPosition);
           }
         },
       );
     }
   };
 
-  const handleAnimateClose = (dest: Close = 'default', callback?: () => void): void => {
+  const handleClose = (dest: Close = 'default', callback?: () => void): void => {
     const { timing, spring } = closeAnimationConfig;
     const lastSnapValue = snapPoint ? snaps[1] : 80;
     const toInitialAlwaysOpen = dest === 'alwaysOpen' && Boolean(alwaysOpen);
     const toValue =
       toInitialAlwaysOpen && alwaysOpen ? (modalHeightValue || 0) - alwaysOpen : screenHeight;
 
+    onClose?.();
     backButtonListenerRef.current?.remove();
     cancelTranslateY.value = 1;
     beginScrollY.value = 0;
@@ -409,7 +383,7 @@ export const Root = (
 
     if (panGestureAnimatedValue) {
       panGestureAnimatedValue.value = withTiming(0, {
-        duration: PAN_DURATION,
+        duration: constants.panDuration,
         easing: Easing.ease,
       });
     }
@@ -417,7 +391,7 @@ export const Root = (
     if (spring) {
       translateY.value = withSpring(toValue, spring, isFinished => {
         if (isFinished) {
-          runOnJS(closeFinished)({
+          runOnJS(onCloseFinished)({
             callback,
             dest,
             toInitialAlwaysOpen,
@@ -435,7 +409,7 @@ export const Root = (
         },
         isFinished => {
           if (isFinished) {
-            runOnJS(closeFinished)({
+            runOnJS(onCloseFinished)({
               callback,
               dest,
               toInitialAlwaysOpen,
@@ -462,21 +436,10 @@ export const Root = (
     setModalHeightValue(value);
   };
 
-  const handleClose = (dest?: Close, callback?: () => void): void => {
-    if (onClose) {
-      onClose();
-    }
-
-    handleAnimateClose(dest, callback);
-  };
-
   useImperativeHandle(ref, () => ({
     open(dest?: Open): void {
-      if (onOpen) {
-        onOpen();
-      }
-
-      handleAnimateOpen(alwaysOpen, dest);
+      onOpen?.();
+      handleOpen(alwaysOpen, dest);
     },
 
     close(dest?: Close, callback?: () => void): void {
@@ -486,7 +449,7 @@ export const Root = (
 
   useEffect(() => {
     if (alwaysOpen && (modalHeightValue || adjustToContentHeight)) {
-      handleAnimateOpen(alwaysOpen);
+      handleOpen(alwaysOpen);
     }
   }, [alwaysOpen, modalHeightValue]);
 
@@ -514,14 +477,9 @@ export const Root = (
       style={[s.modalize, rootStyle]}
       pointerEvents={alwaysOpen || !withOverlay ? 'box-none' : 'auto'}
     >
-      <TapGestureHandler
-        ref={tapGestureModalizeRef}
-        maxDurationMs={tapGestureEnabled ? 100000 : 50}
-        maxDeltaY={lastSnap}
-        enabled={panGestureEnabled}
-      >
+      <GestureDetector gesture={tapGesture}>
         <View style={s.modalize__wrapper} pointerEvents="box-none">
-          {showContent && (
+          {/* {showContent && (
             <AnimatedKeyboardAvoidingView
               keyboardVerticalOffset={keyboardAvoidingOffset}
               behavior={keyboardAvoidingBehavior}
@@ -533,55 +491,30 @@ export const Root = (
               }
               style={[s.modalize__content, modalStyle, animatedKeyboardAvoidingViewStyle]}
             >
-              <Handle
-                dragY={dragY}
-                panGestureEnabled={panGestureEnabled}
-                handlePosition={handlePosition}
-                handleStyle={handleStyle}
-                withHandle={withHandle}
-                onClose={handleAnimateClose}
-              />
+              <Handle onClose={handleClose} />
 
               {/* <Element
-                id="header"
+                id={ElementType.header}
                 component={HeaderComponent}
-                panGestureComponentEnabled={panGestureComponentEnabled}
               />
 
               <Child />
 
               <Element
-                id="footer"
+                id={ElementType.footer}
                 component={HeaderComponent}
-                panGestureComponentEnabled={panGestureComponentEnabled}
-              /> */}
+              /> *}
             </AnimatedKeyboardAvoidingView>
-          )}
+          )} */}
 
-          <Overlay
-            dragY={dragY}
-            overlay={overlay}
-            panGestureEnabled={panGestureEnabled}
-            overlayStyle={overlayStyle}
-            alwaysOpen={alwaysOpen}
-            closeOnOverlayTap={closeOnOverlayTap}
-            withOverlay={withOverlay}
-            showContent={showContent}
-            modalPosition={modalPosition}
-            onClose={handleAnimateClose}
-            onOverlayPress={onOverlayPress}
-          />
+          <Overlay showContent={showContent} modalPosition={modalPosition} onClose={handleClose} />
         </View>
-      </TapGestureHandler>
+      </GestureDetector>
 
       {/* <Element
-        id="floating"
+        id={ElementType.floating}
         component={FloatingComponent}
-        panGestureComponentEnabled={panGestureComponentEnabled}
       /> */}
     </View>
   );
-};
-
-// export type Modalize = Handles;
-// export const Modalize = forwardRef(ModalizeBase);
+});

@@ -272,7 +272,7 @@ export interface ModalizeProps<ListItem = any> {
    * i.e. completely opened to modal/screen height, or is at the initial
    * point (snapPoint or alwaysOpened height).
    */
-  onPositionChange?: (position: 'top' | 'initial') => void;
+  onPositionChange?(position: 'top' | 'initial'): void;
 
   /**
    * Callback used when you press the overlay.
@@ -285,7 +285,7 @@ export interface ModalizeProps<ListItem = any> {
   onLayout?(nativeEvent: { layout: LayoutRectangle }): void;
 }
 
-export interface Handles {
+export interface ModalizeMethods {
   /**
    * Method to open Modalize.
    *

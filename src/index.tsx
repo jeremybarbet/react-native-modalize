@@ -1,16 +1,14 @@
-import React, { forwardRef, ReactNode, Ref } from 'react';
+import React, { forwardRef } from 'react';
 
 import { Root } from './components/Root';
-import { InternalProvider } from './context/Internal-provider';
+import { InternalProvider } from './context/InternalProvider';
+import { PropsProvider } from './context/PropsProvider';
 import { invariant } from './utils/invariant';
-import { Handles, ModalizeProps } from './options';
+import { ModalizeMethods, ModalizeProps } from './options';
 
-const ModalizeWithInternalProvider = (
-  props: ModalizeProps,
-  ref: Ref<ReactNode>,
-): JSX.Element | null => {
+export const Modalize = forwardRef<ModalizeMethods, ModalizeProps>((props, ref) => {
   invariant(
-    props.modalHeight && props.adjustToContentHeight,
+    props?.modalHeight && props.adjustToContentHeight,
     `You can't use both 'modalHeight' and 'adjustToContentHeight' props at the same time. Only choose one of the two.`,
   );
 
@@ -25,11 +23,10 @@ const ModalizeWithInternalProvider = (
   );
 
   return (
-    <InternalProvider>
-      <Root ref={ref} {...props} />
-    </InternalProvider>
+    <PropsProvider {...props}>
+      <InternalProvider>
+        <Root ref={ref} {...props} />
+      </InternalProvider>
+    </PropsProvider>
   );
-};
-
-export type Modalize = Handles;
-export const Modalize = forwardRef(ModalizeWithInternalProvider);
+});

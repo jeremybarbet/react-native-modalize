@@ -1,29 +1,12 @@
-import React, {
-  cloneElement,
-  forwardRef,
-  ReactNode,
-  Ref,
-  RefObject,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
+import React, { cloneElement, ReactNode, Ref, RefObject, useRef, useState } from 'react';
 import {
-  BackHandler,
   FlatList,
-  Keyboard,
-  KeyboardAvoidingView,
-  KeyboardEvent,
   LayoutChangeEvent,
   NativeEventSubscription,
   Platform,
   ScrollView,
   SectionList,
   StatusBar,
-  StyleSheet,
-  View,
-  ViewStyle,
 } from 'react-native';
 import {
   Gesture,
@@ -48,14 +31,13 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { Element } from '../components/Element';
-import { Close, Handles, ModalizeProps, Open, Position, Style } from '../options';
+import { useDimensions } from '../hooks/use-dimensions';
+import { Close, ModalizeProps, Position } from '../options';
 import s from '../styles';
 import { clamp } from '../utils/clamp';
 import { composeRefs } from '../utils/compose-refs';
 import { isAndroid, isIos, isIphoneX } from '../utils/devices';
 import { renderElement } from '../utils/render-element';
-import { useDimensions } from '../utils/use-dimensions';
 
 const AnimatedSectionList = Animated.createAnimatedComponent(
   SectionList as new () => SectionList<unknown>,
@@ -144,7 +126,7 @@ export const Child = (
     onLayout,
   }: ModalizeProps,
   ref: Ref<ReactNode>,
-): JSX.Element | null => {
+) => {
   const { height: screenHeight } = useDimensions();
   const isHandleOutside = handlePosition === 'outside';
   const handleHeight = withHandle ? 20 : isHandleOutside ? 35 : 20;

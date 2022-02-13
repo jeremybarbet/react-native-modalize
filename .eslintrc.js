@@ -28,6 +28,9 @@ module.exports = {
     '@typescript-eslint/no-unsafe-return': 'off',
     '@typescript-eslint/no-unsafe-call': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/unbound-method': 'off',
+    'react/display-name': 'off',
+    'react/prop-types': 'off',
     'simple-import-sort/imports': [
       'error',
       {
