@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### ✨ Improvements
+
+- Add new prop `snapPoints` to receive an array of points instead of a single one ([#395](https://github.com/jeremybarbet/react-native-modalize/pull/395))
+
 ## [2.0.8] - 2020-12-04
 
 ### 👀 Bug Fixes
