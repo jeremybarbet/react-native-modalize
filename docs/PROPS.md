@@ -217,6 +217,16 @@ The value you pass is the height of the modal before being full opened.
 | ------ | -------- |
 | number | No       |
 
+### `snapPoints`
+
+Similar to `snapPoint`, but here you pass an array of numbers that will enable the snapping feature and create intermediate points before opening the modal to full screen.
+
+The values you pass are the height of the modal before being full opened.
+
+| Type  | Required |
+| ----- | -------- |
+| array | No       |
+
 ### `modalHeight`
 
 A number to define the modal's total height.
