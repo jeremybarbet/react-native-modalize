@@ -927,12 +927,12 @@ const ModalizeBase = (
       modalStyle,
       {
         height: modalHeightValue,
-        maxHeight: endHeight,
+        maxHeight: Math.max(0, endHeight),
         transform: [
           {
             translateY: value.interpolate({
-              inputRange: [-40, 0, endHeight],
-              outputRange: [0, 0, endHeight],
+              inputRange: [-40, 0, Math.max(0, endHeight)],
+              outputRange: [0, 0, Math.max(0, endHeight)],
               extrapolate: 'clamp',
             }),
           },
