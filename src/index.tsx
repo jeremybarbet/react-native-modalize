@@ -33,6 +33,7 @@ import {
   TapGestureHandler,
   PanGestureHandlerStateChangeEvent,
   TapGestureHandlerStateChangeEvent,
+  GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 
 import { IProps, TOpen, TClose, TStyle, IHandles, TPosition } from './options';
@@ -694,8 +695,10 @@ const ModalizeBase = (
      * Nesting Touchable/ScrollView components with RNGH PanGestureHandler cancels the inner events.
      * Until a better solution lands in RNGH, I will disable the PanGestureHandler for Android only,
      * so inner touchable/gestures are working from the custom components you can pass in.
+     *
+     * This is fixed in RNGH 2 with https://github.com/software-mansion/react-native-gesture-handler/pull/1603
      */
-    if (isAndroid && !panGestureComponentEnabled) {
+    if (isAndroid && !panGestureComponentEnabled && !isRNGH2()) {
       return tag;
     }
 
@@ -983,7 +986,7 @@ const ModalizeBase = (
       visible={isVisible}
       transparent
     >
-      {child}
+      <GestureHandlerRootView style={{ flex: 1 }}>{child}</GestureHandlerRootView>
     </Modal>
   );
 

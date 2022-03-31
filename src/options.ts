@@ -161,6 +161,7 @@ export interface IProps<ListItem = any> {
 
   /**
    * Define if HeaderComponent/FooterComponent/FloatingComponent should have pan gesture enable (Android specific). When enable it might break touchable inside the view.
+   * Only has effect on react-native-gesture-handler version < 2.0.0
    * @default false
    */
   panGestureComponentEnabled?: boolean;
