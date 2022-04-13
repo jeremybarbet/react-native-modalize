@@ -227,6 +227,7 @@ const ModalizeBase = (
   ): void => {
     const { timing, spring } = openAnimationConfig;
 
+    backButtonListenerRef.current?.remove();
     (backButtonListenerRef as any).current = BackHandler.addEventListener(
       'hardwareBackPress',
       handleBackPress,
