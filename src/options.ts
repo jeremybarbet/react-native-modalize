@@ -330,5 +330,5 @@ export interface IHandles {
    * If you are using `alwaysOpen` prop, you can supply a `dest` argument to the `close` method to reset it
    * to the initial position `close('alwaysOpen')`, and avoiding to close it completely.
    */
-  close(dest?: TClose): void;
+  close(dest?: TClose, callback?(): void): void;
 }
