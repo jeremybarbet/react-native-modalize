@@ -176,7 +176,7 @@ const ModalizeBase = (
   const nativeViewChildrenRef = React.useRef<NativeViewGestureHandler>(null);
   const contentViewRef = React.useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
   const tapGestureOverlayRef = React.useRef<TapGestureHandler>(null);
-  const backButtonListenerRef = React.useRef<NativeEventSubscription>(null);
+  const backButtonListenerRef = React.useRef<NativeEventSubscription | null>(null);
 
   // We diff and get the negative value only. It sometimes go above 0
   // (e.g. 1.5) and creates the flickering on Modalize for a ms
@@ -228,7 +228,7 @@ const ModalizeBase = (
     const { timing, spring } = openAnimationConfig;
 
     backButtonListenerRef.current?.remove();
-    (backButtonListenerRef as any).current = BackHandler.addEventListener(
+    backButtonListenerRef.current = BackHandler.addEventListener(
       'hardwareBackPress',
       handleBackPress,
     );
@@ -858,6 +858,18 @@ const ModalizeBase = (
   }));
 
   React.useEffect(() => {
+    if (backButtonListenerRef.current) {
+      backButtonListenerRef.current.remove();
+      backButtonListenerRef.current = null;
+
+      backButtonListenerRef.current = BackHandler.addEventListener(
+        'hardwareBackPress',
+        handleBackPress
+      );
+    }
+  },[handleBackPress])
+
+  React.useEffect(() => {
     if (alwaysOpen && (modalHeightValue || adjustToContentHeight)) {
       handleAnimateOpen(alwaysOpen);
     }
@@ -906,7 +918,6 @@ const ModalizeBase = (
     }
 
     return (): void => {
-      backButtonListenerRef.current?.remove();
       beginScrollY.removeListener(beginScrollYListener);
 
       if (isBelowRN65) {
