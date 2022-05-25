@@ -2,18 +2,15 @@
  * Extracted from https://github.com/seznam/compose-react-refs
  * and moved here to avoid to install an extra-dependency
  */
-import * as React from 'react';
+import { MutableRefObject, Ref } from 'react';
 
-type NonNullRef<T> = NonNullable<React.Ref<T>>;
+type NonNullRef<T> = NonNullable<Ref<T>>;
 const composedRefCache = new WeakMap<
   NonNullRef<unknown>,
   WeakMap<NonNullRef<unknown>, NonNullRef<unknown>>
 >();
 
-export const composeRefs = <T>(
-  ref1: React.Ref<T>,
-  ref2: React.Ref<T> | undefined,
-): React.Ref<T> => {
+export const composeRefs = <T>(ref1: Ref<T>, ref2: Ref<T> | undefined): Ref<T> => {
   if (ref1 && ref2) {
     const ref1Cache =
       composedRefCache.get(ref1) || new WeakMap<NonNullRef<unknown>, NonNullRef<unknown>>();
@@ -37,6 +34,6 @@ const updateRef = <T>(ref: NonNullRef<T>, instance: null | T): void => {
   if (typeof ref === 'function') {
     ref(instance);
   } else {
-    (ref as React.MutableRefObject<T | null>).current = instance;
+    (ref as MutableRefObject<T | null>).current = instance;
   }
 };

@@ -1,0 +1,42 @@
+name: CI / Lint
+
+on:
+  push:
+    branches: [master]
+
+  pull_request:
+    branches: [master]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure Node
+        uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+          node-version: '16'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Install reviewdog
+        uses: reviewdog/action-setup@v1
+
+      - name: Run TypeScript
+        run: |
+          yarn lint:tsc | reviewdog -name="tsc" -efm="%f(%l,%c): error TS%n: %m" -reporter="github-check" -filter-mode="nofilter" -fail-on-error -tee
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Format & Lint
+        run: yarn lint
+
+      - name: Check for changes
+        run: git diff --exit-code HEAD

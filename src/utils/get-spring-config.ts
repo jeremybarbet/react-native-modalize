@@ -1,7 +1,8 @@
-import { ISpringProps } from '../options';
+import { SpringProps } from '../options';
+
 import { invariant } from './invariant';
 
-export const getSpringConfig = (config: ISpringProps): { [key: string]: number | undefined } => {
+export const getSpringConfig = (config: SpringProps): { [key: string]: number | undefined } => {
   const { friction, tension, speed, bounciness, stiffness, damping, mass } = config;
 
   if (stiffness || damping || mass) {

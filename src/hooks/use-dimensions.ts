@@ -1,16 +1,16 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { Dimensions, EmitterSubscription, ScaledSize } from 'react-native';
 
-import { isBelowRN65 } from './libraries';
+import { isBelowRN65 } from '../utils/libraries';
 
 export const useDimensions = (): ScaledSize => {
-  const [dimensions, setDimensions] = React.useState(Dimensions.get('window'));
+  const [dimensions, setDimensions] = useState(Dimensions.get('window'));
 
   const onChange = ({ window }: { window: ScaledSize }): void => {
     setDimensions(window);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     let dimensionChangeListener: EmitterSubscription | null = null;
 
     if (isBelowRN65) {

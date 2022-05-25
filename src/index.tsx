@@ -1,59 +1,57 @@
-/**
- * esModuleInterop: true looks to work everywhere except
- * on snack.expo for some reason. Will revisit this later.
- */
-import * as React from 'react';
+import React, {
+  cloneElement,
+  forwardRef,
+  ReactNode,
+  Ref,
+  RefObject,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import {
   Animated,
-  View,
-  Modal,
-  Easing,
-  LayoutChangeEvent,
   BackHandler,
-  KeyboardAvoidingView,
-  Keyboard,
-  ScrollView,
-  FlatList,
-  SectionList,
-  Platform,
-  StatusBar,
-  KeyboardEvent,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-  StyleSheet,
-  KeyboardAvoidingViewProps,
-  ViewStyle,
-  NativeEventSubscription,
+  Easing,
   EmitterSubscription,
+  FlatList,
+  Keyboard,
+  KeyboardAvoidingView,
+  KeyboardAvoidingViewProps,
+  KeyboardEvent,
+  LayoutChangeEvent,
+  Modal,
+  NativeEventSubscription,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Platform,
+  ScrollView,
+  SectionList,
+  StatusBar,
+  StyleSheet,
+  View,
+  ViewStyle,
 } from 'react-native';
 import {
-  PanGestureHandler,
   NativeViewGestureHandler,
+  PanGestureHandler,
+  PanGestureHandlerStateChangeEvent,
   State,
   TapGestureHandler,
-  PanGestureHandlerStateChangeEvent,
   TapGestureHandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
 
-import { IProps, TOpen, TClose, TStyle, IHandles, TPosition } from './options';
-import { useDimensions } from './utils/use-dimensions';
-import { getSpringConfig } from './utils/get-spring-config';
-import { isIphoneX, isIos, isAndroid } from './utils/devices';
-import { isBelowRN65, isRNGH2 } from './utils/libraries';
-import { invariant } from './utils/invariant';
+import { useDimensions } from './hooks/use-dimensions';
 import { composeRefs } from './utils/compose-refs';
+import { constants } from './utils/constants';
+import { isAndroid, isIos, isIphoneX } from './utils/devices';
+import { getSpringConfig } from './utils/get-spring-config';
+import { invariant } from './utils/invariant';
+import { isBelowRN65, isRNGH2 } from './utils/libraries';
+import { Close, Handles, Open, Position, Props, Style } from './options';
 import s from './styles';
 
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
-/**
- * When scrolling, it happens than beginScrollYValue is not always equal to 0 (top of the ScrollView).
- * Since we use this to trigger the swipe down gesture animation, we allow a small threshold to
- * not dismiss Modalize when we are using the ScrollView and we don't want to dismiss.
- */
-const SCROLL_THRESHOLD = -4;
-const USE_NATIVE_DRIVER = true;
-const ACTIVATED = 20;
-const PAN_DURATION = 150;
 
 const ModalizeBase = (
   {
@@ -135,8 +133,8 @@ const ModalizeBase = (
     onPositionChange,
     onOverlayPress,
     onLayout,
-  }: IProps,
-  ref: React.Ref<React.ReactNode>,
+  }: Props,
+  ref: Ref<ReactNode>,
 ): JSX.Element | null => {
   const { height: screenHeight } = useDimensions();
   const isHandleOutside = handlePosition === 'outside';
@@ -147,36 +145,34 @@ const ModalizeBase = (
   const adjustValue = adjustToContentHeight ? undefined : endHeight;
   const snaps = snapPoint ? [0, endHeight - snapPoint, endHeight] : [0, endHeight];
 
-  const [modalHeightValue, setModalHeightValue] = React.useState(adjustValue);
-  const [lastSnap, setLastSnap] = React.useState(snapPoint ? endHeight - snapPoint : 0);
-  const [isVisible, setIsVisible] = React.useState(false);
-  const [showContent, setShowContent] = React.useState(true);
-  const [enableBounces, setEnableBounces] = React.useState(true);
-  const [keyboardToggle, setKeyboardToggle] = React.useState(false);
-  const [keyboardHeight, setKeyboardHeight] = React.useState(0);
-  const [disableScroll, setDisableScroll] = React.useState(
-    alwaysOpen || snapPoint ? true : undefined,
-  );
-  const [beginScrollYValue, setBeginScrollYValue] = React.useState(0);
-  const [modalPosition, setModalPosition] = React.useState<TPosition>('initial');
-  const [cancelClose, setCancelClose] = React.useState(false);
-  const [layouts, setLayouts] = React.useState<Map<string, number>>(new Map());
+  const [modalHeightValue, setModalHeightValue] = useState(adjustValue);
+  const [lastSnap, setLastSnap] = useState(snapPoint ? endHeight - snapPoint : 0);
+  const [isVisible, setIsVisible] = useState(false);
+  const [showContent, setShowContent] = useState(true);
+  const [enableBounces, setEnableBounces] = useState(true);
+  const [keyboardToggle, setKeyboardToggle] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [disableScroll, setDisableScroll] = useState(alwaysOpen || snapPoint ? true : undefined);
+  const [beginScrollYValue, setBeginScrollYValue] = useState(0);
+  const [modalPosition, setModalPosition] = useState<Position>('initial');
+  const [cancelClose, setCancelClose] = useState(false);
+  const [layouts, setLayouts] = useState<Map<string, number>>(new Map());
 
-  const cancelTranslateY = React.useRef(new Animated.Value(1)).current; // 1 by default to have the translateY animation running
-  const componentTranslateY = React.useRef(new Animated.Value(0)).current;
-  const overlay = React.useRef(new Animated.Value(0)).current;
-  const beginScrollY = React.useRef(new Animated.Value(0)).current;
-  const dragY = React.useRef(new Animated.Value(0)).current;
-  const translateY = React.useRef(new Animated.Value(screenHeight)).current;
-  const reverseBeginScrollY = React.useRef(Animated.multiply(new Animated.Value(-1), beginScrollY))
+  const cancelTranslateY = useRef(new Animated.Value(1)).current; // 1 by default to have the translateY animation running
+  const componentTranslateY = useRef(new Animated.Value(0)).current;
+  const overlay = useRef(new Animated.Value(0)).current;
+  const beginScrollY = useRef(new Animated.Value(0)).current;
+  const dragY = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(screenHeight)).current;
+  const reverseBeginScrollY = useRef(Animated.multiply(new Animated.Value(-1), beginScrollY))
     .current;
 
-  const tapGestureModalizeRef = React.useRef<TapGestureHandler>(null);
-  const panGestureChildrenRef = React.useRef<PanGestureHandler>(null);
-  const nativeViewChildrenRef = React.useRef<NativeViewGestureHandler>(null);
-  const contentViewRef = React.useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
-  const tapGestureOverlayRef = React.useRef<TapGestureHandler>(null);
-  const backButtonListenerRef = React.useRef<NativeEventSubscription>(null);
+  const tapGestureModalizeRef = useRef<TapGestureHandler>(null);
+  const panGestureChildrenRef = useRef<PanGestureHandler>(null);
+  const nativeViewChildrenRef = useRef<NativeViewGestureHandler>(null);
+  const contentViewRef = useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
+  const tapGestureOverlayRef = useRef<TapGestureHandler>(null);
+  const backButtonListenerRef = useRef<NativeEventSubscription>(null);
 
   // We diff and get the negative value only. It sometimes go above 0
   // (e.g. 1.5) and creates the flickering on Modalize for a ms
@@ -221,10 +217,7 @@ const ModalizeBase = (
     setKeyboardHeight(0);
   };
 
-  const handleAnimateOpen = (
-    alwaysOpenValue: number | undefined,
-    dest: TOpen = 'default',
-  ): void => {
+  const handleAnimateOpen = (alwaysOpenValue: number | undefined, dest: Open = 'default'): void => {
     const { timing, spring } = openAnimationConfig;
 
     (backButtonListenerRef as any).current = BackHandler.addEventListener(
@@ -234,7 +227,7 @@ const ModalizeBase = (
 
     let toValue = 0;
     let toPanValue = 0;
-    let newPosition: TPosition;
+    let newPosition: Position;
 
     if (dest === 'top') {
       toValue = 0;
@@ -268,13 +261,13 @@ const ModalizeBase = (
         toValue: alwaysOpenValue && dest === 'default' ? 0 : 1,
         duration: timing.duration,
         easing: Easing.ease,
-        useNativeDriver: USE_NATIVE_DRIVER,
+        useNativeDriver: true,
       }),
 
       panGestureAnimatedValue
         ? Animated.timing(panGestureAnimatedValue, {
             toValue: toPanValue,
-            duration: PAN_DURATION,
+            duration: constants.panDuration,
             easing: Easing.ease,
             useNativeDriver,
           })
@@ -284,13 +277,13 @@ const ModalizeBase = (
         ? Animated.spring(translateY, {
             ...getSpringConfig(spring),
             toValue,
-            useNativeDriver: USE_NATIVE_DRIVER,
+            useNativeDriver: true,
           })
         : Animated.timing(translateY, {
             toValue,
             duration: timing.duration,
             easing: timing.easing,
-            useNativeDriver: USE_NATIVE_DRIVER,
+            useNativeDriver: true,
           }),
     ]).start(() => {
       if (onOpened) {
@@ -305,7 +298,7 @@ const ModalizeBase = (
     });
   };
 
-  const handleAnimateClose = (dest: TClose = 'default', callback?: () => void): void => {
+  const handleAnimateClose = (dest: Close = 'default', callback?: () => void): void => {
     const { timing, spring } = closeAnimationConfig;
     const lastSnapValue = snapPoint ? snaps[1] : 80;
     const toInitialAlwaysOpen = dest === 'alwaysOpen' && Boolean(alwaysOpen);
@@ -322,13 +315,13 @@ const ModalizeBase = (
         toValue: 0,
         duration: timing.duration,
         easing: Easing.ease,
-        useNativeDriver: USE_NATIVE_DRIVER,
+        useNativeDriver: true,
       }),
 
       panGestureAnimatedValue
         ? Animated.timing(panGestureAnimatedValue, {
             toValue: 0,
-            duration: PAN_DURATION,
+            duration: constants.panDuration,
             easing: Easing.ease,
             useNativeDriver,
           })
@@ -338,13 +331,13 @@ const ModalizeBase = (
         ? Animated.spring(translateY, {
             ...getSpringConfig(spring),
             toValue,
-            useNativeDriver: USE_NATIVE_DRIVER,
+            useNativeDriver: true,
           })
         : Animated.timing(translateY, {
             duration: timing.duration,
             easing: Easing.out(Easing.ease),
             toValue,
-            useNativeDriver: USE_NATIVE_DRIVER,
+            useNativeDriver: true,
           }),
     ]).start(() => {
       if (onClosed) {
@@ -436,7 +429,7 @@ const ModalizeBase = (
     handleBaseLayout(name, nativeEvent.layout.height);
   };
 
-  const handleClose = (dest?: TClose, callback?: () => void): void => {
+  const handleClose = (dest?: Close, callback?: () => void): void => {
     if (onClose) {
       onClose();
     }
@@ -452,7 +445,7 @@ const ModalizeBase = (
     const { velocityY, translationY } = nativeEvent;
     const negativeReverseScroll =
       modalPosition === 'top' &&
-      beginScrollYValue >= (snapPoint ? 0 : SCROLL_THRESHOLD) &&
+      beginScrollYValue >= (snapPoint ? 0 : constants.scrollThreshold) &&
       translationY < 0;
     const thresholdProps = translationY > threshold && beginScrollYValue === 0;
     const closeThreshold = velocity
@@ -566,7 +559,7 @@ const ModalizeBase = (
           toValue: Number(destSnapPoint <= 0),
           duration: timing.duration,
           easing: Easing.ease,
-          useNativeDriver: USE_NATIVE_DRIVER,
+          useNativeDriver: true,
         }).start();
       }
 
@@ -575,7 +568,7 @@ const ModalizeBase = (
         friction: 12,
         velocity: velocityY,
         toValue: destSnapPoint,
-        useNativeDriver: USE_NATIVE_DRIVER,
+        useNativeDriver: true,
       }).start();
 
       if (beginScrollYValue <= 0) {
@@ -584,7 +577,7 @@ const ModalizeBase = (
         if (panGestureAnimatedValue) {
           Animated.timing(panGestureAnimatedValue, {
             toValue: Number(modalPositionValue === 'top'),
-            duration: PAN_DURATION,
+            duration: constants.panDuration,
             easing: Easing.ease,
             useNativeDriver,
           }).start();
@@ -628,7 +621,7 @@ const ModalizeBase = (
   };
 
   const handleGestureEvent = Animated.event([{ nativeEvent: { translationY: dragY } }], {
-    useNativeDriver: USE_NATIVE_DRIVER,
+    useNativeDriver: true,
     listener: ({ nativeEvent: { translationY } }: PanGestureHandlerStateChangeEvent) => {
       if (panGestureAnimatedValue) {
         const offset = alwaysOpen ?? snapPoint ?? 0;
@@ -650,8 +643,8 @@ const ModalizeBase = (
   });
 
   const renderHandle = (): JSX.Element | null => {
-    const handleStyles: (TStyle | undefined)[] = [s.handle];
-    const shapeStyles: (TStyle | undefined)[] = [s.handle__shape, handleStyle];
+    const handleStyles: (Style | undefined)[] = [s.handle];
+    const shapeStyles: (Style | undefined)[] = [s.handle__shape, handleStyle];
 
     if (!withHandle) {
       return null;
@@ -677,11 +670,11 @@ const ModalizeBase = (
     );
   };
 
-  const renderElement = (Element: React.ReactNode): JSX.Element =>
+  const renderElement = (Element: ReactNode): JSX.Element =>
     typeof Element === 'function' ? Element() : Element;
 
   const renderComponent = (
-    component: React.ReactNode,
+    component: ReactNode,
     name: 'header' | 'footer' | 'floating',
   ): JSX.Element | null => {
     if (!component) {
@@ -742,10 +735,10 @@ const ModalizeBase = (
     ) => void | undefined;
 
     const opts = {
-      ref: composeRefs(contentViewRef, contentRef) as React.RefObject<any>,
+      ref: composeRefs(contentViewRef, contentRef) as RefObject<any>,
       bounces,
       onScrollBeginDrag: Animated.event([{ nativeEvent: { contentOffset: { y: beginScrollY } } }], {
-        useNativeDriver: USE_NATIVE_DRIVER,
+        useNativeDriver: true,
         listener: onScrollBeginDrag,
       }),
       scrollEventThrottle,
@@ -764,7 +757,7 @@ const ModalizeBase = (
 
     if (customRenderer) {
       const tag = renderElement(customRenderer);
-      return React.cloneElement(tag, { ...opts });
+      return cloneElement(tag, { ...opts });
     }
 
     return (
@@ -776,7 +769,7 @@ const ModalizeBase = (
 
   const renderChildren = (): JSX.Element => {
     const style = adjustToContentHeight ? s.content__adjustHeight : s.content__container;
-    const minDist = isRNGH2() ? undefined : ACTIVATED;
+    const minDist = isRNGH2() ? undefined : constants.activated;
 
     return (
       <PanGestureHandler
@@ -786,8 +779,8 @@ const ModalizeBase = (
         shouldCancelWhenOutside={false}
         onGestureEvent={handleGestureEvent}
         minDist={minDist}
-        activeOffsetY={ACTIVATED}
-        activeOffsetX={ACTIVATED}
+        activeOffsetY={constants.activated}
+        activeOffsetX={constants.activated}
         onHandlerStateChange={handleChildren}
       >
         <Animated.View style={[style, childrenStyle]}>
@@ -842,8 +835,8 @@ const ModalizeBase = (
     );
   };
 
-  React.useImperativeHandle(ref, () => ({
-    open(dest?: TOpen): void {
+  useImperativeHandle(ref, () => ({
+    open(dest?: Open): void {
       if (onOpen) {
         onOpen();
       }
@@ -851,18 +844,18 @@ const ModalizeBase = (
       handleAnimateOpen(alwaysOpen, dest);
     },
 
-    close(dest?: TClose, callback?: () => void): void {
+    close(dest?: Close, callback?: () => void): void {
       handleClose(dest, callback);
     },
   }));
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (alwaysOpen && (modalHeightValue || adjustToContentHeight)) {
       handleAnimateOpen(alwaysOpen);
     }
   }, [alwaysOpen, modalHeightValue]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     invariant(
       modalHeight && adjustToContentHeight,
       `You can't use both 'modalHeight' and 'adjustToContentHeight' props at the same time. Only choose one of the two.`,
@@ -884,11 +877,11 @@ const ModalizeBase = (
     sectionListProps,
   ]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setModalHeightValue(adjustValue);
   }, [adjustToContentHeight, modalHeight, screenHeight]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let keyboardShowListener: EmitterSubscription | null = null;
     let keyboardHideListener: EmitterSubscription | null = null;
 
@@ -979,7 +972,7 @@ const ModalizeBase = (
       {...reactModalProps}
       supportedOrientations={['landscape', 'portrait', 'portrait-upside-down']}
       onRequestClose={handleBackPress}
-      hardwareAccelerated={USE_NATIVE_DRIVER}
+      hardwareAccelerated={true}
       visible={isVisible}
       transparent
     >
@@ -998,6 +991,6 @@ const ModalizeBase = (
   return renderModalize;
 };
 
-export type ModalizeProps = IProps;
-export type Modalize = IHandles;
-export const Modalize = React.forwardRef(ModalizeBase);
+export type ModalizeProps = Props;
+export type Modalize = Handles;
+export const Modalize = forwardRef(ModalizeBase);

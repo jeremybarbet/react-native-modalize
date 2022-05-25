@@ -3,19 +3,14 @@ module.exports = {
     browser: true,
     es6: true,
   },
-  extends: [
-    'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
-    'plugin:react/recommended',
-    'prettier/@typescript-eslint',
-  ],
+  extends: ['plugin:@typescript-eslint/recommended', 'plugin:react/recommended', 'prettier'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: 'tsconfig.json',
     sourceType: 'module',
     ecmaFeatures: { jsx: true },
   },
-  plugins: ['@typescript-eslint', 'react', 'react-native'],
+  plugins: ['@typescript-eslint', 'react', 'react-native', 'simple-import-sort'],
   rules: {
     camelcase: 'off',
     '@typescript-eslint/camelcase': 'off',
@@ -28,6 +23,20 @@ module.exports = {
     '@typescript-eslint/no-unsafe-return': 'off',
     '@typescript-eslint/no-unsafe-call': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/unbound-method': 'off',
+    'react/display-name': 'off',
+    'react/prop-types': 'off',
+    'simple-import-sort/imports': [
+      'error',
+      {
+        groups: [
+          ['^\\u0000'],
+          ['^react', '^@?\\w'],
+          ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
+          ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
+        ],
+      },
+    ],
   },
   settings: {
     react: {
