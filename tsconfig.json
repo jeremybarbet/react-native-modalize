@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "outDir": "lib/",
     "allowSyntheticDefaultImports": true,
     "declaration": true,
@@ -19,7 +20,10 @@
     "strictPropertyInitialization": false,
     "noUnusedLocals": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "paths": {
+      "react-native-modalize": ["./src/index"]
+    }
   },
-  "include": ["src", "docs", "examples", ".*rc.js"]
+  "include": ["src", "docs", "example", ".*rc.js"]
 }

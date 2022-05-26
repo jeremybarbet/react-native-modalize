@@ -58,7 +58,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 
 export const App = () => {
-  const modalizeRef = useRef<Modalize>(null);
+  const modalizeRef = useRef<Modalize | null>(null);
 
   const onOpen = () => {
     modalizeRef.current?.open();

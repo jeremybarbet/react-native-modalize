@@ -14,12 +14,11 @@ yarn.lock
 .expo
 .vscode/
 docs/
-examples/
+example/
 src/
 .eslintrc.js
 .prettierignore
 .watchmanconfig
 CHANGELOG.md
 post-version.sh
-renovate.json
 tsconfig.json

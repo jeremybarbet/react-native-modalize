@@ -45,7 +45,7 @@ A ref on Modalize component to be able to use the internal methods [`open()`](/M
 import { Modalize } from 'react-native-modalize';
 
 const App = () => {
-  const modalizeRef = useRef<Modalize>(null);
+  const modalizeRef = useRef<Modalize | null>(null);
 
   // e.g. modalizeRef.current?.open() or modalizeRef.current?.close()
 
@@ -488,7 +488,7 @@ A footer component outside of the ScrollView, at the bottom of the modal.
 
 ### `FloatingComponent`
 
-A floating component inside the modal wrapper that will be independent of scrolling. It requires `zIndex` child with absolute positioning. Check out the [Flatlist example](https://github.com/jeremybarbet/react-native-modalize/blob/master/examples/expo/src/components/modals/FlatList.js#L29-L33).
+A floating component inside the modal wrapper that will be independent of scrolling. It requires `zIndex` child with absolute positioning. Check out the [Flatlist example](https://github.com/jeremybarbet/react-native-modalize/blob/master/example/src/components/modals/FlatList.tsx#L29-L33).
 
 | Type | Required |
 | ---- | -------- |

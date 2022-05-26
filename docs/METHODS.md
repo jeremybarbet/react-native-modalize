@@ -7,7 +7,7 @@ import React, { useRef } from 'react';
 import { Modalize } from 'react-native-modalize';
 
 export const App = () => {
-  const modalizeRef = useRef<Modalize>(null);
+  const modalizeRef = useRef<Modalize | null>(null);
 
   // e.g. modalizeRef.current?.open();
 

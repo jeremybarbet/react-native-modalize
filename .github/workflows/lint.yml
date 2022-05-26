@@ -36,7 +36,7 @@ jobs:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Format & Lint
-        run: yarn lint
+        run: yarn lint:ci
 
       - name: Check for changes
         run: git diff --exit-code HEAD

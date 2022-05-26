@@ -1,0 +1,32 @@
+{
+  "name": "example",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start"
+  },
+  "dependencies": {
+    "@faker-js/faker": "7.1.0",
+    "react": "17.0.2",
+    "react-native": "0.68.2",
+    "react-native-gesture-handler": "2.4.2",
+    "react-native-pager-view": "5.4.23",
+    "react-native-tab-view": "3.1.1",
+    "react-native-webview": "11.18.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@babel/runtime": "^7.12.5",
+    "@types/react-native": "^0.67.3",
+    "@types/react-test-renderer": "^17.0.1",
+    "babel-plugin-module-resolver": "4.1.0",
+    "metro-react-native-babel-preset": "^0.67.0",
+    "react-test-renderer": "17.0.2",
+    "typescript": "^4.4.4"
+  },
+  "resolutions": {
+    "@types/react": "^17"
+  }
+}
