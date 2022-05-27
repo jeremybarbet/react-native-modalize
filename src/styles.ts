@@ -1,8 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { isWeb } from './utils/platform';
-
-export default StyleSheet.create({
+export const s = StyleSheet.create({
   modalize: {
     position: 'absolute',
     top: 0,
@@ -31,17 +29,5 @@ export default StyleSheet.create({
     shadowRadius: 12,
 
     elevation: 4,
-  },
-
-  content__container: {
-    flex: 1,
-    flexGrow: 1,
-    flexShrink: 1,
-  },
-
-  content__adjustHeight: {
-    flex: isWeb ? 1 : 0,
-    flexGrow: isWeb ? undefined : 0,
-    flexShrink: isWeb ? undefined : 1,
   },
 });

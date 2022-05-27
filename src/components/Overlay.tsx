@@ -1,4 +1,4 @@
-import React, { Ref, useRef } from 'react';
+import React, { RefObject, useRef } from 'react';
 import { Animated, StyleSheet } from 'react-native';
 import {
   GestureEvent,
@@ -22,7 +22,7 @@ interface OverlayProps {
   overlayStyle: Props['overlayStyle'];
   onOverlayPress: Props['onOverlayPress'];
   modalPosition: Position;
-  simultaneousHandlers: Ref<unknown>;
+  tapGestureOverlayRef: RefObject<TapGestureHandler>;
   showContent: boolean;
   willCloseModalize: boolean;
   overlay: Animated.Value;
@@ -39,7 +39,7 @@ export const Overlay = ({
   overlayStyle,
   onOverlayPress,
   modalPosition,
-  simultaneousHandlers,
+  tapGestureOverlayRef,
   showContent,
   willCloseModalize,
   overlay,
@@ -65,7 +65,7 @@ export const Overlay = ({
   return (
     <PanGestureHandler
       enabled={panGestureEnabled}
-      simultaneousHandlers={simultaneousHandlers}
+      simultaneousHandlers={tapGestureOverlayRef}
       shouldCancelWhenOutside={false}
       onGestureEvent={onGestureEvent}
       onHandlerStateChange={onHandlerStateChange}

@@ -1,11 +1,4 @@
-import React, {
-  forwardRef,
-  RefObject,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import {
   Animated,
   BackHandler,
@@ -18,8 +11,6 @@ import {
   KeyboardEvent,
   LayoutChangeEvent,
   NativeEventSubscription,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
   Platform,
   ScrollView,
   SectionList,
@@ -34,17 +25,17 @@ import {
   TapGestureHandler,
 } from 'react-native-gesture-handler';
 
+import { Child } from './components/Child';
 import { Element, ElementType } from './components/Element';
 import { Handle } from './components/Handle';
 import { Overlay } from './components/Overlay';
 import { useDimensions } from './hooks/use-dimensions';
-import { composeRefs } from './utils/compose-refs';
 import { constants } from './utils/constants';
 import { invariant } from './utils/invariant';
-import { isBelowRN65, isRNGH2 } from './utils/libraries';
-import { isAndroid, isIos, isIphoneX } from './utils/platform';
+import { isBelowRN65 } from './utils/libraries';
+import { isAndroid, isIphoneX } from './utils/platform';
 import { Close, Handles, Open, Position, Props } from './options';
-import s from './styles';
+import { s } from './styles';
 
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
 
@@ -259,15 +250,9 @@ export const Modalize = forwardRef<Handles, Props>(
           ...constants.springConfig,
         }),
       ]).start(() => {
-        if (onOpened) {
-          onOpened();
-        }
-
+        onOpened?.();
         setModalPosition(newPosition);
-
-        if (onPositionChange) {
-          onPositionChange(newPosition);
-        }
+        onPositionChange?.(newPosition);
       });
     };
 
@@ -304,13 +289,8 @@ export const Modalize = forwardRef<Handles, Props>(
           ...constants.springConfig,
         }),
       ]).start(() => {
-        if (onClosed) {
-          onClosed();
-        }
-
-        if (callback) {
-          callback();
-        }
+        onClosed?.();
+        callback?.();
 
         if (alwaysOpen && dest === 'alwaysOpen' && onPositionChange) {
           onPositionChange('initial');
@@ -355,9 +335,7 @@ export const Modalize = forwardRef<Handles, Props>(
     };
 
     const handleContentLayout = ({ nativeEvent }: LayoutChangeEvent) => {
-      if (onLayout) {
-        onLayout(nativeEvent);
-      }
+      onLayout?.(nativeEvent);
 
       if (alwaysOpen && adjustToContentHeight) {
         const { height } = nativeEvent.layout;
@@ -391,10 +369,7 @@ export const Modalize = forwardRef<Handles, Props>(
     };
 
     const handleClose = (dest?: Close, callback?: () => void) => {
-      if (onClose) {
-        onClose();
-      }
-
+      onClose?.();
       handleAnimateClose(dest, callback);
     };
 
@@ -591,93 +566,9 @@ export const Modalize = forwardRef<Handles, Props>(
       },
     });
 
-    const renderContent = () => {
-      const keyboardDismissMode:
-        | Animated.Value
-        | Animated.AnimatedInterpolation
-        | 'interactive'
-        | 'on-drag' = isIos ? 'interactive' : 'on-drag';
-      const passedOnProps = flatListProps ?? sectionListProps ?? scrollViewProps;
-      // We allow overwrites when the props (bounces, scrollEnabled) are set to false, when true we use Modalize's core behavior
-      const bounces =
-        passedOnProps?.bounces !== undefined && !passedOnProps?.bounces
-          ? passedOnProps?.bounces
-          : enableBounces;
-      const scrollEnabled =
-        passedOnProps?.scrollEnabled !== undefined && !passedOnProps?.scrollEnabled
-          ? passedOnProps?.scrollEnabled
-          : keyboardToggle || !disableScroll;
-      const scrollEventThrottle = passedOnProps?.scrollEventThrottle || 16;
-      const onScrollBeginDrag = passedOnProps?.onScrollBeginDrag as (
-        event: NativeSyntheticEvent<NativeScrollEvent>,
-      ) => void | undefined;
-
-      const opts = {
-        ref: composeRefs(contentViewRef, contentRef) as RefObject<any>,
-        bounces,
-        onScrollBeginDrag: Animated.event(
-          [{ nativeEvent: { contentOffset: { y: beginScrollY } } }],
-          {
-            useNativeDriver: constants.useNativeDriver,
-            listener: onScrollBeginDrag,
-          },
-        ),
-        scrollEventThrottle,
-        onLayout: handleContentLayout,
-        scrollEnabled,
-        keyboardDismissMode,
-      };
-
-      if (flatListProps) {
-        return <Animated.FlatList {...flatListProps} {...opts} />;
-      }
-
-      if (sectionListProps) {
-        return <Animated.SectionList {...sectionListProps} {...opts} />;
-      }
-
-      return (
-        <Animated.ScrollView {...scrollViewProps} {...opts}>
-          {children}
-        </Animated.ScrollView>
-      );
-    };
-
-    const renderChildren = () => {
-      const style = adjustToContentHeight ? s.content__adjustHeight : s.content__container;
-      const minDist = isRNGH2() ? undefined : constants.activated;
-
-      return (
-        <PanGestureHandler
-          ref={panGestureChildrenRef}
-          enabled={panGestureEnabled}
-          simultaneousHandlers={[nativeViewChildrenRef, tapGestureModalizeRef]}
-          shouldCancelWhenOutside={false}
-          onGestureEvent={handleGestureEvent}
-          minDist={minDist}
-          activeOffsetY={constants.activated}
-          activeOffsetX={constants.activated}
-          onHandlerStateChange={handleChildren}
-        >
-          <Animated.View style={[style, childrenStyle]}>
-            <NativeViewGestureHandler
-              ref={nativeViewChildrenRef}
-              waitFor={tapGestureModalizeRef}
-              simultaneousHandlers={panGestureChildrenRef}
-            >
-              {renderContent()}
-            </NativeViewGestureHandler>
-          </Animated.View>
-        </PanGestureHandler>
-      );
-    };
-
     useImperativeHandle(ref, () => ({
       open(dest?: Open) {
-        if (onOpen) {
-          onOpen();
-        }
-
+        onOpen?.();
         handleAnimateOpen(alwaysOpen, dest);
       },
 
@@ -748,6 +639,10 @@ export const Modalize = forwardRef<Handles, Props>(
       };
     }, []);
 
+    if (!isVisible) {
+      return null;
+    }
+
     const keyboardAvoidingViewProps: Animated.AnimatedProps<KeyboardAvoidingViewProps> = {
       keyboardVerticalOffset: keyboardAvoidingOffset,
       behavior: keyboardAvoidingBehavior,
@@ -775,7 +670,7 @@ export const Modalize = forwardRef<Handles, Props>(
       keyboardAvoidingViewProps.onLayout = handleModalizeContentLayout;
     }
 
-    const renderModalize = (
+    return (
       <View
         style={[s.modalize, rootStyle]}
         pointerEvents={alwaysOpen || !withOverlay ? 'box-none' : 'auto'}
@@ -809,7 +704,28 @@ export const Modalize = forwardRef<Handles, Props>(
                   onComponentLayout={handleComponentLayout}
                 />
 
-                {renderChildren()}
+                <Child
+                  panGestureEnabled={panGestureEnabled}
+                  adjustToContentHeight={adjustToContentHeight}
+                  flatListProps={flatListProps}
+                  sectionListProps={sectionListProps}
+                  scrollViewProps={scrollViewProps}
+                  childrenStyle={childrenStyle}
+                  contentRef={contentRef}
+                  enableBounces={enableBounces}
+                  keyboardToggle={keyboardToggle}
+                  disableScroll={disableScroll}
+                  beginScrollY={beginScrollY}
+                  nativeViewChildrenRef={nativeViewChildrenRef}
+                  tapGestureModalizeRef={tapGestureModalizeRef}
+                  contentViewRef={contentViewRef}
+                  panGestureChildrenRef={panGestureChildrenRef}
+                  onLayout={handleContentLayout}
+                  onGestureEvent={handleGestureEvent}
+                  onHandlerStateChange={handleChildren}
+                >
+                  {children}
+                </Child>
 
                 <Element
                   id={ElementType.footer}
@@ -831,7 +747,7 @@ export const Modalize = forwardRef<Handles, Props>(
               overlayStyle={overlayStyle}
               onOverlayPress={onOverlayPress}
               modalPosition={modalPosition}
-              simultaneousHandlers={tapGestureOverlayRef}
+              tapGestureOverlayRef={tapGestureOverlayRef}
               showContent={showContent}
               willCloseModalize={willCloseModalize}
               overlay={overlay}
@@ -853,12 +769,6 @@ export const Modalize = forwardRef<Handles, Props>(
         />
       </View>
     );
-
-    if (!isVisible) {
-      return null;
-    }
-
-    return renderModalize;
   },
 );
 
