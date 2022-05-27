@@ -35,15 +35,15 @@ import {
   PanGestureHandlerStateChangeEvent,
   State,
   TapGestureHandler,
-  TapGestureHandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
 
+import { Overlay } from './components/Overlay';
 import { useDimensions } from './hooks/use-dimensions';
 import { composeRefs } from './utils/compose-refs';
 import { constants } from './utils/constants';
-import { isAndroid, isIos, isIphoneX } from './utils/devices';
 import { invariant } from './utils/invariant';
 import { isBelowRN65, isRNGH2 } from './utils/libraries';
+import { isAndroid, isIos, isIphoneX } from './utils/platform';
 import { renderElement } from './utils/render-element';
 import { Close, Handles, Open, Position, Props, Style } from './options';
 import s from './styles';
@@ -577,18 +577,6 @@ export const Modalize = forwardRef<Handles, Props>(
       handleChildren({ nativeEvent }, 'component');
     };
 
-    const handleOverlay = ({ nativeEvent }: TapGestureHandlerStateChangeEvent): void => {
-      if (nativeEvent.oldState === State.ACTIVE && !willCloseModalize) {
-        if (onOverlayPress) {
-          onOverlayPress();
-        }
-
-        const dest = !!alwaysOpen ? 'alwaysOpen' : 'default';
-
-        handleClose(dest);
-      }
-    };
-
     const handleGestureEvent = Animated.event([{ nativeEvent: { translationY: dragY } }], {
       useNativeDriver: constants.useNativeDriver,
       listener: ({ nativeEvent: { translationY } }: PanGestureHandlerStateChangeEvent) => {
@@ -760,45 +748,6 @@ export const Modalize = forwardRef<Handles, Props>(
       );
     };
 
-    const renderOverlay = (): JSX.Element => {
-      const pointerEvents =
-        alwaysOpen && (modalPosition === 'initial' || !modalPosition) ? 'box-none' : 'auto';
-
-      return (
-        <PanGestureHandler
-          enabled={panGestureEnabled}
-          simultaneousHandlers={tapGestureModalizeRef}
-          shouldCancelWhenOutside={false}
-          onGestureEvent={handleGestureEvent}
-          onHandlerStateChange={handleChildren}
-        >
-          <Animated.View style={s.overlay} pointerEvents={pointerEvents}>
-            {showContent && (
-              <TapGestureHandler
-                ref={tapGestureOverlayRef}
-                enabled={closeOnOverlayTap !== undefined ? closeOnOverlayTap : panGestureEnabled}
-                onHandlerStateChange={handleOverlay}
-              >
-                <Animated.View
-                  style={[
-                    s.overlay__background,
-                    overlayStyle,
-                    {
-                      opacity: overlay.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [0, 1],
-                      }),
-                    },
-                  ]}
-                  pointerEvents={pointerEvents}
-                />
-              </TapGestureHandler>
-            )}
-          </Animated.View>
-        </PanGestureHandler>
-      );
-    };
-
     useImperativeHandle(ref, () => ({
       open(dest?: Open): void {
         if (onOpen) {
@@ -923,7 +872,22 @@ export const Modalize = forwardRef<Handles, Props>(
               </AnimatedKeyboardAvoidingView>
             )}
 
-            {withOverlay && renderOverlay()}
+            <Overlay
+              alwaysOpen={alwaysOpen}
+              panGestureEnabled={panGestureEnabled}
+              withOverlay={withOverlay}
+              closeOnOverlayTap={closeOnOverlayTap}
+              overlayStyle={overlayStyle}
+              onOverlayPress={onOverlayPress}
+              modalPosition={modalPosition}
+              simultaneousHandlers={tapGestureOverlayRef}
+              showContent={showContent}
+              willCloseModalize={willCloseModalize}
+              overlay={overlay}
+              onGestureEvent={handleGestureEvent}
+              onHandlerStateChange={handleChildren}
+              onClose={handleClose}
+            />
           </View>
         </TapGestureHandler>
 

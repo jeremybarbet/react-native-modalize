@@ -1,6 +1,6 @@
-import { Dimensions, Platform } from 'react-native';
+import { Platform } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+import { height, width } from './dimensions';
 
 export const isIos = Platform.OS === 'ios';
 export const isIphoneX =
