@@ -97,7 +97,7 @@ On older version of react-native, most likely something like `contentRef.getNode
 
 ## Renderers
 
-Modalize is shipped by default with four different renderers. The default one is a ScrollView and you just have to pass your content without specifying it directly. If you want to use a FlatList or a SectionList, then you don't have to pass the `children` props, but the `data`/`renderItem` that you can normally find with both of them. You also have the possibility to pass your `customRenderer` with this props.
+Modalize is shipped by default with four different renderers. The default one is a ScrollView and you just have to pass your content without specifying it directly. If you want to use a FlatList or a SectionList, then you don't have to pass the `children` props, but the `data`/`renderItem` that you can normally find with both of them.
 
 ### `children`
 
@@ -136,16 +136,6 @@ Refer to the [`react-native` SectionList documentation](https://reactnative.dev/
 | Type   | Required |
 | ------ | -------- |
 | object | No       |
-
-### `customRenderer`
-
-An animated custom React node that will inherit of the onScroll/gesture events
-
-!> You must pass an animated component, either by doing e.g. `<Animated.View ...>` or `const AnimatedCustomComponent = Animated.createAnimatedComponent(CustomComponent);`.
-
-| Type | Required |
-| ---- | -------- |
-| node | No       |
 
 ## Styles
 

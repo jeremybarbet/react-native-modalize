@@ -44,11 +44,6 @@ export interface Props<ListItem = any> {
   sectionListProps?: Animated.AnimatedProps<SectionListProps<ListItem>>;
 
   /**
-   * An animated custom JSX Element that will inherits of the onScroll/gesture events
-   */
-  customRenderer?: JSX.Element;
-
-  /**
    * Define the style of the root modal component.
    */
   rootStyle?: Style;

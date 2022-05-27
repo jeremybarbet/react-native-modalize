@@ -1,5 +1,4 @@
 import React, {
-  cloneElement,
   forwardRef,
   ReactNode,
   RefObject,
@@ -45,6 +44,7 @@ import { constants } from './utils/constants';
 import { isAndroid, isIos, isIphoneX } from './utils/devices';
 import { invariant } from './utils/invariant';
 import { isBelowRN65, isRNGH2 } from './utils/libraries';
+import { renderElement } from './utils/render-element';
 import { Close, Handles, Open, Position, Props, Style } from './options';
 import s from './styles';
 
@@ -61,7 +61,6 @@ export const Modalize = forwardRef<Handles, Props>(
       scrollViewProps,
       flatListProps,
       sectionListProps,
-      customRenderer,
 
       // Styles
       rootStyle,
@@ -640,9 +639,6 @@ export const Modalize = forwardRef<Handles, Props>(
       );
     };
 
-    const renderElement = (Element: ReactNode): JSX.Element =>
-      typeof Element === 'function' ? Element() : Element;
-
     const renderComponent = (
       component: ReactNode,
       name: 'header' | 'footer' | 'floating',
@@ -726,11 +722,6 @@ export const Modalize = forwardRef<Handles, Props>(
 
       if (sectionListProps) {
         return <Animated.SectionList {...sectionListProps} {...opts} />;
-      }
-
-      if (customRenderer) {
-        const tag = renderElement(customRenderer);
-        return cloneElement(tag, { ...opts });
       }
 
       return (
