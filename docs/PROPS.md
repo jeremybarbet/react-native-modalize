@@ -432,26 +432,6 @@ Wether or not you want to use the native driver with the `panGestureAnimatedValu
 
 ## Elements visibilities
 
-### `withReactModal`
-
-Define if `Modalize` has to be wrap with the Modal component from react-native.
-
-?> In order to work on Android you will need at least `react-native-gesture-handler >= 1.6.0`.
-
-!> It's not recommended to use this props and it's better to use [`react-native-portalize`](https://github.com/jeremybarbet/react-native-portalize) if you want to display Modalize on top of the rest.
-
-| Type | Required | Default |
-| ---- | -------- | ------- |
-| bool | No       | `false` |
-
-### `reactModalProps`
-
-Props for the react-native `Modal` wrapping `Modalize`.
-
-| Type       | Required |
-| ---------- | -------- |
-| ModalProps | No       |
-
 ### `withHandle`
 
 Define if the handle on top of the modal is display or not.

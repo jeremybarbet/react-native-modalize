@@ -19,7 +19,6 @@ import {
   KeyboardAvoidingViewProps,
   KeyboardEvent,
   LayoutChangeEvent,
-  Modal,
   NativeEventSubscription,
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -114,8 +113,6 @@ export const Modalize = forwardRef<Handles, Props>(
       useNativeDriver = true,
 
       // Elements visibilities
-      withReactModal = false,
-      reactModalProps,
       withHandle = true,
       withOverlay = true,
 
@@ -974,25 +971,8 @@ export const Modalize = forwardRef<Handles, Props>(
       </View>
     );
 
-    const renderReactModal = (child: JSX.Element): JSX.Element => (
-      <Modal
-        {...reactModalProps}
-        supportedOrientations={['landscape', 'portrait', 'portrait-upside-down']}
-        onRequestClose={handleBackPress}
-        hardwareAccelerated={true}
-        visible={isVisible}
-        transparent
-      >
-        {child}
-      </Modal>
-    );
-
     if (!isVisible) {
       return null;
-    }
-
-    if (withReactModal) {
-      return renderReactModal(renderModalize);
     }
 
     return renderModalize;

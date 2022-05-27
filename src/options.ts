@@ -5,7 +5,6 @@ import {
   FlatList,
   FlatListProps,
   LayoutRectangle,
-  ModalProps,
   ScrollView,
   ScrollViewProps,
   SectionList,
@@ -231,17 +230,6 @@ export interface Props<ListItem = any> {
    * @default true
    */
   useNativeDriver?: boolean;
-
-  /**
-   * Define if Modalize has to be wrap with the Modal component from react-native.
-   * @default false
-   */
-  withReactModal?: boolean;
-
-  /**
-   * Props for the react-native Modal wrapping Modalize
-   */
-  reactModalProps?: ModalProps;
 
   /**
    * Define if the handle on top of the modal is display or not.
