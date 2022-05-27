@@ -1,6 +1,5 @@
 import React, {
   forwardRef,
-  ReactNode,
   RefObject,
   useEffect,
   useImperativeHandle,
@@ -25,9 +24,7 @@ import {
   ScrollView,
   SectionList,
   StatusBar,
-  StyleSheet,
   View,
-  ViewStyle,
 } from 'react-native';
 import {
   NativeViewGestureHandler,
@@ -37,6 +34,8 @@ import {
   TapGestureHandler,
 } from 'react-native-gesture-handler';
 
+import { Element, ElementType } from './components/Element';
+import { Handle } from './components/Handle';
 import { Overlay } from './components/Overlay';
 import { useDimensions } from './hooks/use-dimensions';
 import { composeRefs } from './utils/compose-refs';
@@ -44,8 +43,7 @@ import { constants } from './utils/constants';
 import { invariant } from './utils/invariant';
 import { isBelowRN65, isRNGH2 } from './utils/libraries';
 import { isAndroid, isIos, isIphoneX } from './utils/platform';
-import { renderElement } from './utils/render-element';
-import { Close, Handles, Open, Position, Props, Style } from './options';
+import { Close, Handles, Open, Position, Props } from './options';
 import s from './styles';
 
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
@@ -119,7 +117,7 @@ export const Modalize = forwardRef<Handles, Props>(
       onLayout,
     },
     ref,
-  ): JSX.Element | null => {
+  ) => {
     const { height: screenHeight } = useDimensions();
     const isHandleOutside = handlePosition === 'outside';
     const handleHeight = withHandle ? 20 : isHandleOutside ? 35 : 20;
@@ -176,7 +174,7 @@ export const Modalize = forwardRef<Handles, Props>(
 
     let willCloseModalize = false;
 
-    const handleBackPress = (): boolean => {
+    const handleBackPress = () => {
       if (alwaysOpen) {
         return false;
       }
@@ -190,22 +188,19 @@ export const Modalize = forwardRef<Handles, Props>(
       return true;
     };
 
-    const handleKeyboardShow = (event: KeyboardEvent): void => {
+    const handleKeyboardShow = (event: KeyboardEvent) => {
       const { height } = event.endCoordinates;
 
       setKeyboardToggle(true);
       setKeyboardHeight(height);
     };
 
-    const handleKeyboardHide = (): void => {
+    const handleKeyboardHide = () => {
       setKeyboardToggle(false);
       setKeyboardHeight(0);
     };
 
-    const handleAnimateOpen = (
-      alwaysOpenValue: number | undefined,
-      dest: Open = 'default',
-    ): void => {
+    const handleAnimateOpen = (alwaysOpenValue: number | undefined, dest: Open = 'default') => {
       (backButtonListenerRef as any).current = BackHandler.addEventListener(
         'hardwareBackPress',
         handleBackPress,
@@ -276,7 +271,7 @@ export const Modalize = forwardRef<Handles, Props>(
       });
     };
 
-    const handleAnimateClose = (dest: Close = 'default', callback?: () => void): void => {
+    const handleAnimateClose = (dest: Close = 'default', callback?: () => void) => {
       const lastSnapValue = snapPoint ? snaps[1] : 80;
       const toInitialAlwaysOpen = dest === 'alwaysOpen' && Boolean(alwaysOpen);
       const toValue =
@@ -334,7 +329,7 @@ export const Modalize = forwardRef<Handles, Props>(
       });
     };
 
-    const handleModalizeContentLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent): void => {
+    const handleModalizeContentLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
       const value = Math.min(
         layout.height + (!adjustToContentHeight || keyboardHeight ? layout.y : 0),
         endHeight -
@@ -348,10 +343,7 @@ export const Modalize = forwardRef<Handles, Props>(
       setModalHeightValue(value);
     };
 
-    const handleBaseLayout = (
-      component: 'content' | 'header' | 'footer' | 'floating',
-      height: number,
-    ): void => {
+    const handleBaseLayout = (component: 'content' | ElementType, height: number) => {
       setLayouts(new Map(layouts.set(component, height)));
 
       const max = Array.from(layouts).reduce((acc, cur) => acc + cur?.[1], 0);
@@ -362,7 +354,7 @@ export const Modalize = forwardRef<Handles, Props>(
       setDisableScroll(shorterHeight && disableScrollIfPossible);
     };
 
-    const handleContentLayout = ({ nativeEvent }: LayoutChangeEvent): void => {
+    const handleContentLayout = ({ nativeEvent }: LayoutChangeEvent) => {
       if (onLayout) {
         onLayout(nativeEvent);
       }
@@ -383,9 +375,9 @@ export const Modalize = forwardRef<Handles, Props>(
 
     const handleComponentLayout = (
       { nativeEvent }: LayoutChangeEvent,
-      name: 'header' | 'footer' | 'floating',
+      id: ElementType,
       absolute: boolean,
-    ): void => {
+    ) => {
       /**
        * We don't want to disable the scroll if we are not using adjustToContentHeight props.
        * Also, if the component is in absolute positioning we don't want to take in
@@ -395,10 +387,10 @@ export const Modalize = forwardRef<Handles, Props>(
         return;
       }
 
-      handleBaseLayout(name, nativeEvent.layout.height);
+      handleBaseLayout(id, nativeEvent.layout.height);
     };
 
-    const handleClose = (dest?: Close, callback?: () => void): void => {
+    const handleClose = (dest?: Close, callback?: () => void) => {
       if (onClose) {
         onClose();
       }
@@ -409,7 +401,7 @@ export const Modalize = forwardRef<Handles, Props>(
     const handleChildren = (
       { nativeEvent }: PanGestureHandlerStateChangeEvent,
       type?: 'component' | 'children',
-    ): void => {
+    ) => {
       const { velocityY, translationY } = nativeEvent;
       const negativeReverseScroll =
         modalPosition === 'top' &&
@@ -567,7 +559,7 @@ export const Modalize = forwardRef<Handles, Props>(
       }
     };
 
-    const handleComponent = ({ nativeEvent }: PanGestureHandlerStateChangeEvent): void => {
+    const handleElement = ({ nativeEvent }: PanGestureHandlerStateChangeEvent) => {
       // If we drag from the HeaderComponent/FooterComponent/FloatingComponent we allow the translation animation
       if (nativeEvent.oldState === State.BEGAN) {
         componentTranslateY.setValue(1);
@@ -599,75 +591,7 @@ export const Modalize = forwardRef<Handles, Props>(
       },
     });
 
-    const renderHandle = (): JSX.Element | null => {
-      const handleStyles: (Style | undefined)[] = [s.handle];
-      const shapeStyles: (Style | undefined)[] = [s.handle__shape, handleStyle];
-
-      if (!withHandle) {
-        return null;
-      }
-
-      if (!isHandleOutside) {
-        handleStyles.push(s.handleBottom);
-        shapeStyles.push(s.handle__shapeBottom, handleStyle);
-      }
-
-      return (
-        <PanGestureHandler
-          enabled={panGestureEnabled}
-          simultaneousHandlers={tapGestureModalizeRef}
-          shouldCancelWhenOutside={false}
-          onGestureEvent={handleGestureEvent}
-          onHandlerStateChange={handleComponent}
-        >
-          <Animated.View style={handleStyles}>
-            <View style={shapeStyles} />
-          </Animated.View>
-        </PanGestureHandler>
-      );
-    };
-
-    const renderComponent = (
-      component: ReactNode,
-      name: 'header' | 'footer' | 'floating',
-    ): JSX.Element | null => {
-      if (!component) {
-        return null;
-      }
-
-      const tag = renderElement(component);
-
-      /**
-       * Nesting Touchable/ScrollView components with RNGH PanGestureHandler cancels the inner events.
-       * Until a better solution lands in RNGH, I will disable the PanGestureHandler for Android only,
-       * so inner touchable/gestures are working from the custom components you can pass in.
-       */
-      if (isAndroid && !panGestureComponentEnabled) {
-        return tag;
-      }
-
-      const obj: ViewStyle = StyleSheet.flatten(tag?.props?.style);
-      const absolute: boolean = obj?.position === 'absolute';
-      const zIndex: number | undefined = obj?.zIndex;
-
-      return (
-        <PanGestureHandler
-          enabled={panGestureEnabled}
-          shouldCancelWhenOutside={false}
-          onGestureEvent={handleGestureEvent}
-          onHandlerStateChange={handleComponent}
-        >
-          <Animated.View
-            style={{ zIndex }}
-            onLayout={(e: LayoutChangeEvent): void => handleComponentLayout(e, name, absolute)}
-          >
-            {tag}
-          </Animated.View>
-        </PanGestureHandler>
-      );
-    };
-
-    const renderContent = (): JSX.Element => {
+    const renderContent = () => {
       const keyboardDismissMode:
         | Animated.Value
         | Animated.AnimatedInterpolation
@@ -719,7 +643,7 @@ export const Modalize = forwardRef<Handles, Props>(
       );
     };
 
-    const renderChildren = (): JSX.Element => {
+    const renderChildren = () => {
       const style = adjustToContentHeight ? s.content__adjustHeight : s.content__container;
       const minDist = isRNGH2() ? undefined : constants.activated;
 
@@ -749,7 +673,7 @@ export const Modalize = forwardRef<Handles, Props>(
     };
 
     useImperativeHandle(ref, () => ({
-      open(dest?: Open): void {
+      open(dest?: Open) {
         if (onOpen) {
           onOpen();
         }
@@ -757,7 +681,7 @@ export const Modalize = forwardRef<Handles, Props>(
         handleAnimateOpen(alwaysOpen, dest);
       },
 
-      close(dest?: Close, callback?: () => void): void {
+      close(dest?: Close, callback?: () => void) {
         handleClose(dest, callback);
       },
     }));
@@ -810,7 +734,7 @@ export const Modalize = forwardRef<Handles, Props>(
         keyboardHideListener = Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
       }
 
-      return (): void => {
+      return () => {
         backButtonListenerRef.current?.remove();
         beginScrollY.removeListener(beginScrollYListener);
 
@@ -865,10 +789,37 @@ export const Modalize = forwardRef<Handles, Props>(
           <View style={s.modalize__wrapper} pointerEvents="box-none">
             {showContent && (
               <AnimatedKeyboardAvoidingView {...keyboardAvoidingViewProps}>
-                {renderHandle()}
-                {renderComponent(HeaderComponent, 'header')}
+                <Handle
+                  panGestureEnabled={panGestureEnabled}
+                  withHandle={withHandle}
+                  handleStyle={handleStyle}
+                  tapGestureModalizeRef={tapGestureModalizeRef}
+                  isHandleOutside={isHandleOutside}
+                  onGestureEvent={handleGestureEvent}
+                  onHandlerStateChange={handleChildren}
+                />
+
+                <Element
+                  id={ElementType.header}
+                  component={HeaderComponent}
+                  panGestureEnabled={panGestureEnabled}
+                  panGestureComponentEnabled={panGestureComponentEnabled}
+                  onGestureEvent={handleGestureEvent}
+                  onHandlerStateChange={handleElement}
+                  onComponentLayout={handleComponentLayout}
+                />
+
                 {renderChildren()}
-                {renderComponent(FooterComponent, 'footer')}
+
+                <Element
+                  id={ElementType.footer}
+                  component={FooterComponent}
+                  panGestureEnabled={panGestureEnabled}
+                  panGestureComponentEnabled={panGestureComponentEnabled}
+                  onGestureEvent={handleGestureEvent}
+                  onHandlerStateChange={handleElement}
+                  onComponentLayout={handleComponentLayout}
+                />
               </AnimatedKeyboardAvoidingView>
             )}
 
@@ -891,7 +842,15 @@ export const Modalize = forwardRef<Handles, Props>(
           </View>
         </TapGestureHandler>
 
-        {renderComponent(FloatingComponent, 'floating')}
+        <Element
+          id={ElementType.floating}
+          component={FloatingComponent}
+          panGestureEnabled={panGestureEnabled}
+          panGestureComponentEnabled={panGestureComponentEnabled}
+          onGestureEvent={handleGestureEvent}
+          onHandlerStateChange={handleElement}
+          onComponentLayout={handleComponentLayout}
+        />
       </View>
     );
 
