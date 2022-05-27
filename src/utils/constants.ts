@@ -7,6 +7,7 @@ export const constants = {
   scrollThreshold: -4,
   activated: 20,
   panDuration: 150,
+  useNativeDriver: true,
 
   springConfig: {
     damping: 50,

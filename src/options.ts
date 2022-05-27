@@ -226,12 +226,6 @@ export interface Props<ListItem = any> {
   panGestureAnimatedValue?: Animated.Value;
 
   /**
-   * Define if the Animated.Value uses the native thread to execute the animations.
-   * @default true
-   */
-  useNativeDriver?: boolean;
-
-  /**
    * Define if the handle on top of the modal is display or not.
    * @default true
    */

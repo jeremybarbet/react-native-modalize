@@ -110,7 +110,6 @@ export const Modalize = forwardRef<Handles, Props>(
       threshold = 120,
       velocity = 2800,
       panGestureAnimatedValue,
-      useNativeDriver = true,
 
       // Elements visibilities
       withHandle = true,
@@ -262,7 +261,7 @@ export const Modalize = forwardRef<Handles, Props>(
           toValue: alwaysOpenValue && dest === 'default' ? 0 : 1,
           duration: timing.duration,
           easing: Easing.ease,
-          useNativeDriver: true,
+          useNativeDriver: constants.useNativeDriver,
         }),
 
         panGestureAnimatedValue
@@ -270,7 +269,7 @@ export const Modalize = forwardRef<Handles, Props>(
               toValue: toPanValue,
               duration: constants.panDuration,
               easing: Easing.ease,
-              useNativeDriver,
+              useNativeDriver: constants.useNativeDriver,
             })
           : Animated.delay(0),
 
@@ -278,13 +277,13 @@ export const Modalize = forwardRef<Handles, Props>(
           ? Animated.spring(translateY, {
               ...getSpringConfig(spring),
               toValue,
-              useNativeDriver: true,
+              useNativeDriver: constants.useNativeDriver,
             })
           : Animated.timing(translateY, {
               toValue,
               duration: timing.duration,
               easing: timing.easing,
-              useNativeDriver: true,
+              useNativeDriver: constants.useNativeDriver,
             }),
       ]).start(() => {
         if (onOpened) {
@@ -316,7 +315,7 @@ export const Modalize = forwardRef<Handles, Props>(
           toValue: 0,
           duration: timing.duration,
           easing: Easing.ease,
-          useNativeDriver: true,
+          useNativeDriver: constants.useNativeDriver,
         }),
 
         panGestureAnimatedValue
@@ -324,7 +323,7 @@ export const Modalize = forwardRef<Handles, Props>(
               toValue: 0,
               duration: constants.panDuration,
               easing: Easing.ease,
-              useNativeDriver,
+              useNativeDriver: constants.useNativeDriver,
             })
           : Animated.delay(0),
 
@@ -332,13 +331,13 @@ export const Modalize = forwardRef<Handles, Props>(
           ? Animated.spring(translateY, {
               ...getSpringConfig(spring),
               toValue,
-              useNativeDriver: true,
+              useNativeDriver: constants.useNativeDriver,
             })
           : Animated.timing(translateY, {
               duration: timing.duration,
               easing: Easing.out(Easing.ease),
               toValue,
-              useNativeDriver: true,
+              useNativeDriver: constants.useNativeDriver,
             }),
       ]).start(() => {
         if (onClosed) {
@@ -560,7 +559,7 @@ export const Modalize = forwardRef<Handles, Props>(
             toValue: Number(destSnapPoint <= 0),
             duration: timing.duration,
             easing: Easing.ease,
-            useNativeDriver: true,
+            useNativeDriver: constants.useNativeDriver,
           }).start();
         }
 
@@ -569,7 +568,7 @@ export const Modalize = forwardRef<Handles, Props>(
           friction: 12,
           velocity: velocityY,
           toValue: destSnapPoint,
-          useNativeDriver: true,
+          useNativeDriver: constants.useNativeDriver,
         }).start();
 
         if (beginScrollYValue <= 0) {
@@ -580,7 +579,7 @@ export const Modalize = forwardRef<Handles, Props>(
               toValue: Number(modalPositionValue === 'top'),
               duration: constants.panDuration,
               easing: Easing.ease,
-              useNativeDriver,
+              useNativeDriver: constants.useNativeDriver,
             }).start();
           }
 
@@ -622,7 +621,7 @@ export const Modalize = forwardRef<Handles, Props>(
     };
 
     const handleGestureEvent = Animated.event([{ nativeEvent: { translationY: dragY } }], {
-      useNativeDriver: true,
+      useNativeDriver: constants.useNativeDriver,
       listener: ({ nativeEvent: { translationY } }: PanGestureHandlerStateChangeEvent) => {
         if (panGestureAnimatedValue) {
           const offset = alwaysOpen ?? snapPoint ?? 0;
@@ -741,7 +740,7 @@ export const Modalize = forwardRef<Handles, Props>(
         onScrollBeginDrag: Animated.event(
           [{ nativeEvent: { contentOffset: { y: beginScrollY } } }],
           {
-            useNativeDriver: true,
+            useNativeDriver: constants.useNativeDriver,
             listener: onScrollBeginDrag,
           },
         ),
