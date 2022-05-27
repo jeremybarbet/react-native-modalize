@@ -1,7 +1,6 @@
 import { ReactNode, RefObject } from 'react';
 import {
   Animated,
-  EasingFunction,
   FlatList,
   FlatListProps,
   LayoutRectangle,
@@ -17,28 +16,6 @@ export type Open = 'default' | 'top';
 export type Close = 'default' | 'alwaysOpen';
 export type Position = 'initial' | 'top';
 export type Style = StyleProp<ViewStyle>;
-
-export interface TimingProps {
-  duration: number;
-  easing?: EasingFunction;
-  delay?: number;
-  isInteraction?: boolean;
-}
-
-export interface SpringProps {
-  friction?: number;
-  tension?: number;
-  speed?: number;
-  bounciness?: number;
-  stiffness?: number;
-  damping?: number;
-  mass?: number;
-}
-
-export interface ConfigProps {
-  timing: TimingProps;
-  spring?: SpringProps;
-}
 
 export interface Props<ListItem = any> {
   /**
@@ -181,44 +158,6 @@ export interface Props<ListItem = any> {
    * @default true
    */
   closeSnapPointStraightEnabled?: boolean;
-
-  /**
-   * Object to change the open animations.
-   * @default
-   * {
-   * timing: { duration: 280 },
-   * spring: { speed: 14, bounciness: 5 }
-   * }
-   */
-  openAnimationConfig?: ConfigProps;
-
-  /**
-   * Object to change the close animations.
-   * @default
-   * {
-   * timing: { duration: 280 },
-   * spring: { speed: 14, bounciness: 5 }
-   * }
-   */
-  closeAnimationConfig?: ConfigProps;
-
-  /**
-   * A number that determines the momentum of the scroll required.
-   * @default 0.05
-   */
-  dragToss?: number;
-
-  /**
-   * Number of pixels that the user must pass to be able to close the modal.
-   * @default 120
-   */
-  threshold?: number;
-
-  /**
-   * Number of pixels the user has to pan down fast to close the modal.
-   * @default 2800
-   */
-  velocity?: number | undefined;
 
   /**
    * Animated.Value of the modal position between 0 and 1.

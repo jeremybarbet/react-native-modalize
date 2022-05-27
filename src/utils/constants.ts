@@ -9,6 +9,16 @@ export const constants = {
   panDuration: 150,
   useNativeDriver: true,
 
+  animations: {
+    dragToss: 0.18,
+    threshold: 120,
+    velocity: 2800,
+  },
+
+  timingConfig: {
+    duration: 240,
+  },
+
   springConfig: {
     damping: 50,
     mass: 0.3,

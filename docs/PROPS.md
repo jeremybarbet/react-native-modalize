@@ -349,69 +349,6 @@ Define if `snapPoint` props should close straight when swiping down or come back
 
 ## Animations
 
-### `openAnimationConfig`
-
-Object to change the open animation. You can either pass a timing (`Animated.timing`) or a spring (`Animated.spring`) animation.
-
-| Type   | Required | Default                                    |
-| ------ | -------- | ------------------------------------------ |
-| object | No       | `{ spring: { speed: 14, bounciness: 4 } }` |
-
-**Spring props (default object)**
-
-- `friction`: Controls "bounciness"/overshoot.
-- `tension`: Controls speed.
-- `speed`: Controls speed of the animation. _Default 14_.
-- `bounciness`: Controls bounciness. _Default 4_.
-- `stiffness`: The spring stiffness coefficient.
-- `damping`: Defines how the spring’s motion should be damped due to the forces of friction.
-- `mass`: The mass of the object attached to the end of the spring.
-
-**Timing props**
-
-- `duration`: Length of animation (milliseconds). _Default 280_.
-- `easing`: Easing function to define curve. _Default is `Easing.ease`_.
-- `delay`: Start the animation after delay (milliseconds).
-- `isInteraction`: Whether or not this animation creates an "interaction handle" on the InteractionManager.
-
-### `closeAnimationConfig`
-
-Object to change the close animation. You can either pass a timing (`Animated.timing`) or a spring (`Animated.spring`) animation. _(See above for spring and timing props)_
-
-| Type   | Required | Default                                    |
-| ------ | -------- | ------------------------------------------ |
-| object | No       | `{ spring: { speed: 14, bounciness: 5 } }` |
-
-### `dragToss`
-
-A number that determines the momentum of the scroll required.
-
-| Type   | Required | Default |
-| ------ | -------- | ------- |
-| number | No       | `0.05`  |
-
-### `threshold`
-
-Number of pixels that the user must pass to be able to close the modal.
-
-| Type   | Required | Default |
-| ------ | -------- | ------- |
-| number | No       | `150`   |
-
-### `velocity`
-
-Speed at which the user has to pan down to close the modal.
-
-The highest the number is, the faster the user will need to pan down and make an important gesture to dismiss the modal.
-
-?> e.g. When the user is reaching the top of the ScrollView and is immediately panning down to dismiss Modalize. If it reaches the velocity threshold then it instantly closes the modal.
-
-?> If the `velocity` is defined, then it's the first condition checked to close Modalize, then comes `threshold` used in a second time. If you want to use the `threshold` method only, just define `velocity={undefined}`.
-
-| Type   | Required | Default |
-| ------ | -------- | ------- |
-| number | No       | `2800`  |
-
 ### `panGestureAnimatedValue`
 
 Animated.Value of the modal opening position between 0 and 1.

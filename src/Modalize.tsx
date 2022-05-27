@@ -43,7 +43,6 @@ import { useDimensions } from './hooks/use-dimensions';
 import { composeRefs } from './utils/compose-refs';
 import { constants } from './utils/constants';
 import { isAndroid, isIos, isIphoneX } from './utils/devices';
-import { getSpringConfig } from './utils/get-spring-config';
 import { invariant } from './utils/invariant';
 import { isBelowRN65, isRNGH2 } from './utils/libraries';
 import { Close, Handles, Open, Position, Props, Style } from './options';
@@ -99,16 +98,6 @@ export const Modalize = forwardRef<Handles, Props>(
       closeSnapPointStraightEnabled = true,
 
       // Animations
-      openAnimationConfig = {
-        timing: { duration: 240, easing: Easing.ease },
-        spring: { speed: 14, bounciness: 4 },
-      },
-      closeAnimationConfig = {
-        timing: { duration: 240, easing: Easing.ease },
-      },
-      dragToss = 0.18,
-      threshold = 120,
-      velocity = 2800,
       panGestureAnimatedValue,
 
       // Elements visibilities
@@ -218,8 +207,6 @@ export const Modalize = forwardRef<Handles, Props>(
       alwaysOpenValue: number | undefined,
       dest: Open = 'default',
     ): void => {
-      const { timing, spring } = openAnimationConfig;
-
       (backButtonListenerRef as any).current = BackHandler.addEventListener(
         'hardwareBackPress',
         handleBackPress,
@@ -257,34 +244,26 @@ export const Modalize = forwardRef<Handles, Props>(
       }
 
       Animated.parallel([
-        Animated.timing(overlay, {
+        Animated.spring(overlay, {
           toValue: alwaysOpenValue && dest === 'default' ? 0 : 1,
-          duration: timing.duration,
-          easing: Easing.ease,
           useNativeDriver: constants.useNativeDriver,
+          ...constants.springConfig,
         }),
 
         panGestureAnimatedValue
           ? Animated.timing(panGestureAnimatedValue, {
               toValue: toPanValue,
               duration: constants.panDuration,
-              easing: Easing.ease,
+              easing: Easing.linear,
               useNativeDriver: constants.useNativeDriver,
             })
           : Animated.delay(0),
 
-        spring
-          ? Animated.spring(translateY, {
-              ...getSpringConfig(spring),
-              toValue,
-              useNativeDriver: constants.useNativeDriver,
-            })
-          : Animated.timing(translateY, {
-              toValue,
-              duration: timing.duration,
-              easing: timing.easing,
-              useNativeDriver: constants.useNativeDriver,
-            }),
+        Animated.spring(translateY, {
+          toValue,
+          useNativeDriver: constants.useNativeDriver,
+          ...constants.springConfig,
+        }),
       ]).start(() => {
         if (onOpened) {
           onOpened();
@@ -299,7 +278,6 @@ export const Modalize = forwardRef<Handles, Props>(
     };
 
     const handleAnimateClose = (dest: Close = 'default', callback?: () => void): void => {
-      const { timing, spring } = closeAnimationConfig;
       const lastSnapValue = snapPoint ? snaps[1] : 80;
       const toInitialAlwaysOpen = dest === 'alwaysOpen' && Boolean(alwaysOpen);
       const toValue =
@@ -311,34 +289,26 @@ export const Modalize = forwardRef<Handles, Props>(
       beginScrollY.setValue(0);
 
       Animated.parallel([
-        Animated.timing(overlay, {
+        Animated.spring(overlay, {
           toValue: 0,
-          duration: timing.duration,
-          easing: Easing.ease,
           useNativeDriver: constants.useNativeDriver,
+          ...constants.springConfig,
         }),
 
         panGestureAnimatedValue
           ? Animated.timing(panGestureAnimatedValue, {
               toValue: 0,
               duration: constants.panDuration,
-              easing: Easing.ease,
+              easing: Easing.linear,
               useNativeDriver: constants.useNativeDriver,
             })
           : Animated.delay(0),
 
-        spring
-          ? Animated.spring(translateY, {
-              ...getSpringConfig(spring),
-              toValue,
-              useNativeDriver: constants.useNativeDriver,
-            })
-          : Animated.timing(translateY, {
-              duration: timing.duration,
-              easing: Easing.out(Easing.ease),
-              toValue,
-              useNativeDriver: constants.useNativeDriver,
-            }),
+        Animated.spring(translateY, {
+          toValue,
+          useNativeDriver: constants.useNativeDriver,
+          ...constants.springConfig,
+        }),
       ]).start(() => {
         if (onClosed) {
           onClosed();
@@ -441,15 +411,15 @@ export const Modalize = forwardRef<Handles, Props>(
       { nativeEvent }: PanGestureHandlerStateChangeEvent,
       type?: 'component' | 'children',
     ): void => {
-      const { timing } = closeAnimationConfig;
       const { velocityY, translationY } = nativeEvent;
       const negativeReverseScroll =
         modalPosition === 'top' &&
         beginScrollYValue >= (snapPoint ? 0 : constants.scrollThreshold) &&
         translationY < 0;
-      const thresholdProps = translationY > threshold && beginScrollYValue === 0;
-      const closeThreshold = velocity
-        ? (beginScrollYValue <= 20 && velocityY >= velocity) || thresholdProps
+      const thresholdProps =
+        translationY > constants.animations.threshold && beginScrollYValue === 0;
+      const closeThreshold = constants.animations.velocity
+        ? (beginScrollYValue <= 20 && velocityY >= constants.animations.velocity) || thresholdProps
         : thresholdProps;
       let enableBouncesValue = true;
 
@@ -500,7 +470,7 @@ export const Modalize = forwardRef<Handles, Props>(
         let destSnapPoint = 0;
 
         if (snapPoint || alwaysOpen) {
-          const endOffsetY = lastSnap + toValue + dragToss * velocityY;
+          const endOffsetY = lastSnap + toValue + constants.animations.dragToss * velocityY;
 
           /**
            * snapPoint and alwaysOpen use both an array of points to define the first open state and the final state.
@@ -557,7 +527,7 @@ export const Modalize = forwardRef<Handles, Props>(
         if (alwaysOpen) {
           Animated.timing(overlay, {
             toValue: Number(destSnapPoint <= 0),
-            duration: timing.duration,
+            duration: constants.timingConfig.duration,
             easing: Easing.ease,
             useNativeDriver: constants.useNativeDriver,
           }).start();
