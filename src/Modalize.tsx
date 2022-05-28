@@ -9,6 +9,7 @@ import {
   NativeEventSubscription,
   Platform,
   StatusBar,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import {
@@ -33,7 +34,6 @@ import { Child } from './components/Child';
 import { Element, ElementType } from './components/Element';
 import { Handle } from './components/Handle';
 import { Overlay } from './components/Overlay';
-import { useDimensions } from './hooks/use-dimensions';
 import { constants } from './utils/constants';
 import { invariant } from './utils/invariant';
 import { isBelowRN65 } from './utils/libraries';
@@ -114,7 +114,7 @@ export const Modalize = forwardRef<Handles, Props>(
     },
     ref,
   ) => {
-    const { height: screenHeight } = useDimensions();
+    const { height: screenHeight } = useWindowDimensions();
     const isHandleOutside = handlePosition === 'outside';
     const handleHeight = withHandle ? 20 : isHandleOutside ? 35 : 20;
     const fullHeight = screenHeight - modalTopOffset;
