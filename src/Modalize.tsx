@@ -13,6 +13,7 @@ import {
   View,
 } from 'react-native';
 import {
+  GestureHandlerRootView,
   NativeViewGestureHandler,
   PanGestureHandler,
   PanGestureHandlerStateChangeEvent,
@@ -635,7 +636,7 @@ export const Modalize = forwardRef<Handles, Props>(
     }
 
     return (
-      <View
+      <GestureHandlerRootView
         style={[s.modalize, rootStyle]}
         pointerEvents={alwaysOpen || !withOverlay ? 'box-none' : 'auto'}
       >
@@ -740,7 +741,7 @@ export const Modalize = forwardRef<Handles, Props>(
           onHandlerStateChange={handleElement}
           onComponentLayout={handleComponentLayout}
         />
-      </View>
+      </GestureHandlerRootView>
     );
   },
 );
