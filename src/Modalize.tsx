@@ -119,7 +119,7 @@ export const Modalize = forwardRef<Handles, Props>(
     const handleHeight = withHandle ? 20 : isHandleOutside ? 35 : 20;
     const fullHeight = screenHeight - modalTopOffset;
     const computedHeight = fullHeight - handleHeight - (isIphoneX ? 34 : 0);
-    const endHeight = modalHeight || computedHeight;
+    const endHeight = Math.max(0, modalHeight || computedHeight);
     const adjustValue = adjustToContentHeight ? undefined : endHeight;
     const snaps = snapPoint ? [0, endHeight - snapPoint, endHeight] : [0, endHeight];
 
