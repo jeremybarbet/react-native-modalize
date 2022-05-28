@@ -146,11 +146,11 @@ export const Modalize = forwardRef<Handles, Props>(
     const translateY = useSharedValue(screenHeight);
     const reverseBeginScrollY = useSharedValue(-1 * beginScrollY.value);
 
-    const tapGestureModalizeRef = useRef<TapGestureHandler>(null);
-    const panGestureChildrenRef = useRef<PanGestureHandler>(null);
-    const nativeViewChildrenRef = useRef<NativeViewGestureHandler>(null);
-    const tapGestureOverlayRef = useRef<TapGestureHandler>(null);
-    const backButtonListenerRef = useRef<NativeEventSubscription>(null);
+    const tapGestureModalizeRef = useRef<TapGestureHandler | null>(null);
+    const panGestureChildrenRef = useRef<PanGestureHandler | null>(null);
+    const nativeViewChildrenRef = useRef<NativeViewGestureHandler | null>(null);
+    const tapGestureOverlayRef = useRef<TapGestureHandler | null>(null);
+    const backButtonListenerRef = useRef<NativeEventSubscription | null>(null);
 
     /**
      * We diff and get the negative value only. It sometimes go above 0
