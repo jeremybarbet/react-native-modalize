@@ -1,14 +1,15 @@
 import React, { RefObject, useRef } from 'react';
-import { Animated, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   GestureEvent,
-  HandlerStateChangeEvent,
   PanGestureHandler,
   PanGestureHandlerEventPayload,
+  PanGestureHandlerStateChangeEvent,
   State,
   TapGestureHandler,
   TapGestureHandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
+import Animated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 
 import { Close, Position, Props } from '../options';
 import { height } from '../utils/dimensions';
@@ -25,9 +26,9 @@ interface OverlayProps {
   tapGestureOverlayRef: RefObject<TapGestureHandler>;
   showContent: boolean;
   willCloseModalize: boolean;
-  overlay: Animated.Value;
+  overlay: SharedValue<number>;
   onGestureEvent(event: GestureEvent<PanGestureHandlerEventPayload>): void;
-  onHandlerStateChange(event: HandlerStateChangeEvent<PanGestureHandlerEventPayload>): void;
+  onHandlerStateChange(event: PanGestureHandlerStateChangeEvent): void;
   onClose(dest?: Close, callback?: () => void): void;
 }
 
@@ -50,6 +51,10 @@ export const Overlay = ({
   const ref = useRef<TapGestureHandler>(null);
   const pointerEvents =
     alwaysOpen && (modalPosition === 'initial' || !modalPosition) ? 'box-none' : 'auto';
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: overlay.value,
+  }));
 
   const handleOverlay = ({ nativeEvent }: TapGestureHandlerStateChangeEvent): void => {
     if (nativeEvent.oldState === State.ACTIVE && !willCloseModalize) {
@@ -78,16 +83,7 @@ export const Overlay = ({
             onHandlerStateChange={handleOverlay}
           >
             <Animated.View
-              style={[
-                s.overlay__background,
-                overlayStyle,
-                {
-                  opacity: overlay.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0, 1],
-                  }),
-                },
-              ]}
+              style={[s.overlay__background, overlayStyle, animatedStyle]}
               pointerEvents={pointerEvents}
             />
           </TapGestureHandler>

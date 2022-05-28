@@ -1,6 +1,5 @@
 import React, { forwardRef, memo, useRef, useState } from 'react';
 import {
-  Animated,
   Dimensions,
   Image,
   Platform,
@@ -11,6 +10,13 @@ import {
   View,
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
+import Animated, {
+  Extrapolate,
+  interpolate,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import { faker } from '@faker-js/faker';
 
@@ -108,11 +114,28 @@ const Tabs = memo(
 
 export const SlackTabView = forwardRef<Modalize>((_, ref) => {
   const modalizeRef = useRef<Modalize | null>(null);
-  const contentRef = useRef<ScrollView | null>(null);
+  const rendererRef = useRef<ScrollView | null>(null);
   const combinedRef = useCombinedRefs<Modalize | null>(ref, modalizeRef);
   const scrollViewRef = useRef<ScrollView | null>(null);
   const [index, setIndex] = useState(0);
-  const scrollY = useRef(new Animated.Value(0)).current;
+  const scrollY = useSharedValue(0);
+
+  const onScroll = useAnimatedScrollHandler(
+    {
+      onScroll: ({ contentOffset: { y } }) => {
+        scrollY.value = y;
+      },
+    },
+    [scrollY],
+  );
+
+  const wrapperStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        translateY: interpolate(scrollY.value, [0, 100], [0, -HEADER_COLLAPSE], Extrapolate.CLAMP),
+      },
+    ],
+  }));
 
   const handleIndexChange = (i: number) => {
     const w = 55; // item width
@@ -121,28 +144,13 @@ export const SlackTabView = forwardRef<Modalize>((_, ref) => {
 
     setIndex(i);
 
-    contentRef.current?.scrollTo({ y: 0, animated: true });
+    rendererRef.current?.scrollTo({ y: 0, animated: true });
     scrollViewRef.current?.scrollTo({ x, animated: true });
   };
 
   const renderTabBar = (
     <View style={s.tabbar}>
-      <Animated.View
-        style={[
-          s.tabbar__wrapper,
-          {
-            transform: [
-              {
-                translateY: scrollY.interpolate({
-                  inputRange: [0, 100],
-                  outputRange: [0, -HEADER_COLLAPSE],
-                  extrapolate: 'clamp',
-                }),
-              },
-            ],
-          },
-        ]}
-      >
+      <Animated.View style={[s.tabbar__wrapper, wrapperStyle]}>
         <View style={s.tabbar__heading}>
           <Text style={s.tabbar__headingText}>List of reactions</Text>
         </View>
@@ -171,7 +179,7 @@ export const SlackTabView = forwardRef<Modalize>((_, ref) => {
   return (
     <Modalize
       ref={combinedRef}
-      contentRef={contentRef}
+      rendererRef={rendererRef}
       HeaderComponent={renderTabBar}
       modalStyle={{ backgroundColor: '#1a1d21' }}
       handleStyle={{ width: 35, backgroundColor: '#75777a' }}
@@ -180,12 +188,7 @@ export const SlackTabView = forwardRef<Modalize>((_, ref) => {
         borderTopRightRadius: 12,
         overflow: 'hidden',
       }}
-      scrollViewProps={{
-        onScroll: Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
-          useNativeDriver: true,
-        }),
-        scrollEventThrottle: 16,
-      }}
+      scrollViewProps={{ onScroll }}
     >
       <Tabs index={index} onIndexChange={handleIndexChange} />
     </Modalize>

@@ -1,12 +1,13 @@
 import React, { RefObject } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   GestureEvent,
-  HandlerStateChangeEvent,
   PanGestureHandler,
   PanGestureHandlerEventPayload,
+  PanGestureHandlerStateChangeEvent,
   TapGestureHandler,
 } from 'react-native-gesture-handler';
+import Animated from 'react-native-reanimated';
 
 import { Props, Style } from '../options';
 
@@ -17,7 +18,7 @@ interface HandleProps {
   tapGestureModalizeRef: RefObject<TapGestureHandler>;
   isHandleOutside: boolean;
   onGestureEvent(event: GestureEvent<PanGestureHandlerEventPayload>): void;
-  onHandlerStateChange(event: HandlerStateChangeEvent<PanGestureHandlerEventPayload>): void;
+  onHandlerStateChange(event: PanGestureHandlerStateChangeEvent): void;
 }
 
 export const Handle = ({

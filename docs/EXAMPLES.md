@@ -114,13 +114,21 @@ You will need for that to use the [`panGestureAnimatedValue`](/PROPS.md?id=panGe
 
 ```tsx
 import React, { useRef } from 'react';
-import { Animated, View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import Animated, { interpolate, useSharedValue } from 'react-native-reanimated';
 import { Modalize } from 'react-native-modalize';
 import { Host } from 'react-native-portalize';
 
 const App = () => {
   const modalizeRef = useRef<Modalize | null>(null);
-  const animated = useRef(new Animated.Value(0)).current;
+  const animated = useSharedValue(0);
+
+  const viewStyle = useAnimatedStyle(() => ({
+    flex: 1,
+    borderRadius: interpolate(animated.value, [0, 1], [0, 12]),
+    transform: [{ scale: interpolate(animated.value, [0, 1], [1, 0.92]) }],
+    opacity: interpolate(animated.value, [0, 1], [1, 0.75]),
+  }));
 
   const onOpen = () => {
     modalizeRef.current?.open();
@@ -128,18 +136,7 @@ const App = () => {
 
   return (
     <Host style={{ backgroundColor: '#000' }}>
-      <View
-        style={{
-          flex: 1,
-          borderRadius: animated.interpolate({ inputRange: [0, 1], outputRange: [0, 12] }),
-          transform: [
-            {
-              scale: animated.interpolate({ inputRange: [0, 1], outputRange: [1, 0.92] }),
-            },
-          ],
-          opacity: animated.interpolate({ inputRange: [0, 1], outputRange: [1, 0.75] }),
-        }}
-      >
+      <Animated.View style={viewStyle}>
         <TouchableOpacity onPress={onOpen}>
           <Text>Open the modal</Text>
         </TouchableOpacity>
@@ -149,7 +146,7 @@ const App = () => {
             ...your content
           </Modalize>
         </Portal>
-      </Layout>
+      </Animated.View>
     </Host>
   );
 };

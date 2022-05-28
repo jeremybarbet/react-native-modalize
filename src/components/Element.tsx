@@ -1,11 +1,12 @@
 import React, { ReactNode } from 'react';
-import { Animated, LayoutChangeEvent, StyleSheet, ViewStyle } from 'react-native';
+import { LayoutChangeEvent, StyleSheet, ViewStyle } from 'react-native';
 import {
   GestureEvent,
-  HandlerStateChangeEvent,
   PanGestureHandler,
   PanGestureHandlerEventPayload,
+  PanGestureHandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
+import Animated from 'react-native-reanimated';
 
 import { Props } from '../options';
 import { isAndroid } from '../utils/platform';
@@ -23,7 +24,7 @@ interface ElementProps {
   panGestureEnabled: Props['panGestureEnabled'];
   panGestureComponentEnabled: Props['panGestureComponentEnabled'];
   onGestureEvent(event: GestureEvent<PanGestureHandlerEventPayload>): void;
-  onHandlerStateChange(event: HandlerStateChangeEvent<PanGestureHandlerEventPayload>): void;
+  onHandlerStateChange(event: PanGestureHandlerStateChangeEvent): void;
   onComponentLayout({ nativeEvent }: LayoutChangeEvent, name: ElementType, absolute: boolean): void;
 }
 

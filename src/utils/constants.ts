@@ -8,6 +8,7 @@ export const constants = {
   activated: 20,
   panDuration: 150,
   useNativeDriver: true,
+  scrollEventThrottle: 16,
 
   animations: {
     dragToss: 0.18,

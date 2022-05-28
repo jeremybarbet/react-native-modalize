@@ -8,11 +8,11 @@ import { Button } from '../button/Button';
 
 export const SnappingList = forwardRef<Modalize>((_, ref) => {
   const modalizeRef = useRef<Modalize | null>(null);
-  const contentRef = useRef<ScrollView | null>(null);
+  const rendererRef = useRef<ScrollView | null>(null);
   const combinedRef = useCombinedRefs<Modalize | null>(ref, modalizeRef);
 
   const handleScrollToTop = () => {
-    contentRef.current?.scrollTo({
+    rendererRef.current?.scrollTo({
       y: 0,
       animated: true,
     });
@@ -50,7 +50,7 @@ export const SnappingList = forwardRef<Modalize>((_, ref) => {
   return (
     <Modalize
       ref={combinedRef}
-      contentRef={contentRef}
+      rendererRef={rendererRef}
       HeaderComponent={renderHeader}
       snapPoint={350}
     >

@@ -8,6 +8,13 @@ import {
   View,
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
+import {
+  Extrapolate,
+  interpolate,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 import { faker } from '@faker-js/faker';
 
 import { useCombinedRefs } from '../../utils/use-combined-refs';
@@ -16,9 +23,27 @@ const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpaci
 
 export const FlatList = forwardRef<Modalize>((_, ref) => {
   const modalizeRef = useRef<Modalize | null>(null);
-  const contentRef = useRef<RNFlatList | null>(null);
+  const rendererRef = useRef<RNFlatList | null>(null);
   const combinedRef = useCombinedRefs<Modalize | null>(ref, modalizeRef);
-  const scrollY = useRef(new Animated.Value(0)).current;
+  const scrollY = useSharedValue(0);
+
+  const onScroll = useAnimatedScrollHandler(
+    {
+      onScroll: ({ contentOffset: { y } }) => {
+        scrollY.value = y;
+      },
+    },
+    [scrollY],
+  );
+
+  const floatingStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(scrollY.value, [100, 200], [0, 1], Extrapolate.CLAMP),
+    transform: [
+      {
+        scale: interpolate(scrollY.value, [100, 150], [0.6, 1], Extrapolate.CLAMP),
+      },
+    ],
+  }));
 
   const getData = () =>
     Array(50)
@@ -29,7 +54,7 @@ export const FlatList = forwardRef<Modalize>((_, ref) => {
       }));
 
   const handleScrollToTop = () => {
-    contentRef.current?.scrollToOffset({
+    rendererRef.current?.scrollToOffset({
       offset: 0,
       animated: true,
     });
@@ -37,25 +62,7 @@ export const FlatList = forwardRef<Modalize>((_, ref) => {
 
   const renderFloatingComponent = () => (
     <AnimatedTouchableOpacity
-      style={[
-        s.floating,
-        {
-          opacity: scrollY.interpolate({
-            inputRange: [100, 200],
-            outputRange: [0, 1],
-            extrapolate: 'clamp',
-          }),
-          transform: [
-            {
-              scale: scrollY.interpolate({
-                inputRange: [100, 150],
-                outputRange: [0.6, 1],
-                extrapolate: 'clamp',
-              }),
-            },
-          ],
-        },
-      ]}
+      style={[s.floating, floatingStyle]}
       onPress={handleScrollToTop}
       activeOpacity={0.75}
     >
@@ -73,17 +80,14 @@ export const FlatList = forwardRef<Modalize>((_, ref) => {
   return (
     <Modalize
       ref={combinedRef}
-      contentRef={contentRef}
+      rendererRef={rendererRef}
       FloatingComponent={renderFloatingComponent}
       flatListProps={{
         data: getData(),
         renderItem: renderItem,
         keyExtractor: item => item.email,
         showsVerticalScrollIndicator: false,
-        onScroll: Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
-          useNativeDriver: true,
-        }),
-        scrollEventThrottle: 16,
+        onScroll,
       }}
     />
   );

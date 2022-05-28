@@ -41,6 +41,6 @@ The method to close Modalize. You don't need to call it to dismiss the modal, si
 
 ## Externals
 
-If you want to use `scrollTo()` from the ScrollView, or `scrollToIndex()` from the FlatList (when using `flatListProps`), you will need to add a `contentRef`.
+If you want to use `scrollTo()` from the ScrollView, or `scrollToIndex()` from the FlatList (when using `flatListProps`), you will need to add a `rendererRef`.
 
-Visit this [section](/PROPS.md?id=contentRef) to find more information about this usage.
+Visit this [section](/PROPS.md?id=rendererRef) to find more information about this usage.

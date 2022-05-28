@@ -1,19 +1,13 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import {
-  Animated,
   BackHandler,
-  Easing,
   EmitterSubscription,
-  FlatList,
   Keyboard,
   KeyboardAvoidingView,
-  KeyboardAvoidingViewProps,
   KeyboardEvent,
   LayoutChangeEvent,
   NativeEventSubscription,
   Platform,
-  ScrollView,
-  SectionList,
   StatusBar,
   View,
 } from 'react-native';
@@ -24,6 +18,16 @@ import {
   State,
   TapGestureHandler,
 } from 'react-native-gesture-handler';
+import Animated, {
+  Extrapolate,
+  interpolate,
+  runOnJS,
+  useAnimatedGestureHandler,
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 
 import { Child } from './components/Child';
 import { Element, ElementType } from './components/Element';
@@ -34,6 +38,7 @@ import { constants } from './utils/constants';
 import { invariant } from './utils/invariant';
 import { isBelowRN65 } from './utils/libraries';
 import { isAndroid, isIphoneX } from './utils/platform';
+import { clamp } from './worklets/clamp';
 import { Close, Handles, Open, Position, Props } from './options';
 import { s } from './styles';
 
@@ -43,7 +48,7 @@ export const Modalize = forwardRef<Handles, Props>(
   (
     {
       // Refs
-      contentRef,
+      rendererRef,
 
       // Renderers
       children,
@@ -126,44 +131,67 @@ export const Modalize = forwardRef<Handles, Props>(
     const [keyboardToggle, setKeyboardToggle] = useState(false);
     const [keyboardHeight, setKeyboardHeight] = useState(0);
     const [disableScroll, setDisableScroll] = useState(alwaysOpen || snapPoint ? true : undefined);
-    const [beginScrollYValue, setBeginScrollYValue] = useState(0);
     const [modalPosition, setModalPosition] = useState<Position>('initial');
     const [cancelClose, setCancelClose] = useState(false);
     const [layouts, setLayouts] = useState<Map<string, number>>(new Map());
 
-    const cancelTranslateY = useRef(new Animated.Value(1)).current; // 1 by default to have the translateY animation running
-    const componentTranslateY = useRef(new Animated.Value(0)).current;
-    const overlay = useRef(new Animated.Value(0)).current;
-    const beginScrollY = useRef(new Animated.Value(0)).current;
-    const dragY = useRef(new Animated.Value(0)).current;
-    const translateY = useRef(new Animated.Value(screenHeight)).current;
-    const reverseBeginScrollY = useRef(
-      Animated.multiply(new Animated.Value(-1), beginScrollY),
-    ).current;
+    /**
+     * 1 by default to have the translateY animation running
+     */
+    const cancelTranslateY = useSharedValue(1);
+    const componentTranslateY = useSharedValue(0);
+    const overlay = useSharedValue(0);
+    const beginScrollY = useSharedValue(0);
+    const dragY = useSharedValue(0);
+    const translateY = useSharedValue(screenHeight);
+    const reverseBeginScrollY = useSharedValue(-1 * beginScrollY.value);
 
     const tapGestureModalizeRef = useRef<TapGestureHandler>(null);
     const panGestureChildrenRef = useRef<PanGestureHandler>(null);
     const nativeViewChildrenRef = useRef<NativeViewGestureHandler>(null);
-    const contentViewRef = useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
     const tapGestureOverlayRef = useRef<TapGestureHandler>(null);
     const backButtonListenerRef = useRef<NativeEventSubscription>(null);
 
-    // We diff and get the negative value only. It sometimes go above 0
-    // (e.g. 1.5) and creates the flickering on Modalize for a ms
-    const diffClamp = Animated.diffClamp(reverseBeginScrollY, -screenHeight, 0);
-    const componentDragEnabled = (componentTranslateY as any)._value === 1;
-    // When we have a scrolling happening in the ScrollView, we don't want to translate
-    // the modal down. We either multiply by 0 to cancel the animation, or 1 to proceed.
-    const dragValue = Animated.add(
-      Animated.multiply(dragY, componentDragEnabled ? 1 : cancelTranslateY),
-      diffClamp,
+    /**
+     * We diff and get the negative value only. It sometimes go above 0
+     * (e.g. 1.5) and creates the flickering on Modalize for a ms
+     */
+    const diffClamp = useDerivedValue(
+      () => clamp(reverseBeginScrollY.value, -screenHeight, 0),
+      [reverseBeginScrollY, screenHeight],
     );
-    const value = Animated.add(
-      Animated.multiply(translateY, componentDragEnabled ? 1 : cancelTranslateY),
-      dragValue,
+    const componentDragEnabled = componentTranslateY.value === 1;
+    /**
+     * When we have a scrolling happening in the ScrollView, we don't want to translate
+     * the modal down. We either multiply by 0 to cancel the animation, or 1 to proceed.
+     */
+    const dragValue = useDerivedValue(
+      () => dragY.value * (componentDragEnabled ? 1 : cancelTranslateY.value) + diffClamp.value,
+      [dragY, componentDragEnabled, cancelTranslateY, diffClamp],
+    );
+
+    const computedTranslateY = useDerivedValue(
+      () =>
+        translateY.value * (componentDragEnabled ? 1 : cancelTranslateY.value) + dragValue.value,
+      [translateY, componentDragEnabled, cancelTranslateY, dragValue],
     );
 
     let willCloseModalize = false;
+
+    const animatedStyle = useAnimatedStyle(() => ({
+      height: modalHeightValue,
+      maxHeight: endHeight,
+      transform: [
+        {
+          translateY: interpolate(
+            computedTranslateY.value,
+            [-40, 0, endHeight],
+            [0, 0, endHeight],
+            Extrapolate.CLAMP,
+          ),
+        },
+      ],
+    }));
 
     const handleBackPress = () => {
       if (alwaysOpen) {
@@ -228,31 +256,26 @@ export const Modalize = forwardRef<Handles, Props>(
         newPosition = 'top';
       }
 
-      Animated.parallel([
-        Animated.spring(overlay, {
-          toValue: alwaysOpenValue && dest === 'default' ? 0 : 1,
-          useNativeDriver: constants.useNativeDriver,
-          ...constants.springConfig,
-        }),
+      // to run in parallel
+      overlay.value = withSpring(
+        alwaysOpenValue && dest === 'default' ? 0 : 1,
+        constants.springConfig,
+      );
 
-        panGestureAnimatedValue
-          ? Animated.timing(panGestureAnimatedValue, {
-              toValue: toPanValue,
-              duration: constants.panDuration,
-              easing: Easing.linear,
-              useNativeDriver: constants.useNativeDriver,
-            })
-          : Animated.delay(0),
+      if (panGestureAnimatedValue) {
+        panGestureAnimatedValue.value = toPanValue;
+      }
 
-        Animated.spring(translateY, {
-          toValue,
-          useNativeDriver: constants.useNativeDriver,
-          ...constants.springConfig,
-        }),
-      ]).start(() => {
+      const handleFinish = () => {
         onOpened?.();
         setModalPosition(newPosition);
         onPositionChange?.(newPosition);
+      };
+
+      translateY.value = withSpring(toValue, constants.springConfig, isFinished => {
+        if (isFinished) {
+          runOnJS(handleFinish)();
+        }
       });
     };
 
@@ -263,32 +286,16 @@ export const Modalize = forwardRef<Handles, Props>(
         toInitialAlwaysOpen && alwaysOpen ? (modalHeightValue || 0) - alwaysOpen : screenHeight;
 
       backButtonListenerRef.current?.remove();
-      cancelTranslateY.setValue(1);
-      setBeginScrollYValue(0);
-      beginScrollY.setValue(0);
+      cancelTranslateY.value = 1;
+      beginScrollY.value = 0;
 
-      Animated.parallel([
-        Animated.spring(overlay, {
-          toValue: 0,
-          useNativeDriver: constants.useNativeDriver,
-          ...constants.springConfig,
-        }),
+      overlay.value = withSpring(0, constants.springConfig);
 
-        panGestureAnimatedValue
-          ? Animated.timing(panGestureAnimatedValue, {
-              toValue: 0,
-              duration: constants.panDuration,
-              easing: Easing.linear,
-              useNativeDriver: constants.useNativeDriver,
-            })
-          : Animated.delay(0),
+      if (panGestureAnimatedValue) {
+        panGestureAnimatedValue.value = 0;
+      }
 
-        Animated.spring(translateY, {
-          toValue,
-          useNativeDriver: constants.useNativeDriver,
-          ...constants.springConfig,
-        }),
-      ]).start(() => {
+      const handleFinish = () => {
         onClosed?.();
         callback?.();
 
@@ -301,11 +308,17 @@ export const Modalize = forwardRef<Handles, Props>(
         }
 
         setShowContent(toInitialAlwaysOpen);
-        translateY.setValue(toValue);
-        dragY.setValue(0);
+        translateY.value = toValue;
+        dragY.value = 0;
         willCloseModalize = false;
         setLastSnap(lastSnapValue);
         setIsVisible(toInitialAlwaysOpen);
+      };
+
+      translateY.value = withSpring(toValue, constants.springConfig, isFinished => {
+        if (isFinished) {
+          runOnJS(handleFinish)();
+        }
       });
     };
 
@@ -380,18 +393,18 @@ export const Modalize = forwardRef<Handles, Props>(
       const { velocityY, translationY } = nativeEvent;
       const negativeReverseScroll =
         modalPosition === 'top' &&
-        beginScrollYValue >= (snapPoint ? 0 : constants.scrollThreshold) &&
+        beginScrollY.value >= (snapPoint ? 0 : constants.scrollThreshold) &&
         translationY < 0;
       const thresholdProps =
-        translationY > constants.animations.threshold && beginScrollYValue === 0;
+        translationY > constants.animations.threshold && beginScrollY.value === 0;
       const closeThreshold = constants.animations.velocity
-        ? (beginScrollYValue <= 20 && velocityY >= constants.animations.velocity) || thresholdProps
+        ? (beginScrollY.value <= 20 && velocityY >= constants.animations.velocity) || thresholdProps
         : thresholdProps;
       let enableBouncesValue = true;
 
       // We make sure to reset the value if we are dragging from the children
       if (type !== 'component' && (cancelTranslateY as any)._value === 0) {
-        componentTranslateY.setValue(0);
+        componentTranslateY.value = 0;
       }
 
       /*
@@ -403,16 +416,16 @@ export const Modalize = forwardRef<Handles, Props>(
 
         if (
           !closeSnapPointStraightEnabled && snapPoint
-            ? beginScrollYValue > 0
-            : beginScrollYValue > 0 || negativeReverseScroll
+            ? beginScrollY.value > 0
+            : beginScrollY.value > 0 || negativeReverseScroll
         ) {
           setCancelClose(true);
-          translateY.setValue(0);
-          dragY.setValue(0);
-          cancelTranslateY.setValue(0);
+          translateY.value = 0;
+          dragY.value = 0;
+          cancelTranslateY.value = 0;
           enableBouncesValue = true;
         } else {
-          cancelTranslateY.setValue(1);
+          cancelTranslateY.value = 1;
           enableBouncesValue = false;
 
           if (!tapGestureEnabled) {
@@ -427,12 +440,12 @@ export const Modalize = forwardRef<Handles, Props>(
         isAndroid
           ? false
           : alwaysOpen
-          ? beginScrollYValue > 0 || translationY < 0
+          ? beginScrollY.value > 0 || translationY < 0
           : enableBouncesValue,
       );
 
       if (nativeEvent.oldState === State.ACTIVE) {
-        const toValue = translationY - beginScrollYValue;
+        const toValue = translationY - beginScrollY.value;
         let destSnapPoint = 0;
 
         if (snapPoint || alwaysOpen) {
@@ -470,7 +483,7 @@ export const Modalize = forwardRef<Handles, Props>(
             }
 
             // For alwaysOpen props
-            if (distFromSnap < diffPoint && alwaysOpen && beginScrollYValue <= 0) {
+            if (distFromSnap < diffPoint && alwaysOpen && beginScrollY.value <= 0) {
               destSnapPoint = (modalHeightValue || 0) - alwaysOpen;
               willCloseModalize = false;
             }
@@ -485,38 +498,20 @@ export const Modalize = forwardRef<Handles, Props>(
         }
 
         setLastSnap(destSnapPoint);
-        translateY.extractOffset();
-        translateY.setValue(toValue);
-        translateY.flattenOffset();
-        dragY.setValue(0);
+        translateY.value = toValue;
+        dragY.value = 0;
 
         if (alwaysOpen) {
-          Animated.timing(overlay, {
-            toValue: Number(destSnapPoint <= 0),
-            duration: constants.timingConfig.duration,
-            easing: Easing.ease,
-            useNativeDriver: constants.useNativeDriver,
-          }).start();
+          overlay.value = withSpring(Number(destSnapPoint <= 0), constants.springConfig);
         }
 
-        Animated.spring(translateY, {
-          tension: 50,
-          friction: 12,
-          velocity: velocityY,
-          toValue: destSnapPoint,
-          useNativeDriver: constants.useNativeDriver,
-        }).start();
+        translateY.value = withSpring(destSnapPoint, constants.springConfig);
 
-        if (beginScrollYValue <= 0) {
+        if (beginScrollY.value <= 0) {
           const modalPositionValue = destSnapPoint <= 0 ? 'top' : 'initial';
 
           if (panGestureAnimatedValue) {
-            Animated.timing(panGestureAnimatedValue, {
-              toValue: Number(modalPositionValue === 'top'),
-              duration: constants.panDuration,
-              easing: Easing.ease,
-              useNativeDriver: constants.useNativeDriver,
-            }).start();
+            panGestureAnimatedValue.value = Number(modalPositionValue === 'top');
           }
 
           if (!adjustToContentHeight && modalPositionValue === 'top') {
@@ -537,16 +532,17 @@ export const Modalize = forwardRef<Handles, Props>(
     const handleElement = ({ nativeEvent }: PanGestureHandlerStateChangeEvent) => {
       // If we drag from the HeaderComponent/FooterComponent/FloatingComponent we allow the translation animation
       if (nativeEvent.oldState === State.BEGAN) {
-        componentTranslateY.setValue(1);
-        beginScrollY.setValue(0);
+        componentTranslateY.value = 1;
+        beginScrollY.value = 0;
       }
 
       handleChildren({ nativeEvent }, 'component');
     };
 
-    const handleGestureEvent = Animated.event([{ nativeEvent: { translationY: dragY } }], {
-      useNativeDriver: constants.useNativeDriver,
-      listener: ({ nativeEvent: { translationY } }: PanGestureHandlerStateChangeEvent) => {
+    const handleGestureEvent = useAnimatedGestureHandler({
+      onActive: ({ translationY }) => {
+        dragY.value = translationY;
+
         if (panGestureAnimatedValue) {
           const offset = alwaysOpen ?? snapPoint ?? 0;
           const diff = Math.abs(translationY / (endHeight - offset));
@@ -561,7 +557,7 @@ export const Modalize = forwardRef<Handles, Props>(
             value = y;
           }
 
-          panGestureAnimatedValue.setValue(value);
+          panGestureAnimatedValue.value = value;
         }
       },
     });
@@ -613,10 +609,6 @@ export const Modalize = forwardRef<Handles, Props>(
       let keyboardShowListener: EmitterSubscription | null = null;
       let keyboardHideListener: EmitterSubscription | null = null;
 
-      const beginScrollYListener = beginScrollY.addListener(({ value }) =>
-        setBeginScrollYValue(value),
-      );
-
       if (isBelowRN65) {
         Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
         Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
@@ -627,7 +619,6 @@ export const Modalize = forwardRef<Handles, Props>(
 
       return () => {
         backButtonListenerRef.current?.remove();
-        beginScrollY.removeListener(beginScrollYListener);
 
         if (isBelowRN65) {
           Keyboard.removeListener('keyboardDidShow', handleKeyboardShow);
@@ -643,33 +634,6 @@ export const Modalize = forwardRef<Handles, Props>(
       return null;
     }
 
-    const keyboardAvoidingViewProps: Animated.AnimatedProps<KeyboardAvoidingViewProps> = {
-      keyboardVerticalOffset: keyboardAvoidingOffset,
-      behavior: keyboardAvoidingBehavior,
-      enabled: avoidKeyboardLikeIOS,
-      style: [
-        s.modalize__content,
-        modalStyle,
-        {
-          height: modalHeightValue,
-          maxHeight: endHeight,
-          transform: [
-            {
-              translateY: value.interpolate({
-                inputRange: [-40, 0, endHeight],
-                outputRange: [0, 0, endHeight],
-                extrapolate: 'clamp',
-              }),
-            },
-          ],
-        },
-      ],
-    };
-
-    if (!avoidKeyboardLikeIOS && !adjustToContentHeight) {
-      keyboardAvoidingViewProps.onLayout = handleModalizeContentLayout;
-    }
-
     return (
       <View
         style={[s.modalize, rootStyle]}
@@ -683,7 +647,17 @@ export const Modalize = forwardRef<Handles, Props>(
         >
           <View style={s.modalize__wrapper} pointerEvents="box-none">
             {showContent && (
-              <AnimatedKeyboardAvoidingView {...keyboardAvoidingViewProps}>
+              <AnimatedKeyboardAvoidingView
+                keyboardVerticalOffset={keyboardAvoidingOffset}
+                behavior={keyboardAvoidingBehavior}
+                enabled={avoidKeyboardLikeIOS}
+                style={[s.modalize__content, modalStyle, animatedStyle]}
+                onLayout={
+                  !avoidKeyboardLikeIOS && !adjustToContentHeight
+                    ? handleModalizeContentLayout
+                    : undefined
+                }
+              >
                 <Handle
                   panGestureEnabled={panGestureEnabled}
                   withHandle={withHandle}
@@ -711,14 +685,13 @@ export const Modalize = forwardRef<Handles, Props>(
                   sectionListProps={sectionListProps}
                   scrollViewProps={scrollViewProps}
                   childrenStyle={childrenStyle}
-                  contentRef={contentRef}
+                  rendererRef={rendererRef}
                   enableBounces={enableBounces}
                   keyboardToggle={keyboardToggle}
                   disableScroll={disableScroll}
                   beginScrollY={beginScrollY}
                   nativeViewChildrenRef={nativeViewChildrenRef}
                   tapGestureModalizeRef={tapGestureModalizeRef}
-                  contentViewRef={contentViewRef}
                   panGestureChildrenRef={panGestureChildrenRef}
                   onLayout={handleContentLayout}
                   onGestureEvent={handleGestureEvent}

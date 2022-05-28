@@ -57,7 +57,7 @@ const App = () => {
 | --------------- | -------- |
 | React.RefObject | Yes      |
 
-### `contentRef`
+### `rendererRef`
 
 A reference to the view (ScrollView, FlatList, SectionList) that provides the scroll behavior, where you will be able to access their owns methods.
 
@@ -72,11 +72,11 @@ import { Modalize } from 'react-native-modalize';
 import { ScrollView, Animated } from 'react-native';
 
 const App = () => {
-  const contentRef = useRef<Animated.AnimatedComponent<ScrollView>>(null);
+  const rendererRef = useRef<Animated.AnimatedComponent<ScrollView>>(null);
 
-  // e.g. contentRef.current?.getScrollResponder().scrollTo(...);
+  // e.g. rendererRef.current?.getScrollResponder().scrollTo(...);
 
-  return <Modalize contentRef={contentRef} />;
+  return <Modalize rendererRef={rendererRef} />;
 };
 ```
 
@@ -85,11 +85,11 @@ To find the path to each of the function it will depend what content renderer (S
 
 On latest `react-native`, it should:
 
-- For the ScrollView: `contentRef.getScrollResponder().scrollTo(...)` or `contentRef.getScrollResponder().scrollToIndex(...)`, etc...
-- For the FlatList: `contentRef.current.getNode().scrollToOffset({ animated: true, offset: 0 });`, etc...
-- For the SectionList: `contentRef.current.getNode().scrollToLocation(...)`, etc...
+- For the ScrollView: `rendererRef.getScrollResponder().scrollTo(...)` or `rendererRef.getScrollResponder().scrollToIndex(...)`, etc...
+- For the FlatList: `rendererRef.current.getNode().scrollToOffset({ animated: true, offset: 0 });`, etc...
+- For the SectionList: `rendererRef.current.getNode().scrollToLocation(...)`, etc...
 
-On older version of react-native, most likely something like `contentRef.getNode().getScrollResponder().scrollTo(...)` for the ScrollView and following the same pattern for the FlatList and SectionList.
+On older version of react-native, most likely something like `rendererRef.getNode().getScrollResponder().scrollTo(...)` for the ScrollView and following the same pattern for the FlatList and SectionList.
 
 | Type            | Required |
 | --------------- | -------- |

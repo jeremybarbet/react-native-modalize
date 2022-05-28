@@ -1,16 +1,14 @@
-/**
- * Extracted from https://github.com/seznam/compose-react-refs
- * and moved here to avoid to install an extra-dependency
- */
 import { MutableRefObject, Ref } from 'react';
 
 type NonNullRef<T> = NonNullable<Ref<T>>;
+type OptionalRef<T> = Ref<T> | undefined;
+
 const composedRefCache = new WeakMap<
   NonNullRef<unknown>,
   WeakMap<NonNullRef<unknown>, NonNullRef<unknown>>
 >();
 
-export const composeRefs = <T>(ref1: Ref<T>, ref2: Ref<T> | undefined): Ref<T> => {
+const composeTwoRefs = <T>(ref1: OptionalRef<T>, ref2: OptionalRef<T>): OptionalRef<T> => {
   if (ref1 && ref2) {
     const ref1Cache =
       composedRefCache.get(ref1) || new WeakMap<NonNullRef<unknown>, NonNullRef<unknown>>();
@@ -27,13 +25,36 @@ export const composeRefs = <T>(ref1: Ref<T>, ref2: Ref<T> | undefined): Ref<T> =
     return composedRef as NonNullRef<T>;
   }
 
+  if (!ref1) {
+    return ref2;
+  }
+
   return ref1;
 };
 
-const updateRef = <T>(ref: NonNullRef<T>, instance: null | T): void => {
+const updateRef = <T>(ref: NonNullRef<T>, instance: null | T) => {
   if (typeof ref === 'function') {
     ref(instance);
   } else {
     (ref as MutableRefObject<T | null>).current = instance;
   }
+};
+
+export const composeRefs = <T>(
+  ...refs: [OptionalRef<T>, OptionalRef<T>, ...Array<OptionalRef<T>>]
+): Ref<T> => {
+  if (refs.length === 2) {
+    // micro-optimize the hot path
+    return composeTwoRefs(refs[0], refs[1]) || null;
+  }
+
+  const composedRef = refs
+    .slice(1)
+    .reduce(
+      (semiCombinedRef: OptionalRef<T>, refToInclude: OptionalRef<T>) =>
+        composeTwoRefs(semiCombinedRef, refToInclude),
+      refs[0],
+    );
+
+  return composedRef || null;
 };

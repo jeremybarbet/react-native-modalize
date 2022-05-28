@@ -1,27 +1,42 @@
 import { ReactNode, RefObject } from 'react';
 import {
-  Animated,
   FlatList,
   FlatListProps,
   LayoutRectangle,
   ScrollView,
   ScrollViewProps,
-  SectionList,
   SectionListProps,
   StyleProp,
   ViewStyle,
 } from 'react-native';
+import { AnimateProps, SharedValue } from 'react-native-reanimated';
 
+/**
+ * These props are required by the internal logic of Modalize and cannot be used.
+ */
+type OmittedProps<T> = Omit<T, 'onScrollBeginDrag' | 'scrollEventThrottle'>;
+
+export type ListItem = any;
+export type ListSection = any;
 export type Open = 'default' | 'top';
 export type Close = 'default' | 'alwaysOpen';
 export type Position = 'initial' | 'top';
 export type Style = StyleProp<ViewStyle>;
 
-export interface Props<ListItem = any> {
+export type ScrollViewType = AnimateProps<OmittedProps<ScrollViewProps>>;
+export type FlatListType<T> = AnimateProps<OmittedProps<FlatListProps<T>>>;
+export type SectionListType<T, K> = AnimateProps<OmittedProps<SectionListProps<T, K>>>;
+
+export type RendererType<T, K> =
+  | AnimateProps<ScrollView>
+  | AnimateProps<FlatList<T>>
+  | AnimateProps<SectionListProps<T, K>>;
+
+export interface Props<T = ListItem, K = ListSection> {
   /**
-   * A reference to the view (ScrollView, FlatList, SectionList) that provides the scroll behavior, where you will be able to access their owns methods.
+   * A reference to the renderer (ScrollView, FlatList, SectionList) that provides the scroll behavior, where you will be able to access their owns methods.
    */
-  contentRef?: RefObject<ScrollView | FlatList<ListItem> | SectionList<ListItem>>;
+  rendererRef?: RefObject<RendererType<T, K>>;
 
   /**
    * A React node that will define the content of the modal.
@@ -31,17 +46,17 @@ export interface Props<ListItem = any> {
   /**
    * An object to pass any of the react-native ScrollView's props.
    */
-  scrollViewProps?: Animated.AnimatedProps<ScrollViewProps>;
+  scrollViewProps?: ScrollViewType;
 
   /**
    * An object to pass any of the react-native FlatList's props.
    */
-  flatListProps?: Animated.AnimatedProps<FlatListProps<ListItem>>;
+  flatListProps?: FlatListType<T>;
 
   /**
    * An object to pass any of the react-native SectionList's props.
    */
-  sectionListProps?: Animated.AnimatedProps<SectionListProps<ListItem>>;
+  sectionListProps?: SectionListType<T, K>;
 
   /**
    * Define the style of the root modal component.
@@ -157,7 +172,7 @@ export interface Props<ListItem = any> {
   /**
    * Animated.Value of the modal position between 0 and 1.
    */
-  panGestureAnimatedValue?: Animated.Value;
+  panGestureAnimatedValue?: SharedValue<number>;
 
   /**
    * Define if the handle on top of the modal is display or not.

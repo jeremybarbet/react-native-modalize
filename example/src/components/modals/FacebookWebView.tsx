@@ -1,6 +1,5 @@
 import React, { forwardRef, useCallback, useRef, useState } from 'react';
 import {
-  Animated,
   Dimensions,
   Easing,
   Image,
@@ -11,6 +10,12 @@ import {
   View,
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import { WebView as RNWebView } from 'react-native-webview';
 
 import { useCombinedRefs } from '../../utils/use-combined-refs';
@@ -19,7 +24,7 @@ const { width, height: initialHeight } = Dimensions.get('window');
 const isAndroid = Platform.OS === 'android';
 
 const extractHostname = (url: string) => {
-  let hostname;
+  let hostname: string;
 
   if (url.indexOf('//') > -1) {
     hostname = url.split('/')[2];
@@ -68,10 +73,23 @@ export const FacebookWebView = forwardRef<Modalize>((_, ref) => {
   const [mounted, setMounted] = useState(false);
   const [back, setBack] = useState(false);
   const [forward, setForward] = useState(false);
-  const progress = useRef(new Animated.Value(0)).current;
+  const progress = useSharedValue(0);
   const [layoutHeight, setLayoutHeight] = useState(initialHeight);
   const [documentHeight, setDocumentHeight] = useState(initialHeight);
   const height = isAndroid ? documentHeight : layoutHeight;
+
+  const progressStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        translateX: interpolate(
+          progress.value,
+          [0, 0.2, 0.5, 1, 2],
+          [-width, -width + 80, -width + 220, 0, 0],
+        ),
+      },
+    ],
+    opacity: interpolate(progress.value, [0, 0.1, 1, 2], [0, 1, 1, 0]),
+  }));
 
   const handleClose = () => {
     modalizeRef.current?.close();
@@ -86,21 +104,13 @@ export const FacebookWebView = forwardRef<Modalize>((_, ref) => {
 
     const toValue = status === 'start' ? 0.2 : status === 'progress' ? 0.5 : 1;
 
-    Animated.timing(progress, {
-      toValue,
-      duration: 200,
-      easing: Easing.ease,
-      useNativeDriver: true,
-    }).start();
+    progress.value = withTiming(toValue, { duration: 200, easing: Easing.ease });
 
     if (status === 'end') {
-      Animated.timing(progress, {
-        toValue: 2,
-        duration: 200,
-        easing: Easing.ease,
-        useNativeDriver: true,
-      }).start(() => {
-        progress.setValue(0);
+      progress.value = withTiming(2, { duration: 200, easing: Easing.ease }, isFinished => {
+        if (isFinished) {
+          progress.value = 0;
+        }
       });
     }
   };
@@ -197,25 +207,7 @@ export const FacebookWebView = forwardRef<Modalize>((_, ref) => {
         </TouchableOpacity>
       </View>
 
-      <Animated.View
-        style={[
-          s.header__progress,
-          {
-            transform: [
-              {
-                translateX: progress.interpolate({
-                  inputRange: [0, 0.2, 0.5, 1, 2],
-                  outputRange: [-width, -width + 80, -width + 220, 0, 0],
-                }),
-              },
-            ],
-            opacity: progress.interpolate({
-              inputRange: [0, 0.1, 1, 2],
-              outputRange: [0, 1, 1, 0],
-            }),
-          },
-        ]}
-      />
+      <Animated.View style={[s.header__progress, progressStyle]} />
     </View>
   );
 

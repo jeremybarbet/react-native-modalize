@@ -1,6 +1,12 @@
 import React, { forwardRef, useRef, useState } from 'react';
-import { Animated, Dimensions, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { Modalize } from 'react-native-modalize';
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Modalize, Position } from 'react-native-modalize';
+import Animated, {
+  Extrapolate,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 import { useCombinedRefs } from '../../utils/use-combined-refs';
 
@@ -10,71 +16,65 @@ const HEADER_HEIGHT = 100;
 export const AppleMusicPlayer = forwardRef<Modalize>((_, ref) => {
   const modalizeRef = useRef<Modalize | null>(null);
   const combinedRef = useCombinedRefs<Modalize | null>(ref, modalizeRef);
-  const animated = useRef(new Animated.Value(0)).current;
+  const animated = useSharedValue(0);
   const [handle, setHandle] = useState(false);
 
-  const handlePosition = position => {
+  const coverStyle = useAnimatedStyle(() => ({
+    shadowOpacity: interpolate(animated.value, [0, 1], [0.2, 0.35]),
+    transform: [
+      {
+        scale: interpolate(animated.value, [0, 1], [0.18, 1], Extrapolate.CLAMP),
+      },
+      {
+        translateX: interpolate(animated.value, [0, 0.25, 1], [0, 100, 140], Extrapolate.CLAMP),
+      },
+      {
+        translateY: interpolate(animated.value, [0, 0.25, 1], [0, 100, 165], Extrapolate.CLAMP),
+      },
+    ],
+  }));
+
+  const assetStyle = useAnimatedStyle(() => ({
+    borderRadius: interpolate(animated.value, [0, 1], [32, 8]),
+  }));
+
+  const headerStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(animated.value, [0, 0.75], [1, 0]),
+  }));
+
+  const innerStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(animated.value, [0, 1], [0, 1]),
+    transform: [
+      {
+        translateY: interpolate(animated.value, [0, 1], [-300, 0]),
+      },
+    ],
+  }));
+
+  const handlePositionChange = (position: Position) => {
     setHandle(position === 'top');
   };
 
-  const renderContent = () => (
-    <>
-      <Animated.View
-        style={[
-          s.content__cover,
-          {
-            shadowOpacity: animated.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0.2, 0.35],
-            }),
-            transform: [
-              {
-                scale: animated.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0.18, 1],
-                  extrapolate: 'clamp',
-                }),
-              },
-              {
-                translateX: animated.interpolate({
-                  inputRange: [0, 0.25, 1],
-                  outputRange: [0, 100, 140],
-                  extrapolate: 'clamp',
-                }),
-              },
-              {
-                translateY: animated.interpolate({
-                  inputRange: [0, 0.25, 1],
-                  outputRange: [0, 100, 165],
-                  extrapolate: 'clamp',
-                }),
-              },
-            ],
-          },
-        ]}
-      >
+  return (
+    <Modalize
+      ref={combinedRef}
+      panGestureAnimatedValue={animated}
+      snapPoint={HEADER_HEIGHT}
+      withHandle={handle}
+      handlePosition="inside"
+      handleStyle={{ top: 13, width: 40, height: handle ? 6 : 0, backgroundColor: '#bcc0c1' }}
+      onPositionChange={handlePositionChange}
+    >
+      <Animated.View style={[s.content__cover, coverStyle]}>
         <Animated.Image
-          style={[
-            s.content__asset,
-            { borderRadius: animated.interpolate({ inputRange: [0, 1], outputRange: [32, 8] }) },
-          ]}
+          style={[s.content__asset, assetStyle]}
           source={{
             uri: 'https://images.genius.com/7ea34ad2fa694fb706de3e81dc1588c4.1000x1000x1.jpg',
           }}
         />
       </Animated.View>
 
-      <Animated.View
-        style={[
-          s.content__header,
-          {
-            opacity: animated.interpolate({
-              inputRange: [0, 0.75],
-              outputRange: [1, 0],
-            }),
-          },
-        ]}
-      >
+      <Animated.View style={[s.content__header, headerStyle]}>
         <Text style={s.content__title}>Your Design</Text>
 
         <TouchableOpacity activeOpacity={0.75}>
@@ -87,40 +87,10 @@ export const AppleMusicPlayer = forwardRef<Modalize>((_, ref) => {
       </Animated.View>
 
       <Animated.Image
-        style={[
-          s.content__inner,
-          {
-            opacity: animated.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 1],
-            }),
-            transform: [
-              {
-                translateY: animated.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [-300, 0],
-                }),
-              },
-            ],
-          },
-        ]}
+        style={[s.content__inner, innerStyle]}
         resizeMode="contain"
         source={require('../../../assets/inner-player.png')}
       />
-    </>
-  );
-
-  return (
-    <Modalize
-      ref={combinedRef}
-      panGestureAnimatedValue={animated}
-      snapPoint={HEADER_HEIGHT}
-      withHandle={handle}
-      handlePosition="inside"
-      handleStyle={{ top: 13, width: 40, height: handle ? 6 : 0, backgroundColor: '#bcc0c1' }}
-      onPositionChange={handlePosition}
-    >
-      {renderContent()}
     </Modalize>
   );
 });
@@ -146,8 +116,8 @@ const s = StyleSheet.create({
   content__cover: {
     zIndex: 100,
 
-    marginTop: -132, // not the best
-    marginLeft: -115, // not the best
+    marginTop: -132,
+    marginLeft: -115,
 
     width: width - 50,
     height: 360,
