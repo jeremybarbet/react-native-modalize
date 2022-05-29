@@ -295,16 +295,6 @@ Using this prop will enable/disable pan gesture.
 | ---- | -------- | ------- |
 | bool | No       | `true`  |
 
-### `panGestureComponentEnabled`
-
-Define if HeaderComponent/FooterComponent/FloatingComponent should have pan gesture enable (Android specific).
-
-!> Because of a limitation from `react-native-gesture-handler` for Android, when enable it might break touchable inside the view, that's why it's false by default. e.g. you might need to use `TouchableOpacity` from RNGH for Android and `TouchableOpacity` from `react-native` for iOS if set to `true`.
-
-| Type | Required | Default | Platform |
-| ---- | -------- | ------- | -------- |
-| bool | No       | `false` | Android  |
-
 ### `tapGestureEnabled`
 
 Define if the `TapGestureHandler` wrapping Modalize's core should be enable or not.

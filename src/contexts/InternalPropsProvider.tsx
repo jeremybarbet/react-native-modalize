@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext } from 'react';
-import { Platform, StatusBar } from 'react-native';
+import { Platform } from 'react-native';
 
 import { Props } from '../options';
 
@@ -10,7 +10,7 @@ type InternalPropsProviderProps<T> = { children: ReactNode } & Props<T>;
 const defaultProps = {
   modalTopOffset: Platform.select({
     ios: 0,
-    android: StatusBar.currentHeight || 0,
+    android: 0,
     default: 0,
   }),
   adjustToContentHeight: false,
@@ -23,7 +23,6 @@ const defaultProps = {
   }),
   keyboardAvoidingBehavior: 'padding',
   panGestureEnabled: true,
-  panGestureComponentEnabled: false,
   tapGestureEnabled: true,
   closeOnOverlayTap: true,
   closeSnapPointStraightEnabled: true,

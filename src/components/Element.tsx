@@ -33,7 +33,7 @@ export const Element = ({
   onHandlerStateChange,
   onComponentLayout,
 }: ElementProps) => {
-  const { panGestureEnabled, panGestureComponentEnabled } = useInternalProps();
+  const { panGestureEnabled } = useInternalProps();
 
   if (!component) {
     return null;
@@ -46,7 +46,7 @@ export const Element = ({
    * Until a better solution lands in RNGH, I will disable the PanGestureHandler for Android only,
    * so inner touchable/gestures are working from the custom components you can pass in.
    */
-  if (isAndroid && !panGestureComponentEnabled) {
+  if (isAndroid) {
     return tag;
   }
 
