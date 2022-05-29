@@ -9,12 +9,10 @@ import {
 } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 
-import { Props, Style } from '../options';
+import { useInternalProps } from '../contexts/internalPropsProvider';
+import { Style } from '../options';
 
 interface HandleProps {
-  panGestureEnabled: Props['panGestureEnabled'];
-  withHandle: Props['withHandle'];
-  handleStyle: Props['handleStyle'];
   tapGestureModalizeRef: RefObject<TapGestureHandler>;
   isHandleOutside: boolean;
   onGestureEvent(event: GestureEvent<PanGestureHandlerEventPayload>): void;
@@ -22,14 +20,13 @@ interface HandleProps {
 }
 
 export const Handle = ({
-  panGestureEnabled,
-  withHandle,
-  handleStyle,
   tapGestureModalizeRef,
   isHandleOutside,
   onGestureEvent,
   onHandlerStateChange,
 }: HandleProps) => {
+  const { panGestureEnabled, withHandle, handleStyle } = useInternalProps();
+
   const handleStyles: (Style | undefined)[] = [
     s.handle,
     ...(!isHandleOutside ? [s.handleBottom] : []),

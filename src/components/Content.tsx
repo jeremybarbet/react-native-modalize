@@ -2,17 +2,14 @@ import React, { ForwardedRef, forwardRef, LegacyRef, ReactNode } from 'react';
 import { LayoutChangeEvent, SectionList } from 'react-native';
 import Animated, { SharedValue, useAnimatedScrollHandler } from 'react-native-reanimated';
 
-import { Props, RendererType } from '../options';
+import { useInternalProps } from '../contexts/internalPropsProvider';
+import { RendererType } from '../options';
 import { composeRefs } from '../utils/compose-refs';
 import { constants } from '../utils/constants';
 import { isIos } from '../utils/platform';
 
 interface ContentProps {
   children: ReactNode;
-  flatListProps: Props['flatListProps'];
-  sectionListProps: Props['sectionListProps'];
-  scrollViewProps: Props['scrollViewProps'];
-  rendererRef: Props['rendererRef'];
   enableBounces: boolean;
   keyboardToggle: boolean;
   disableScroll?: boolean;
@@ -23,20 +20,10 @@ interface ContentProps {
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 
 const ContentComponent = <T, K>(
-  {
-    children,
-    flatListProps,
-    sectionListProps,
-    scrollViewProps,
-    rendererRef,
-    enableBounces,
-    keyboardToggle,
-    disableScroll,
-    beginScrollY,
-    onLayout,
-  }: ContentProps,
+  { children, enableBounces, keyboardToggle, disableScroll, beginScrollY, onLayout }: ContentProps,
   ref: ForwardedRef<RendererType<T, K>>,
 ) => {
+  const { flatListProps, sectionListProps, scrollViewProps, rendererRef } = useInternalProps();
   const keyboardDismissMode: 'interactive' | 'on-drag' = isIos ? 'interactive' : 'on-drag';
   const passedOnProps = flatListProps ?? sectionListProps ?? scrollViewProps ?? {};
 

@@ -8,7 +8,7 @@ import {
 } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 
-import { Props } from '../options';
+import { useInternalProps } from '../contexts/internalPropsProvider';
 import { isAndroid } from '../utils/platform';
 import { renderElement } from '../utils/render-element';
 
@@ -21,8 +21,6 @@ export enum ElementType {
 interface ElementProps {
   id: ElementType;
   component: ReactNode;
-  panGestureEnabled: Props['panGestureEnabled'];
-  panGestureComponentEnabled: Props['panGestureComponentEnabled'];
   onGestureEvent(event: GestureEvent<PanGestureHandlerEventPayload>): void;
   onHandlerStateChange(event: PanGestureHandlerStateChangeEvent): void;
   onComponentLayout({ nativeEvent }: LayoutChangeEvent, name: ElementType, absolute: boolean): void;
@@ -31,12 +29,12 @@ interface ElementProps {
 export const Element = ({
   id,
   component,
-  panGestureEnabled,
-  panGestureComponentEnabled,
   onGestureEvent,
   onHandlerStateChange,
   onComponentLayout,
 }: ElementProps) => {
+  const { panGestureEnabled, panGestureComponentEnabled } = useInternalProps();
+
   if (!component) {
     return null;
   }

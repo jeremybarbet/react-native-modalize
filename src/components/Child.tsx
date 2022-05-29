@@ -10,7 +10,7 @@ import {
 } from 'react-native-gesture-handler';
 import Animated, { SharedValue } from 'react-native-reanimated';
 
-import { Props } from '../options';
+import { useInternalProps } from '../contexts/internalPropsProvider';
 import { constants } from '../utils/constants';
 import { isRNGH2 } from '../utils/libraries';
 import { isWeb } from '../utils/platform';
@@ -19,13 +19,6 @@ import { Content } from './Content';
 
 interface ChildProps {
   children: ReactNode;
-  panGestureEnabled: Props['panGestureEnabled'];
-  adjustToContentHeight: Props['adjustToContentHeight'];
-  flatListProps: Props['flatListProps'];
-  sectionListProps: Props['sectionListProps'];
-  scrollViewProps: Props['scrollViewProps'];
-  childrenStyle: Props['childrenStyle'];
-  rendererRef: Props['rendererRef'];
   enableBounces: boolean;
   keyboardToggle: boolean;
   disableScroll?: boolean;
@@ -40,13 +33,6 @@ interface ChildProps {
 
 export const Child = ({
   children,
-  panGestureEnabled,
-  adjustToContentHeight,
-  flatListProps,
-  sectionListProps,
-  scrollViewProps,
-  childrenStyle,
-  rendererRef,
   enableBounces,
   keyboardToggle,
   disableScroll,
@@ -58,6 +44,7 @@ export const Child = ({
   onGestureEvent,
   onHandlerStateChange,
 }: ChildProps) => {
+  const { panGestureEnabled, adjustToContentHeight, childrenStyle } = useInternalProps();
   const style = adjustToContentHeight ? s.child__adjustHeight : s.child__container;
   const minDist = isRNGH2() ? undefined : constants.activated;
 
@@ -80,10 +67,6 @@ export const Child = ({
           simultaneousHandlers={panGestureChildrenRef}
         >
           <Content
-            flatListProps={flatListProps}
-            sectionListProps={sectionListProps}
-            scrollViewProps={scrollViewProps}
-            rendererRef={rendererRef}
             enableBounces={enableBounces}
             keyboardToggle={keyboardToggle}
             disableScroll={disableScroll}

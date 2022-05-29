@@ -11,17 +11,12 @@ import {
 } from 'react-native-gesture-handler';
 import Animated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 
-import { Close, Position, Props } from '../options';
+import { useInternalProps } from '../contexts/internalPropsProvider';
+import { Close, Position } from '../options';
 import { height } from '../utils/dimensions';
 import { isWeb } from '../utils/platform';
 
 interface OverlayProps {
-  alwaysOpen: Props['alwaysOpen'];
-  panGestureEnabled: Props['panGestureEnabled'];
-  withOverlay: Props['withOverlay'];
-  closeOnOverlayTap: Props['closeOnOverlayTap'];
-  overlayStyle: Props['overlayStyle'];
-  onOverlayPress: Props['onOverlayPress'];
   modalPosition: Position;
   tapGestureOverlayRef: RefObject<TapGestureHandler>;
   showContent: boolean;
@@ -33,12 +28,6 @@ interface OverlayProps {
 }
 
 export const Overlay = ({
-  alwaysOpen,
-  panGestureEnabled,
-  withOverlay,
-  closeOnOverlayTap,
-  overlayStyle,
-  onOverlayPress,
   modalPosition,
   tapGestureOverlayRef,
   showContent,
@@ -48,6 +37,14 @@ export const Overlay = ({
   onHandlerStateChange,
   onClose,
 }: OverlayProps) => {
+  const {
+    alwaysOpen,
+    panGestureEnabled,
+    withOverlay,
+    closeOnOverlayTap,
+    overlayStyle,
+    onOverlayPress,
+  } = useInternalProps();
   const ref = useRef<TapGestureHandler>(null);
   const pointerEvents =
     alwaysOpen && (modalPosition === 'initial' || !modalPosition) ? 'box-none' : 'auto';

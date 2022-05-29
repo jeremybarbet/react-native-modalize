@@ -1,2 +1,2 @@
-export * from './Modalize';
+export * from './Root';
 export * from './options';
