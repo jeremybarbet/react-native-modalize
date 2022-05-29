@@ -8,7 +8,6 @@ import {
   LayoutChangeEvent,
   NativeEventSubscription,
   Platform,
-  StatusBar,
   StyleSheet,
   useWindowDimensions,
   View,
@@ -56,28 +55,20 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
     modalStyle,
     snapPoint,
     modalHeight,
-    modalTopOffset = Platform.select({
-      ios: 0,
-      android: StatusBar.currentHeight || 0,
-      default: 0,
-    }),
+    modalTopOffset,
     alwaysOpen,
-    adjustToContentHeight = false,
-    handlePosition = 'outside',
-    disableScrollIfPossible = true,
-    avoidKeyboardLikeIOS = Platform.select({
-      ios: true,
-      android: false,
-      default: true,
-    }),
-    keyboardAvoidingBehavior = 'padding',
+    adjustToContentHeight,
+    handlePosition,
+    disableScrollIfPossible,
+    avoidKeyboardLikeIOS,
+    keyboardAvoidingBehavior,
     keyboardAvoidingOffset,
-    panGestureEnabled = true,
-    tapGestureEnabled = true,
-    closeSnapPointStraightEnabled = true,
+    panGestureEnabled,
+    tapGestureEnabled,
+    closeSnapPointStraightEnabled,
     panGestureAnimatedValue,
-    withHandle = true,
-    withOverlay = true,
+    withHandle,
+    withOverlay,
     HeaderComponent,
     FooterComponent,
     FloatingComponent,
@@ -93,7 +84,7 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
   const { height: screenHeight } = useWindowDimensions();
   const isHandleOutside = handlePosition === 'outside';
   const handleHeight = withHandle ? 20 : isHandleOutside ? 35 : 20;
-  const fullHeight = screenHeight - modalTopOffset;
+  const fullHeight = screenHeight - (modalTopOffset as number);
   const computedHeight = fullHeight - handleHeight - (isIphoneX ? 34 : 0);
   const endHeight = Math.max(0, modalHeight || computedHeight);
   const adjustValue = adjustToContentHeight ? undefined : endHeight;
