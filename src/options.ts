@@ -5,6 +5,7 @@ import {
   LayoutRectangle,
   ScrollView,
   ScrollViewProps,
+  SectionList,
   SectionListProps,
   StyleProp,
   ViewStyle,
@@ -26,11 +27,7 @@ export type Style = StyleProp<ViewStyle>;
 export type ScrollViewType = AnimateProps<OmittedProps<ScrollViewProps>>;
 export type FlatListType<T> = AnimateProps<OmittedProps<FlatListProps<T>>>;
 export type SectionListType<T, K> = AnimateProps<OmittedProps<SectionListProps<T, K>>>;
-
-export type RendererType<T, K> =
-  | AnimateProps<ScrollView>
-  | AnimateProps<FlatList<T>>
-  | AnimateProps<SectionListProps<T, K>>;
+export type RendererType<T, K> = ScrollView | FlatList<T> | SectionList<T, K>;
 
 export interface Props<T = ListItem, K = ListSection> {
   /**

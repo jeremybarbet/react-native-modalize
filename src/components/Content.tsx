@@ -1,5 +1,5 @@
-import React, { ForwardedRef, forwardRef, LegacyRef, ReactNode } from 'react';
-import { LayoutChangeEvent, SectionList } from 'react-native';
+import React, { ForwardedRef, forwardRef, ReactNode, Ref } from 'react';
+import { FlatList, LayoutChangeEvent, ScrollView, SectionList } from 'react-native';
 import Animated, { SharedValue, useAnimatedScrollHandler } from 'react-native-reanimated';
 
 import { useInternalProps } from '../contexts/internalPropsProvider';
@@ -17,7 +17,9 @@ interface ContentProps {
   onLayout({ nativeEvent }: LayoutChangeEvent): void;
 }
 
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
+const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
 const ContentComponent = <T, K>(
   { children, enableBounces, keyboardToggle, disableScroll, beginScrollY, onLayout }: ContentProps,
@@ -61,8 +63,8 @@ const ContentComponent = <T, K>(
 
   if (flatListProps) {
     return (
-      <Animated.FlatList
-        ref={composeRefs(ref, rendererRef) as LegacyRef<Animated.FlatList<T>>}
+      <AnimatedFlatList
+        ref={composeRefs(ref, rendererRef) as Ref<any>}
         {...flatListProps}
         {...opts}
       />
@@ -72,7 +74,7 @@ const ContentComponent = <T, K>(
   if (sectionListProps) {
     return (
       <AnimatedSectionList
-        ref={composeRefs(ref, rendererRef) as LegacyRef<any>}
+        ref={composeRefs(ref, rendererRef) as Ref<any>}
         {...sectionListProps}
         {...opts}
       />
@@ -80,13 +82,13 @@ const ContentComponent = <T, K>(
   }
 
   return (
-    <Animated.ScrollView
-      ref={composeRefs(ref, rendererRef) as LegacyRef<Animated.ScrollView>}
+    <AnimatedScrollView
+      ref={composeRefs(ref, rendererRef) as Ref<ScrollView>}
       {...scrollViewProps}
       {...opts}
     >
       {children}
-    </Animated.ScrollView>
+    </AnimatedScrollView>
   );
 };
 
