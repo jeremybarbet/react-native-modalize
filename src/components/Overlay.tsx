@@ -9,33 +9,24 @@ import {
   TapGestureHandler,
   TapGestureHandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
-import Animated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
-import { useInternalProps } from '../contexts/internalPropsProvider';
-import { Close, Position } from '../options';
+import { useInternalLogic } from '../contexts/InternalLogicProvider';
+import { useInternalProps } from '../contexts/InternalPropsProvider';
 import { height } from '../utils/dimensions';
 import { isWeb } from '../utils/platform';
 
 interface OverlayProps {
-  modalPosition: Position;
   tapGestureOverlayRef: RefObject<TapGestureHandler>;
-  showContent: boolean;
-  willCloseModalize: boolean;
-  overlay: SharedValue<number>;
   onGestureEvent(event: GestureEvent<PanGestureHandlerEventPayload>): void;
   onHandlerStateChange(event: PanGestureHandlerStateChangeEvent): void;
-  onClose(dest?: Close, callback?: () => void): void;
 }
 
 export const Overlay = ({
-  modalPosition,
   tapGestureOverlayRef,
-  showContent,
-  willCloseModalize,
-  overlay,
+
   onGestureEvent,
   onHandlerStateChange,
-  onClose,
 }: OverlayProps) => {
   const {
     alwaysOpen,
@@ -45,6 +36,8 @@ export const Overlay = ({
     overlayStyle,
     onOverlayPress,
   } = useInternalProps();
+  const { overlay, modalPosition, showContent, willCloseModalize, handleClose } =
+    useInternalLogic();
   const ref = useRef<TapGestureHandler>(null);
   const pointerEvents =
     alwaysOpen && (modalPosition === 'initial' || !modalPosition) ? 'box-none' : 'auto';
@@ -54,9 +47,9 @@ export const Overlay = ({
   }));
 
   const handleOverlay = ({ nativeEvent }: TapGestureHandlerStateChangeEvent): void => {
-    if (nativeEvent.oldState === State.ACTIVE && !willCloseModalize) {
+    if (nativeEvent.oldState === State.ACTIVE && !willCloseModalize.current) {
       onOverlayPress?.();
-      onClose(!!alwaysOpen ? 'alwaysOpen' : 'default');
+      handleClose(!!alwaysOpen ? 'alwaysOpen' : 'default');
     }
   };
 

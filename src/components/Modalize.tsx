@@ -1,12 +1,10 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import {
-  BackHandler,
   EmitterSubscription,
   Keyboard,
   KeyboardAvoidingView,
   KeyboardEvent,
   LayoutChangeEvent,
-  NativeEventSubscription,
   Platform,
   StyleSheet,
   useWindowDimensions,
@@ -23,21 +21,18 @@ import {
 import Animated, {
   Extrapolate,
   interpolate,
-  runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
-  useDerivedValue,
-  useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
 
-import { useInternalProps } from '../contexts/internalPropsProvider';
-import { Close, Handles, Open, Position, Props } from '../options';
+import { useInternalLogic } from '../contexts/InternalLogicProvider';
+import { useInternalProps } from '../contexts/InternalPropsProvider';
+import { Close, Handles, Open, Props } from '../options';
 import { constants } from '../utils/constants';
 import { invariant } from '../utils/invariant';
 import { isBelowRN65 } from '../utils/libraries';
-import { isAndroid, isIphoneX } from '../utils/platform';
-import { clamp } from '../worklets/clamp';
+import { isAndroid } from '../utils/platform';
 
 import { Child } from './Child';
 import { Element, ElementType } from './Element';
@@ -47,6 +42,8 @@ import { Overlay } from './Overlay';
 const AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
 
 export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
+  const { height: screenHeight } = useWindowDimensions();
+
   const {
     scrollViewProps,
     flatListProps,
@@ -55,10 +52,8 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
     modalStyle,
     snapPoint,
     modalHeight,
-    modalTopOffset,
     alwaysOpen,
     adjustToContentHeight,
-    handlePosition,
     disableScrollIfPossible,
     avoidKeyboardLikeIOS,
     keyboardAvoidingBehavior,
@@ -67,82 +62,60 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
     tapGestureEnabled,
     closeSnapPointStraightEnabled,
     panGestureAnimatedValue,
-    withHandle,
     withOverlay,
     HeaderComponent,
     FooterComponent,
     FloatingComponent,
     onOpen,
-    onOpened,
-    onClose,
-    onClosed,
-    onBackButtonPress,
     onPositionChange,
     onLayout,
   } = useInternalProps();
 
-  const { height: screenHeight } = useWindowDimensions();
-  const isHandleOutside = handlePosition === 'outside';
-  const handleHeight = withHandle ? 20 : isHandleOutside ? 35 : 20;
-  const fullHeight = screenHeight - (modalTopOffset as number);
-  const computedHeight = fullHeight - handleHeight - (isIphoneX ? 34 : 0);
-  const endHeight = Math.max(0, modalHeight || computedHeight);
-  const adjustValue = adjustToContentHeight ? undefined : endHeight;
-  const snaps = snapPoint ? [0, endHeight - snapPoint, endHeight] : [0, endHeight];
+  const {
+    // Animations
+    cancelTranslateY,
+    componentTranslateY,
+    overlay,
+    beginScrollY,
+    dragY,
+    translateY,
+    computedTranslateY,
 
-  const [modalHeightValue, setModalHeightValue] = useState(adjustValue);
-  const [lastSnap, setLastSnap] = useState(snapPoint ? endHeight - snapPoint : 0);
-  const [isVisible, setIsVisible] = useState(false);
-  const [showContent, setShowContent] = useState(true);
-  const [enableBounces, setEnableBounces] = useState(true);
-  const [keyboardToggle, setKeyboardToggle] = useState(false);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const [disableScroll, setDisableScroll] = useState(alwaysOpen || snapPoint ? true : undefined);
-  const [modalPosition, setModalPosition] = useState<Position>('initial');
-  const [cancelClose, setCancelClose] = useState(false);
-  const [layouts, setLayouts] = useState<Map<string, number>>(new Map());
+    // Variables
+    isHandleOutside,
+    endHeight,
+    adjustValue,
+    snaps,
 
-  /**
-   * 1 by default to have the translateY animation running
-   */
-  const cancelTranslateY = useSharedValue(1);
-  const componentTranslateY = useSharedValue(0);
-  const overlay = useSharedValue(0);
-  const beginScrollY = useSharedValue(0);
-  const dragY = useSharedValue(0);
-  const translateY = useSharedValue(screenHeight);
-  const reverseBeginScrollY = useSharedValue(-1 * beginScrollY.value);
+    // States
+    modalHeightValue,
+    setModalHeightValue,
+    lastSnap,
+    setLastSnap,
+    isVisible,
+    showContent,
+    setEnableBounces,
+    setKeyboardToggle,
+    keyboardHeight,
+    setKeyboardHeight,
+    setDisableScroll,
+    modalPosition,
+    setModalPosition,
+    cancelClose,
+    setCancelClose,
+    layouts,
+    setLayouts,
+    willCloseModalize,
+
+    // Methods
+    handleAnimateOpen,
+    handleClose,
+  } = useInternalLogic();
 
   const tapGestureModalizeRef = useRef<TapGestureHandler | null>(null);
   const panGestureChildrenRef = useRef<PanGestureHandler | null>(null);
   const nativeViewChildrenRef = useRef<NativeViewGestureHandler | null>(null);
   const tapGestureOverlayRef = useRef<TapGestureHandler | null>(null);
-  const backButtonListenerRef = useRef<NativeEventSubscription | null>(null);
-
-  /**
-   * We diff and get the negative value only. It sometimes go above 0
-   * (e.g. 1.5) and creates the flickering on Modalize for a ms
-   */
-  const diffClamp = useDerivedValue(
-    () => clamp(reverseBeginScrollY.value, -screenHeight, 0),
-    [reverseBeginScrollY, screenHeight],
-  );
-  const componentDragEnabled = componentTranslateY.value === 1;
-  /**
-   * When we have a scrolling happening in the ScrollView, we don't want to translate
-   * the modal down. We either multiply by 0 to cancel the animation, or 1 to proceed.
-   */
-  const dragValue = useDerivedValue(
-    () => dragY.value * (componentDragEnabled ? 1 : cancelTranslateY.value) + diffClamp.value,
-    [dragY, componentDragEnabled, cancelTranslateY, diffClamp],
-  );
-
-  const computedTranslateY = useDerivedValue(
-    () => translateY.value * (componentDragEnabled ? 1 : cancelTranslateY.value) + dragValue.value,
-    [translateY, componentDragEnabled, cancelTranslateY, dragValue],
-  );
-
-  let willCloseModalize = false;
 
   const animatedStyle = useAnimatedStyle(() => ({
     height: modalHeightValue,
@@ -159,23 +132,6 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
     ],
   }));
 
-  const handleBackPress = () => {
-    if (alwaysOpen) {
-      backButtonListenerRef.current?.remove();
-      return false;
-    }
-
-    if (onBackButtonPress) {
-      backButtonListenerRef.current?.remove();
-      return onBackButtonPress();
-    } else {
-      handleClose();
-      backButtonListenerRef.current?.remove();
-    }
-
-    return true;
-  };
-
   const handleKeyboardShow = (event: KeyboardEvent) => {
     const { height } = event.endCoordinates;
 
@@ -186,109 +142,6 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
   const handleKeyboardHide = () => {
     setKeyboardToggle(false);
     setKeyboardHeight(0);
-  };
-
-  const handleAnimateOpen = (alwaysOpenValue: number | undefined, dest: Open = 'default') => {
-    let toValue = 0;
-    let toPanValue = 0;
-    let newPosition: Position;
-
-    backButtonListenerRef.current = BackHandler.addEventListener(
-      'hardwareBackPress',
-      handleBackPress,
-    );
-
-    if (dest === 'top') {
-      toValue = 0;
-    } else if (alwaysOpenValue) {
-      toValue = (modalHeightValue || 0) - alwaysOpenValue;
-    } else if (snapPoint) {
-      toValue = (modalHeightValue || 0) - snapPoint;
-    }
-
-    if (panGestureAnimatedValue && (alwaysOpenValue || snapPoint)) {
-      toPanValue = 0;
-    } else if (
-      panGestureAnimatedValue &&
-      !alwaysOpenValue &&
-      (dest === 'top' || dest === 'default')
-    ) {
-      toPanValue = 1;
-    }
-
-    setIsVisible(true);
-    setShowContent(true);
-
-    if ((alwaysOpenValue && dest !== 'top') || (snapPoint && dest === 'default')) {
-      newPosition = 'initial';
-    } else {
-      newPosition = 'top';
-    }
-
-    // to run in parallel
-    overlay.value = withSpring(
-      alwaysOpenValue && dest === 'default' ? 0 : 1,
-      constants.springConfig,
-    );
-
-    if (panGestureAnimatedValue) {
-      panGestureAnimatedValue.value = toPanValue;
-    }
-
-    const handleFinish = () => {
-      onOpened?.();
-      setModalPosition(newPosition);
-      onPositionChange?.(newPosition);
-    };
-
-    translateY.value = withSpring(toValue, constants.springConfig, isFinished => {
-      if (isFinished) {
-        runOnJS(handleFinish)();
-      }
-    });
-  };
-
-  const handleAnimateClose = (dest: Close = 'default', callback?: () => void) => {
-    const lastSnapValue = snapPoint ? snaps[1] : 80;
-    const toInitialAlwaysOpen = dest === 'alwaysOpen' && Boolean(alwaysOpen);
-    const toValue =
-      toInitialAlwaysOpen && alwaysOpen ? (modalHeightValue || 0) - alwaysOpen : screenHeight;
-
-    backButtonListenerRef.current?.remove();
-    cancelTranslateY.value = 1;
-    beginScrollY.value = 0;
-
-    overlay.value = withSpring(0, constants.springConfig);
-
-    if (panGestureAnimatedValue) {
-      panGestureAnimatedValue.value = 0;
-    }
-
-    const handleFinish = () => {
-      onClosed?.();
-      callback?.();
-
-      if (alwaysOpen && dest === 'alwaysOpen' && onPositionChange) {
-        onPositionChange('initial');
-      }
-
-      if (alwaysOpen && dest === 'alwaysOpen') {
-        setModalPosition('initial');
-      }
-
-      setShowContent(toInitialAlwaysOpen);
-      translateY.value = toValue;
-      dragY.value = 0;
-      willCloseModalize = false;
-      setLastSnap(lastSnapValue);
-      setIsVisible(toInitialAlwaysOpen);
-    };
-
-    translateY.value = withSpring(toValue, constants.springConfig, isFinished => {
-      if (isFinished) {
-        runOnJS(handleFinish)();
-      }
-    });
   };
 
   const handleModalizeContentLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
@@ -350,10 +203,10 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
     handleBaseLayout(id, nativeEvent.layout.height);
   };
 
-  const handleClose = (dest?: Close, callback?: () => void) => {
-    onClose?.();
-    handleAnimateClose(dest, callback);
-  };
+  // const handleClose = (dest?: Close, callback?: () => void) => {
+  //   onClose?.();
+  //   handleAnimateClose(dest, callback);
+  // };
 
   const handleChildren = (
     { nativeEvent }: PanGestureHandlerStateChangeEvent,
@@ -432,20 +285,20 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
             if (closeSnapPointStraightEnabled) {
               if (modalPosition === 'initial' && negativeReverseScroll) {
                 destSnapPoint = snap;
-                willCloseModalize = false;
+                willCloseModalize.current = false;
               }
 
               if (snap === endHeight) {
                 destSnapPoint = snap;
-                willCloseModalize = true;
+                willCloseModalize.current = true;
                 handleClose();
               }
             } else {
               destSnapPoint = snap;
-              willCloseModalize = false;
+              willCloseModalize.current = false;
 
               if (snap === endHeight) {
-                willCloseModalize = true;
+                willCloseModalize.current = true;
                 handleClose();
               }
             }
@@ -454,15 +307,15 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
           // For alwaysOpen props
           if (distFromSnap < diffPoint && alwaysOpen && beginScrollY.value <= 0) {
             destSnapPoint = (modalHeightValue || 0) - alwaysOpen;
-            willCloseModalize = false;
+            willCloseModalize.current = false;
           }
         });
       } else if (closeThreshold && !alwaysOpen && !cancelClose) {
-        willCloseModalize = true;
+        willCloseModalize.current = true;
         handleClose();
       }
 
-      if (willCloseModalize) {
+      if (willCloseModalize.current) {
         return;
       }
 
@@ -587,8 +440,6 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
     }
 
     return () => {
-      backButtonListenerRef.current?.remove();
-
       if (isBelowRN65) {
         Keyboard.removeListener('keyboardDidShow', handleKeyboardShow);
         Keyboard.removeListener('keyboardDidHide', handleKeyboardHide);
@@ -643,10 +494,6 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
               />
 
               <Child
-                enableBounces={enableBounces}
-                keyboardToggle={keyboardToggle}
-                disableScroll={disableScroll}
-                beginScrollY={beginScrollY}
                 nativeViewChildrenRef={nativeViewChildrenRef}
                 tapGestureModalizeRef={tapGestureModalizeRef}
                 panGestureChildrenRef={panGestureChildrenRef}
@@ -668,14 +515,9 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
           )}
 
           <Overlay
-            modalPosition={modalPosition}
             tapGestureOverlayRef={tapGestureOverlayRef}
-            showContent={showContent}
-            willCloseModalize={willCloseModalize}
-            overlay={overlay}
             onGestureEvent={handleGestureEvent}
             onHandlerStateChange={handleChildren}
-            onClose={handleClose}
           />
         </View>
       </TapGestureHandler>

@@ -8,9 +8,10 @@ import {
   PanGestureHandlerStateChangeEvent,
   TapGestureHandler,
 } from 'react-native-gesture-handler';
-import Animated, { SharedValue } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 
-import { useInternalProps } from '../contexts/internalPropsProvider';
+import { useInternalLogic } from '../contexts/InternalLogicProvider';
+import { useInternalProps } from '../contexts/InternalPropsProvider';
 import { constants } from '../utils/constants';
 import { isRNGH2 } from '../utils/libraries';
 import { isWeb } from '../utils/platform';
@@ -19,10 +20,6 @@ import { Content } from './Content';
 
 interface ChildProps {
   children: ReactNode;
-  enableBounces: boolean;
-  keyboardToggle: boolean;
-  disableScroll?: boolean;
-  beginScrollY: SharedValue<number>;
   nativeViewChildrenRef: RefObject<NativeViewGestureHandler>;
   tapGestureModalizeRef: RefObject<TapGestureHandler>;
   panGestureChildrenRef: RefObject<PanGestureHandler>;
@@ -33,10 +30,6 @@ interface ChildProps {
 
 export const Child = ({
   children,
-  enableBounces,
-  keyboardToggle,
-  disableScroll,
-  beginScrollY,
   nativeViewChildrenRef,
   tapGestureModalizeRef,
   panGestureChildrenRef,
@@ -45,6 +38,7 @@ export const Child = ({
   onHandlerStateChange,
 }: ChildProps) => {
   const { panGestureEnabled, adjustToContentHeight, childrenStyle } = useInternalProps();
+  const { enableBounces, keyboardToggle, disableScroll } = useInternalLogic();
   const style = adjustToContentHeight ? s.child__adjustHeight : s.child__container;
   const minDist = isRNGH2() ? undefined : constants.activated;
 
@@ -70,7 +64,6 @@ export const Child = ({
             enableBounces={enableBounces}
             keyboardToggle={keyboardToggle}
             disableScroll={disableScroll}
-            beginScrollY={beginScrollY}
             onLayout={onLayout}
           >
             {children}

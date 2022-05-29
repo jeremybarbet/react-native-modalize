@@ -9,7 +9,7 @@ import {
 } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 
-import { useInternalProps } from '../contexts/internalPropsProvider';
+import { useInternalProps } from '../contexts/InternalPropsProvider';
 import { Style } from '../options';
 
 interface HandleProps {

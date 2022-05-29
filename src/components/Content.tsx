@@ -1,8 +1,9 @@
 import React, { ForwardedRef, forwardRef, ReactNode, Ref } from 'react';
 import { FlatList, LayoutChangeEvent, ScrollView, SectionList } from 'react-native';
-import Animated, { SharedValue, useAnimatedScrollHandler } from 'react-native-reanimated';
+import Animated, { useAnimatedScrollHandler } from 'react-native-reanimated';
 
-import { useInternalProps } from '../contexts/internalPropsProvider';
+import { useInternalLogic } from '../contexts/InternalLogicProvider';
+import { useInternalProps } from '../contexts/InternalPropsProvider';
 import { RendererType } from '../options';
 import { composeRefs } from '../utils/compose-refs';
 import { constants } from '../utils/constants';
@@ -13,7 +14,6 @@ interface ContentProps {
   enableBounces: boolean;
   keyboardToggle: boolean;
   disableScroll?: boolean;
-  beginScrollY: SharedValue<number>;
   onLayout({ nativeEvent }: LayoutChangeEvent): void;
 }
 
@@ -22,10 +22,11 @@ const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
 const ContentComponent = <T, K>(
-  { children, enableBounces, keyboardToggle, disableScroll, beginScrollY, onLayout }: ContentProps,
+  { children, enableBounces, keyboardToggle, disableScroll, onLayout }: ContentProps,
   ref: ForwardedRef<RendererType<T, K>>,
 ) => {
   const { flatListProps, sectionListProps, scrollViewProps, rendererRef } = useInternalProps();
+  const { beginScrollY } = useInternalLogic();
   const keyboardDismissMode: 'interactive' | 'on-drag' = isIos ? 'interactive' : 'on-drag';
   const passedOnProps = flatListProps ?? sectionListProps ?? scrollViewProps ?? {};
 

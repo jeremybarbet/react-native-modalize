@@ -1,11 +1,9 @@
-import React, { createContext, ReactNode, useContext } from 'react';
+import React, { createContext, useContext } from 'react';
 import { Platform } from 'react-native';
 
 import { Props } from '../options';
 
 const InternalPropsContext = createContext<Props>({});
-
-type InternalPropsProviderProps<T> = { children: ReactNode } & Props<T>;
 
 const defaultProps = {
   modalTopOffset: Platform.select({
@@ -30,10 +28,7 @@ const defaultProps = {
   withOverlay: true,
 } as Props;
 
-export const InternalPropsProvider = <T,>({
-  children,
-  ...props
-}: InternalPropsProviderProps<T>) => (
+export const InternalPropsProvider = <T, K>({ children, ...props }: Props<T, K>) => (
   <InternalPropsContext.Provider
     value={{
       ...defaultProps,
