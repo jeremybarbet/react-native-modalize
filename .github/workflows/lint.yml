@@ -2,10 +2,10 @@ name: CI / Lint
 
 on:
   push:
-    branches: [master]
+    branches: [master, v3]
 
   pull_request:
-    branches: [master]
+    branches: [master, v3]
 
   workflow_dispatch:
 
