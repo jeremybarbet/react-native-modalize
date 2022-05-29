@@ -196,13 +196,16 @@ export const Modalize = forwardRef<Handles, Props>(
 
     const handleBackPress = () => {
       if (alwaysOpen) {
+        backButtonListenerRef.current?.remove();
         return false;
       }
 
       if (onBackButtonPress) {
+        backButtonListenerRef.current?.remove();
         return onBackButtonPress();
       } else {
         handleClose();
+        backButtonListenerRef.current?.remove();
       }
 
       return true;
@@ -221,14 +224,14 @@ export const Modalize = forwardRef<Handles, Props>(
     };
 
     const handleAnimateOpen = (alwaysOpenValue: number | undefined, dest: Open = 'default') => {
-      (backButtonListenerRef as any).current = BackHandler.addEventListener(
-        'hardwareBackPress',
-        handleBackPress,
-      );
-
       let toValue = 0;
       let toPanValue = 0;
       let newPosition: Position;
+
+      backButtonListenerRef.current = BackHandler.addEventListener(
+        'hardwareBackPress',
+        handleBackPress,
+      );
 
       if (dest === 'top') {
         toValue = 0;
