@@ -23,7 +23,7 @@ export const App = () => {
 
 The method to open Modalize.
 
-?> If you are using `snapPoint` prop, you can supply a `dest` argument to the `open` method, to open it to the top directly `open('top')`. You don't have to provide anything if you want the default behavior.
+?> If you are using `snapPoints` prop, you can supply a `dest` argument to the `open` method, to open it to the top directly `open('top')`. You don't have to provide anything if you want the default behavior.
 
 | Type                                  | Required |
 | ------------------------------------- | -------- |

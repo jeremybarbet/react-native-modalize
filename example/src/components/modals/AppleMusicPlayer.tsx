@@ -59,7 +59,7 @@ export const AppleMusicPlayer = forwardRef<Modalize>((_, ref) => {
     <Modalize
       ref={combinedRef}
       panGestureAnimatedValue={animated}
-      snapPoint={HEADER_HEIGHT}
+      snapPoints={[HEADER_HEIGHT]}
       withHandle={handle}
       handlePosition="inside"
       handleStyle={{ top: 13, width: 40, height: handle ? 6 : 0, backgroundColor: '#bcc0c1' }}

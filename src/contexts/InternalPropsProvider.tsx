@@ -23,7 +23,7 @@ const defaultProps = {
   panGestureEnabled: true,
   tapGestureEnabled: true,
   closeOnOverlayTap: true,
-  closeSnapPointStraightEnabled: true,
+  closeSnapPointsStraightEnabled: true,
   withHandle: true,
   withOverlay: true,
 } as Props;

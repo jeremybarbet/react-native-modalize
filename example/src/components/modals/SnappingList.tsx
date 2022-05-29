@@ -52,7 +52,7 @@ export const SnappingList = forwardRef<Modalize>((_, ref) => {
       ref={combinedRef}
       rendererRef={rendererRef}
       HeaderComponent={renderHeader}
-      snapPoint={350}
+      snapPoints={[250, 450]}
     >
       {renderContent()}
     </Modalize>

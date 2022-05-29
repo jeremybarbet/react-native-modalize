@@ -10,7 +10,7 @@ import { Modalize } from 'react-native-modalize';
 export const App = () => (
   <Modalize
     scrollViewProps={{ showsVerticalScrollIndicator: false }}
-    snapPoint={300}
+    snapPoints={[300]}
     HeaderComponent={
       <View>
         <Text>Header</Text>
@@ -31,7 +31,7 @@ export const App = () => (
 
 - Because of a limitation with react-native-gesture-handler, `HeaderComponent`, `FooterComponent` and `FloatingComponent` are not wrapped with a PanGestureHandler on Android, which mean you cannot dismiss Modalize by swiping down on these three components. If enabled, the inner events you could have in your components (e.g. TouchableOpacity, ScrollView) are cancels and don't work. Opposed to iOS that works just fine.
 
-- When using some third-party library (e.g. expo-av/react-native-video), it's impossible to press any of the native controls. This is a limitation created by the `TapGestureHandler` wrapping the whole Modalize's core component. In short, we need it to make sure we don't scroll and swipe at the same time. As a workaround, we now have a props `tapGestureEnabled` to be able to disable it and press in your third-party library. The only downside that can appear when using `tapGestureEnabled: false` is when you use it along with `snapPoint` props. The ScrollView could be triggered, for a few pixels, at the same time as the swipe gesture.
+- When using some third-party library (e.g. expo-av/react-native-video), it's impossible to press any of the native controls. This is a limitation created by the `TapGestureHandler` wrapping the whole Modalize's core component. In short, we need it to make sure we don't scroll and swipe at the same time. As a workaround, we now have a props `tapGestureEnabled` to be able to disable it and press in your third-party library. The only downside that can appear when using `tapGestureEnabled: false` is when you use it along with `snapPoints` props. The ScrollView could be triggered, for a few pixels, at the same time as the swipe gesture.
 
 - If you are using a `TextInput` component inside your Modalize, it seems to be intercepting all touch events. You can follow this issue on both [#123](https://github.com/jeremybarbet/react-native-modalize/issues/123) and [#668](https://github.com/software-mansion/react-native-gesture-handler/issues/668).
 
@@ -197,15 +197,15 @@ Define the style of the children renderer (only the inside part).
 
 ## Layout
 
-### `snapPoint`
+### `snapPoints`
 
-A number that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
+An array of numbers that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
 
-The value you pass is the height of the modal before being full opened.
+The values you pass are the height of the modal before being full opened.
 
-| Type   | Required |
-| ------ | -------- |
-| number | No       |
+| Type  | Required |
+| ----- | -------- |
+| array | No       |
 
 ### `modalHeight`
 
@@ -303,7 +303,7 @@ This wrapper is used to disable/enable the ScrollView when swiping and scrolling
 
 ?> If you are using a third-library and the touch events are not working, you will most likely want to pass this props to `false` to able to propagate the events down.
 
-!> If you are using `snapPoint` props and have to use to pass this props to `false`, it may, when in initial position, swipe and scroll both Modalize and the ScrollView inside at the same time.
+!> If you are using `snapPoints` props and have to use to pass this props to `false`, it may, when in initial position, swipe and scroll both Modalize and the ScrollView inside at the same time.
 
 | Type | Required | Default |
 | ---- | -------- | ------- |
@@ -317,9 +317,9 @@ Using this prop will enable/disable the overlay tap gesture.
 | ---- | -------- | ------- |
 | bool | No       | `true`  |
 
-### `closeSnapPointStraightEnabled`
+### `closeSnapPointsStraightEnabled`
 
-Define if `snapPoint` props should close straight when swiping down or come back to initial position.
+Define if `snapPoints` props should close straight when swiping down or come back to initial position.
 
 ?> However, if the velocity value is reached it will close Modalize straight, even when `false`.
 
@@ -427,7 +427,7 @@ onBackButtonPress is called when the user taps the hardware back button on Andro
 
 ### `onPositionChange`
 
-Callback function when the modal reaches the `top` (modal/screen height) or `initial` point (snapPoint or alwaysOpen height).
+Callback function when the modal reaches the `top` (modal/screen height) or `initial` point (snapPoints or alwaysOpen height).
 
 ?> Not to be confused with `onOpened` which is triggered when the modal opens for the first time.
 

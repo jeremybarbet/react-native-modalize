@@ -81,9 +81,10 @@ export interface Props<T = ListItem, K = ListSection> {
   childrenStyle?: Style;
 
   /**
-   * A number that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
+   * An array of numbers that will enable the snapping feature and create an intermediate point before opening the modal to full screen.
+   * The values you pass are the height of the modal before being full opened.
    */
-  snapPoint?: number;
+  snapPoints?: number[];
 
   /**
    * A number to define the modal's total height.
@@ -155,10 +156,10 @@ export interface Props<T = ListItem, K = ListSection> {
   closeOnOverlayTap?: boolean;
 
   /**
-   * Define if `snapPoint` props should close straight when swiping down or come back to initial position.
+   * Define if `snapPoints` props should close straight when swiping down or come back to initial position.
    * @default true
    */
-  closeSnapPointStraightEnabled?: boolean;
+  closeSnapPointsStraightEnabled?: boolean;
 
   /**
    * Animated.Value of the modal position between 0 and 1.
@@ -222,7 +223,7 @@ export interface Props<T = ListItem, K = ListSection> {
   /**
    * Callback function which determines if the modal has reached the top
    * i.e. completely opened to modal/screen height, or is at the initial
-   * point (snapPoint or alwaysOpened height).
+   * point (snapPoints or alwaysOpened height).
    */
   onPositionChange?: (position: 'top' | 'initial') => void;
 
@@ -241,7 +242,7 @@ export interface Handles {
   /**
    * Method to open Modalize.
    *
-   * If you are using `snapPoint` prop, you can supply a `dest` argument to the `open` method, to open it
+   * If you are using `snapPoints` prop, you can supply a `dest` argument to the `open` method, to open it
    * to the top directly `open('top')`. You don't have to provide anything if you want the default behavior.
    */
   open(dest?: Open): void;

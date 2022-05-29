@@ -50,7 +50,7 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
     sectionListProps,
     rootStyle,
     modalStyle,
-    snapPoint,
+    snapPoints,
     modalHeight,
     alwaysOpen,
     adjustToContentHeight,
@@ -60,7 +60,7 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
     keyboardAvoidingOffset,
     panGestureEnabled,
     tapGestureEnabled,
-    closeSnapPointStraightEnabled,
+    closeSnapPointsStraightEnabled,
     panGestureAnimatedValue,
     withOverlay,
     HeaderComponent,
@@ -215,7 +215,7 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
     const { velocityY, translationY } = nativeEvent;
     const negativeReverseScroll =
       modalPosition === 'top' &&
-      beginScrollY.value >= (snapPoint ? 0 : constants.scrollThreshold) &&
+      beginScrollY.value >= (snapPoints ? 0 : constants.scrollThreshold) &&
       translationY < 0;
     const thresholdProps =
       translationY > constants.animations.threshold && beginScrollY.value === 0;
@@ -237,7 +237,7 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
       setCancelClose(false);
 
       if (
-        !closeSnapPointStraightEnabled && snapPoint
+        !closeSnapPointsStraightEnabled && snapPoints
           ? beginScrollY.value > 0
           : beginScrollY.value > 0 || negativeReverseScroll
       ) {
@@ -252,7 +252,7 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
 
         if (!tapGestureEnabled) {
           setDisableScroll(
-            (Boolean(snapPoint) || Boolean(alwaysOpen)) && modalPosition === 'initial',
+            (Boolean(snapPoints) || Boolean(alwaysOpen)) && modalPosition === 'initial',
           );
         }
       }
@@ -268,33 +268,33 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
 
     if (nativeEvent.oldState === State.ACTIVE) {
       const toValue = translationY - beginScrollY.value;
-      let destSnapPoint = 0;
+      let destSnapPoints = 0;
 
-      if (snapPoint || alwaysOpen) {
+      if (snapPoints || alwaysOpen) {
         const endOffsetY = lastSnap + toValue + constants.animations.dragToss * velocityY;
 
         /**
-         * snapPoint and alwaysOpen use both an array of points to define the first open state and the final state.
+         * snapPoints and alwaysOpen use both an array of points to define the first open state and the final state.
          */
         snaps.forEach((snap: number) => {
           const distFromSnap = Math.abs(snap - endOffsetY);
-          const diffPoint = Math.abs(destSnapPoint - endOffsetY);
+          const diffPoint = Math.abs(destSnapPoints - endOffsetY);
 
-          // For snapPoint
+          // For snapPoints
           if (distFromSnap < diffPoint && !alwaysOpen) {
-            if (closeSnapPointStraightEnabled) {
+            if (closeSnapPointsStraightEnabled) {
               if (modalPosition === 'initial' && negativeReverseScroll) {
-                destSnapPoint = snap;
+                destSnapPoints = snap;
                 willCloseModalize.current = false;
               }
 
               if (snap === endHeight) {
-                destSnapPoint = snap;
+                destSnapPoints = snap;
                 willCloseModalize.current = true;
                 handleClose();
               }
             } else {
-              destSnapPoint = snap;
+              destSnapPoints = snap;
               willCloseModalize.current = false;
 
               if (snap === endHeight) {
@@ -306,7 +306,7 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
 
           // For alwaysOpen props
           if (distFromSnap < diffPoint && alwaysOpen && beginScrollY.value <= 0) {
-            destSnapPoint = (modalHeightValue || 0) - alwaysOpen;
+            destSnapPoints = (modalHeightValue || 0) - alwaysOpen;
             willCloseModalize.current = false;
           }
         });
@@ -319,18 +319,18 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
         return;
       }
 
-      setLastSnap(destSnapPoint);
+      setLastSnap(destSnapPoints);
       translateY.value = toValue;
       dragY.value = 0;
 
       if (alwaysOpen) {
-        overlay.value = withSpring(Number(destSnapPoint <= 0), constants.springConfig);
+        overlay.value = withSpring(Number(destSnapPoints <= 0), constants.springConfig);
       }
 
-      translateY.value = withSpring(destSnapPoint, constants.springConfig);
+      translateY.value = withSpring(destSnapPoints, constants.springConfig);
 
       if (beginScrollY.value <= 0) {
-        const modalPositionValue = destSnapPoint <= 0 ? 'top' : 'initial';
+        const modalPositionValue = destSnapPoints <= 0 ? 'top' : 'initial';
 
         if (panGestureAnimatedValue) {
           panGestureAnimatedValue.value = Number(modalPositionValue === 'top');
@@ -366,7 +366,7 @@ export const Modalize = forwardRef<Handles, Props>(({ children }, ref) => {
       dragY.value = translationY;
 
       if (panGestureAnimatedValue) {
-        const offset = alwaysOpen ?? snapPoint ?? 0;
+        const offset = alwaysOpen ?? snapPoints?.[0] ?? 0;
         const diff = Math.abs(translationY / (endHeight - offset));
         const y = translationY <= 0 ? diff : 1 - diff;
         let value: number;

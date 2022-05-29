@@ -86,7 +86,7 @@ export const InternalLogicProvider: FC = ({ children }) => {
   const { height: screenHeight } = useWindowDimensions();
 
   const {
-    snapPoint,
+    snapPoints,
     modalHeight,
     modalTopOffset,
     alwaysOpen,
@@ -118,16 +118,16 @@ export const InternalLogicProvider: FC = ({ children }) => {
   const computedHeight = fullHeight - handleHeight - (isIphoneX ? 34 : 0);
   const endHeight = Math.max(0, modalHeight || computedHeight);
   const adjustValue = adjustToContentHeight ? undefined : endHeight;
-  const snaps = snapPoint ? [0, endHeight - snapPoint, endHeight] : [0, endHeight];
+  const snaps = snapPoints ? [0, ...snapPoints, endHeight] : [0, endHeight];
 
   const [modalHeightValue, setModalHeightValue] = useState(adjustValue);
-  const [lastSnap, setLastSnap] = useState(snapPoint ? endHeight - snapPoint : 0);
+  const [lastSnap, setLastSnap] = useState(snapPoints ? snapPoints[snapPoints.length - 1] : 0);
   const [isVisible, setIsVisible] = useState(false);
   const [showContent, setShowContent] = useState(true);
   const [enableBounces, setEnableBounces] = useState(true);
   const [keyboardToggle, setKeyboardToggle] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const [disableScroll, setDisableScroll] = useState(alwaysOpen || snapPoint ? true : undefined);
+  const [disableScroll, setDisableScroll] = useState(alwaysOpen || snapPoints ? true : undefined);
   const [modalPosition, setModalPosition] = useState<Position>('initial');
   const [cancelClose, setCancelClose] = useState(false);
   const [layouts, setLayouts] = useState<Map<string, number>>(new Map());
@@ -191,11 +191,11 @@ export const InternalLogicProvider: FC = ({ children }) => {
       toValue = 0;
     } else if (alwaysOpenValue) {
       toValue = (modalHeightValue || 0) - alwaysOpenValue;
-    } else if (snapPoint) {
-      toValue = (modalHeightValue || 0) - snapPoint;
+    } else if (snapPoints) {
+      toValue = (modalHeightValue || 0) - snapPoints[0];
     }
 
-    if (panGestureAnimatedValue && (alwaysOpenValue || snapPoint)) {
+    if (panGestureAnimatedValue && (alwaysOpenValue || snapPoints)) {
       toPanValue = 0;
     } else if (
       panGestureAnimatedValue &&
@@ -208,7 +208,7 @@ export const InternalLogicProvider: FC = ({ children }) => {
     setIsVisible(true);
     setShowContent(true);
 
-    if ((alwaysOpenValue && dest !== 'top') || (snapPoint && dest === 'default')) {
+    if ((alwaysOpenValue && dest !== 'top') || (snapPoints && dest === 'default')) {
       newPosition = 'initial';
     } else {
       newPosition = 'top';
@@ -237,7 +237,7 @@ export const InternalLogicProvider: FC = ({ children }) => {
   };
 
   const handleAnimateClose = (dest: Close = 'default', callback?: () => void) => {
-    const lastSnapValue = snapPoint ? snaps[1] : 80;
+    const lastSnapValue = snapPoints ? snaps[snaps.length - 1] : 80;
     const toInitialAlwaysOpen = dest === 'alwaysOpen' && Boolean(alwaysOpen);
     const toValue =
       toInitialAlwaysOpen && alwaysOpen ? (modalHeightValue || 0) - alwaysOpen : screenHeight;
