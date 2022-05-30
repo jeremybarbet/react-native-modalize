@@ -3,7 +3,27 @@ import { Platform } from 'react-native';
 
 import { Props } from '../options';
 
-const InternalPropsContext = createContext<Props>({});
+type WithRequiredProperty<Type, Key extends keyof Type> = Type & {
+  [Property in Key]-?: Type[Property];
+};
+
+type ReturnProps<T, K> = WithRequiredProperty<
+  Props<T, K>,
+  | 'modalTopOffset'
+  | 'adjustToContentHeight'
+  | 'handlePosition'
+  | 'disableScrollIfPossible'
+  | 'avoidKeyboardLikeIOS'
+  | 'keyboardAvoidingBehavior'
+  | 'panGestureEnabled'
+  | 'tapGestureEnabled'
+  | 'closeOnOverlayTap'
+  | 'closeSnapPointStraightEnabled'
+  | 'withHandle'
+  | 'withOverlay'
+>;
+
+const InternalPropsContext = createContext({} as ReturnProps<any, any>);
 
 const defaultProps = {
   modalTopOffset: Platform.select({
@@ -28,7 +48,7 @@ const defaultProps = {
   withOverlay: true,
 } as Props;
 
-export const InternalPropsProvider = <T, K>({ children, ...props }: Props<T, K>) => (
+export const InternalPropsProvider = <T, K>({ children, ...props }: ReturnProps<T, K>) => (
   <InternalPropsContext.Provider
     value={{
       ...defaultProps,
