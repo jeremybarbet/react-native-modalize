@@ -9,11 +9,8 @@ import { composeRefs } from '../utils/compose-refs';
 import { constants } from '../utils/constants';
 import { isIos } from '../utils/platform';
 
-interface ContentProps {
+interface RendererProps {
   children: ReactNode;
-  enableBounces: boolean;
-  keyboardToggle: boolean;
-  disableScroll?: boolean;
   onLayout({ nativeEvent }: LayoutChangeEvent): void;
 }
 
@@ -21,12 +18,12 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
-const ContentComponent = <T, K>(
-  { children, enableBounces, keyboardToggle, disableScroll, onLayout }: ContentProps,
+const RendererComponent = <T, K>(
+  { children, onLayout }: RendererProps,
   ref: ForwardedRef<RendererType<T, K>>,
 ) => {
   const { flatListProps, sectionListProps, scrollViewProps, rendererRef } = useInternalProps();
-  const { beginScrollY } = useInternalLogic();
+  const { enableBounces, keyboardToggle, disableScroll, beginDragY } = useInternalLogic();
   const keyboardDismissMode: 'interactive' | 'on-drag' = isIos ? 'interactive' : 'on-drag';
   const passedOnProps = flatListProps ?? sectionListProps ?? scrollViewProps ?? {};
 
@@ -46,26 +43,26 @@ const ContentComponent = <T, K>(
 
   const onScrollBeginDrag = useAnimatedScrollHandler(
     {
-      onBeginDrag: ({ contentOffset: { y } }) => {
-        beginScrollY.value = y;
+      onBeginDrag: ({ contentOffset }) => {
+        beginDragY.value = contentOffset.y;
       },
     },
-    [beginScrollY],
+    [beginDragY],
   );
 
   const opts = {
     bounces,
-    onScrollBeginDrag,
-    scrollEventThrottle: constants.scrollEventThrottle,
-    onLayout,
     scrollEnabled,
     keyboardDismissMode,
+    scrollEventThrottle: constants.scrollEventThrottle,
+    onScrollBeginDrag,
+    onLayout,
   };
 
   if (flatListProps) {
     return (
       <AnimatedFlatList
-        ref={composeRefs(ref, rendererRef) as Ref<any>}
+        ref={composeRefs(ref, rendererRef) as Ref<FlatList>}
         {...flatListProps}
         {...opts}
       />
@@ -75,7 +72,9 @@ const ContentComponent = <T, K>(
   if (sectionListProps) {
     return (
       <AnimatedSectionList
-        ref={composeRefs(ref, rendererRef) as Ref<any>}
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore SectionList type is not working with latest reanimated
+        ref={composeRefs(ref, rendererRef) as Ref<SectionList>}
         {...sectionListProps}
         {...opts}
       />
@@ -93,4 +92,4 @@ const ContentComponent = <T, K>(
   );
 };
 
-export const Content = forwardRef(ContentComponent);
+export const Renderer = forwardRef(RendererComponent);

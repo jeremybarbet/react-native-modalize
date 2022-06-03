@@ -1,33 +1,14 @@
-import React, { RefObject, useRef } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
-import {
-  GestureEvent,
-  PanGestureHandler,
-  PanGestureHandlerEventPayload,
-  PanGestureHandlerStateChangeEvent,
-  State,
-  TapGestureHandler,
-  TapGestureHandlerStateChangeEvent,
-} from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import Animated, { runOnJS, useAnimatedStyle } from 'react-native-reanimated';
 
 import { useInternalLogic } from '../contexts/InternalLogicProvider';
 import { useInternalProps } from '../contexts/InternalPropsProvider';
 import { height } from '../utils/dimensions';
 import { isWeb } from '../utils/platform';
 
-interface OverlayProps {
-  tapGestureOverlayRef: RefObject<TapGestureHandler>;
-  onGestureEvent(event: GestureEvent<PanGestureHandlerEventPayload>): void;
-  onHandlerStateChange(event: PanGestureHandlerStateChangeEvent): void;
-}
-
-export const Overlay = ({
-  tapGestureOverlayRef,
-
-  onGestureEvent,
-  onHandlerStateChange,
-}: OverlayProps) => {
+export const Overlay = () => {
   const {
     alwaysOpen,
     panGestureEnabled,
@@ -36,50 +17,58 @@ export const Overlay = ({
     overlayStyle,
     onOverlayPress,
   } = useInternalProps();
-  const { overlay, modalPosition, showContent, willCloseModalize, handleClose } =
-    useInternalLogic();
-  const ref = useRef<TapGestureHandler>(null);
+  const {
+    overlay,
+    modalPosition,
+    showContent,
+    willCloseModalize,
+    handleGestureUpdate,
+    handleGestureEnd,
+    handleClose,
+  } = useInternalLogic();
   const pointerEvents =
     alwaysOpen && (modalPosition === 'initial' || !modalPosition) ? 'box-none' : 'auto';
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: overlay.value,
-  }));
+  const panGesture = Gesture.Pan()
+    .enabled(panGestureEnabled)
+    .shouldCancelWhenOutside(false)
+    .onUpdate(handleGestureUpdate)
+    .onEnd(handleGestureEnd);
 
-  const handleOverlay = ({ nativeEvent }: TapGestureHandlerStateChangeEvent): void => {
-    if (nativeEvent.oldState === State.ACTIVE && !willCloseModalize.current) {
+  const handleTapPress = () => {
+    if (!willCloseModalize.current) {
       onOverlayPress?.();
       handleClose(!!alwaysOpen ? 'alwaysOpen' : 'default');
     }
   };
+
+  const tapGesture = Gesture.Tap()
+    .enabled(closeOnOverlayTap !== undefined ? closeOnOverlayTap : panGestureEnabled)
+    .onStart(() => {
+      runOnJS(handleTapPress)();
+    });
+
+  const gestures = Gesture.Race(panGesture, tapGesture);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: overlay.value,
+  }));
 
   if (!withOverlay) {
     return null;
   }
 
   return (
-    <PanGestureHandler
-      enabled={panGestureEnabled}
-      simultaneousHandlers={tapGestureOverlayRef}
-      shouldCancelWhenOutside={false}
-      onGestureEvent={onGestureEvent}
-      onHandlerStateChange={onHandlerStateChange}
-    >
+    <GestureDetector gesture={gestures}>
       <Animated.View style={s.overlay} pointerEvents={pointerEvents}>
         {showContent && (
-          <TapGestureHandler
-            ref={ref}
-            enabled={closeOnOverlayTap !== undefined ? closeOnOverlayTap : panGestureEnabled}
-            onHandlerStateChange={handleOverlay}
-          >
-            <Animated.View
-              style={[s.overlay__background, overlayStyle, animatedStyle]}
-              pointerEvents={pointerEvents}
-            />
-          </TapGestureHandler>
+          <Animated.View
+            style={[s.overlay__background, overlayStyle, animatedStyle]}
+            pointerEvents={pointerEvents}
+          />
         )}
       </Animated.View>
-    </PanGestureHandler>
+    </GestureDetector>
   );
 };
 

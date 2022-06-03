@@ -48,7 +48,7 @@ export default () => {
       <AppleMusicPlayer ref={el => (modals[6].current = el)} />
       <FacebookWebView ref={el => (modals[7].current = el)} />
       <SlackTabView ref={el => (modals[8].current = el)} />
-      <AlwaysOpen />
+      {/* <AlwaysOpen /> */}
     </Layout>
   );
 };

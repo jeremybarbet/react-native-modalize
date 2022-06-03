@@ -1,11 +1,8 @@
-import React, { ReactNode, RefObject } from 'react';
+import React, { ReactNode, RefObject, useRef } from 'react';
 import { LayoutChangeEvent, StyleSheet } from 'react-native';
 import {
-  GestureEvent,
   NativeViewGestureHandler,
   PanGestureHandler,
-  PanGestureHandlerEventPayload,
-  PanGestureHandlerStateChangeEvent,
   TapGestureHandler,
 } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
@@ -13,61 +10,45 @@ import Animated from 'react-native-reanimated';
 import { useInternalLogic } from '../contexts/InternalLogicProvider';
 import { useInternalProps } from '../contexts/InternalPropsProvider';
 import { constants } from '../utils/constants';
-import { isRNGH2 } from '../utils/libraries';
 import { isWeb } from '../utils/platform';
 
-import { Content } from './Content';
+import { Renderer } from './Renderer';
 
 interface ChildProps {
   children: ReactNode;
-  nativeViewChildrenRef: RefObject<NativeViewGestureHandler>;
-  tapGestureModalizeRef: RefObject<TapGestureHandler>;
-  panGestureChildrenRef: RefObject<PanGestureHandler>;
+  tapGestureRef: RefObject<TapGestureHandler>;
   onLayout({ nativeEvent }: LayoutChangeEvent): void;
-  onGestureEvent(event: GestureEvent<PanGestureHandlerEventPayload>): void;
-  onHandlerStateChange(event: PanGestureHandlerStateChangeEvent): void;
 }
 
-export const Child = ({
-  children,
-  nativeViewChildrenRef,
-  tapGestureModalizeRef,
-  panGestureChildrenRef,
-  onLayout,
-  onGestureEvent,
-  onHandlerStateChange,
-}: ChildProps) => {
+export const Child = ({ children, tapGestureRef, onLayout }: ChildProps) => {
   const { panGestureEnabled, adjustToContentHeight, childrenStyle } = useInternalProps();
-  const { enableBounces, keyboardToggle, disableScroll } = useInternalLogic();
+  const {
+    // TODO
+    deprecated__handleChildren,
+    // TODO
+    deprecated__handleGestureEvent,
+  } = useInternalLogic();
+  const childRef = useRef<PanGestureHandler | null>(null);
+  const rendererRef = useRef<NativeViewGestureHandler | null>(null);
   const style = adjustToContentHeight ? s.child__adjustHeight : s.child__container;
-  const minDist = isRNGH2() ? undefined : constants.activated;
 
   return (
     <PanGestureHandler
-      ref={panGestureChildrenRef}
+      ref={childRef}
       enabled={panGestureEnabled}
-      simultaneousHandlers={[nativeViewChildrenRef, tapGestureModalizeRef]}
-      shouldCancelWhenOutside={false}
-      onGestureEvent={onGestureEvent}
-      minDist={minDist}
       activeOffsetY={constants.activated}
-      activeOffsetX={constants.activated}
-      onHandlerStateChange={onHandlerStateChange}
+      simultaneousHandlers={[rendererRef, tapGestureRef]}
+      shouldCancelWhenOutside={false}
+      onGestureEvent={deprecated__handleGestureEvent}
+      onHandlerStateChange={deprecated__handleChildren}
     >
       <Animated.View style={[style, childrenStyle]}>
         <NativeViewGestureHandler
-          ref={nativeViewChildrenRef}
-          waitFor={tapGestureModalizeRef}
-          simultaneousHandlers={panGestureChildrenRef}
+          ref={rendererRef}
+          waitFor={tapGestureRef}
+          simultaneousHandlers={childRef}
         >
-          <Content
-            enableBounces={enableBounces}
-            keyboardToggle={keyboardToggle}
-            disableScroll={disableScroll}
-            onLayout={onLayout}
-          >
-            {children}
-          </Content>
+          <Renderer onLayout={onLayout}>{children}</Renderer>
         </NativeViewGestureHandler>
       </Animated.View>
     </PanGestureHandler>

@@ -10,13 +10,9 @@ import { Modalize } from 'react-native-modalize';
 export const App = () => {
   const modalizeRef = useRef<Modalize | null>(null);
 
-  const onOpen = () => {
-    modalizeRef.current?.open();
-  };
-
   return (
     <>
-      <TouchableOpacity onPress={onOpen}>
+      <TouchableOpacity onPress={modalizeRef.current?.open()}>
         <Text>Open the modal</Text>
       </TouchableOpacity>
 

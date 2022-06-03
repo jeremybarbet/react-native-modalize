@@ -329,13 +329,13 @@ Define if `snapPoint` props should close straight when swiping down or come back
 
 ## Animations
 
-### `panGestureAnimatedValue`
+### `panGestureSharedValue`
 
-Animated.Value of the modal opening position between 0 and 1.
+Reanimated Value of the modal opening position between 0 and 1.
 
-| Type           | Required |
-| -------------- | -------- |
-| Animated.Value | No       |
+| Type        | Required |
+| ----------- | -------- |
+| SharedValue | No       |
 
 ## Elements visibilities
 
@@ -385,25 +385,9 @@ A floating component inside the modal wrapper that will be independent of scroll
 
 Pass any callbacks to them and you will be able to get changes they are taking care of.
 
-### `onOpen`
-
-Callback function when the `open` method is triggered.
-
-| Type     | Required |
-| -------- | -------- |
-| function | No       |
-
 ### `onOpened`
 
 Callback function when the modal is opened.
-
-| Type     | Required |
-| -------- | -------- |
-| function | No       |
-
-### `onClose`
-
-Callback function when the `close` method is triggered.
 
 | Type     | Required |
 | -------- | -------- |
@@ -428,8 +412,6 @@ onBackButtonPress is called when the user taps the hardware back button on Andro
 ### `onPositionChange`
 
 Callback function when the modal reaches the `top` (modal/screen height) or `initial` point (snapPoint or alwaysOpen height).
-
-?> Not to be confused with `onOpened` which is triggered when the modal opens for the first time.
 
 | Type                                     | Required |
 | ---------------------------------------- | -------- |

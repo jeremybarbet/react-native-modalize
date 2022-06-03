@@ -1,13 +1,9 @@
 import React, { ReactNode } from 'react';
 import { LayoutChangeEvent, StyleSheet, ViewStyle } from 'react-native';
-import {
-  GestureEvent,
-  PanGestureHandler,
-  PanGestureHandlerEventPayload,
-  PanGestureHandlerStateChangeEvent,
-} from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 
+import { useInternalLogic } from '../contexts/InternalLogicProvider';
 import { useInternalProps } from '../contexts/InternalPropsProvider';
 import { renderElement } from '../utils/render-element';
 
@@ -20,19 +16,13 @@ export enum ElementType {
 interface ElementProps {
   id: ElementType;
   component: ReactNode;
-  onGestureEvent(event: GestureEvent<PanGestureHandlerEventPayload>): void;
-  onHandlerStateChange(event: PanGestureHandlerStateChangeEvent): void;
-  onComponentLayout({ nativeEvent }: LayoutChangeEvent, name: ElementType, absolute: boolean): void;
+  onComponentLayout(event: LayoutChangeEvent, name: ElementType, absolute: boolean): void;
 }
 
-export const Element = ({
-  id,
-  component,
-  onGestureEvent,
-  onHandlerStateChange,
-  onComponentLayout,
-}: ElementProps) => {
+export const Element = ({ id, component, onComponentLayout }: ElementProps) => {
   const { panGestureEnabled } = useInternalProps();
+  const { componentTranslateY, beginDragY, handleGestureUpdate, handleGestureEnd } =
+    useInternalLogic();
 
   if (!component) {
     return null;
@@ -43,19 +33,23 @@ export const Element = ({
   const absolute: boolean = obj?.position === 'absolute';
   const zIndex: number | undefined = obj?.zIndex;
 
+  const panGesture = Gesture.Pan()
+    .enabled(panGestureEnabled)
+    .shouldCancelWhenOutside(false)
+    .onBegin(() => {
+      'worklet';
+
+      componentTranslateY.value = 1;
+      beginDragY.value = 0;
+    })
+    .onUpdate(handleGestureUpdate)
+    .onEnd(handleGestureEnd);
+
   return (
-    <PanGestureHandler
-      enabled={panGestureEnabled}
-      shouldCancelWhenOutside={false}
-      onGestureEvent={onGestureEvent}
-      onHandlerStateChange={onHandlerStateChange}
-    >
-      <Animated.View
-        style={{ zIndex }}
-        onLayout={(e: LayoutChangeEvent): void => onComponentLayout(e, id, absolute)}
-      >
+    <GestureDetector gesture={panGesture}>
+      <Animated.View style={{ zIndex }} onLayout={event => onComponentLayout(event, id, absolute)}>
         {tag}
       </Animated.View>
-    </PanGestureHandler>
+    </GestureDetector>
   );
 };

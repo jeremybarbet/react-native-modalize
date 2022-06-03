@@ -1,31 +1,32 @@
-import React, { RefObject } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import {
-  GestureEvent,
-  PanGestureHandler,
-  PanGestureHandlerEventPayload,
-  PanGestureHandlerStateChangeEvent,
-  TapGestureHandler,
-} from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 
+import { useInternalLogic } from '../contexts/InternalLogicProvider';
 import { useInternalProps } from '../contexts/InternalPropsProvider';
 import { Style } from '../options';
 
-interface HandleProps {
-  tapGestureModalizeRef: RefObject<TapGestureHandler>;
-  isHandleOutside: boolean;
-  onGestureEvent(event: GestureEvent<PanGestureHandlerEventPayload>): void;
-  onHandlerStateChange(event: PanGestureHandlerStateChangeEvent): void;
-}
-
-export const Handle = ({
-  tapGestureModalizeRef,
-  isHandleOutside,
-  onGestureEvent,
-  onHandlerStateChange,
-}: HandleProps) => {
+export const Handle = () => {
   const { panGestureEnabled, withHandle, handleStyle } = useInternalProps();
+  const {
+    componentTranslateY,
+    beginDragY,
+    isHandleOutside,
+    handleGestureUpdate,
+    handleGestureEnd,
+  } = useInternalLogic();
+  const panGesture = Gesture.Pan()
+    .enabled(panGestureEnabled)
+    .shouldCancelWhenOutside(false)
+    .onBegin(() => {
+      'worklet';
+
+      componentTranslateY.value = 1;
+      beginDragY.value = 0;
+    })
+    .onUpdate(handleGestureUpdate)
+    .onEnd(handleGestureEnd);
 
   const handleStyles: (Style | undefined)[] = [
     s.handle,
@@ -43,17 +44,11 @@ export const Handle = ({
   }
 
   return (
-    <PanGestureHandler
-      enabled={panGestureEnabled}
-      simultaneousHandlers={tapGestureModalizeRef}
-      shouldCancelWhenOutside={false}
-      onGestureEvent={onGestureEvent}
-      onHandlerStateChange={onHandlerStateChange}
-    >
+    <GestureDetector gesture={panGesture}>
       <Animated.View style={handleStyles}>
         <View style={shapeStyles} />
       </Animated.View>
-    </PanGestureHandler>
+    </GestureDetector>
   );
 };
 

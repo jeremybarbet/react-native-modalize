@@ -11,32 +11,41 @@ import React, {
 } from 'react';
 import { BackHandler, NativeEventSubscription, useWindowDimensions } from 'react-native';
 import {
+  GestureStateChangeEvent,
+  GestureUpdateEvent,
+  PanGestureHandlerEventPayload,
+  PanGestureHandlerStateChangeEvent,
+  State,
+} from 'react-native-gesture-handler';
+import {
+  Easing,
   runOnJS,
   SharedValue,
+  useAnimatedGestureHandler,
   useDerivedValue,
   useSharedValue,
   withSpring,
+  withTiming,
 } from 'react-native-reanimated';
 
 import { useInternalProps } from '../contexts/InternalPropsProvider';
-import { Close, Open, Position } from '../options';
+import { Callback, Close, Open, Position } from '../options';
 import { constants } from '../utils/constants';
-import { isIphoneX } from '../utils/platform';
+import { isAndroid, isIphoneX } from '../utils/platform';
 import { clamp } from '../worklets/clamp';
 
 interface InternalLogicContextProps {
   // Animations
+  translateY: SharedValue<number>;
   cancelTranslateY: SharedValue<number>;
   componentTranslateY: SharedValue<number>;
-  overlay: SharedValue<number>;
-  beginScrollY: SharedValue<number>;
   dragY: SharedValue<number>;
-  translateY: SharedValue<number>;
-  reverseBeginScrollY: SharedValue<number>;
-  diffClamp: Readonly<SharedValue<number>>;
-  componentDragEnabled: boolean;
-  dragValue: Readonly<SharedValue<number>>;
-  computedTranslateY: Readonly<SharedValue<number>>;
+  beginDragY: SharedValue<number>;
+  reverseDragY: SharedValue<number>;
+  overlay: SharedValue<number>;
+
+  // Derived
+  derivedTranslateY: Readonly<SharedValue<number>>;
 
   // Variables
   isHandleOutside: boolean;
@@ -73,9 +82,14 @@ interface InternalLogicContextProps {
   willCloseModalize: MutableRefObject<boolean>;
 
   // Methods
-  handleAnimateOpen(alwaysOpenValue: number | undefined, dest?: Open): void;
-  handleAnimateClose(dest: Close, callback?: () => void): void;
-  handleClose(dest?: Close, callback?: () => void): void;
+  handleGestureUpdate(event: GestureUpdateEvent<PanGestureHandlerEventPayload>): void;
+  handleGestureEnd(event: GestureStateChangeEvent<PanGestureHandlerEventPayload>): void;
+  handleOpen(alwaysOpenValue: number | undefined, dest?: Open): void;
+  handleClose(dest: Close, callback?: Callback): void;
+
+  // deprecated
+  deprecated__handleChildren: any;
+  deprecated__handleGestureEvent: any;
 }
 
 const InternalLogicContext = createContext<InternalLogicContextProps>(
@@ -93,28 +107,26 @@ export const InternalLogicProvider: FC = ({ children }) => {
     adjustToContentHeight,
     handlePosition,
     withHandle,
-    panGestureAnimatedValue,
+    panGestureSharedValue,
+    closeSnapPointStraightEnabled,
+    tapGestureEnabled,
     onOpened,
-    onClose,
     onClosed,
     onPositionChange,
     onBackButtonPress,
   } = useInternalProps();
 
-  /**
-   * 1 by default to have the translateY animation running
-   */
-  const cancelTranslateY = useSharedValue(1);
-  const componentTranslateY = useSharedValue(0);
-  const overlay = useSharedValue(0);
-  const beginScrollY = useSharedValue(0);
-  const dragY = useSharedValue(0);
   const translateY = useSharedValue(screenHeight);
-  const reverseBeginScrollY = useSharedValue(-1 * beginScrollY.value);
+  const cancelTranslateY = useSharedValue(1); // 1 by default to have the translateY animation running
+  const componentTranslateY = useSharedValue(0);
+  const dragY = useSharedValue(0);
+  const beginDragY = useSharedValue(0);
+  const reverseDragY = useSharedValue(-1 * beginDragY.value);
+  const overlay = useSharedValue(0);
 
   const isHandleOutside = handlePosition === 'outside';
   const handleHeight = withHandle ? 20 : isHandleOutside ? 35 : 20;
-  const fullHeight = screenHeight - (modalTopOffset as number);
+  const fullHeight = screenHeight - modalTopOffset;
   const computedHeight = fullHeight - handleHeight - (isIphoneX ? 34 : 0);
   const endHeight = Math.max(0, modalHeight || computedHeight);
   const adjustValue = adjustToContentHeight ? undefined : endHeight;
@@ -140,8 +152,8 @@ export const InternalLogicProvider: FC = ({ children }) => {
    * (e.g. 1.5) and creates the flickering on Modalize for a ms
    */
   const diffClamp = useDerivedValue(
-    () => clamp(reverseBeginScrollY.value, -screenHeight, 0),
-    [reverseBeginScrollY, screenHeight],
+    () => clamp(reverseDragY.value, -screenHeight, 0),
+    [reverseDragY, screenHeight],
   );
 
   const componentDragEnabled = componentTranslateY.value === 1;
@@ -150,143 +162,530 @@ export const InternalLogicProvider: FC = ({ children }) => {
    * When we have a scrolling happening in the ScrollView, we don't want to translate
    * the modal down. We either multiply by 0 to cancel the animation, or 1 to proceed.
    */
-  const dragValue = useDerivedValue(
+  const derivedDragY = useDerivedValue(
     () => dragY.value * (componentDragEnabled ? 1 : cancelTranslateY.value) + diffClamp.value,
-    [dragY, componentDragEnabled, cancelTranslateY, diffClamp],
+    [componentDragEnabled, cancelTranslateY, diffClamp],
   );
 
-  const computedTranslateY = useDerivedValue(
-    () => translateY.value * (componentDragEnabled ? 1 : cancelTranslateY.value) + dragValue.value,
-    [translateY, componentDragEnabled, cancelTranslateY, dragValue],
+  const derivedTranslateY = useDerivedValue(
+    () =>
+      translateY.value * (componentDragEnabled ? 1 : cancelTranslateY.value) + derivedDragY.value,
+    [translateY, componentDragEnabled, cancelTranslateY, derivedDragY],
   );
+
+  const handleClearBackButtonListener = () => {
+    if (isAndroid) {
+      backButtonListenerRef.current?.remove();
+    }
+  };
 
   const handleBackPress = () => {
     if (alwaysOpen) {
-      backButtonListenerRef.current?.remove();
+      handleClearBackButtonListener();
       return false;
     }
 
     if (onBackButtonPress) {
-      backButtonListenerRef.current?.remove();
+      handleClearBackButtonListener();
       return onBackButtonPress();
     } else {
       handleClose();
-      backButtonListenerRef.current?.remove();
+      handleClearBackButtonListener();
     }
 
     return true;
   };
 
-  const handleAnimateOpen = (alwaysOpenValue: number | undefined, dest: Open = 'default') => {
-    let toValue = 0;
-    let toPanValue = 0;
-    let newPosition: Position;
+  const handleOpenFinished = (alwaysOpenValue: number | undefined, dest: Open = 'default') => {
+    const newPosition =
+      (alwaysOpenValue && dest !== 'top') || (snapPoint && dest === 'default') ? 'initial' : 'top';
 
-    backButtonListenerRef.current = BackHandler.addEventListener(
-      'hardwareBackPress',
-      handleBackPress,
-    );
+    setModalPosition(newPosition);
+    onPositionChange?.(newPosition);
+    onOpened?.();
+  };
 
-    if (dest === 'top') {
-      toValue = 0;
-    } else if (alwaysOpenValue) {
-      toValue = (modalHeightValue || 0) - alwaysOpenValue;
-    } else if (snapPoint) {
-      toValue = (modalHeightValue || 0) - snapPoint;
+  const handleOpen = (alwaysOpenValue: number | undefined, dest: Open = 'default') => {
+    /**
+     * We register a listener for the hardware back button on Android
+     */
+    if (isAndroid) {
+      backButtonListenerRef.current = BackHandler.addEventListener(
+        'hardwareBackPress',
+        handleBackPress,
+      );
     }
 
-    if (panGestureAnimatedValue && (alwaysOpenValue || snapPoint)) {
-      toPanValue = 0;
-    } else if (
-      panGestureAnimatedValue &&
-      !alwaysOpenValue &&
-      (dest === 'top' || dest === 'default')
-    ) {
-      toPanValue = 1;
-    }
-
+    /**
+     * Before starting animating, we show the component
+     */
     setIsVisible(true);
     setShowContent(true);
 
-    if ((alwaysOpenValue && dest !== 'top') || (snapPoint && dest === 'default')) {
-      newPosition = 'initial';
-    } else {
-      newPosition = 'top';
-    }
-
+    /**
+     * Start animating the overlay component, individually from the sheet
+     */
     overlay.value = withSpring(
       alwaysOpenValue && dest === 'default' ? 0 : 1,
       constants.springConfig,
     );
 
-    if (panGestureAnimatedValue) {
-      panGestureAnimatedValue.value = toPanValue;
-    }
-
-    const handleFinish = () => {
-      onOpened?.();
-      setModalPosition(newPosition);
-      onPositionChange?.(newPosition);
-    };
+    /**
+     * We check in which state the sheet is and animate to the correct position
+     */
+    const toValue = alwaysOpenValue
+      ? (modalHeightValue || 0) - alwaysOpenValue
+      : snapPoint
+      ? (modalHeightValue || 0) - snapPoint
+      : 0;
 
     translateY.value = withSpring(toValue, constants.springConfig, isFinished => {
       if (isFinished) {
-        runOnJS(handleFinish)();
+        runOnJS(handleOpenFinished)(alwaysOpenValue, dest);
       }
     });
+
+    /**
+     * If user registered a panGestureSharedValue props, we set the value while the sheet is opening
+     */
+    if (panGestureSharedValue) {
+      const toValue = !alwaysOpenValue && (dest === 'top' || dest === 'default') ? 1 : 0;
+
+      panGestureSharedValue.value = withTiming(toValue, { easing: Easing.linear });
+    }
   };
 
-  const handleAnimateClose = (dest: Close = 'default', callback?: () => void) => {
+  const handleCloseFinished = (toInitialAlwaysOpen: boolean, dest: Close, callback?: Callback) => {
     const lastSnapValue = snapPoint ? snaps[1] : 80;
+
+    setShowContent(toInitialAlwaysOpen);
+    setLastSnap(lastSnapValue);
+    setIsVisible(toInitialAlwaysOpen);
+    handleClearBackButtonListener();
+
+    dragY.value = 0;
+    willCloseModalize.current = false;
+
+    if (alwaysOpen && dest === 'alwaysOpen' && onPositionChange) {
+      onPositionChange('initial');
+    }
+
+    if (alwaysOpen && dest === 'alwaysOpen') {
+      setModalPosition('initial');
+    }
+
+    onClosed?.();
+    callback?.();
+  };
+
+  const handleClose = (dest: Close = 'default', callback?: Callback) => {
     const toInitialAlwaysOpen = dest === 'alwaysOpen' && Boolean(alwaysOpen);
+
+    /**
+     * We reset a few value to their initial state
+     */
+    cancelTranslateY.value = 1;
+    beginDragY.value = 0;
+
+    /**
+     * We animate the overlay individually from the sheet
+     */
+    overlay.value = withSpring(0, constants.springConfig);
+
+    /**
+     * We check in which state the sheet is and animate to the correct position
+     */
     const toValue =
       toInitialAlwaysOpen && alwaysOpen ? (modalHeightValue || 0) - alwaysOpen : screenHeight;
 
-    backButtonListenerRef.current?.remove();
-    cancelTranslateY.value = 1;
-    beginScrollY.value = 0;
-
-    overlay.value = withSpring(0, constants.springConfig);
-
-    if (panGestureAnimatedValue) {
-      panGestureAnimatedValue.value = 0;
-    }
-
-    const handleFinish = () => {
-      onClosed?.();
-      callback?.();
-
-      if (alwaysOpen && dest === 'alwaysOpen' && onPositionChange) {
-        onPositionChange('initial');
-      }
-
-      if (alwaysOpen && dest === 'alwaysOpen') {
-        setModalPosition('initial');
-      }
-
-      setShowContent(toInitialAlwaysOpen);
-      translateY.value = toValue;
-      dragY.value = 0;
-      willCloseModalize.current = false;
-      setLastSnap(lastSnapValue);
-      setIsVisible(toInitialAlwaysOpen);
-    };
-
     translateY.value = withSpring(toValue, constants.springConfig, isFinished => {
       if (isFinished) {
-        runOnJS(handleFinish)();
+        runOnJS(handleCloseFinished)(toInitialAlwaysOpen, dest, callback);
       }
     });
+
+    /**
+     * If user registered a panGestureSharedValue props, we set the value while the sheet is opening
+     */
+    if (panGestureSharedValue) {
+      panGestureSharedValue.value = withTiming(0, { easing: Easing.linear });
+    }
   };
 
-  const handleClose = (dest?: Close, callback?: () => void) => {
-    onClose?.();
-    handleAnimateClose(dest, callback);
+  const handleGestureUpdate = ({
+    velocityY,
+    translationY,
+  }: GestureUpdateEvent<PanGestureHandlerEventPayload>) => {
+    'worklet';
+
+    console.log('---------> handleGestureUpdate');
+
+    translateY.value = translationY;
+  };
+
+  // const handleGestureUpdate = ({
+  //   velocityY,
+  //   translationY,
+  // }: GestureUpdateEvent<PanGestureHandlerEventPayload>) => {
+  //   console.log('---------> handleGestureUpdate');
+
+  //   // should be shared
+  //   const negativeReverseScroll =
+  //     modalPosition === 'top' &&
+  //     dragY.value >= (snapPoint ? 0 : constants.scrollThreshold) &&
+  //     translationY < 0;
+
+  //   // should be shared
+  //   const thresholdProps =
+  //     translationY > constants.animations.threshold && dragY.value === 0;
+
+  //   // should be shared
+  //   const closeThreshold = constants.animations.velocity
+  //     ? (dragY.value <= 20 && velocityY >= constants.animations.velocity) || thresholdProps
+  //     : thresholdProps;
+
+  //   const toValue = translationY - dragY.value;
+  //   let destSnapPoint = 0;
+
+  //   // translateY.value = translationY;
+
+  //   if (panGestureSharedValue) {
+  //     const offset = alwaysOpen ?? snapPoint ?? 0;
+  //     const diff = Math.abs(translationY / (endHeight - offset));
+  //     const y = translationY <= 0 ? diff : 1 - diff;
+  //     let value: number;
+
+  //     if (modalPosition === 'initial' && translationY > 0) {
+  //       value = 0;
+  //     } else if (modalPosition === 'top' && translationY <= 0) {
+  //       value = 1;
+  //     } else {
+  //       value = y;
+  //     }
+
+  //     panGestureSharedValue.value = value;
+  //   }
+
+  //   if (snapPoint || alwaysOpen) {
+  //     const endOffsetY = lastSnap + toValue + constants.animations.dragToss * velocityY;
+
+  //     /**
+  //      * snapPoint and alwaysOpen use both an array of points to define the first open state and the final state.
+  //      */
+  //     snaps.forEach((snap: number) => {
+  //       const distFromSnap = Math.abs(snap - endOffsetY);
+  //       const diffPoint = Math.abs(destSnapPoint - endOffsetY);
+
+  //       // For snapPoint
+  //       if (distFromSnap < diffPoint && !alwaysOpen) {
+  //         if (closeSnapPointStraightEnabled) {
+  //           if (modalPosition === 'initial' && negativeReverseScroll) {
+  //             destSnapPoint = snap;
+  //             willCloseModalize.current = false;
+  //           }
+
+  //           if (snap === endHeight) {
+  //             destSnapPoint = snap;
+  //             willCloseModalize.current = true;
+  //             handleClose();
+  //           }
+  //         } else {
+  //           destSnapPoint = snap;
+  //           willCloseModalize.current = false;
+
+  //           if (snap === endHeight) {
+  //             willCloseModalize.current = true;
+  //             handleClose();
+  //           }
+  //         }
+  //       }
+
+  //       // For alwaysOpen props
+  //       if (distFromSnap < diffPoint && alwaysOpen && dragY.value <= 0) {
+  //         destSnapPoint = (modalHeightValue || 0) - alwaysOpen;
+  //         willCloseModalize.current = false;
+  //       }
+  //     });
+  //   } else if (closeThreshold && !alwaysOpen && !cancelClose) {
+  //     willCloseModalize.current = true;
+  //     handleClose();
+  //   }
+
+  //   if (willCloseModalize.current) {
+  //     return;
+  //   }
+
+  //   setLastSnap(destSnapPoint);
+  //   // translateY.value = toValue;
+
+  //   if (alwaysOpen) {
+  //     overlay.value = withSpring(Number(destSnapPoint <= 0), constants.springConfig);
+  //   }
+
+  //   if (dragY.value <= 0) {
+  //     const modalPositionValue = destSnapPoint <= 0 ? 'top' : 'initial';
+
+  //     if (panGestureSharedValue) {
+  //       panGestureSharedValue.value = Number(modalPositionValue === 'top');
+  //     }
+
+  //     if (!adjustToContentHeight && modalPositionValue === 'top') {
+  //       setDisableScroll(false);
+  //     }
+
+  //     if (onPositionChange && modalPosition !== modalPositionValue) {
+  //       onPositionChange(modalPositionValue);
+  //     }
+
+  //     if (modalPosition !== modalPositionValue) {
+  //       setModalPosition(modalPositionValue);
+  //     }
+  //   }
+
+  //   // translateY.value = withSpring(snapPoint ? destSnapPoint : toValue, constants.springConfig);
+  //   translateY.value = withSpring(translationY, constants.springConfig);
+  // };
+
+  // const handleGestureEnd = ({
+  //   state,
+  //   translationY,
+  // }: GestureStateChangeEvent<PanGestureHandlerEventPayload>) => {
+  //   console.log('---------> handleGestureEnd');
+  //   console.log('-state', state);
+
+  //   const negativeReverseScroll =
+  //     modalPosition === 'top' &&
+  //     dragY.value >= (snapPoint ? 0 : constants.scrollThreshold) &&
+  //     translationY < 0;
+  //   let enableBouncesValue = true;
+
+  //   // if (state === State.BEGAN) {
+  //   setCancelClose(false);
+
+  //   if (
+  //     !closeSnapPointStraightEnabled && snapPoint
+  //       ? dragY.value > 0
+  //       : dragY.value > 0 || negativeReverseScroll
+  //   ) {
+  //     setCancelClose(true);
+  //     translateY.value = withSpring(0, constants.springConfig);
+  //     cancelTranslateY.value = 0;
+  //     enableBouncesValue = true;
+  //   } else {
+  //     cancelTranslateY.value = 1;
+  //     enableBouncesValue = false;
+
+  //     if (!tapGestureEnabled) {
+  //       setDisableScroll(
+  //         (Boolean(snapPoint) || Boolean(alwaysOpen)) && modalPosition === 'initial',
+  //       );
+  //     }
+
+  //     setEnableBounces(
+  //       isAndroid
+  //         ? false
+  //         : alwaysOpen
+  //         ? dragY.value > 0 || translationY < 0
+  //         : enableBouncesValue,
+  //     );
+  //   }
+  //   // }
+  // };
+
+  const deprecated__handleChildren = (
+    { nativeEvent }: PanGestureHandlerStateChangeEvent,
+    type?: 'component' | 'children',
+  ) => {
+    const { velocityY, translationY } = nativeEvent;
+    const negativeReverseScroll =
+      modalPosition === 'top' &&
+      beginDragY.value >= (snapPoint ? 0 : constants.scrollThreshold) &&
+      translationY < 0;
+    const thresholdProps = translationY > constants.animations.threshold && beginDragY.value === 0;
+    const closeThreshold = constants.animations.velocity
+      ? (beginDragY.value <= 20 && velocityY >= constants.animations.velocity) || thresholdProps
+      : thresholdProps;
+    let enableBouncesValue = true;
+
+    // We make sure to reset the value if we are dragging from the children
+    if (type !== 'component' && cancelTranslateY.value === 0) {
+      componentTranslateY.value = 0;
+    }
+
+    /*
+     * When the pan gesture began we check the position of the ScrollView "cursor".
+     * We cancel the translation animation if the ScrollView is not scrolled to the top
+     */
+    if (nativeEvent.oldState === State.BEGAN) {
+      setCancelClose(false);
+
+      if (
+        !closeSnapPointStraightEnabled && snapPoint
+          ? beginDragY.value > 0
+          : beginDragY.value > 0 || negativeReverseScroll
+      ) {
+        setCancelClose(true);
+        translateY.value = 0;
+        dragY.value = 0;
+        cancelTranslateY.value = 0;
+        enableBouncesValue = true;
+      } else {
+        cancelTranslateY.value = 1;
+        enableBouncesValue = false;
+
+        if (!tapGestureEnabled) {
+          setDisableScroll(
+            (Boolean(snapPoint) || Boolean(alwaysOpen)) && modalPosition === 'initial',
+          );
+        }
+      }
+    }
+
+    setEnableBounces(
+      isAndroid
+        ? false
+        : alwaysOpen
+        ? beginDragY.value > 0 || translationY < 0
+        : enableBouncesValue,
+    );
+
+    if (nativeEvent.oldState === State.ACTIVE) {
+      const toValue = translationY - beginDragY.value;
+      let destSnapPoint = 0;
+
+      if (snapPoint || alwaysOpen) {
+        const endOffsetY = lastSnap + toValue + constants.animations.dragToss * velocityY;
+
+        /**
+         * snapPoint and alwaysOpen use both an array of points to define the first open state and the final state.
+         */
+        snaps.forEach((snap: number) => {
+          const distFromSnap = Math.abs(snap - endOffsetY);
+          const diffPoint = Math.abs(destSnapPoint - endOffsetY);
+
+          // For snapPoint
+          if (distFromSnap < diffPoint && !alwaysOpen) {
+            if (closeSnapPointStraightEnabled) {
+              if (modalPosition === 'initial' && negativeReverseScroll) {
+                destSnapPoint = snap;
+                willCloseModalize.current = false;
+              }
+
+              if (snap === endHeight) {
+                destSnapPoint = snap;
+                willCloseModalize.current = true;
+                handleClose();
+              }
+            } else {
+              destSnapPoint = snap;
+              willCloseModalize.current = false;
+
+              if (snap === endHeight) {
+                willCloseModalize.current = true;
+                handleClose();
+              }
+            }
+          }
+
+          // For alwaysOpen props
+          if (distFromSnap < diffPoint && alwaysOpen && beginDragY.value <= 0) {
+            destSnapPoint = (modalHeightValue || 0) - alwaysOpen;
+            willCloseModalize.current = false;
+          }
+        });
+      } else if (closeThreshold && !alwaysOpen && !cancelClose) {
+        willCloseModalize.current = true;
+        handleClose();
+      }
+
+      if (willCloseModalize.current) {
+        return;
+      }
+
+      setLastSnap(destSnapPoint);
+      // translateY.value = toValue;
+      dragY.value = 0;
+
+      if (alwaysOpen) {
+        overlay.value = withSpring(Number(destSnapPoint <= 0), constants.springConfig);
+      }
+
+      translateY.value = withSpring(destSnapPoint, constants.springConfig);
+
+      if (beginDragY.value <= 0) {
+        const modalPositionValue = destSnapPoint <= 0 ? 'top' : 'initial';
+
+        if (panGestureSharedValue) {
+          panGestureSharedValue.value = Number(modalPositionValue === 'top');
+        }
+
+        if (!adjustToContentHeight && modalPositionValue === 'top') {
+          setDisableScroll(false);
+        }
+
+        if (onPositionChange && modalPosition !== modalPositionValue) {
+          onPositionChange(modalPositionValue);
+        }
+
+        if (modalPosition !== modalPositionValue) {
+          setModalPosition(modalPositionValue);
+        }
+      }
+    }
+  };
+
+  const deprecated__handleGestureEvent = useAnimatedGestureHandler({
+    onActive: ({ translationY }) => {
+      dragY.value = translationY;
+
+      if (panGestureSharedValue) {
+        const offset = alwaysOpen ?? snapPoint ?? 0;
+        const diff = Math.abs(translationY / (endHeight - offset));
+        const y = translationY <= 0 ? diff : 1 - diff;
+        let value: number;
+
+        if (modalPosition === 'initial' && translationY > 0) {
+          value = 0;
+        } else if (modalPosition === 'top' && translationY <= 0) {
+          value = 1;
+        } else {
+          value = y;
+        }
+
+        panGestureSharedValue.value = value;
+      }
+    },
+  });
+
+  const handleGestureEnd = ({
+    state,
+    translationY,
+    velocityY,
+  }: GestureStateChangeEvent<PanGestureHandlerEventPayload>) => {
+    'worklet';
+
+    console.log('---------> handleGestureEnd');
+    console.log('-state', state);
+
+    const thresholdProps = translationY > constants.animations.threshold && dragY.value === 0;
+
+    const closeThreshold = constants.animations.velocity
+      ? (dragY.value <= 20 && velocityY >= constants.animations.velocity) || thresholdProps
+      : thresholdProps;
+
+    runOnJS(setEnableBounces)(false);
+    runOnJS(setDisableScroll)(true);
+
+    if (closeThreshold) {
+      runOnJS(handleClose)();
+    } else {
+      translateY.value = withSpring(0, constants.springConfig);
+    }
   };
 
   useEffect(() => {
     return () => {
-      backButtonListenerRef.current?.remove();
+      handleClearBackButtonListener();
     };
   }, []);
 
@@ -294,17 +693,16 @@ export const InternalLogicProvider: FC = ({ children }) => {
     <InternalLogicContext.Provider
       value={{
         // Animations
+        translateY,
         cancelTranslateY,
         componentTranslateY,
-        overlay,
-        beginScrollY,
         dragY,
-        translateY,
-        reverseBeginScrollY,
-        diffClamp,
-        componentDragEnabled,
-        dragValue,
-        computedTranslateY,
+        beginDragY,
+        reverseDragY,
+        overlay,
+
+        // Derived
+        derivedTranslateY,
 
         // Variables
         isHandleOutside,
@@ -341,9 +739,14 @@ export const InternalLogicProvider: FC = ({ children }) => {
         willCloseModalize,
 
         // Methods
-        handleAnimateOpen,
-        handleAnimateClose,
+        handleGestureUpdate,
+        handleGestureEnd,
+        handleOpen,
         handleClose,
+
+        // deprecated
+        deprecated__handleChildren,
+        deprecated__handleGestureEvent,
       }}
     >
       {children}

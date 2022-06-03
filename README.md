@@ -6,11 +6,11 @@
 
 [![npm version](https://badge.fury.io/js/react-native-modalize.svg)](https://badge.fury.io/js/react-native-modalize)
 
-A highly customizable modal/bottom sheet that loves scrolling content.
+An opinionated yet customizable bottom sheet that loves scrolling content.
 
-This component has been built with `react-native-gesture-handler` to address the common issue of **scrolling**, **swiping** and handling the **keyboard** behaviors, you can face with react-native's modal.
+This component has been built to address the common issues of **scrolling**, **swiping** and handling the **keyboard** behaviors, when used at the same together.
 
-This component comes with a ScrollView, the default renderer, a FlatList or a SectionList. They are all three built-in and make your life easier, just pass your content and Modalize will handle the rest for you. You can also have the possibility to pass your own custom renderer.
+This component comes with a ScrollView, the default renderer, a FlatList or a SectionList. They are all three built-in to make your life easier, just pass your content and Modalize will handle the rest for you.
 
 <p align="left">
   <img src="https://user-images.githubusercontent.com/937328/80501705-458d2d80-895f-11ea-9667-d193c135cabf.gif" width="272" alt="Simple" />
@@ -27,34 +27,36 @@ This component comes with a ScrollView, the default renderer, a FlatList or a Se
 ## Installation
 
 ```bash
-yarn add react-native-modalize react-native-gesture-handler
+yarn add react-native-modalize
 ```
 
-<details>
-  <summary>iOS</summary>
+You will also need to install the following dependencies that are required by Modalize:
 
 ```bash
-npx pod-install ios
+yarn add react-native-gesture-handler react-native-reanimated
 ```
 
-</details>
-
 <details>
-  <summary>Android</summary>
+  <summary>Prerequisites</summary>
 
-#### React Native <= 0.59
+  <p>
+  Following are the minimum version supported:
+  </p>
 
-Follow [this guide](https://jeremybarbet.github.io/react-native-modalize/#/INSTALLATION) to complete the Android installation.
+  <ul>
+    <li>react-native >= 0.65</li>
+    <li>react-native-gesture-handler >= 2</li>
+    <li>react-native-reanimated >= 2</li>
+  </ul>
 
-#### React Native > 0.60
-
-You don't need to follow the guide mentioned above because autolinking from React already did the steps.
-
+  <p>
+  Make sure to check out <a href="https://docs.swmansion.com/react-native-gesture-handler/docs/installation">react-native-gesture-handler</a> and <a href="https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation/">react-native-reanimated</a> documentations to install the required dependencies.
+  </p>
 </details>
 
 ## Usage
 
-Here is a quick example, using the default ScrollView renderer.
+Here is a quick example, using the default ScrollView renderer. (See [the documentation](https://jeremybarbet.github.io/react-native-modalize) for more details)
 
 ```tsx
 import React, { useRef } from 'react';
@@ -64,13 +66,9 @@ import { Modalize } from 'react-native-modalize';
 export const App = () => {
   const modalizeRef = useRef<Modalize | null>(null);
 
-  const onOpen = () => {
-    modalizeRef.current?.open();
-  };
-
   return (
     <>
-      <TouchableOpacity onPress={onOpen}>
+      <TouchableOpacity onPress={modalizeRef.current?.open()}>
         <Text>Open the modal</Text>
       </TouchableOpacity>
 

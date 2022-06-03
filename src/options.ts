@@ -23,6 +23,7 @@ export type Open = 'default' | 'top';
 export type Close = 'default' | 'alwaysOpen';
 export type Position = 'initial' | 'top';
 export type Style = StyleProp<ViewStyle>;
+export type Callback = () => void;
 
 export type ScrollViewType = AnimateProps<OmittedProps<ScrollViewProps>>;
 export type FlatListType<T> = AnimateProps<OmittedProps<FlatListProps<T>>>;
@@ -163,7 +164,7 @@ export interface Props<T = ListItem, K = ListSection> {
   /**
    * Animated.Value of the modal position between 0 and 1.
    */
-  panGestureAnimatedValue?: SharedValue<number>;
+  panGestureSharedValue?: SharedValue<number>;
 
   /**
    * Define if the handle on top of the modal is display or not.
@@ -193,19 +194,9 @@ export interface Props<T = ListItem, K = ListSection> {
   FloatingComponent?: ReactNode;
 
   /**
-   * Callback function when the `open` method is triggered.
-   */
-  onOpen?(): void;
-
-  /**
    * Callback function when the modal is opened.
    */
   onOpened?(): void;
-
-  /**
-   * Callback function when the `close` method is triggered.
-   */
-  onClose?(): void;
 
   /**
    * Callback function when the modal is closed.
@@ -252,5 +243,5 @@ export interface Handles {
    * If you are using `alwaysOpen` prop, you can supply a `dest` argument to the `close` method to reset it
    * to the initial position `close('alwaysOpen')`, and avoiding to close it completely.
    */
-  close(dest?: Close, callback?: () => void): void;
+  close(dest?: Close, callback?: Callback): void;
 }

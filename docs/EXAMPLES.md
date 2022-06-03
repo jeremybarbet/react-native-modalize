@@ -16,10 +16,6 @@ import { Modalize } from 'react-native-modalize';
 export const App = () => {
   const modalizeRef = useRef<Modalize | null>(null);
 
-  const onOpen = () => {
-    modalizeRef.current?.open();
-  };
-
   const getData = () => ({ ... });
 
   const renderItem = (item) => (
@@ -30,7 +26,7 @@ export const App = () => {
 
   return (
     <>
-      <TouchableOpacity onPress={onOpen}>
+      <TouchableOpacity onPress={modalizeRef.current?.open()}>
         <Text>Open the modal</Text>
       </TouchableOpacity>
 
@@ -67,13 +63,9 @@ const Tab = createBottomTabNavigator();
 const ExamplesScreen = () => {
   const modalizeRef = useRef<Modalize | null>(null);
 
-  const onOpen = () => {
-    modalizeRef.current?.open();
-  };
-
   return (
     <>
-      <TouchableOpacity onPress={onOpen}>
+      <TouchableOpacity onPress={modalizeRef.current?.open()}>
         <Text>Open the modal</Text>
       </TouchableOpacity>
 
@@ -108,7 +100,7 @@ export const App = () => (
 
 It's possible to replicate the new modal presentation style now shipped by default with iOS for both Android and iOS.
 
-You will need for that to use the [`panGestureAnimatedValue`](/PROPS.md?id=panGestureAnimatedValue) and [`react-native-portalize`](https://github.com/jeremybarbet/react-native-portalize) and use the Animated API to animate your app wrapper. Here is a quick implementation example.
+You will need for that to use the [`panGestureSharedValue`](/PROPS.md?id=panGestureSharedValue) and [`react-native-portalize`](https://github.com/jeremybarbet/react-native-portalize) and use the Animated API to animate your app wrapper. Here is a quick implementation example.
 
 ?> If you want a more complete example, you can find [here](https://github.com/jeremybarbet/react-native-modalize/blob/master/example/src/components/modals/AnimatedValue.tsx) a reproduction of iOS 13 Modal Presentation Style.
 
@@ -130,19 +122,15 @@ const App = () => {
     opacity: interpolate(animated.value, [0, 1], [1, 0.75]),
   }));
 
-  const onOpen = () => {
-    modalizeRef.current?.open();
-  };
-
   return (
     <Host style={{ backgroundColor: '#000' }}>
       <Animated.View style={viewStyle}>
-        <TouchableOpacity onPress={onOpen}>
+        <TouchableOpacity onPress={modalizeRef.current?.open()}>
           <Text>Open the modal</Text>
         </TouchableOpacity>
 
         <Portal>
-          <Modalize ref={modalizeRef} panGestureAnimatedValue={animated}>
+          <Modalize ref={modalizeRef} panGestureSharedValue={animated}>
             ...your content
           </Modalize>
         </Portal>
