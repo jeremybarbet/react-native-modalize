@@ -87,6 +87,7 @@ const ModalizeBase = (
 
     // Options
     handlePosition = 'outside',
+    initialDest = 'default',
     disableScrollIfPossible = true,
     avoidKeyboardLikeIOS = Platform.select({
       ios: true,
@@ -858,7 +859,7 @@ const ModalizeBase = (
 
   React.useEffect(() => {
     if (alwaysOpen && (modalHeightValue || adjustToContentHeight)) {
-      handleAnimateOpen(alwaysOpen);
+      handleAnimateOpen(alwaysOpen, initialDest);
     }
   }, [alwaysOpen, modalHeightValue]);
 
