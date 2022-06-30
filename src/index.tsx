@@ -25,7 +25,6 @@ import {
   ViewStyle,
   NativeEventSubscription,
   EmitterSubscription,
-  TouchableOpacity,
 } from 'react-native';
 import {
   PanGestureHandler,
@@ -33,6 +32,7 @@ import {
   State,
   TapGestureHandler,
   PanGestureHandlerStateChangeEvent,
+  TapGestureHandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
 
 import { IProps, TOpen, TClose, TStyle, IHandles, TPosition } from './options';
@@ -175,6 +175,7 @@ const ModalizeBase = (
   const panGestureChildrenRef = React.useRef<PanGestureHandler>(null);
   const nativeViewChildrenRef = React.useRef<NativeViewGestureHandler>(null);
   const contentViewRef = React.useRef<ScrollView | FlatList<any> | SectionList<any>>(null);
+  const tapGestureOverlayRef = React.useRef<TapGestureHandler>(null);
   const backButtonListenerRef = React.useRef<NativeEventSubscription>(null);
 
   // We diff and get the negative value only. It sometimes go above 0
@@ -614,11 +615,12 @@ const ModalizeBase = (
     handleChildren({ nativeEvent }, 'component');
   };
 
-  const handleOverlay = (): void => {
-    if (!willCloseModalize) {
+  const handleOverlay = ({ nativeEvent }: TapGestureHandlerStateChangeEvent): void => {
+    if (nativeEvent.oldState === State.ACTIVE && !willCloseModalize) {
       if (onOverlayPress) {
         onOverlayPress();
       }
+
       const dest = !!alwaysOpen ? 'alwaysOpen' : 'default';
 
       handleClose(dest);
@@ -802,7 +804,8 @@ const ModalizeBase = (
   };
 
   const renderOverlay = (): JSX.Element => {
-    const pointerEvents = 'auto';
+    const pointerEvents =
+      alwaysOpen && (modalPosition === 'initial' || !modalPosition) ? 'box-none' : 'auto';
 
     return (
       <PanGestureHandler
@@ -814,11 +817,10 @@ const ModalizeBase = (
       >
         <Animated.View style={s.overlay} pointerEvents={pointerEvents}>
           {showContent && (
-            <TouchableOpacity
-              style={{ flex: 1 }}
-              activeOpacity={1}
-              disabled={!(closeOnOverlayTap !== undefined ? closeOnOverlayTap : panGestureEnabled)}
-              onPress={handleOverlay}
+            <TapGestureHandler
+              ref={tapGestureOverlayRef}
+              enabled={closeOnOverlayTap !== undefined ? closeOnOverlayTap : panGestureEnabled}
+              onHandlerStateChange={handleOverlay}
             >
               <Animated.View
                 style={[
@@ -833,7 +835,7 @@ const ModalizeBase = (
                 ]}
                 pointerEvents={pointerEvents}
               />
-            </TouchableOpacity>
+            </TapGestureHandler>
           )}
         </Animated.View>
       </PanGestureHandler>
@@ -944,17 +946,17 @@ const ModalizeBase = (
   }
 
   const renderModalize = (
-    <View style={[s.modalize, rootStyle]} pointerEvents={'auto'}>
+    <View
+      style={[s.modalize, rootStyle]}
+      pointerEvents={alwaysOpen || !withOverlay ? 'box-none' : 'auto'}
+    >
       <TapGestureHandler
         ref={tapGestureModalizeRef}
         maxDurationMs={tapGestureEnabled ? 100000 : 50}
         maxDeltaY={lastSnap}
         enabled={panGestureEnabled}
       >
-        <View
-          style={s.modalize__wrapper}
-          // pointerEvents="box-none"
-        >
+        <View style={s.modalize__wrapper} pointerEvents="box-none">
           {showContent && (
             <AnimatedKeyboardAvoidingView {...keyboardAvoidingViewProps}>
               {renderHandle()}
