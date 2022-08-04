@@ -16,8 +16,7 @@ three keys:
 
 ```tsx
 import React from 'react';
-import { Modalize } from 'react-native-modalize';
-import { useModalize } from 'react-native-modalize/lib/utils/use-modalize';
+import { Modalize, useModalize } from 'react-native-modalize';
 
 export const App = () => {
   const { ref, open, close } = useModalize();

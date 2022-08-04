@@ -37,6 +37,7 @@ import {
 
 import { IProps, TOpen, TClose, TStyle, IHandles, TPosition } from './options';
 import { useDimensions } from './utils/use-dimensions';
+import { useModalize } from './utils/use-modalize';
 import { getSpringConfig } from './utils/get-spring-config';
 import { isIphoneX, isIos, isAndroid } from './utils/devices';
 import { isBelowRN65, isRNGH2 } from './utils/libraries';
@@ -1000,4 +1001,5 @@ const ModalizeBase = (
 
 export type ModalizeProps = IProps;
 export type Modalize = IHandles;
-export const Modalize = React.forwardRef(ModalizeBase);
+const Modalize = React.forwardRef(ModalizeBase);
+export { Modalize, useModalize };
