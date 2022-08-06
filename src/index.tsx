@@ -76,6 +76,7 @@ const ModalizeBase = (
 
     // Layout
     snapPoint,
+    snapPoints = [],
     modalHeight,
     modalTopOffset = Platform.select({
       ios: 0,
@@ -138,6 +139,7 @@ const ModalizeBase = (
   }: IProps,
   ref: React.Ref<React.ReactNode>,
 ): JSX.Element | null => {
+  const hasMiddlePoints = snapPoints.length > 0;
   const { height: screenHeight } = useDimensions();
   const isHandleOutside = handlePosition === 'outside';
   const handleHeight = withHandle ? 20 : isHandleOutside ? 35 : 20;
@@ -145,17 +147,23 @@ const ModalizeBase = (
   const computedHeight = fullHeight - handleHeight - (isIphoneX ? 34 : 0);
   const endHeight = modalHeight || computedHeight;
   const adjustValue = adjustToContentHeight ? undefined : endHeight;
-  const snaps = snapPoint ? [0, endHeight - snapPoint, endHeight] : [0, endHeight];
+  const snaps = hasMiddlePoints
+    ? [0, ...snapPoints, endHeight]
+    : snapPoint
+    ? [0, endHeight - snapPoint, endHeight]
+    : [0, endHeight];
 
   const [modalHeightValue, setModalHeightValue] = React.useState(adjustValue);
-  const [lastSnap, setLastSnap] = React.useState(snapPoint ? endHeight - snapPoint : 0);
+  const [lastSnap, setLastSnap] = React.useState(
+    hasMiddlePoints ? snapPoints[snapPoints.length - 1] : snapPoint ? endHeight - snapPoint : 0,
+  );
   const [isVisible, setIsVisible] = React.useState(false);
   const [showContent, setShowContent] = React.useState(true);
   const [enableBounces, setEnableBounces] = React.useState(true);
   const [keyboardToggle, setKeyboardToggle] = React.useState(false);
   const [keyboardHeight, setKeyboardHeight] = React.useState(0);
   const [disableScroll, setDisableScroll] = React.useState(
-    alwaysOpen || snapPoint ? true : undefined,
+    alwaysOpen || snapPoint || hasMiddlePoints ? true : undefined,
   );
   const [beginScrollYValue, setBeginScrollYValue] = React.useState(0);
   const [modalPosition, setModalPosition] = React.useState<TPosition>('initial');
@@ -240,6 +248,8 @@ const ModalizeBase = (
       toValue = 0;
     } else if (alwaysOpenValue) {
       toValue = (modalHeightValue || 0) - alwaysOpenValue;
+    } else if (hasMiddlePoints) {
+      toValue = (modalHeightValue || 0) - snapPoints[0];
     } else if (snapPoint) {
       toValue = (modalHeightValue || 0) - snapPoint;
     }
@@ -257,7 +267,10 @@ const ModalizeBase = (
     setIsVisible(true);
     setShowContent(true);
 
-    if ((alwaysOpenValue && dest !== 'top') || (snapPoint && dest === 'default')) {
+    if (
+      (alwaysOpenValue && dest !== 'top') ||
+      ((hasMiddlePoints || snapPoint) && dest === 'default')
+    ) {
       newPosition = 'initial';
     } else {
       newPosition = 'top';
@@ -307,7 +320,7 @@ const ModalizeBase = (
 
   const handleAnimateClose = (dest: TClose = 'default', callback?: () => void): void => {
     const { timing, spring } = closeAnimationConfig;
-    const lastSnapValue = snapPoint ? snaps[1] : 80;
+    const lastSnapValue = hasMiddlePoints || snapPoint ? snaps[snaps.length - 1] : 80;
     const toInitialAlwaysOpen = dest === 'alwaysOpen' && Boolean(alwaysOpen);
     const toValue =
       toInitialAlwaysOpen && alwaysOpen ? (modalHeightValue || 0) - alwaysOpen : screenHeight;
@@ -452,7 +465,7 @@ const ModalizeBase = (
     const { velocityY, translationY } = nativeEvent;
     const negativeReverseScroll =
       modalPosition === 'top' &&
-      beginScrollYValue >= (snapPoint ? 0 : SCROLL_THRESHOLD) &&
+      beginScrollYValue >= (snapPoint || hasMiddlePoints ? 0 : SCROLL_THRESHOLD) &&
       translationY < 0;
     const thresholdProps = translationY > threshold && beginScrollYValue === 0;
     const closeThreshold = velocity
@@ -473,7 +486,7 @@ const ModalizeBase = (
       setCancelClose(false);
 
       if (
-        !closeSnapPointStraightEnabled && snapPoint
+        !closeSnapPointStraightEnabled && (snapPoint || hasMiddlePoints)
           ? beginScrollYValue > 0
           : beginScrollYValue > 0 || negativeReverseScroll
       ) {
@@ -488,7 +501,8 @@ const ModalizeBase = (
 
         if (!tapGestureEnabled) {
           setDisableScroll(
-            (Boolean(snapPoint) || Boolean(alwaysOpen)) && modalPosition === 'initial',
+            (Boolean(snapPoint) || Boolean(hasMiddlePoints) || Boolean(alwaysOpen)) &&
+              modalPosition === 'initial',
           );
         }
       }
@@ -506,7 +520,7 @@ const ModalizeBase = (
       const toValue = translationY - beginScrollYValue;
       let destSnapPoint = 0;
 
-      if (snapPoint || alwaysOpen) {
+      if (hasMiddlePoints || snapPoint || alwaysOpen) {
         const endOffsetY = lastSnap + toValue + dragToss * velocityY;
 
         /**
@@ -631,7 +645,7 @@ const ModalizeBase = (
     useNativeDriver: USE_NATIVE_DRIVER,
     listener: ({ nativeEvent: { translationY } }: PanGestureHandlerStateChangeEvent) => {
       if (panGestureAnimatedValue) {
-        const offset = alwaysOpen ?? snapPoint ?? 0;
+        const offset = alwaysOpen ?? snapPoint ?? snapPoints[0] ?? 0;
         const diff = Math.abs(translationY / (endHeight - offset));
         const y = translationY <= 0 ? diff : 1 - diff;
         let value: number;
@@ -874,6 +888,10 @@ const ModalizeBase = (
     invariant(
       (scrollViewProps || children) && sectionListProps,
       `You have defined 'sectionListProps'  along with 'scrollViewProps' or 'children' props. Remove 'scrollViewProps' or 'children' or 'sectionListProps' to fix the error.`,
+    );
+    invariant(
+      snapPoint && snapPoints,
+      `You can't use both 'snapPoint' and 'snapPoints' props at the same time. Only choose one of the two.`,
     );
   }, [
     modalHeight,
