@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.1] - 2022-08-10
+
+### 👀 Bug Fixes
+
+- Correctly export useModalize in https://github.com/jeremybarbet/react-native-modalize/commit/e8b95f66639bd5d7dd18039ea0f1d70c71b8030f
+
 ## [2.1.0] - 2022-08-10
 
 ### 🎉 New features
