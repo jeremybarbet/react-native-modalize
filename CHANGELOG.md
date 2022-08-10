@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2022-08-10
+
+### 🎉 New features
+
+- Export useModalize from the root of the library in https://github.com/jeremybarbet/react-native-modalize/pull/441
+
+### 📜 Documentation
+
+- Adjust link to react-native-gesture-handler in https://github.com/jeremybarbet/react-native-modalize/pull/437
+
+## [2.0.13] - 2021-12-24
+
+### 👀 Bug Fixes
+
+- Support RNGH V2 by @sakiwei in https://github.com/jeremybarbet/react-native-modalize/pull/378
+
+## [2.0.12] - 2021-11-11
+
+### 👀 Bug Fixes
+
+- Jest - ReactNative.Platform.constants.reactNativeVersion is undefined by @ACHP in https://github.com/jeremybarbet/react-native-modalize/pull/368
+
+## [2.0.11] - 2021-11-07
+
+### 👀 Bug Fixes
+
+- Platform.constants is undefined error in WEB by @lekzd in https://github.com/jeremybarbet/react-native-modalize/pull/367
+
+## [2.0.10] - 2021-10-14
+
+### 👀 Bug Fixes
+
+- Make reactModalProps optional by @hagmic in https://github.com/jeremybarbet/react-native-modalize/pull/364
+
+## [2.0.9] - 2021-10-14
+
+### 🎉 New features
+
+- Add react modal props to Modalize by @Regicollis in https://github.com/jeremybarbet/react-native-modalize/pull/352
+- Add callback when closing modal by @maryjenel in https://github.com/jeremybarbet/react-native-modalize/pull/299
+- Utility hook for modalize by @vambola in https://github.com/jeremybarbet/react-native-modalize/pull/309
+
 ## [2.0.8] - 2020-12-04
 
 ### 👀 Bug Fixes
