@@ -130,6 +130,12 @@ export interface IProps<ListItem = any> {
   handlePosition?: 'outside' | 'inside';
 
   /**
+   * Define which position the modal should be started.
+   * @default 'default'
+   */
+  initialDest?: TOpen;
+  
+  /**
    * Disable the scroll when the content is shorter than screen's height.
    * @default true
    */

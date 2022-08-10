@@ -263,6 +263,14 @@ Define where the handle on top of the modal should be positioned.
 | ------------------------- | -------- | --------- |
 | enum('outside', 'inside') | No       | `outside` |
 
+### `initialDest`
+
+Define which position the modal should be started.
+
+| Type                      | Required | Default   |
+| ------------------------- | -------- | --------- |
+| enum('default', 'top')    | No       | `default` |
+
 ### `disableScrollIfPossible`
 
 Disable the scroll when the content is shorter than screen's height.
