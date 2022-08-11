@@ -926,7 +926,7 @@ const ModalizeBase = (
       s.modalize__content,
       modalStyle,
       {
-        height: modalHeightValue,
+        height: adjustToContentHeight ? undefined : modalHeightValue,
         maxHeight: endHeight,
         transform: [
           {
