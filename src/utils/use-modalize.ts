@@ -14,5 +14,7 @@ export const useModalize = () => {
     ref.current?.open(dest);
   }, []);
 
-  return { ref, open, close };
+  const position = ref.current?.modalPosition;
+
+  return { ref, open, close, position };
 };
