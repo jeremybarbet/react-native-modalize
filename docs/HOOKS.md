@@ -19,7 +19,7 @@ import React from 'react';
 import { Modalize, useModalize } from 'react-native-modalize';
 
 export const App = () => {
-  const { ref, open, close } = useModalize();
+  const { ref, open, close, position } = useModalize();
 
   // e.g. open();
 
