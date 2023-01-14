@@ -630,7 +630,7 @@ const ModalizeBase = (
   const handleGestureEvent = Animated.event([{ nativeEvent: { translationY: dragY } }], {
     useNativeDriver: USE_NATIVE_DRIVER,
     listener: ({ nativeEvent: { translationY } }: PanGestureHandlerStateChangeEvent) => {
-      if (panGestureAnimatedValue) {
+      if (panGestureAnimatedValue && !beginScrollYValue) {
         const offset = alwaysOpen ?? snapPoint ?? 0;
         const diff = Math.abs(translationY / (endHeight - offset));
         const y = translationY <= 0 ? diff : 1 - diff;
