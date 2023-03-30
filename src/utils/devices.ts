@@ -40,9 +40,9 @@ const targetIPhoneOffsetHeight: { [key: string]: number } = {
 };
 
 export const iphoneOffsetHeight = () => {
-  const iphoneType = targetIphoneSafeArea(width, height);
+  const iphoneType: string | null = targetIphoneSafeArea(width, height);
 
-  return isIos && iphoneType !== null ? targetIPhoneOffsetHeight.iphoneType : 0;
+  return isIos && iphoneType !== null ? targetIPhoneOffsetHeight[iphoneType] : 0;
 };
 
 export const isAndroid = Platform.OS === 'android';
