@@ -38,7 +38,7 @@ import {
 import { IProps, TOpen, TClose, TStyle, IHandles, TPosition } from './options';
 import { useDimensions } from './utils/use-dimensions';
 import { getSpringConfig } from './utils/get-spring-config';
-import { isIphoneX, isIos, isAndroid } from './utils/devices';
+import { iphoneOffsetHeight, isIos, isAndroid } from './utils/devices';
 import { isBelowRN65, isRNGH2 } from './utils/libraries';
 import { invariant } from './utils/invariant';
 import { composeRefs } from './utils/compose-refs';
@@ -142,7 +142,7 @@ const ModalizeBase = (
   const isHandleOutside = handlePosition === 'outside';
   const handleHeight = withHandle ? 20 : isHandleOutside ? 35 : 20;
   const fullHeight = screenHeight - modalTopOffset;
-  const computedHeight = fullHeight - handleHeight - (isIphoneX ? 34 : 0);
+  const computedHeight = fullHeight - handleHeight - iphoneOffsetHeight();
   const endHeight = modalHeight || computedHeight;
   const adjustValue = adjustToContentHeight ? undefined : endHeight;
   const snaps = snapPoint ? [0, endHeight - snapPoint, endHeight] : [0, endHeight];
