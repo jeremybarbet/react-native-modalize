@@ -5,13 +5,13 @@ const { width, height } = Dimensions.get('window');
 export const isIos = Platform.OS === 'ios';
 
 const DEVICE_LAYOUT_MAX_VALUES: { [key: number]: string } = {
-  780: "iPhone",
-  812: "iPhoneX",
-  896: "iPhoneXMax",
-  844: "iPhone12",
-  926: "iPhone12Max",
-  852: "iPhone14Pro",
-  932: "iPhone14ProMax",
+  780: 'iPhone',
+  812: 'iPhoneX',
+  896: 'iPhoneXMax',
+  844: 'iPhone12',
+  926: 'iPhone12Max',
+  852: 'iPhone14Pro',
+  932: 'iPhone14ProMax',
 };
 
 const targetIphoneSafeArea = (wWidth: number, wHeight: number) => {
@@ -42,9 +42,7 @@ const targetIPhoneOffsetHeight: { [key: string]: number } = {
 export const iphoneOffsetHeight = () => {
   const iphoneType = targetIphoneSafeArea(width, height);
 
-  return isIos && iphoneType !== null
-    ? targetIPhoneOffsetHeight[iphoneType]
-    : 0;
+  return isIos && iphoneType !== null ? targetIPhoneOffsetHeight.iphoneType : 0;
 };
 
 export const isAndroid = Platform.OS === 'android';
