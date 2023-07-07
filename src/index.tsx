@@ -25,6 +25,7 @@ import {
   ViewStyle,
   NativeEventSubscription,
   EmitterSubscription,
+  useWindowDimensions,
 } from 'react-native';
 import {
   PanGestureHandler,
@@ -138,7 +139,9 @@ const ModalizeBase = (
   }: IProps,
   ref: React.Ref<React.ReactNode>,
 ): JSX.Element | null => {
-  const { height: screenHeight } = useDimensions();
+  const { height: windowDefaultHeight } = useWindowDimensions();
+  const { height } = useDimensions();
+  const screenHeight = height || windowDefaultHeight;
   const isHandleOutside = handlePosition === 'outside';
   const handleHeight = withHandle ? 20 : isHandleOutside ? 35 : 20;
   const fullHeight = screenHeight - modalTopOffset;
