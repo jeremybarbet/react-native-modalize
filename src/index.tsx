@@ -57,6 +57,9 @@ const PAN_DURATION = 150;
 
 const ModalizeBase = (
   {
+    // Test
+    testID,
+    
     // Refs
     contentRef,
 
@@ -671,7 +674,7 @@ const ModalizeBase = (
         onHandlerStateChange={handleComponent}
       >
         <Animated.View style={handleStyles}>
-          <View style={shapeStyles} />
+          <View style={shapeStyles} testID={`${testID}_handle_shape`}/>
         </Animated.View>
       </PanGestureHandler>
     );
