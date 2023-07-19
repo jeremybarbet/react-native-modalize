@@ -346,7 +346,10 @@ const ModalizeBase = (
             toValue,
             useNativeDriver: USE_NATIVE_DRIVER,
           }),
-    ]).start(() => {
+    ]).start(({ finished }) => {
+      if (!finished) {
+        return;
+      }
       if (onClosed) {
         onClosed();
       }
