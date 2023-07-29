@@ -14,7 +14,14 @@ export const isIphoneX =
     height === 896 ||
     width === 896 ||
     height === 926 ||
-    width === 926);
+    width === 926 ||
+    // iPhone 14 Pro Viewport Height
+    height === 852 ||
+    width === 852 ||
+    //iPhone 14 Pro Max Viewport Height
+    height === 932 ||
+    width === 932
+  );
 
 export const isAndroid = Platform.OS === 'android';
 export const isWeb = Platform.OS === 'web';
